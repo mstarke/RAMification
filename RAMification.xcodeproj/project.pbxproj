@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
+		4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */; };
+		4C5BDB67147EF6AD000E19B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB66147EF6AD000E19B0 /* main.m */; };
+		4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB69147EF6AD000E19B0 /* Credits.rtf */; };
+		4C5BDB6E147EF6AD000E19B0 /* AKPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */; };
+		4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */; };
+		4C5BDB79147EF6AD000E19B0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */; };
+		4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
+		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
+		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C5BDB7B147EF6AD000E19B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C5BDB4D147EF6AD000E19B0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C5BDB55147EF6AD000E19B0;
+			remoteInfo = RAMification;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C5BDB56147EF6AD000E19B0 /* RAMification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAMification.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		4C5BDB5D147EF6AD000E19B0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		4C5BDB5E147EF6AD000E19B0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4C5BDB5F147EF6AD000E19B0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4C5BDB62147EF6AD000E19B0 /* RAMification-Info.plist */ = {isa = PBXFileReference; path = "RAMification-Info.plist"; sourceTree = "<group>"; };
+		4C5BDB64147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C5BDB66147EF6AD000E19B0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */ = {isa = PBXFileReference; path = "RAMification-Prefix.pch"; sourceTree = "<group>"; };
+		4C5BDB6A147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		4C5BDB6C147EF6AD000E19B0 /* AKPAppDelegate.h */ = {isa = PBXFileReference; path = AKPAppDelegate.h; sourceTree = "<group>"; };
+		4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AKPAppDelegate.m; sourceTree = "<group>"; };
+		4C5BDB70147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RAMificationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4C5BDB7F147EF6AD000E19B0 /* RAMificationTests-Info.plist */ = {isa = PBXFileReference; path = "RAMificationTests-Info.plist"; sourceTree = "<group>"; };
+		4C5BDB81147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */ = {isa = PBXFileReference; path = RAMificationTests.h; sourceTree = "<group>"; };
+		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C5BDB53147EF6AD000E19B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C5BDB73147EF6AD000E19B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB79147EF6AD000E19B0 /* SenTestingKit.framework in Frameworks */,
+				4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C5BDB4B147EF6AD000E19B0 = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB60147EF6AD000E19B0 /* RAMification */,
+				4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */,
+				4C5BDB59147EF6AD000E19B0 /* Frameworks */,
+				4C5BDB57147EF6AD000E19B0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C5BDB57147EF6AD000E19B0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB56147EF6AD000E19B0 /* RAMification.app */,
+				4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C5BDB59147EF6AD000E19B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */,
+				4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */,
+				4C5BDB5C147EF6AD000E19B0 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C5BDB5C147EF6AD000E19B0 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB5D147EF6AD000E19B0 /* AppKit.framework */,
+				4C5BDB5E147EF6AD000E19B0 /* CoreData.framework */,
+				4C5BDB5F147EF6AD000E19B0 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB6C147EF6AD000E19B0 /* AKPAppDelegate.h */,
+				4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */,
+				4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */,
+				4C5BDB61147EF6AD000E19B0 /* Supporting Files */,
+			);
+			path = RAMification;
+			sourceTree = "<group>";
+		};
+		4C5BDB61147EF6AD000E19B0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB62147EF6AD000E19B0 /* RAMification-Info.plist */,
+				4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */,
+				4C5BDB66147EF6AD000E19B0 /* main.m */,
+				4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */,
+				4C5BDB69147EF6AD000E19B0 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */,
+				4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */,
+				4C5BDB7E147EF6AD000E19B0 /* Supporting Files */,
+			);
+			path = RAMificationTests;
+			sourceTree = "<group>";
+		};
+		4C5BDB7E147EF6AD000E19B0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BDB7F147EF6AD000E19B0 /* RAMificationTests-Info.plist */,
+				4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C5BDB55147EF6AD000E19B0 /* RAMification */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C5BDB88147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMification" */;
+			buildPhases = (
+				4C5BDB52147EF6AD000E19B0 /* Sources */,
+				4C5BDB53147EF6AD000E19B0 /* Frameworks */,
+				4C5BDB54147EF6AD000E19B0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RAMification;
+			productName = RAMification;
+			productReference = 4C5BDB56147EF6AD000E19B0 /* RAMification.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C5BDB76147EF6AD000E19B0 /* RAMificationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C5BDB8B147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMificationTests" */;
+			buildPhases = (
+				4C5BDB72147EF6AD000E19B0 /* Sources */,
+				4C5BDB73147EF6AD000E19B0 /* Frameworks */,
+				4C5BDB74147EF6AD000E19B0 /* Resources */,
+				4C5BDB75147EF6AD000E19B0 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C5BDB7C147EF6AD000E19B0 /* PBXTargetDependency */,
+			);
+			name = RAMificationTests;
+			productName = RAMificationTests;
+			productReference = 4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C5BDB4D147EF6AD000E19B0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "HicknHack Software GmbH";
+			};
+			buildConfigurationList = 4C5BDB50147EF6AD000E19B0 /* Build configuration list for PBXProject "RAMification" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C5BDB4B147EF6AD000E19B0;
+			productRefGroup = 4C5BDB57147EF6AD000E19B0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C5BDB55147EF6AD000E19B0 /* RAMification */,
+				4C5BDB76147EF6AD000E19B0 /* RAMificationTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C5BDB54147EF6AD000E19B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */,
+				4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */,
+				4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C5BDB74147EF6AD000E19B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C5BDB75147EF6AD000E19B0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C5BDB52147EF6AD000E19B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB67147EF6AD000E19B0 /* main.m in Sources */,
+				4C5BDB6E147EF6AD000E19B0 /* AKPAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C5BDB72147EF6AD000E19B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C5BDB7C147EF6AD000E19B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C5BDB55147EF6AD000E19B0 /* RAMification */;
+			targetProxy = 4C5BDB7B147EF6AD000E19B0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C5BDB64147EF6AD000E19B0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4C5BDB69147EF6AD000E19B0 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C5BDB6A147EF6AD000E19B0 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C5BDB70147EF6AD000E19B0 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C5BDB81147EF6AD000E19B0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4C5BDB86147EF6AD000E19B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4C5BDB87147EF6AD000E19B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4C5BDB89147EF6AD000E19B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
+				INFOPLIST_FILE = "RAMification/RAMification-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4C5BDB8A147EF6AD000E19B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
+				INFOPLIST_FILE = "RAMification/RAMification-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4C5BDB8C147EF6AD000E19B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RAMification.app/Contents/MacOS/RAMification";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
+				INFOPLIST_FILE = "RAMificationTests/RAMificationTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4C5BDB8D147EF6AD000E19B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RAMification.app/Contents/MacOS/RAMification";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
+				INFOPLIST_FILE = "RAMificationTests/RAMificationTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C5BDB50147EF6AD000E19B0 /* Build configuration list for PBXProject "RAMification" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5BDB86147EF6AD000E19B0 /* Debug */,
+				4C5BDB87147EF6AD000E19B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C5BDB88147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMification" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5BDB89147EF6AD000E19B0 /* Debug */,
+				4C5BDB8A147EF6AD000E19B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C5BDB8B147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMificationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5BDB8C147EF6AD000E19B0 /* Debug */,
+				4C5BDB8D147EF6AD000E19B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C5BDB4D147EF6AD000E19B0 /* Project object */;
+}
