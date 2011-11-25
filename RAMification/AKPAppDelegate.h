@@ -7,9 +7,24 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "SettingsToolbarDelegate.h"
 @interface AKPAppDelegate : NSObject <NSApplicationDelegate>
+{
+  SettingsToolbarDelegate *toolbarDelegate;
+}
 
-@property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet NSWindow *settingsWindow;
+@property (assign) IBOutlet NSToolbar *settingsToolbar;
+@property (retain) NSStatusItem *statusItem;
+@property (retain) NSMenu *menu;
+@property (assign) NSUInteger ramdisksize;
+@property (retain) NSString *ramdiskname;
+
+- (void) createStatusItem;
+- (void) createMenu;
+- (void) quitApplication;
+- (void) createRamdisk;
+- (void) removeRamdisk;
+- (void) showSettings;
 
 @end
