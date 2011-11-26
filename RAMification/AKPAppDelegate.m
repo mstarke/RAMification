@@ -8,6 +8,21 @@
 
 #import "AKPAppDelegate.h"
 
+// predefined values (private)
+NSString *const defaultName = @"Ramdisk";
+const NSUInteger defaultSize = 1024;
+
+
+// private redeclaration to make properties writeable
+@interface AKPAppDelegate (private)
+
+@property (assign, readwrite) NSUInteger ramdisksize;
+@property (retain, readwrite) NSString *ramdiskname;
+
+@end
+
+// actual implemenation
+
 @implementation AKPAppDelegate
 
 @synthesize settingsWindow = _window;
@@ -30,9 +45,11 @@
   // intialize settings window toolbar delegate
   toolbarDelegate = [[SettingsToolbarDelegate alloc] init];
   [self.settingsToolbar setDelegate:toolbarDelegate];
-  NSLog([[self.settingsToolbar delegate] description]);
   [self createMenu];
   [self createStatusItem];
+  
+  self.ramdiskname = defaultName;
+  self.ramdisksize = defaultSize;
 }
 
 - (void) createMenu
@@ -97,11 +114,38 @@
 
 - (void) createRamdisk
 {
-  // test if disk is mounted
+  // TODO test if disk is mounted
+  NSPipe *output = [NSPipe pipe];  
+  NSTask *createDisk = [[NSTask alloc] init];
+  
   // create the device
-  // hdiutil attach -nomount ram://MB*2048 
+  // hdiutil attach -nomount ram://MB*2048
+  
+  // create the string for the desired ramdisksize
+  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.ramdisksize*2048];
+  
+  // create the task and run it
+  [createDisk setLaunchPath:@"/usr/bin/hdiutil"];
+  [createDisk setArguments:[NSArray arrayWithObjects:@"attach", @"-nomount", ramdisksize, nil]];
+  [createDisk setStandardOutput:output];
+  [createDisk launch];
+  
+  
+  // retrieve the device name
+  NSFileHandle *outputFileHandle = [output fileHandleForReading];
+  NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+  NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  [deviceName release];
+  [createDisk release];
+  
   // and format it
   // diskutil erasevolume HFS+ <NAME> <DEVICE>
+  createDisk = [[NSTask alloc] init];
+  [createDisk setLaunchPath:@"/usr/sbin/diskutil"];
+  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdiskname, strippedDeviceName, nil]];
+  [createDisk launch];
+  [createDisk release];
+
   //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
 }
 
