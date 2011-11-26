@@ -7,18 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "SettingsToolbarDelegate.h"
-@interface AKPAppDelegate : NSObject <NSApplicationDelegate>
-{
-  SettingsToolbarDelegate *toolbarDelegate;
-}
+#import "RMFSettingsController.h"
 
-@property (assign) IBOutlet NSWindow *settingsWindow;
-@property (assign) IBOutlet NSToolbar *settingsToolbar;
+@interface RMFAppDelegate : NSObject <NSApplicationDelegate>
+
 @property (retain) NSStatusItem *statusItem;
 @property (retain) NSMenu *menu;
-@property (assign, readonly) NSUInteger ramdisksize;
-@property (retain, readonly) NSString *ramdiskname;
+@property (assign) NSUInteger ramdisksize;
+@property (retain) NSString *ramdiskname;
+@property (retain) RMFSettingsController *settingsController;
 
 - (void) createStatusItem;
 - (void) createMenu;

@@ -11,14 +11,16 @@
 		4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB67147EF6AD000E19B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB66147EF6AD000E19B0 /* main.m */; };
 		4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB69147EF6AD000E19B0 /* Credits.rtf */; };
-		4C5BDB6E147EF6AD000E19B0 /* AKPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */; };
+		4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */; };
 		4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */; };
 		4C5BDB79147EF6AD000E19B0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */; };
 		4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
-		4C82CEBF14805144009E61C8 /* SettingsWindowDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEBE14805144009E61C8 /* SettingsWindowDelegate.m */; };
-		4C82CEC3148053BB009E61C8 /* SettingsToolbarDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* SettingsToolbarDelegate.m */; };
+		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
+		4CC52F7A14819A360006C278 /* GeneralTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralTab.xib */; };
+		4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* PresetsTab.xib */; };
+		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +44,8 @@
 		4C5BDB66147EF6AD000E19B0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RAMification-Prefix.pch"; sourceTree = "<group>"; };
 		4C5BDB6A147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		4C5BDB6C147EF6AD000E19B0 /* AKPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AKPAppDelegate.h; sourceTree = "<group>"; };
-		4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AKPAppDelegate.m; sourceTree = "<group>"; };
+		4C5BDB6C147EF6AD000E19B0 /* RMFAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMFAppDelegate.h; sourceTree = "<group>"; };
+		4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RMFAppDelegate.m; sourceTree = "<group>"; };
 		4C5BDB70147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RAMificationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -51,10 +53,11 @@
 		4C5BDB81147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RAMificationTests.h; sourceTree = "<group>"; };
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
-		4C82CEBD14805144009E61C8 /* SettingsWindowDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowDelegate.h; sourceTree = "<group>"; };
-		4C82CEBE14805144009E61C8 /* SettingsWindowDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowDelegate.m; sourceTree = "<group>"; };
-		4C82CEC1148053BB009E61C8 /* SettingsToolbarDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsToolbarDelegate.h; sourceTree = "<group>"; };
-		4C82CEC2148053BB009E61C8 /* SettingsToolbarDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsToolbarDelegate.m; sourceTree = "<group>"; };
+		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
+		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
+		4CC52F7914819A360006C278 /* GeneralTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralTab.xib; sourceTree = "<group>"; };
+		4CC52F7C14819BB60006C278 /* PresetsTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresetsTab.xib; sourceTree = "<group>"; };
+		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,14 +123,15 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
-				4C5BDB6C147EF6AD000E19B0 /* AKPAppDelegate.h */,
-				4C5BDB6D147EF6AD000E19B0 /* AKPAppDelegate.m */,
+				4C5BDB6C147EF6AD000E19B0 /* RMFAppDelegate.h */,
+				4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */,
 				4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */,
+				4CC52F7E1481A1400006C278 /* SettingsWindow.xib */,
+				4CC52F7914819A360006C278 /* GeneralTab.xib */,
+				4CC52F7C14819BB60006C278 /* PresetsTab.xib */,
 				4C5BDB61147EF6AD000E19B0 /* Supporting Files */,
-				4C82CEBD14805144009E61C8 /* SettingsWindowDelegate.h */,
-				4C82CEBE14805144009E61C8 /* SettingsWindowDelegate.m */,
-				4C82CEC1148053BB009E61C8 /* SettingsToolbarDelegate.h */,
-				4C82CEC2148053BB009E61C8 /* SettingsToolbarDelegate.m */,
+				4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */,
+				4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */,
 			);
 			path = RAMification;
 			sourceTree = "<group>";
@@ -237,6 +241,9 @@
 				4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */,
 				4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */,
 				4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */,
+				4CC52F7A14819A360006C278 /* GeneralTab.xib in Resources */,
+				4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */,
+				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,9 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5BDB67147EF6AD000E19B0 /* main.m in Sources */,
-				4C5BDB6E147EF6AD000E19B0 /* AKPAppDelegate.m in Sources */,
-				4C82CEBF14805144009E61C8 /* SettingsWindowDelegate.m in Sources */,
-				4C82CEC3148053BB009E61C8 /* SettingsToolbarDelegate.m in Sources */,
+				4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */,
+				4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

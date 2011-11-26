@@ -6,28 +6,18 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "AKPAppDelegate.h"
+#import "RMFAppDelegate.h"
 
 // predefined values (private)
 NSString *const defaultName = @"Ramdisk";
 const NSUInteger defaultSize = 1024;
 
-
-// private redeclaration to make properties writeable
-@interface AKPAppDelegate (private)
-
-@property (assign, readwrite) NSUInteger ramdisksize;
-@property (retain, readwrite) NSString *ramdiskname;
-
-@end
-
 // actual implemenation
 
-@implementation AKPAppDelegate
+@implementation RMFAppDelegate
 
-@synthesize settingsWindow = _window;
-@synthesize settingsToolbar = _settingsToolbar;
 @synthesize statusItem = _statusItem;
+@synthesize settingsController = _toolbarController;
 @synthesize menu = _menu;
 @synthesize ramdiskname = _ramdiskname;
 @synthesize ramdisksize = _ramdisksize;
@@ -36,15 +26,11 @@ const NSUInteger defaultSize = 1024;
 {
   [super dealloc];
   // remove the toolbardelegate from the 
-  [self.settingsToolbar setDelegate:nil];
-  [toolbarDelegate release];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   // intialize settings window toolbar delegate
-  toolbarDelegate = [[SettingsToolbarDelegate alloc] init];
-  [self.settingsToolbar setDelegate:toolbarDelegate];
   [self createMenu];
   [self createStatusItem];
   
@@ -109,7 +95,12 @@ const NSUInteger defaultSize = 1024;
 
 - (void) showSettings
 {
-  [self.settingsWindow setIsVisible:YES];
+  if(self.settingsController == nil)
+  {
+    self.settingsController = [[RMFSettingsController alloc] init];
+    [NSBundle loadNibNamed:@"SettingsWindow" owner:self.settingsController];
+  }
+  [self.settingsController showWindow];
 }
 
 - (void) createRamdisk
