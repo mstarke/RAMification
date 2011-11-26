@@ -1,0 +1,7 @@
+h1. RAMification
+
+A Tool to manage RAM disks.
+
+h2. Disclaimer
+
+This tool is a simple test for me to play with some fundamental stuff on OS X. In no way do i gurantee for the safty or correctness of this software. Use at your own risk.
