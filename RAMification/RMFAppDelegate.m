@@ -7,6 +7,7 @@
 //
 
 #import "RMFAppDelegate.h"
+#import "RMFCreateRamDiskOperation.h"
 
 // predefined values (private)
 NSString *const defaultName = @"Ramdisk";
@@ -17,7 +18,7 @@ const NSUInteger defaultSize = 1024;
 @implementation RMFAppDelegate
 
 @synthesize statusItem = _statusItem;
-@synthesize settingsController = _toolbarController;
+@synthesize settingsController = _settingsController;
 @synthesize menu = _menu;
 @synthesize ramdiskname = _ramdiskname;
 @synthesize ramdisksize = _ramdisksize;
@@ -31,6 +32,7 @@ const NSUInteger defaultSize = 1024;
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
   // intialize settings window toolbar delegate
+  queue = [[NSOperationQueue alloc] init];
   [self createMenu];
   [self createStatusItem];
   
@@ -40,7 +42,7 @@ const NSUInteger defaultSize = 1024;
 
 - (void) createMenu
 {
-  self.menu = [[NSMenu alloc] initWithTitle:@"menu"];
+  _menu = [[NSMenu alloc] initWithTitle:@"menu"];
   // Create ramdisk
   NSMenuItem *item;
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk) keyEquivalent:@""];
@@ -48,6 +50,7 @@ const NSUInteger defaultSize = 1024;
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
   [self.menu addItem:item];
+  [item release];
   
   // Destroy ramdisk
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Destroy Ramdisk" action:@selector(removeRamdisk) keyEquivalent:@""];
@@ -55,6 +58,7 @@ const NSUInteger defaultSize = 1024;
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
   [self.menu addItem:item];
+  [item release];
 
   // Separation
   [self.menu addItem:[NSMenuItem separatorItem]];
@@ -64,6 +68,7 @@ const NSUInteger defaultSize = 1024;
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
   [self.menu addItem:item];
+  [item release];
 
   // Separation
   [self.menu addItem:[NSMenuItem separatorItem]];
@@ -97,50 +102,22 @@ const NSUInteger defaultSize = 1024;
 {
   if(self.settingsController == nil)
   {
-    self.settingsController = [[RMFSettingsController alloc] init];
+   _settingsController = [[RMFSettingsController alloc] init];
   }
   [self.settingsController showWindow];
 }
 
 - (void) createRamdisk
 {
-  // TODO test if disk is mounted
-  NSPipe *output = [NSPipe pipe];  
-  NSTask *createDisk = [[NSTask alloc] init];
-  
-  // create the device
-  // hdiutil attach -nomount ram://MB*2048
-  
-  // create the string for the desired ramdisksize
-  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.ramdisksize*2048];
-  
-  // create the task and run it
-  [createDisk setLaunchPath:@"/usr/bin/hdiutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"attach", @"-nomount", ramdisksize, nil]];
-  [createDisk setStandardOutput:output];
-  [createDisk launch];
-  
-  
-  // retrieve the device name
-  NSFileHandle *outputFileHandle = [output fileHandleForReading];
-  NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
-  NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  [deviceName release];
-  [createDisk release];
-  
-  // and format it
-  // diskutil erasevolume HFS+ <NAME> <DEVICE>
-  createDisk = [[NSTask alloc] init];
-  [createDisk setLaunchPath:@"/usr/sbin/diskutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdiskname, strippedDeviceName, nil]];
-  [createDisk launch];
-  [createDisk release];
-
-  //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
+  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithSize:self.ramdisksize andLabel:self.ramdiskname];
+  [queue cancelAllOperations];
+  [queue addOperation:mountOperation];
+  [mountOperation release];
 }
 
 - (void) removeRamdisk
 {
+  [queue cancelAllOperations];
   // search if a ramdisk is active and detach it by calling
   // hdutil detach <Device>
 }

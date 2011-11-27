@@ -4,16 +4,5 @@
 <dict>
 	<key>LaunchAtLogin</key>
 	<false/>
-	<key>Presets</key>
-	<array>
-		<dict>
-			<key>ShouldAutoMount</key>
-			<false/>
-			<key>VolumeLabel</key>
-			<string>RAMdisk</string>
-			<key>VolumeSize</key>
-			<integer>1024</integer>
-		</dict>
-	</array>
 </dict>
 </plist>

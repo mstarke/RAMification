@@ -10,7 +10,10 @@
 #import "RMFSettingsController.h"
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
-
+{
+  @private
+  NSOperationQueue *queue;
+}
 @property (retain) NSStatusItem *statusItem;
 @property (retain) NSMenu *menu;
 @property (assign) NSUInteger ramdisksize;

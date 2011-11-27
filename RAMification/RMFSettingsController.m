@@ -76,17 +76,12 @@
 
 - (void) intializeDefaults
 {
-  NSDictionary *defaultPreset = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"ShouldAutoMount",
-                                                                            [NSNumber numberWithUnsignedInt:1024], @"VolumeSize",
-                                                                            @"RAMdisk",@"VolumeLabel",
-                                                                            nil]; 
-  NSDictionary *defaultsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO],@"LaunchAtLogin",
-                                                                                [NSArray arrayWithObject:defaultPreset], @"Presets",
-                                                                                nil];
-  
-  [defaultsDictionary writeToFile:@"/Users/michael/Desktop/export.plist" atomically:YES];
-  [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDictionary];
-  [[NSUserDefaults standardUserDefaults] synchronize];
+  NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
+  if(defaultsPlistURL != nil)
+  {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithContentsOfURL:defaultsPlistURL]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
 }
 
 
