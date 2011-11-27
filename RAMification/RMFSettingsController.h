@@ -20,13 +20,16 @@ enum RMFSettingsTabs {
 }
 
 @property (assign) IBOutlet NSTabView *tabView;
+@property (assign) IBOutlet NSView* generalTab;
+@property (assign) IBOutlet NSView* presetsTab;
 @property (assign) IBOutlet NSToolbar *toolbar;
 @property (assign) IBOutlet NSWindow *settingsWindow;
 
 - (IBAction) switchTabView:(id)sender;
 - (void) showWindow;
+- (void) intializeDefaults;
 
 @end
 
-APPKIT_PRIVATE_EXTERN NSString *const RMFGeneral;
-APPKIT_PRIVATE_EXTERN NSString *const RMFPresets;
+APPKIT_PRIVATE_EXTERN NSString *const RMFGeneralIdentifier;
+APPKIT_PRIVATE_EXTERN NSString *const RMFPresetsIdentifier;

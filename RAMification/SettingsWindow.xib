@@ -451,11 +451,21 @@
 						</object>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="generalTab">NSView</string>
+						<string key="presetsTab">NSView</string>
 						<string key="settingsWindow">NSWindow</string>
 						<string key="tabView">NSTabView</string>
 						<string key="toolbar">NSToolbar</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="generalTab">
+							<string key="name">generalTab</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="presetsTab">
+							<string key="name">presetsTab</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="settingsWindow">
 							<string key="name">settingsWindow</string>
 							<string key="candidateClassName">NSWindow</string>

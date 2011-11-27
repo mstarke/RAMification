@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C2CF6591482A79A00338AAF /* RMFVolumePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2CF6581482A79A00338AAF /* RMFVolumePreset.m */; };
 		4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB67147EF6AD000E19B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB66147EF6AD000E19B0 /* main.m */; };
@@ -21,6 +22,7 @@
 		4CC52F7A14819A360006C278 /* GeneralTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralTab.xib */; };
 		4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* PresetsTab.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
+		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C2CF6571482A79A00338AAF /* RMFVolumePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMFVolumePreset.h; path = ../RMFVolumePreset.h; sourceTree = "<group>"; };
+		4C2CF6581482A79A00338AAF /* RMFVolumePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMFVolumePreset.m; path = ../RMFVolumePreset.m; sourceTree = "<group>"; };
 		4C5BDB56147EF6AD000E19B0 /* RAMification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAMification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4C5BDB5D147EF6AD000E19B0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -58,6 +62,7 @@
 		4CC52F7914819A360006C278 /* GeneralTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralTab.xib; sourceTree = "<group>"; };
 		4CC52F7C14819BB60006C278 /* PresetsTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresetsTab.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
+		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +128,8 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
+				4C2CF6571482A79A00338AAF /* RMFVolumePreset.h */,
+				4C2CF6581482A79A00338AAF /* RMFVolumePreset.m */,
 				4C5BDB6C147EF6AD000E19B0 /* RMFAppDelegate.h */,
 				4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */,
 				4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */,
@@ -144,6 +151,7 @@
 				4C5BDB66147EF6AD000E19B0 /* main.m */,
 				4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */,
 				4C5BDB69147EF6AD000E19B0 /* Credits.rtf */,
+				4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -244,6 +252,7 @@
 				4CC52F7A14819A360006C278 /* GeneralTab.xib in Resources */,
 				4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */,
 				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
+				4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,6 +290,7 @@
 				4C5BDB67147EF6AD000E19B0 /* main.m in Sources */,
 				4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */,
 				4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */,
+				4C2CF6591482A79A00338AAF /* RMFVolumePreset.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

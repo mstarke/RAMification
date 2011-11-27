@@ -98,7 +98,6 @@ const NSUInteger defaultSize = 1024;
   if(self.settingsController == nil)
   {
     self.settingsController = [[RMFSettingsController alloc] init];
-    [NSBundle loadNibNamed:@"SettingsWindow" owner:self.settingsController];
   }
   [self.settingsController showWindow];
 }
