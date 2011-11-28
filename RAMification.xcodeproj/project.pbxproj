@@ -24,6 +24,7 @@
 		4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* PresetsTab.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
 		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
+		4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,12 +61,13 @@
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
 		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
 		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
-		4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RMFCreateRamDiskOperation.h; sourceTree = "<group>"; };
+		4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFCreateRamDiskOperation.h; sourceTree = "<group>"; };
 		4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFCreateRamDiskOperation.m; sourceTree = "<group>"; };
 		4CC52F7914819A360006C278 /* GeneralTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralTab.xib; sourceTree = "<group>"; };
 		4CC52F7C14819BB60006C278 /* PresetsTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresetsTab.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
 		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 		4C5BDB61147EF6AD000E19B0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
 				4C5BDB62147EF6AD000E19B0 /* RAMification-Info.plist */,
 				4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */,
 				4C5BDB66147EF6AD000E19B0 /* main.m */,
@@ -258,6 +261,7 @@
 				4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */,
 				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
 				4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */,
+				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

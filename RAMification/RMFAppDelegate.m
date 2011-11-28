@@ -11,6 +11,7 @@
 
 // predefined values (private)
 NSString *const defaultName = @"Ramdisk";
+NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate"; 
 const NSUInteger defaultSize = 1024;
 
 // actual implemenation
@@ -63,7 +64,29 @@ const NSUInteger defaultSize = 1024;
   // Separation
   [self.menu addItem:[NSMenuItem separatorItem]];
 
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettings) keyEquivalent:@""];
+  NSMenu *presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setTarget:self];
+  [presetsSubMenu addItem:item];
+  [item release];
+  
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setTarget:self];
+  [item setSubmenu:presetsSubMenu];
+  [self.menu addItem:item];
+  [presetsSubMenu release];
+  [item release];
+  
+
+  
+  // Separation
+  [self.menu addItem:[NSMenuItem separatorItem]];
+
+  
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setRepresentedObject:item];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -86,7 +109,8 @@ const NSUInteger defaultSize = 1024;
   NSStatusBar *bar = [NSStatusBar systemStatusBar];
   self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
   //[self.statusItem setTitle:@"RAMification"];
-  [self.statusItem setImage: [NSImage imageNamed:NSImageNameActionTemplate]];
+  NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
+  [self.statusItem setImage:menuIconImage];
   [self.statusItem setEnabled:YES];
   [self.statusItem setHighlightMode:YES];
   [self.statusItem setMenu:self.menu];
@@ -98,13 +122,25 @@ const NSUInteger defaultSize = 1024;
   [[NSApplication sharedApplication] terminate:nil];
 }
 
-- (void) showSettings
+- (void) showSettingsTab:(id)sender
 {
   if(self.settingsController == nil)
   {
    _settingsController = [[RMFSettingsController alloc] init];
   }
-  [self.settingsController showWindow];
+  NSString *label = [(NSMenuItem*)sender title];
+  NSString *tabIdentifier = RMFPresetsIdentifier;
+  if(label == @"Preferences...")
+  {
+    tabIdentifier = RMFGeneralIdentifier;
+  }
+  [self.settingsController showWindowWithActiveTab:tabIdentifier];
+    
+}
+
+- (void) showSettings
+{
+  [self showSettingsTab:nil];
 }
 
 - (void) createRamdisk

@@ -69,10 +69,22 @@
   [tabView selectTabViewItemWithIdentifier:[toolbar selectedItemIdentifier]];
 }
 
-- (void) showWindow
+- (void) showWindowWithActiveTab:(NSString *)tabidentifier
 {
+  if(tabidentifier != nil)
+  {
+    // select the tab
+    [self.toolbar setSelectedItemIdentifier:tabidentifier];
+    [self.tabView selectTabViewItemWithIdentifier:tabidentifier];
+  }
   [self.settingsWindow setIsVisible:YES];
 }
+
+- (void) showWindow
+{
+  [self showWindowWithActiveTab:nil];
+}
+
 
 - (void) intializeDefaults
 {

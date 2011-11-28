@@ -27,6 +27,7 @@ enum RMFSettingsTabs {
 
 - (IBAction) switchTabView:(id)sender;
 - (void) showWindow;
+- (void) showWindowWithActiveTab:(NSString *)tabidentifier;
 - (void) intializeDefaults;
 
 @end
