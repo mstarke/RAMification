@@ -14,4 +14,15 @@
 @synthesize volumeLabel;
 @synthesize shouldAutoMount;
 
++ (NSUInteger) defaultDiskSize
+{
+  return 4096;
+}
+
++ (NSString*) defaultVolumeLabel
+{
+  [[NSUserDefaults standardUserDefaults] valueForKey:@""];
+  return @"RAMdisk";
+}
+
 @end

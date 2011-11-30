@@ -15,4 +15,7 @@
 @property (assign) NSUInteger diskSize;
 @property (assign) BOOL shouldAutoMount;
 
++ (NSUInteger) defaultDiskSize;
++ (NSString*) defaultVolumeLabel;
+
 @end

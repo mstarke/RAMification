@@ -14,59 +14,45 @@
 // set identifiers programatically
 // to make selection work transparent
 
-@synthesize tabView;
-@synthesize toolbar;
+
 @synthesize settingsWindow;
-@synthesize generalTab;
-@synthesize presetsTab;
+@synthesize toolbar = _toolbar;
+@synthesize presetSettingsController = _presetSettingsController;
+@synthesize generalSettingsController = _generalSettingsController;
 
 - (id)init
 {
   self = [super init];
   if (self)
   {
-    // intialize the defauls values
-    [self intializeDefaults];
     // load the window and create all the necessary gui elements
     [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
-    settingsTabNames = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:RMFGeneralTab], RMFGeneralIdentifier,
-                        [NSNumber numberWithInt:RMFPresetsTab], RMFPresetsIdentifier,
-                        nil];  
     
+    // Initalize the controllers
+    _generalSettingsController = [[RMFGeneralSettingsContoller alloc] initWithNibName:nil bundle:nil];
+    _presetSettingsController = [[RMFPresetSettingsContoller alloc] initWithNibName:nil bundle:nil];
+    
+    //Fixme let the views controller handle this
+    availableSettingsControler = [NSDictionary dictionaryWithObjectsAndKeys:_generalSettingsController,
+                                                                            [RMFGeneralSettingsContoller identifier],
+                                                                            _presetSettingsController,
+                                                                            [RMFPresetSettingsContoller identifier], nil];
+    // create the necessary toolbar delgate
+    toolbarDelegate = [[RMFSettingsToolbarDelegate alloc] init];
+    
+    _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
+    self.toolbar.delegate = toolbarDelegate;
+    self.settingsWindow.toolbar = _toolbar;
     // just if there are really two tabs change their identifiers and headings
-    NSTabViewItem *generalTabViewItem = [[NSTabViewItem alloc] initWithIdentifier:RMFGeneralIdentifier];
-    NSTabViewItem *presetTabViewItem = [[NSTabViewItem alloc] initWithIdentifier:RMFPresetsIdentifier];
-    
-    [NSBundle loadNibNamed:@"GeneralTab" owner:self];
-    [NSBundle loadNibNamed:@"PresetsTab" owner:self];
-    
-    [generalTabViewItem setView:self.generalTab];
-    [presetTabViewItem setView:self.presetsTab];
-    
-    [tabView addTabViewItem:generalTabViewItem];
-    [tabView addTabViewItem:presetTabViewItem];
-
-    [self.toolbar setSelectedItemIdentifier:RMFGeneralIdentifier];
-    [self.tabView selectTabViewItemWithIdentifier:RMFGeneralIdentifier];
-    
-    [generalTabViewItem release];
-    [presetTabViewItem release];
   }
   return self;
 }
 
-- (NSArray*) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+- (void)dealloc
 {
-  return nil;
-  return [NSArray arrayWithObjects:RMFGeneralIdentifier, RMFPresetsIdentifier, nil];
-}
-
-
-- (IBAction) switchTabView:(id)sender
-{
-  //NSString *label = [(NSToolbarItem*)sender label];
-  //NSLog(@"Select %@", label);
-  [tabView selectTabViewItemWithIdentifier:[toolbar selectedItemIdentifier]];
+  self.toolbar = nil;
+  [toolbarDelegate dealloc];
+  [super dealloc];
 }
 
 - (void) showWindowWithActiveTab:(NSString *)tabidentifier
@@ -74,8 +60,8 @@
   if(tabidentifier != nil)
   {
     // select the tab
-    [self.toolbar setSelectedItemIdentifier:tabidentifier];
-    [self.tabView selectTabViewItemWithIdentifier:tabidentifier];
+    //[self.toolbar setSelectedItemIdentifier:tabidentifier];
+    //[self.tabView selectTabViewItemWithIdentifier:tabidentifier];
   }
   [self.settingsWindow setIsVisible:YES];
 }
@@ -84,21 +70,5 @@
 {
   [self showWindowWithActiveTab:nil];
 }
-
-
-- (void) intializeDefaults
-{
-  NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
-  if(defaultsPlistURL != nil)
-  {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithContentsOfURL:defaultsPlistURL]];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-  }
-}
-
-
-
-NSString *const RMFGeneralIdentifier = @"General";
-NSString *const RMFPresetsIdentifier = @"Presets";
 
 @end

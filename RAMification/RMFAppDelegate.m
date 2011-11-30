@@ -24,6 +24,16 @@ const NSUInteger defaultSize = 1024;
 @synthesize ramdiskname = _ramdiskname;
 @synthesize ramdisksize = _ramdisksize;
 
++ (void) initialize
+{
+  NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
+  if(defaultsPlistURL != nil)
+  {
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithContentsOfURL:defaultsPlistURL]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+}
+
 - (void)dealloc
 {
   [super dealloc];
@@ -40,6 +50,7 @@ const NSUInteger defaultSize = 1024;
   self.ramdiskname = defaultName;
   self.ramdisksize = defaultSize;
 }
+
 
 - (void) createMenu
 {
@@ -128,14 +139,6 @@ const NSUInteger defaultSize = 1024;
   {
    _settingsController = [[RMFSettingsController alloc] init];
   }
-  NSString *label = [(NSMenuItem*)sender title];
-  NSString *tabIdentifier = RMFPresetsIdentifier;
-  if(label == @"Preferences...")
-  {
-    tabIdentifier = RMFGeneralIdentifier;
-  }
-  [self.settingsController showWindowWithActiveTab:tabIdentifier];
-    
 }
 
 - (void) showSettings

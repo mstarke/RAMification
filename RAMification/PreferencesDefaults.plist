@@ -4,5 +4,9 @@
 <dict>
 	<key>LaunchAtLogin</key>
 	<false/>
+	<key>DefaultVolumeName</key>
+	<string>RAMdisk</string>
+	<key>DefaultSize</key>
+	<integer>4096</integer>
 </dict>
 </plist>
