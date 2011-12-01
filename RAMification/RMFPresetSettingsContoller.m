@@ -10,6 +10,9 @@
 
 @implementation RMFPresetSettingsContoller
 
+@synthesize tableDataSource = _tableDataSource;
+@synthesize tableDelegate = _tableDelegate;
+
 + (NSString *) identifier
 {
   return @"PresetSettings";
@@ -23,11 +26,20 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-
+    if (self)
+    {
+      _tableDataSource = [[RMFPresetsTableDataSource alloc] init];
+      _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
+      tableView.dataSource = self.tableDataSource;
+      tableView.delegate = self.tableDelegate;
     }
     
     return self;
+}
+
+- (void)dealloc {
+  self.tableDataSource = nil;
+  [super dealloc];
 }
 
 @end

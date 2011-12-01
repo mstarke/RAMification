@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+enum RMFPresetValue
+{
+RMFPresetVolumeName,
+  RMFPresetDiskSize,
+  RMFPresetAutomount,
+};
+
 //  Represents the list of Presets the user has created
 @interface RMFVolumePreset : NSObject
 
