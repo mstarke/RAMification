@@ -44,6 +44,7 @@ const NSUInteger defaultSize = 1024;
 {
   // intialize settings window toolbar delegate
   queue = [[NSOperationQueue alloc] init];
+    
   [self createMenu];
   [self createStatusItem];
   
