@@ -9,5 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface RMFSettingsToolbarDelegate : NSObject <NSToolbarDelegate>
-
+{
+  @private
+  NSDictionary *controllerMap;
+}
 @end

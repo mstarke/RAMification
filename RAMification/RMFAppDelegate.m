@@ -139,6 +139,7 @@ const NSUInteger defaultSize = 1024;
   {
    _settingsController = [[RMFSettingsController alloc] init];
   }
+  [self.settingsController showWindow];
 }
 
 - (void) showSettings

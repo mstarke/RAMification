@@ -23,6 +23,13 @@
   return NSLocalizedString(@"PRESET_SETTINGS_LABEL", @"Label for the Preset Settings");
 }
 
++ (NSToolbarItem *) toolbarItem
+{
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFPresetSettingsContoller identifier]];
+  [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
+  return [item autorelease];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];

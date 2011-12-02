@@ -20,6 +20,13 @@
   return NSLocalizedString(@"GENERAL_SETTINGS_LABEL", @"Label for the General Settings");
 }
 
++ (NSToolbarItem *) toolbarItem
+{
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsContoller identifier]];
+  [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
+  return [item autorelease];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
   self = [super initWithNibName:@"GeneralSettings" bundle:[NSBundle mainBundle]];

@@ -14,5 +14,6 @@
 
 + (NSString*) identifier;
 + (NSString*) label;
++ (NSToolbarItem*) toolbarItem;
 
 @end
