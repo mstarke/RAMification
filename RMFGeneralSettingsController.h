@@ -9,6 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsControllerProtocol.h"
 
-@interface RMFGeneralSettingsContoller : NSViewController <RMFSettingsControllerProtocol>
+@interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
 
 @end

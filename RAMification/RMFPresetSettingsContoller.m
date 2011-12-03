@@ -7,6 +7,7 @@
 //
 
 #import "RMFPresetSettingsContoller.h"
+#import "RMFAppDelegate.h"
 
 @implementation RMFPresetSettingsContoller
 
@@ -27,6 +28,10 @@
 {
   NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFPresetSettingsContoller identifier]];
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
+  [item setAction:@selector(showSettingsPane:)];
+  id delegate = [NSApp delegate];
+  [item setTarget:((RMFAppDelegate*)delegate).settingsController];
+  [item setAction:@selector(showSettings:)];
   return [item autorelease];
 }
 

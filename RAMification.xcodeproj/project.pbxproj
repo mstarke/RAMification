@@ -23,7 +23,7 @@
 		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
-		4CBE41301486DBB700931FCB /* RMFGeneralSettingsContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE412E1486DBB700931FCB /* RMFGeneralSettingsContoller.m */; };
+		4CBE41301486DBB700931FCB /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE412E1486DBB700931FCB /* RMFGeneralSettingsController.m */; };
 		4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */; };
 		4CC52F7A14819A360006C278 /* GeneralSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralSettings.xib */; };
 		4CC52F7D14819BB60006C278 /* PresetsTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* PresetsTab.xib */; };
@@ -75,8 +75,8 @@
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
 		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
 		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
-		4CBE412D1486DBB700931FCB /* RMFGeneralSettingsContoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RMFGeneralSettingsContoller.h; path = ../RMFGeneralSettingsContoller.h; sourceTree = "<group>"; };
-		4CBE412E1486DBB700931FCB /* RMFGeneralSettingsContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMFGeneralSettingsContoller.m; path = ../RMFGeneralSettingsContoller.m; sourceTree = "<group>"; };
+		4CBE412D1486DBB700931FCB /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; name = RMFGeneralSettingsController.h; path = ../RMFGeneralSettingsController.h; sourceTree = "<group>"; };
+		4CBE412E1486DBB700931FCB /* RMFGeneralSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RMFGeneralSettingsController.m; path = ../RMFGeneralSettingsController.m; sourceTree = "<group>"; };
 		4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFCreateRamDiskOperation.h; sourceTree = "<group>"; };
 		4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFCreateRamDiskOperation.m; sourceTree = "<group>"; };
 		4CC52F7914819A360006C278 /* GeneralSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralSettings.xib; sourceTree = "<group>"; };
@@ -123,8 +123,8 @@
 			children = (
 				4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */,
 				4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */,
-				4CBE412D1486DBB700931FCB /* RMFGeneralSettingsContoller.h */,
-				4CBE412E1486DBB700931FCB /* RMFGeneralSettingsContoller.m */,
+				4CBE412D1486DBB700931FCB /* RMFGeneralSettingsController.h */,
+				4CBE412E1486DBB700931FCB /* RMFGeneralSettingsController.m */,
 				4C2A4AE41486DDDE009F3AB0 /* RMFPresetSettingsContoller.h */,
 				4C2A4AE51486DDDE009F3AB0 /* RMFPresetSettingsContoller.m */,
 			);
@@ -368,7 +368,7 @@
 				4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */,
 				4C2CF6591482A79A00338AAF /* RMFVolumePreset.m in Sources */,
 				4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */,
-				4CBE41301486DBB700931FCB /* RMFGeneralSettingsContoller.m in Sources */,
+				4CBE41301486DBB700931FCB /* RMFGeneralSettingsController.m in Sources */,
 				4C2A4AE71486DDDF009F3AB0 /* RMFPresetSettingsContoller.m in Sources */,
 				4C2A4AEC1486E2AF009F3AB0 /* RMFSettingsToolbarDelegate.m in Sources */,
 				4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */,

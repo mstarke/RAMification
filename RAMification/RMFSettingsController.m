@@ -29,12 +29,12 @@
     [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
     
     // Initalize the controllers
-    _generalSettingsController = [[RMFGeneralSettingsContoller alloc] initWithNibName:nil bundle:nil];
+    _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
     _presetSettingsController = [[RMFPresetSettingsContoller alloc] initWithNibName:nil bundle:nil];
     
     //Fixme let the views controller handle this
     availableSettingsControler = [NSDictionary dictionaryWithObjectsAndKeys:_generalSettingsController,
-                                                                            [RMFGeneralSettingsContoller identifier],
+                                                                            [RMFGeneralSettingsController identifier],
                                                                             _presetSettingsController,
                                                                             [RMFPresetSettingsContoller identifier], nil];
     // create the necessary toolbar delgate
@@ -55,20 +55,31 @@
   [super dealloc];
 }
 
-- (void) showWindowWithActiveTab:(NSString *)tabidentifier
+- (void)showSettings:(id)sender
 {
-  if(tabidentifier != nil)
+  NSString* settingsIdentifier;
+  
+  if([sender isMemberOfClass:[NSToolbarItem class]])
   {
-    // select the tab
-    //[self.toolbar setSelectedItemIdentifier:tabidentifier];
-    //[self.tabView selectTabViewItemWithIdentifier:tabidentifier];
+    settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
+  
+  if(sender == nil)
+  {
+    settingsIdentifier = [RMFGeneralSettingsController identifier];
+  }
+  id<RMFSettingsControllerProtocol> visibleSettings = [availableSettingsControler objectForKey:settingsIdentifier];
+  
+  if(visibleSettings == nil)
+  {
+    visibleSettings = _generalSettingsController;
+  }
+  NSView *settingsView = [(NSViewController*)visibleSettings view];
+  NSLog(@"Settings View retain count before:%lu", [settingsView retainCount]);
+  [self.settingsWindow setContentView:settingsView];
+  NSLog(@"Settings View retain count after:%lu", [settingsView retainCount]);
   [self.settingsWindow setIsVisible:YES];
 }
 
-- (void) showWindow
-{
-  [self showWindowWithActiveTab:nil];
-}
 
 @end

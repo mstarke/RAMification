@@ -26,7 +26,6 @@
 - (void) quitApplication;
 - (void) createRamdisk;
 - (void) removeRamdisk;
-- (void) showSettings;
 - (void) showSettingsTab:(id)sender;
 
 @end

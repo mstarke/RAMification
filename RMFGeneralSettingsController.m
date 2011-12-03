@@ -6,9 +6,10 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFGeneralSettingsContoller.h"
+#import "RMFGeneralSettingsController.h"
+#import "RMFAppDelegate.h"
 
-@implementation RMFGeneralSettingsContoller
+@implementation RMFGeneralSettingsController
 
 + (NSString *) identifier
 {
@@ -22,8 +23,11 @@
 
 + (NSToolbarItem *) toolbarItem
 {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsContoller identifier]];
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsController identifier]];
   [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
+  id delegate = [NSApp delegate];
+  [item setTarget:((RMFAppDelegate*)delegate).settingsController];
+  [item setAction:@selector(showSettings:)];
   return [item autorelease];
 }
 
@@ -37,5 +41,6 @@
     
     return self;
 }
+
 
 @end

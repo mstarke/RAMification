@@ -7,15 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFGeneralSettingsContoller.h"
+#import "RMFGeneralSettingsController.h"
 #import "RMFPresetSettingsContoller.h"
 #import "RMFSettingsToolbarDelegate.h"
-
-enum RMFSettingsTabs {
-  RMFGeneralTab,
-  RMFPresetsTab,
-};
-
 
 @interface RMFSettingsController : NSObject
 {
@@ -23,15 +17,11 @@ enum RMFSettingsTabs {
   RMFSettingsToolbarDelegate *toolbarDelegate;
 }
 
-@property (retain) RMFGeneralSettingsContoller *generalSettingsController;
+@property (retain) RMFGeneralSettingsController *generalSettingsController;
 @property (retain) RMFPresetSettingsContoller *presetSettingsController;
 @property (retain) NSToolbar* toolbar;
 @property (assign) IBOutlet NSWindow *settingsWindow;
 
-- (void) showWindow;
-- (void) showWindowWithActiveTab:(NSString *)tabidentifier;
+- (void) showSettings: (id)sender;
 
 @end
-
-APPKIT_PRIVATE_EXTERN NSString *const RMFGeneralIdentifier;
-APPKIT_PRIVATE_EXTERN NSString *const RMFPresetsIdentifier;

@@ -78,6 +78,7 @@ const NSUInteger defaultSize = 1024;
 
   NSMenu *presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setRepresentedObject:item];
   [item setEnabled:YES];
   [item setTarget:self];
   [presetsSubMenu addItem:item];
@@ -140,12 +141,8 @@ const NSUInteger defaultSize = 1024;
   {
    _settingsController = [[RMFSettingsController alloc] init];
   }
-  [self.settingsController showWindow];
-}
-
-- (void) showSettings
-{
-  [self showSettingsTab:nil];
+  
+  [self.settingsController showSettings:nil];
 }
 
 - (void) createRamdisk

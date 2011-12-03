@@ -7,7 +7,7 @@
 //
 
 #import "RMFSettingsToolbarDelegate.h"
-#import "RMFGeneralSettingsContoller.h"
+#import "RMFGeneralSettingsController.h"
 #import "RMFPresetSettingsContoller.h"
 #import "RMFSettingsControllerProtocol.h"
 
@@ -18,7 +18,7 @@
   self = [super init];
   if (self)
   {
-    controllerMap = [NSDictionary dictionaryWithObjectsAndKeys:[RMFGeneralSettingsContoller class], [RMFGeneralSettingsContoller identifier],
+    controllerMap = [NSDictionary dictionaryWithObjectsAndKeys:[RMFGeneralSettingsController class], [RMFGeneralSettingsController identifier],
                                                                 [RMFPresetSettingsContoller class], [RMFPresetSettingsContoller identifier], nil];
   }
   return self;
