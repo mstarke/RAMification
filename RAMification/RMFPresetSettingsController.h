@@ -11,7 +11,7 @@
 #import "RMFPresetsTableDataSource.h"
 #import "RMFPresetsTableViewDelegate.h"
 
-@interface RMFPresetSettingsContoller : NSViewController <RMFSettingsControllerProtocol>
+@interface RMFPresetSettingsController : NSViewController <RMFSettingsControllerProtocol>
 {
   IBOutlet NSTableView* tableView;
 }

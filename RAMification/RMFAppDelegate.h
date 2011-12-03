@@ -20,6 +20,7 @@
 @property (assign) NSUInteger ramdisksize;
 @property (retain) NSString *ramdiskname;
 @property (retain) RMFSettingsController *settingsController;
+@property (retain) NSMutableDictionary *mountedVolumes;
 
 - (void) createStatusItem;
 - (void) createMenu;

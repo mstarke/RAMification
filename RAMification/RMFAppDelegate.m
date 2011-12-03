@@ -23,6 +23,7 @@ const NSUInteger defaultSize = 1024;
 @synthesize menu = _menu;
 @synthesize ramdiskname = _ramdiskname;
 @synthesize ramdisksize = _ramdisksize;
+@synthesize mountedVolumes = _mountedVolumes;
 
 + (void) initialize
 {
@@ -78,7 +79,7 @@ const NSUInteger defaultSize = 1024;
 
   NSMenu *presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:item];
+  [item setRepresentedObject:[RMFPresetSettingsController identifier]];
   [item setEnabled:YES];
   [item setTarget:self];
   [presetsSubMenu addItem:item];
@@ -99,7 +100,7 @@ const NSUInteger defaultSize = 1024;
 
   
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:item];
+  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -121,7 +122,6 @@ const NSUInteger defaultSize = 1024;
 {
   NSStatusBar *bar = [NSStatusBar systemStatusBar];
   self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
-  //[self.statusItem setTitle:@"RAMification"];
   NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
   [self.statusItem setImage:menuIconImage];
   [self.statusItem setEnabled:YES];
@@ -142,7 +142,7 @@ const NSUInteger defaultSize = 1024;
    _settingsController = [[RMFSettingsController alloc] init];
   }
   
-  [self.settingsController showSettings:nil];
+  [self.settingsController showSettings:sender];
 }
 
 - (void) createRamdisk

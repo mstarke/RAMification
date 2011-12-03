@@ -25,15 +25,14 @@
 {
   NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsController identifier]];
   [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
-  id delegate = [NSApp delegate];
-  [item setTarget:((RMFAppDelegate*)delegate).settingsController];
   [item setAction:@selector(showSettings:)];
+  [item setLabel:[RMFGeneralSettingsController label]];
   return [item autorelease];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-  self = [super initWithNibName:@"GeneralSettings" bundle:[NSBundle mainBundle]];
+  self = [super initWithNibName:@"GeneralPane" bundle:[NSBundle mainBundle]];
   if (self)
   {
     // init

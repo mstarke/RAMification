@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFPresetSettingsContoller.h"
+#import "RMFPresetSettingsController.h"
 #import "RMFAppDelegate.h"
 
-@implementation RMFPresetSettingsContoller
+@implementation RMFPresetSettingsController
 
 @synthesize tableDataSource = _tableDataSource;
 @synthesize tableDelegate = _tableDelegate;
@@ -26,18 +26,16 @@
 
 + (NSToolbarItem *) toolbarItem
 {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFPresetSettingsContoller identifier]];
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFPresetSettingsController identifier]];
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
-  [item setAction:@selector(showSettingsPane:)];
-  id delegate = [NSApp delegate];
-  [item setTarget:((RMFAppDelegate*)delegate).settingsController];
+  [item setLabel:[RMFPresetSettingsController label]];
   [item setAction:@selector(showSettings:)];
   return [item autorelease];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:@"PresetsPane" bundle:[NSBundle mainBundle]];
     if (self)
     {
       _tableDataSource = [[RMFPresetsTableDataSource alloc] init];

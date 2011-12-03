@@ -30,18 +30,17 @@
     
     // Initalize the controllers
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
-    _presetSettingsController = [[RMFPresetSettingsContoller alloc] initWithNibName:nil bundle:nil];
+    _presetSettingsController = [[RMFPresetSettingsController alloc] initWithNibName:nil bundle:nil];
     
     //Fixme let the views controller handle this
-    availableSettingsControler = [NSDictionary dictionaryWithObjectsAndKeys:_generalSettingsController,
-                                                                            [RMFGeneralSettingsController identifier],
-                                                                            _presetSettingsController,
-                                                                            [RMFPresetSettingsContoller identifier], nil];
-    // create the necessary toolbar delgate
-    toolbarDelegate = [[RMFSettingsToolbarDelegate alloc] init];
+    settingsPaneControler = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
+                                                                        [RMFGeneralSettingsController identifier],
+                                                                        _presetSettingsController,
+                                                                        [RMFPresetSettingsController identifier], nil];
     
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
-    self.toolbar.delegate = toolbarDelegate;
+    self.toolbar.allowsUserCustomization = YES;
+    self.toolbar.delegate = self;
     self.settingsWindow.toolbar = _toolbar;
     // just if there are really two tabs change their identifiers and headings
   }
@@ -51,7 +50,7 @@
 - (void)dealloc
 {
   self.toolbar = nil;
-  [toolbarDelegate dealloc];
+  [settingsPaneControler release];
   [super dealloc];
 }
 
@@ -63,23 +62,54 @@
   {
     settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
-  
+  else
+  {
+    if ([sender isMemberOfClass:[NSString class]])
+    {
+      settingsIdentifier = sender;
+    }
+  }
+ 
   if(sender == nil)
   {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
   }
-  id<RMFSettingsControllerProtocol> visibleSettings = [availableSettingsControler objectForKey:settingsIdentifier];
+  id<RMFSettingsControllerProtocol> visibleSettings = [settingsPaneControler objectForKey:settingsIdentifier];
   
   if(visibleSettings == nil)
   {
     visibleSettings = _generalSettingsController;
   }
+  [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
   NSView *settingsView = [(NSViewController*)visibleSettings view];
-  NSLog(@"Settings View retain count before:%lu", [settingsView retainCount]);
   [self.settingsWindow setContentView:settingsView];
-  NSLog(@"Settings View retain count after:%lu", [settingsView retainCount]);
   [self.settingsWindow setIsVisible:YES];
 }
 
+#pragma mark NSToolbarDelegateProtocol
+
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
+{
+  return [settingsPaneControler allKeys];
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
+{
+  return [settingsPaneControler allKeys];
+}
+
+- (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
+{
+  return [settingsPaneControler allKeys];
+}
+
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
+{
+  id controller = [settingsPaneControler objectForKey:itemIdentifier];
+  NSToolbarItem *item = [[controller class ]toolbarItem];
+  [item setAction:@selector(showSettings:)];
+  [item setTarget:self];
+  return item;
+}
 
 @end

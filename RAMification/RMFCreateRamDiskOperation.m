@@ -7,6 +7,8 @@
 //
 
 #import "RMFCreateRamDiskOperation.h"
+#import "RMFAppDelegate.h"
+
 @implementation RMFCreateRamDiskOperation
 
 @synthesize size = _size;
@@ -25,6 +27,13 @@
 
 - (void) main
 {  
+  // just get out if the operation is set as canceled
+  if([self isCancelled])
+    return;
+  
+  // make some checking if the volume name is available?
+  // TODO
+  
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   // wrap the creation method in a block to call it asynchrounous.
   
@@ -61,6 +70,11 @@
   [createDisk release];
   
   [pool drain];
+  
+  // if the Mount finished tell the application that this thing is mounted
+  RMFAppDelegate *appDelegate = [NSApp delegate];
+  NSLog(@"Adding %@ with device name %@", self.label, strippedDeviceName);
+  [appDelegate.mountedVolumes setObject:self.label forKey:strippedDeviceName];
   
   //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
 }
