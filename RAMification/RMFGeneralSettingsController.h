@@ -11,6 +11,4 @@
 
 @interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
 
-- (IBAction) toggleLaunchAtLogin:(id)sender;
-
 @end
