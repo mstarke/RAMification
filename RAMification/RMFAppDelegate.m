@@ -142,7 +142,7 @@ const NSUInteger defaultSize = 1024;
    _settingsController = [[RMFSettingsController alloc] init];
   }
   
-  [self.settingsController showSettings:sender];
+  [self.settingsController showSettings:[sender representedObject]];
 }
 
 - (void) createRamdisk

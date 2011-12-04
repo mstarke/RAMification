@@ -64,7 +64,7 @@
   }
   else
   {
-    if ([sender isMemberOfClass:[NSString class]])
+    if ([sender isKindOfClass:[NSString class]])
     {
       settingsIdentifier = sender;
     }
@@ -82,6 +82,7 @@
   }
   [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
   NSView *settingsView = [(NSViewController*)visibleSettings view];
+  //[self.settingsWindow setContentSize:[settingsView frame].size];
   [self.settingsWindow setContentView:settingsView];
   [self.settingsWindow setIsVisible:YES];
 }
