@@ -41,5 +41,10 @@
     return self;
 }
 
+- (IBAction)toggleLaunchAtLogin:(id)sender
+{
+LSSharedFileList
+}
+
 
 @end
