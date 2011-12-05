@@ -25,6 +25,7 @@ const NSUInteger defaultSize = 1024;
 @synthesize ramdisksize = _ramdisksize;
 @synthesize mountedVolumes = _mountedVolumes;
 
+
 + (void) initialize
 {
   NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
@@ -37,6 +38,11 @@ const NSUInteger defaultSize = 1024;
 
 - (void)dealloc
 {
+  self.statusItem  = nil;
+  self.settingsController = nil;
+  self.menu = nil;
+  self.mountedVolumes = nil;
+  
   [super dealloc];
   // remove the toolbardelegate from the 
 }

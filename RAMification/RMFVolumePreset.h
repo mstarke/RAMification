@@ -22,7 +22,11 @@ RMFPresetVolumeName,
 @property (assign) NSUInteger diskSize;
 @property (assign) BOOL shouldAutoMount;
 
++ (RMFVolumePreset*) VolumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
++ (RMFVolumePreset*) VolumePreset;
 + (NSUInteger) defaultDiskSize;
 + (NSString*) defaultVolumeLabel;
+
+- (id) initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize;
 
 @end

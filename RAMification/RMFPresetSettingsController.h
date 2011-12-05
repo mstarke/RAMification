@@ -18,5 +18,6 @@
 
 @property (retain) RMFPresetsTableDataSource *tableDataSource;
 @property (retain) RMFPresetsTableViewDelegate *tableDelegate;
+@property (retain, readonly) NSArray* testArray;
 
 @end
