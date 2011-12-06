@@ -11,18 +11,16 @@
 			<string key="NS.object.0">1938</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
-			<string>NSScroller</string>
-			<string>NSArrayController</string>
+			<string>NSCustomObject</string>
+			<string>NSTableColumn</string>
+			<string>NSScrollView</string>
+			<string>NSTextFieldCell</string>
+			<string>NSCustomView</string>
+			<string>NSButtonCell</string>
 			<string>NSTableHeaderView</string>
 			<string>NSButton</string>
-			<string>NSScrollView</string>
-			<string>NSButtonCell</string>
-			<string>NSTextFieldCell</string>
+			<string>NSScroller</string>
 			<string>NSTableView</string>
-			<string>NSCustomObject</string>
-			<string>NSCustomView</string>
-			<string>NSTableColumn</string>
-			<string>NSUserDefaultsController</string>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -385,21 +383,6 @@
 				<reference key="NSNextKeyView" ref="1020953927"/>
 				<string key="NSClassName">NSView</string>
 			</object>
-			<object class="NSArrayController" id="48207174">
-				<array class="NSMutableArray" key="NSDeclaredKeys">
-					<string>label</string>
-				</array>
-				<string key="NSObjectClassName">NSArray</string>
-				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
-				<bool key="NSAvoidsEmptySelection">YES</bool>
-				<bool key="NSPreservesSelection">YES</bool>
-				<bool key="NSSelectsInsertedObjects">YES</bool>
-				<bool key="NSFilterRestrictsInsertion">YES</bool>
-				<bool key="NSClearsFilterPredicateOnInsertion">YES</bool>
-			</object>
-			<object class="NSUserDefaultsController" id="361350167">
-				<bool key="NSSharedInstance">YES</bool>
-			</object>
 		</array>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<array class="NSMutableArray" key="connectionRecords">
@@ -410,86 +393,6 @@
 						<reference key="destination" ref="1005"/>
 					</object>
 					<int key="connectionID">39</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects.volumeLabel</string>
-						<reference key="source" ref="173464942"/>
-						<reference key="destination" ref="48207174"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="173464942"/>
-							<reference key="NSDestination" ref="48207174"/>
-							<string key="NSLabel">content: arrangedObjects.volumeLabel</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects.volumeLabel</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">100</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentObject: values</string>
-						<reference key="source" ref="48207174"/>
-						<reference key="destination" ref="361350167"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="48207174"/>
-							<reference key="NSDestination" ref="361350167"/>
-							<string key="NSLabel">contentObject: values</string>
-							<string key="NSBinding">contentObject</string>
-							<string key="NSKeyPath">values</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">92</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: testArray</string>
-						<reference key="source" ref="48207174"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="48207174"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">contentArray: testArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">testArray</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">94</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.volumeLabel</string>
-						<reference key="source" ref="195619416"/>
-						<reference key="destination" ref="48207174"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="195619416"/>
-							<reference key="NSDestination" ref="48207174"/>
-							<string key="NSLabel">value: arrangedObjects.volumeLabel</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.volumeLabel</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">110</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.diskSize</string>
-						<reference key="source" ref="4840481"/>
-						<reference key="destination" ref="48207174"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="4840481"/>
-							<reference key="NSDestination" ref="48207174"/>
-							<string key="NSLabel">value: arrangedObjects.diskSize</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.diskSize</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">109</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -613,16 +516,6 @@
 						<reference key="parent" ref="173464942"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">84</int>
-						<reference key="object" ref="48207174"/>
-						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">91</int>
-						<reference key="object" ref="361350167"/>
-						<reference key="parent" ref="0"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">102</int>
 						<reference key="object" ref="195619416"/>
 						<array class="NSMutableArray" key="children">
@@ -678,9 +571,6 @@
 				<string key="54.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="55.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<dictionary class="NSMutableDictionary" key="84.IBAttributePlaceholdersKey"/>
-				<string key="84.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="91.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>

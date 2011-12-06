@@ -206,6 +206,7 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
+				4CEF3E74148ED25100232818 /* Model */,
 				4CB61008148AA30100166397 /* Preferences */,
 				4C2A4AF11486ED8D009F3AB0 /* Protcols */,
 				4C2A4AF01486ED63009F3AB0 /* Operations */,
@@ -213,8 +214,6 @@
 				4C2A4AEE1486ED07009F3AB0 /* Views */,
 				4C2A4AF21486EDC2009F3AB0 /* Delegates */,
 				4C5BDB61147EF6AD000E19B0 /* Supporting Files */,
-				4C34B6AF1486FC2D008CFB00 /* RMFPresetsTableDataSource.h */,
-				4C34B6B01486FC2D008CFB00 /* RMFPresetsTableDataSource.m */,
 			);
 			path = RAMification;
 			sourceTree = "<group>";
@@ -270,6 +269,15 @@
 				4CBE8D6F148C30D100747A33 /* README.md */,
 			);
 			path = LaunchAtLoginController;
+			sourceTree = "<group>";
+		};
+		4CEF3E74148ED25100232818 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C34B6AF1486FC2D008CFB00 /* RMFPresetsTableDataSource.h */,
+				4C34B6B01486FC2D008CFB00 /* RMFPresetsTableDataSource.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

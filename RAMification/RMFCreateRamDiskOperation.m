@@ -11,17 +11,23 @@
 
 @implementation RMFCreateRamDiskOperation
 
-@synthesize size = _size;
-@synthesize label = _label;
+@synthesize preset = _preset;
 
-- (id) initWithSize:(NSUInteger)size andLabel:(NSString *)label
+- (id) initWithPreset:(RMFVolumePreset *)preset
 {
   self = [super init];
   if (self)
   {
-    self.label = label;
-    self.size = size;
+    self.preset = preset;
   }
+  return self;
+}
+
+- (id) init
+{
+  RMFVolumePreset* preset = [[RMFVolumePreset alloc] init];
+  self = [self initWithPreset:preset];
+  [preset release];
   return self;
 }
 
@@ -37,7 +43,6 @@
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   // wrap the creation method in a block to call it asynchrounous.
   
-  //NSOperationQueue *operationQueeu = [NSOperationQueue ]
   NSPipe *output = [NSPipe pipe];  
   NSTask *createDisk = [[NSTask alloc] init];
   
@@ -45,7 +50,7 @@
   // hdiutil attach -nomount ram://MB*2048
   
   // create the string for the desired ramdisksize
-  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.size*2048];
+  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.preset.diskSize*2048];
   
   // create the task and run it
   [createDisk setLaunchPath:@"/usr/bin/hdiutil"];
@@ -65,7 +70,7 @@
   // diskutil erasevolume HFS+ <NAME> <DEVICE>
   createDisk = [[NSTask alloc] init];
   [createDisk setLaunchPath:@"/usr/sbin/diskutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.label, strippedDeviceName, nil]];
+  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.preset.volumeLabel, strippedDeviceName, nil]];
   [createDisk launch];
   [createDisk release];
   
@@ -73,8 +78,8 @@
   
   // if the Mount finished tell the application that this thing is mounted
   RMFAppDelegate *appDelegate = [NSApp delegate];
-  NSLog(@"Adding %@ with device name %@", self.label, strippedDeviceName);
-  [appDelegate.mountedVolumes setObject:self.label forKey:strippedDeviceName];
+  NSLog(@"Adding %@ with device name %@", self.preset.volumeLabel, strippedDeviceName);
+  [appDelegate.mountedVolumes setObject:self.preset.volumeLabel forKey:strippedDeviceName];
   
   //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
 }

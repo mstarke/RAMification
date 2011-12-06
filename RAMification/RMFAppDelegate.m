@@ -8,11 +8,10 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFCreateRamDiskOperation.h"
+#import "RMFVolumePreset.h"
 
 // predefined values (private)
-NSString *const defaultName = @"Ramdisk";
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate"; 
-const NSUInteger defaultSize = 1024;
 
 // actual implemenation
 
@@ -21,10 +20,8 @@ const NSUInteger defaultSize = 1024;
 @synthesize statusItem = _statusItem;
 @synthesize settingsController = _settingsController;
 @synthesize menu = _menu;
-@synthesize ramdiskname = _ramdiskname;
-@synthesize ramdisksize = _ramdisksize;
 @synthesize mountedVolumes = _mountedVolumes;
-
+@synthesize presets = _presets;
 
 + (void) initialize
 {
@@ -54,9 +51,6 @@ const NSUInteger defaultSize = 1024;
     
   [self createMenu];
   [self createStatusItem];
-  
-  self.ramdiskname = defaultName;
-  self.ramdisksize = defaultSize;
 }
 
 
@@ -153,7 +147,7 @@ const NSUInteger defaultSize = 1024;
 
 - (void) createRamdisk
 {
-  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithSize:self.ramdisksize andLabel:self.ramdiskname];
+  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] init];
   [queue cancelAllOperations];
   [queue addOperation:mountOperation];
   [mountOperation release];

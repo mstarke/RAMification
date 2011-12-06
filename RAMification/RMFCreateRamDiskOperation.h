@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RMFVolumePreset.h"
 
 @interface RMFCreateRamDiskOperation : NSOperation
 
-@property (assign) NSUInteger size;
-@property (retain) NSString* label;
+@property (retain) RMFVolumePreset* preset;
 
-- (id) initWithSize:(NSUInteger)size andLabel:(NSString*)label;
+- (id) initWithPreset:(RMFVolumePreset *)preset;
 
 @end

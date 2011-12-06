@@ -17,10 +17,10 @@
 
 @property (retain) NSStatusItem *statusItem;
 @property (retain) NSMenu *menu;
-@property (assign) NSUInteger ramdisksize;
-@property (retain) NSString *ramdiskname;
 @property (retain) RMFSettingsController *settingsController;
 @property (retain) NSMutableDictionary *mountedVolumes;
+@property (retain) NSArray *presets;
+
 
 - (void) createStatusItem;
 - (void) createMenu;

@@ -14,7 +14,6 @@
 
 @synthesize tableDataSource = _tableDataSource;
 @synthesize tableDelegate = _tableDelegate;
-@synthesize testArray = _testArray;
 
 + (NSString *) identifier
 {
@@ -44,9 +43,6 @@
       _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
       tableView.dataSource = self.tableDataSource;
       tableView.delegate = self.tableDelegate;
-      _testArray = [[NSArray arrayWithObjects:  [RMFVolumePreset VolumePresetWithLable:@"Disk1" andSize:100 shouldAutoMount:NO],
-                                                [RMFVolumePreset VolumePresetWithLable:@"Disk2" andSize:123 shouldAutoMount:NO],
-                                                nil] retain];
     }
     
     return self;
