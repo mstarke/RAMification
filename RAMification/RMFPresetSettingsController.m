@@ -50,4 +50,18 @@
   [super dealloc];
 }
 
+- (void)addPreset:(id)sender
+{
+  RMFAppDelegate *delegate = [NSApp delegate];
+  [delegate.presetsManager addNewVolumePreset];
+}
+
+- (void)deletePreset:(id)sender
+{
+  // find the selected preset
+  RMFAppDelegate *delegate = [NSApp delegate];
+  [delegate.presetsManager deleteVolumePreset:nil];
+
+}
+
 @end

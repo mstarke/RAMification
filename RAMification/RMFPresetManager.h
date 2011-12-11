@@ -16,6 +16,9 @@
 + (NSString*) presetsPreferencesKey;
 
 - (BOOL) addVolumePreset:(RMFVolumePreset*) preset;
+- (RMFVolumePreset*) addNewVolumePreset;
+- (RMFVolumePreset*) createUniqueVolumePreset;
+- (void) deleteVolumePreset:(RMFVolumePreset *)preset;
 - (void) synchronize;
 
 

@@ -17,4 +17,7 @@
 
 @property (retain, readonly) RMFPresetsTableViewDelegate *tableDelegate;
 
+- (IBAction)addPreset:(id)sender;
+- (IBAction)deletePreset :(id)sender;
+
 @end

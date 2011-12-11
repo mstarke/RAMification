@@ -21,29 +21,47 @@
   self = [super init];
   if (self)
   {
-    id loadedPrests = [[NSUserDefaults standardUserDefaults] arrayForKey:[RMFPresetManager presetsPreferencesKey]];
-    if(loadedPrests != nil)
+    NSLog(@"Trying to load presets!");
+    _presets = [[NSMutableArray array] retain];
+    NSArray *loadedPresets = [[NSUserDefaults standardUserDefaults] arrayForKey:[RMFPresetManager presetsPreferencesKey]];
+    if(loadedPresets != nil)
     {
-      for(NSDictionary* volumeDict in loadedPrests)
+      NSLog(@"Found %lu Presets", [loadedPresets count]);
+      for(NSDictionary* volumeDict in loadedPresets)
       {
         RMFVolumePreset* preset = [RMFVolumePreset VolumePresetWithContentOfDict:volumeDict];
         if(preset != nil)
         {
+          NSLog(@"Adding %@!", preset.volumeLabel);
           [_presets addObject:preset];
         }
       }
-    }
-    else
-    {
-      // we got no presets
     }
   }
   return self;
 }
 
+- (void)dealloc {
+  [_presets release];
+  [super dealloc];
+}
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
   return [self.presets count];
+}
+
+- (RMFVolumePreset *)createUniqueVolumePreset
+{
+  // todo implement
+  return nil;
+}
+
+-(RMFVolumePreset *)addNewVolumePreset
+{
+  RMFVolumePreset* newPreset = [self createUniqueVolumePreset];
+  [self addVolumePreset:newPreset];
+  return [newPreset autorelease];
 }
 
 - (BOOL) addVolumePreset:(RMFVolumePreset *)preset
@@ -56,6 +74,12 @@
   }
   
   return !volumePresent;
+}
+
+- (void)deleteVolumePreset:(RMFVolumePreset *)preset
+{
+  [[NSApp delegate] unmountAndEjectDeviceAtPath:@""];
+  [_presets removeObject:preset];
 }
 
 - (void)synchronize
