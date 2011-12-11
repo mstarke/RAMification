@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C2A4AE71486DDDF009F3AB0 /* RMFPresetSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFPresetSettingsController.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */; };
+		4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */; };
 		4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB67147EF6AD000E19B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB66147EF6AD000E19B0 /* main.m */; };
@@ -50,6 +51,8 @@
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsControllerProtocol.h; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFPresetsTableViewDelegate.h; sourceTree = "<group>"; };
 		4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFPresetsTableViewDelegate.m; sourceTree = "<group>"; };
+		4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFVolumeTools.h"; sourceTree = "<group>"; };
+		4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RMFVolumeTools.m"; sourceTree = "<group>"; };
 		4C5BDB56147EF6AD000E19B0 /* RAMification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAMification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4C5BDB5D147EF6AD000E19B0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -163,6 +166,15 @@
 			name = Delegates;
 			sourceTree = "<group>";
 		};
+		4C5039931495663500089F86 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */,
+				4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
 		4C5BDB4B147EF6AD000E19B0 = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +218,7 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
+				4C5039931495663500089F86 /* Tools */,
 				4CEF3E74148ED25100232818 /* Model */,
 				4C2A4AF11486ED8D009F3AB0 /* Protcols */,
 				4C2A4AF01486ED63009F3AB0 /* Operations */,
@@ -397,6 +410,7 @@
 				4CB61006148AA2DE00166397 /* RMFVolumePreset.m in Sources */,
 				4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */,
 				4CF8842914926DC2000EE2D7 /* RMFPresetManager.m in Sources */,
+				4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

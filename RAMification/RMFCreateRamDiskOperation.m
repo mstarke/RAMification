@@ -8,6 +8,7 @@
 
 #import "RMFCreateRamDiskOperation.h"
 #import "RMFAppDelegate.h"
+#import "NSString+RMFVolumeTools.h"
 
 @implementation RMFCreateRamDiskOperation
 
@@ -33,12 +34,11 @@
 
 - (void) main
 {  
-  // just get out if the operation is set as canceled
-  if([self isCancelled])
+  // stop if we are cancelled or are a already mounted volume
+  if([self isCancelled] || [self.preset.volumeLabel isUsedAsVolumeName])
+  {  
     return;
-  
-  // make some checking if the volume name is available?
-  // TODO
+  }
   
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   // wrap the creation method in a block to call it asynchrounous.

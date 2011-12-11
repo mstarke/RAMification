@@ -24,6 +24,8 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 @synthesize presetsSubMenu = _presetsSubMenu;
 @synthesize presetsManager = _presetsManager;
 
+# pragma mark init/dealloc
+
 + (void) initialize
 {
   NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
@@ -49,7 +51,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 {
   // intialize settings window toolbar delegate
   queue = [[NSOperationQueue alloc] init];
-    
+  
   // initialize our settings controller
   _settingsController = [[RMFSettingsController alloc] init];
   _presetsManager = [[RMFPresetManager alloc] init];
@@ -58,95 +60,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [self createStatusItem];
 }
 
-
-- (void)updatePresetsMenu
-{
-    NSMenuItem *item;
-    _presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
-    
-    for(RMFVolumePreset *preset in self.presetsManager.presets)
-    {
-        item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(mountRamdisk:) keyEquivalent:@""];
-    }
-    if([self.presetsManager.presets count] == 0)
-    {
-        
-    }
-    
-    [_presetsSubMenu addItem:[NSMenuItem separatorItem]];
-}
-
-- (void) createMenu
-{
-  _menu = [[NSMenu alloc] initWithTitle:@"menu"];
-  // Create ramdisk
-  NSMenuItem *item;
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk:) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Destroy ramdisk
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Destroy Ramdisk" action:@selector(removeRamdisk) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-
-  [self updatePresetsMenu];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFPresetSettingsController identifier]];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [self.presetsSubMenu addItem:item];
-  [item release];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [item setSubmenu:self.presetsSubMenu];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-  
-  // Quit
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Quit" action:@selector(quitApplication) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-}
-
-- (void) createStatusItem
-{
-  NSStatusBar *bar = [NSStatusBar systemStatusBar];
-  self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
-  NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
-  [self.statusItem setImage:menuIconImage];
-  [self.statusItem setEnabled:YES];
-  [self.statusItem setHighlightMode:YES];
-  [self.statusItem setMenu:self.menu];
-}
+# pragma mark Actions
 
 - (void) quitApplication
 {
@@ -174,4 +88,94 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   // hdutil detach <Device>
 }
 
+# pragma mark Menu
+
+- (void)updatePresetsMenu
+{
+  NSMenuItem *item;
+  _presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
+  
+  for(RMFVolumePreset *preset in self.presetsManager.presets)
+  {
+    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(mountRamdisk:) keyEquivalent:@""];
+  }
+  if([self.presetsManager.presets count] == 0)
+  {
+    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"No Presets defined" action:nil keyEquivalent:@""];
+  }
+  
+  [_presetsSubMenu addItem:[NSMenuItem separatorItem]];
+}
+
+- (void) createMenu
+{
+  _menu = [[NSMenu alloc] initWithTitle:@"menu"];
+  // Create ramdisk
+  NSMenuItem *item;
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk:) keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
+  [item setTarget:self];
+  [self.menu addItem:item];
+  [item release];
+  
+  // Destroy ramdisk
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Destroy Ramdisk" action:@selector(removeRamdisk) keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
+  [item setTarget:self];
+  [self.menu addItem:item];
+  [item release];
+  
+  // Separation
+  [self.menu addItem:[NSMenuItem separatorItem]];
+  
+  [self updatePresetsMenu];
+  
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setRepresentedObject:[RMFPresetSettingsController identifier]];
+  [item setEnabled:YES];
+  [item setTarget:self];
+  [self.presetsSubMenu addItem:item];
+  [item release];
+  
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setTarget:self];
+  [item setSubmenu:self.presetsSubMenu];
+  [self.menu addItem:item];
+  [item release];
+  
+  // Separation
+  [self.menu addItem:[NSMenuItem separatorItem]];
+  
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
+  [item setEnabled:YES];
+  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
+  [item setTarget:self];
+  [self.menu addItem:item];
+  [item release];
+  
+  // Separation
+  [self.menu addItem:[NSMenuItem separatorItem]];
+  
+  // Quit
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Quit" action:@selector(quitApplication) keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setTarget:self];
+  [self.menu addItem:item];
+  [item release];
+}
+
+- (void) createStatusItem
+{
+  NSStatusBar *bar = [NSStatusBar systemStatusBar];
+  self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
+  NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
+  [self.statusItem setImage:menuIconImage];
+  [self.statusItem setEnabled:YES];
+  [self.statusItem setHighlightMode:YES];
+  [self.statusItem setMenu:self.menu];
+}
 @end
