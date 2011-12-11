@@ -12,7 +12,6 @@
 
 @implementation RMFPresetSettingsController
 
-@synthesize tableDataSource = _tableDataSource;
 @synthesize tableDelegate = _tableDelegate;
 
 + (NSString *) identifier
@@ -39,9 +38,8 @@
     self = [super initWithNibName:@"PresetsPane" bundle:[NSBundle mainBundle]];
     if (self)
     {
-      _tableDataSource = [[RMFPresetsTableDataSource alloc] init];
       _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
-      tableView.dataSource = self.tableDataSource;
+      tableView.dataSource = [[NSApp delegate] presetsManager];
       tableView.delegate = self.tableDelegate;
     }
     
@@ -49,7 +47,6 @@
 }
 
 - (void)dealloc {
-  self.tableDataSource = nil;
   [super dealloc];
 }
 

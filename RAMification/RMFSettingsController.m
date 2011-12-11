@@ -9,12 +9,6 @@
 
 @implementation RMFSettingsController
 
-// TODO implement toolbar programatically
-// insert tabs by loading nibs
-// set identifiers programatically
-// to make selection work transparent
-
-
 @synthesize settingsWindow;
 @synthesize toolbar = _toolbar;
 @synthesize presetSettingsController = _presetSettingsController;
@@ -32,7 +26,6 @@
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
     _presetSettingsController = [[RMFPresetSettingsController alloc] initWithNibName:nil bundle:nil];
     
-    //Fixme let the views controller handle this
     settingsPaneControler = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
                                                                         [RMFGeneralSettingsController identifier],
                                                                         _presetSettingsController,
@@ -42,7 +35,6 @@
     self.toolbar.allowsUserCustomization = YES;
     self.toolbar.delegate = self;
     self.settingsWindow.toolbar = _toolbar;
-    // just if there are really two tabs change their identifiers and headings
   }
   return self;
 }
@@ -58,10 +50,16 @@
 {
   NSString* settingsIdentifier;
   
+  // the call can originate from a NSMenuItem or a NSToolbarItem
+  // the NSMenuItem delivers just sends a identifier string as sender
+  // the NSToolbarItem delivers itselv as the sender
+  //
+  // We get a NSToolbarItem
   if([sender isMemberOfClass:[NSToolbarItem class]])
   {
     settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
+  // or the otherwise, we collect the string.
   else
   {
     if ([sender isKindOfClass:[NSString class]])
@@ -69,7 +67,8 @@
       settingsIdentifier = sender;
     }
   }
- 
+  
+  // if something went wrong, we go for the defautl identitifer (first tab)
   if(sender == nil)
   {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
@@ -80,10 +79,13 @@
   {
     visibleSettings = _generalSettingsController;
   }
+  // highlight the toolbar item
   [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
   NSView *settingsView = [(NSViewController*)visibleSettings view];
   //[self.settingsWindow setContentSize:[settingsView frame].size];
+  // set the new view
   [self.settingsWindow setContentView:settingsView];
+  // and show the window, if already visible this doesn't hurt.
   [self.settingsWindow setIsVisible:YES];
 }
 

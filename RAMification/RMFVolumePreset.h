@@ -7,14 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-enum RMFPresetValue
-{
-RMFPresetVolumeName,
-  RMFPresetDiskSize,
-  RMFPresetAutomount,
-};
-
+ 
 //  Represents the list of Presets the user has created
 @interface RMFVolumePreset : NSObject
 
@@ -22,11 +15,13 @@ RMFPresetVolumeName,
 @property (assign) NSUInteger diskSize;
 @property (assign) BOOL shouldAutoMount;
 
++ (RMFVolumePreset*) VolumePresetWithContentOfDict:(NSDictionary*)dict;
 + (RMFVolumePreset*) VolumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
 + (RMFVolumePreset*) VolumePreset;
 + (NSUInteger) defaultDiskSize;
-+ (NSString*) defaultVolumeLabel;
++ (NSString *) defaultVolumeLabel;
 
-- (id) initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize;
+- (id) initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
+- (NSDictionary *) convertToDictionary;
 
 @end

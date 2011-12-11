@@ -21,7 +21,8 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 @synthesize settingsController = _settingsController;
 @synthesize menu = _menu;
 @synthesize mountedVolumes = _mountedVolumes;
-@synthesize presets = _presets;
+@synthesize presetsSubMenu = _presetsSubMenu;
+@synthesize presetsManager = _presetsManager;
 
 + (void) initialize
 {
@@ -49,17 +50,38 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   // intialize settings window toolbar delegate
   queue = [[NSOperationQueue alloc] init];
     
+  // initialize our settings controller
+  _settingsController = [[RMFSettingsController alloc] init];
+  _presetsManager = [[RMFPresetManager alloc] init];
+  
   [self createMenu];
   [self createStatusItem];
 }
 
+
+- (void)updatePresetsMenu
+{
+    NSMenuItem *item;
+    _presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
+    
+    for(RMFVolumePreset *preset in self.presetsManager.presets)
+    {
+        item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(mountRamdisk:) keyEquivalent:@""];
+    }
+    if([self.presetsManager.presets count] == 0)
+    {
+        
+    }
+    
+    [_presetsSubMenu addItem:[NSMenuItem separatorItem]];
+}
 
 - (void) createMenu
 {
   _menu = [[NSMenu alloc] initWithTitle:@"menu"];
   // Create ramdisk
   NSMenuItem *item;
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk:) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -77,27 +99,24 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   // Separation
   [self.menu addItem:[NSMenuItem separatorItem]];
 
-  NSMenu *presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
+  [self updatePresetsMenu];
+  
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
   [item setRepresentedObject:[RMFPresetSettingsController identifier]];
   [item setEnabled:YES];
   [item setTarget:self];
-  [presetsSubMenu addItem:item];
+  [self.presetsSubMenu addItem:item];
   [item release];
   
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
   [item setEnabled:YES];
   [item setTarget:self];
-  [item setSubmenu:presetsSubMenu];
+  [item setSubmenu:self.presetsSubMenu];
   [self.menu addItem:item];
-  [presetsSubMenu release];
   [item release];
-  
-
   
   // Separation
   [self.menu addItem:[NSMenuItem separatorItem]];
-
   
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
   [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
@@ -137,15 +156,10 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 - (void) showSettingsTab:(id)sender
 {
-  if(self.settingsController == nil)
-  {
-   _settingsController = [[RMFSettingsController alloc] init];
-  }
-  
   [self.settingsController showSettings:[sender representedObject]];
 }
 
-- (void) createRamdisk
+- (void) mountRamdisk:(RMFVolumePreset*) preset
 {
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] init];
   [queue cancelAllOperations];

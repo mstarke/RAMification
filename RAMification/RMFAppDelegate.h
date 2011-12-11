@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsController.h"
+#import "RMFPresetManager.h"
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 {
@@ -19,14 +20,16 @@
 @property (retain) NSMenu *menu;
 @property (retain) RMFSettingsController *settingsController;
 @property (retain) NSMutableDictionary *mountedVolumes;
-@property (retain) NSArray *presets;
+@property (retain, readonly) NSMenu *presetsSubMenu;
+@property (retain) RMFPresetManager* presetsManager;
 
 
 - (void) createStatusItem;
 - (void) createMenu;
 - (void) quitApplication;
-- (void) createRamdisk;
+- (void) mountRamdisk:(RMFVolumePreset *)preset;
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;
+- (void) updatePresetsMenu;
 
 @end

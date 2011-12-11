@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsControllerProtocol.h"
-#import "RMFPresetsTableDataSource.h"
 #import "RMFPresetsTableViewDelegate.h"
 
 @interface RMFPresetSettingsController : NSViewController <RMFSettingsControllerProtocol>
@@ -16,7 +15,6 @@
   IBOutlet NSTableView* tableView;
 }
 
-@property (retain) RMFPresetsTableDataSource *tableDataSource;
-@property (retain) RMFPresetsTableViewDelegate *tableDelegate;
+@property (retain, readonly) RMFPresetsTableViewDelegate *tableDelegate;
 
 @end
