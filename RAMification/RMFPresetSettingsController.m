@@ -35,15 +35,21 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithNibName:@"PresetsPane" bundle:[NSBundle mainBundle]];
-    if (self)
-    {
-      _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
-      tableView.dataSource = [[NSApp delegate] presetsManager];
-      tableView.delegate = self.tableDelegate;
-    }
+  self = [super initWithNibName:@"PresetsPane" bundle:[NSBundle mainBundle]];
+  if (self)
+  {
+    columIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:@"automount", [NSNumber numberWithInt:RMFColumnAutomount],
+                        @"label", [NSNumber numberWithInt:RMFColumnLabel],
+                       @"size", [NSNumber numberWithInt:RMFColumnSize],
+                       nil];
     
-    return self;
+    _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
+    //[tableView addTableColumn:[[NSTableColumn alloc] initWithIdentifier:@"automount"]];
+    tableView.dataSource = [[NSApp delegate] presetsManager];
+    tableView.delegate = self.tableDelegate;
+  }
+  
+  return self;
 }
 
 - (void)dealloc {
@@ -54,6 +60,7 @@
 {
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.presetsManager addNewVolumePreset];
+  [tableView reloadData];
 }
 
 - (void)deletePreset:(id)sender
@@ -61,7 +68,8 @@
   // find the selected preset
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.presetsManager deleteVolumePreset:nil];
-
+  [tableView reloadData];
+  
 }
 
 @end

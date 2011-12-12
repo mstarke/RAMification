@@ -47,6 +47,12 @@
   return [self.presets count];
 }
 
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+  // todo
+  return nil;
+}
+
 - (RMFVolumePreset *)createUniqueVolumePreset
 {
   // todo implement

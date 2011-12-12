@@ -10,9 +10,17 @@
 #import "RMFSettingsControllerProtocol.h"
 #import "RMFPresetsTableViewDelegate.h"
 
+enum RMFColumIdentifier {
+  RMFColumnAutomount,
+  RMFColumnLabel,
+  RMFColumnSize,
+};
+
+
 @interface RMFPresetSettingsController : NSViewController <RMFSettingsControllerProtocol>
 {
   IBOutlet NSTableView* tableView;
+  NSDictionary *columIdentifier;
 }
 
 @property (retain, readonly) RMFPresetsTableViewDelegate *tableDelegate;
