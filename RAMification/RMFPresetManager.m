@@ -23,18 +23,14 @@
   {
     NSLog(@"Trying to load presets!");
     _presets = [[NSMutableArray array] retain];
-    NSArray *loadedPresets = [[NSUserDefaults standardUserDefaults] arrayForKey:[RMFPresetManager presetsPreferencesKey]];
-    if(loadedPresets != nil)
+    NSData *presetData = [[NSUserDefaults standardUserDefaults] dataForKey:[RMFPresetManager presetsPreferencesKey]];
+    if(presetData != nil)
     {
-      NSLog(@"Found %lu Presets", [loadedPresets count]);
-      for(NSDictionary* volumeDict in loadedPresets)
+      NSArray *presetArray = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
+      if(presetArray != nil)
       {
-        RMFVolumePreset* preset = [RMFVolumePreset VolumePresetWithContentOfDict:volumeDict];
-        if(preset != nil)
-        {
-          NSLog(@"Adding %@!", preset.volumeLabel);
-          [_presets addObject:preset];
-        }
+        [_presets release];
+        _presets = [[NSMutableArray arrayWithArray:presetArray] retain];
       }
     }
   }
@@ -54,7 +50,7 @@
 - (RMFVolumePreset *)createUniqueVolumePreset
 {
   // todo implement
-  return nil;
+  return [RMFVolumePreset VolumePreset];
 }
 
 -(RMFVolumePreset *)addNewVolumePreset
@@ -84,13 +80,9 @@
 
 - (void)synchronize
 {
-  // write out the preset to the defaults
-  NSMutableArray *presetArray = [NSMutableArray array];
-  for(RMFVolumePreset* preset in _presets)
-  {
-    [presetArray addObject:[preset convertToDictionary]];
-  }
-  [[NSUserDefaults standardUserDefaults] setValue:presetArray forKey:[RMFPresetManager presetsPreferencesKey]];
+  NSData *presetData = [NSKeyedArchiver archivedDataWithRootObject:self.presets];
+  
+  [[NSUserDefaults standardUserDefaults] setValue:presetData forKey:[RMFPresetManager presetsPreferencesKey]];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

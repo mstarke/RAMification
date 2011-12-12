@@ -24,20 +24,10 @@
   return [[[RMFVolumePreset alloc] init] autorelease];
 }
 
-+ (RMFVolumePreset *)VolumePresetWithContentOfDict:(NSDictionary *)dict
++ (RMFVolumePreset *)VolumePresetWithData:(NSData *)data
 {
-  NSArray *keys = [dict allKeys];
-  RMFVolumePreset *preset = nil;
-  if([keys containsObject:@"lable"] && [keys containsObject:@"size"] && [keys containsObject:@"automount"])
-  {
-    preset = [[RMFVolumePreset alloc] init];
-    preset.volumeLabel = [dict objectForKey:@"label"];
-    preset.diskSize = [[dict objectForKey:@"size"] unsignedIntegerValue];
-    preset.shouldAutoMount = [[dict objectForKey:@"automount"] boolValue];
-  }
-  return [preset autorelease];
+  return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
-
 
 + (NSUInteger) defaultDiskSize
 {
@@ -51,9 +41,9 @@
 }
 
 - (id)init
-  {
-    return [self initWithLabel:[RMFVolumePreset defaultVolumeLabel] andSize:[RMFVolumePreset defaultDiskSize] shouldMount:NO];
-  }
+{
+  return [self initWithLabel:[RMFVolumePreset defaultVolumeLabel] andSize:[RMFVolumePreset defaultDiskSize] shouldMount:NO];
+}
 
 - (id)initWithLabel:(NSString *)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount{
   self = [super init];
@@ -73,13 +63,27 @@
   return self;
 }
 
-- (NSDictionary *)convertToDictionary
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-  NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:self.volumeLabel, @"label",
-                                                                  [NSNumber numberWithUnsignedInteger: self.diskSize], @"size",
-                                                                  [NSNumber numberWithBool:self.shouldAutoMount],@"automount",
-                                                                  nil];
-  return dict;
+  if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]])
+  {
+    self = [[RMFVolumePreset alloc] init];
+    self.volumeLabel = [aDecoder decodeObjectForKey:@"label"];
+    self.shouldAutoMount = [aDecoder decodeBoolForKey:@"automount"];
+    self.diskSize = [aDecoder decodeIntegerForKey:@"size"];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+  if([aCoder isKindOfClass:[NSKeyedArchiver class]])
+  {
+    //[super encodeWithCoder:aCoder];
+    [aCoder encodeBool:self.shouldAutoMount forKey:@"automount"];
+    [aCoder encodeInteger:self.diskSize forKey:@"size"];
+    [aCoder encodeObject:self.volumeLabel forKey:@"label"];
+  }
 }
 
 - (BOOL)isEqual:(id)object
