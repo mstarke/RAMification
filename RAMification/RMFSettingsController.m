@@ -48,7 +48,7 @@
 
 - (void)showSettings:(id)sender
 {
-  NSString* settingsIdentifier;
+  NSString* settingsIdentifier = nil;
   
   // the call can originate from a NSMenuItem or a NSToolbarItem
   // the NSMenuItem delivers just sends a identifier string as sender

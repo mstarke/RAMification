@@ -57,7 +57,7 @@
 {
   RMFVolumePreset* newPreset = [self createUniqueVolumePreset];
   [self addVolumePreset:newPreset];
-  return [newPreset autorelease];
+  return newPreset;
 }
 
 - (BOOL) addVolumePreset:(RMFVolumePreset *)preset
@@ -82,7 +82,7 @@
 {
   NSData *presetData = [NSKeyedArchiver archivedDataWithRootObject:self.presets];
   
-  [[NSUserDefaults standardUserDefaults] setValue:presetData forKey:[RMFPresetManager presetsPreferencesKey]];
+  [[NSUserDefaults standardUserDefaults] setObject:presetData forKey:[RMFPresetManager presetsPreferencesKey]];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

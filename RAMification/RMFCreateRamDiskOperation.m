@@ -37,6 +37,7 @@
   // stop if we are cancelled or are a already mounted volume
   if([self isCancelled] || [self.preset.volumeLabel isUsedAsVolumeName])
   {  
+    NSLog(@"We got canceld or the Volume is already present!");
     return;
   }
   

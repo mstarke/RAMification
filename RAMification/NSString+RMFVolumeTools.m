@@ -14,14 +14,14 @@
 {
   // get all the mounted removable volumes
   NSArray *mountedMedia = [[NSWorkspace sharedWorkspace] mountedRemovableMedia];
-  
+  NSMutableSet *mountedVolumeNames = [NSMutableSet set];
   // strip the names and just leave the volume name
   for(NSString *path in mountedMedia)
   {
-    path = [path lastPathComponent];
+    [mountedVolumeNames addObject:[path lastPathComponent]];
   }
   // return if we are in the array (name based search)
-  return [mountedMedia containsObject:self];
+  return [mountedVolumeNames containsObject:self];
 }
 
 @end
