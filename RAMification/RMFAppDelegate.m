@@ -98,6 +98,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   for(RMFVolumePreset *preset in self.presetsManager.presets)
   {
     item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(mountRamdisk:) keyEquivalent:@""];
+    [item setState:NSOffState];
     [_presetsSubMenu addItem:item];
     [item release];
   }

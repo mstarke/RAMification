@@ -10,6 +10,7 @@
 
 @interface NSString (RMFVolumeTools)
 
++ (NSString *) uniqueVolumeName:(NSString*)baseName inFolder:(NSString*)path;
 - (BOOL) isUsedAsVolumeName;
 
 @end

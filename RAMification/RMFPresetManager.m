@@ -12,10 +12,14 @@
 
 @synthesize presets = _presets;
 
+#pragma mark class functions
+
 + (NSString *)presetsPreferencesKey
 {
   return @"Presets";
 }
+
+#pragma mark object lifecycle
 
 - (id)init {
   self = [super init];
@@ -42,6 +46,8 @@
   [super dealloc];
 }
 
+#pragma mark NSTabelDataSource protocoll
+
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
   return [self.presets count];
@@ -49,9 +55,10 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-  // todo
   return nil;
 }
+
+#pragma mark preset handling
 
 - (RMFVolumePreset *)createUniqueVolumePreset
 {

@@ -10,6 +10,26 @@
 
 @implementation NSString (RMFVolumeTools)
 
+
++ (NSString *)uniqueVolumeName:(NSString *)baseName inFolder:(NSString *)path
+{
+  NSString *uniqueName = @"default";
+  NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+  NSMutableSet *files = [NSMutableSet setWithCapacity:[filePaths count]];
+  for(NSString* filePath in filePaths)
+  {
+    [files addObject:[filePath lastPathComponent]];
+  }
+  
+  if([files containsObject:baseName])
+  {
+    NSPredicate *nameMatcher = [NSPredicate predicateWithFormat:@"SELF MATCHES '%@_[0-9]*'",baseName];
+    [files filterUsingPredicate:nameMatcher];
+  }
+  
+  return uniqueName;
+}
+
 - (BOOL)isUsedAsVolumeName
 {
   // get all the mounted removable volumes
@@ -23,5 +43,7 @@
   // return if we are in the array (name based search)
   return [mountedVolumeNames containsObject:self];
 }
+
+
 
 @end
