@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C2A4AE71486DDDF009F3AB0 /* RMFPresetSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFPresetSettingsController.m */; };
+		4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
 		4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */; };
@@ -24,17 +24,17 @@
 		4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
-		4CB61006148AA2DE00166397 /* RMFVolumePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFVolumePreset.m */; };
+		4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFRamdisk.m */; };
 		4CB6100B148AA3D800166397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB61009148AA3D800166397 /* Localizable.strings */; };
 		4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */; };
 		4CBE8D71148C30D100747A33 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6F148C30D100747A33 /* README.md */; };
 		4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */; };
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
-		4CC52F7D14819BB60006C278 /* PresetsPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* PresetsPane.xib */; };
+		4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavoritesPane.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
 		4CD4B7A71482B4C8002DC1F2 /* PreferencesDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* PreferencesDefaults.plist */; };
 		4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */; };
-		4CF8842914926DC2000EE2D7 /* RMFPresetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFPresetManager.m */; };
+		4CF8842914926DC2000EE2D7 /* RMFFavoriteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFFavoriteManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C2A4AE41486DDDE009F3AB0 /* RMFPresetSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFPresetSettingsController.h; sourceTree = "<group>"; };
-		4C2A4AE51486DDDE009F3AB0 /* RMFPresetSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFPresetSettingsController.m; sourceTree = "<group>"; };
+		4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoritesSettingsController.h; sourceTree = "<group>"; };
+		4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoritesSettingsController.m; sourceTree = "<group>"; };
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsControllerProtocol.h; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFPresetsTableViewDelegate.h; sourceTree = "<group>"; };
 		4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFPresetsTableViewDelegate.m; sourceTree = "<group>"; };
@@ -82,8 +82,8 @@
 		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
 		4CB61001148AA2DD00166397 /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFGeneralSettingsController.h; sourceTree = "<group>"; };
 		4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFGeneralSettingsController.m; sourceTree = "<group>"; };
-		4CB61003148AA2DD00166397 /* RMFVolumePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFVolumePreset.h; sourceTree = "<group>"; };
-		4CB61004148AA2DE00166397 /* RMFVolumePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFVolumePreset.m; sourceTree = "<group>"; };
+		4CB61003148AA2DD00166397 /* RMFRamdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFRamdisk.h; sourceTree = "<group>"; };
+		4CB61004148AA2DE00166397 /* RMFRamdisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFRamdisk.m; sourceTree = "<group>"; };
 		4CB6100A148AA3D800166397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4CBE8D6D148C30D100747A33 /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
 		4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
@@ -91,12 +91,12 @@
 		4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFCreateRamDiskOperation.h; sourceTree = "<group>"; };
 		4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFCreateRamDiskOperation.m; sourceTree = "<group>"; };
 		4CC52F7914819A360006C278 /* GeneralPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralPane.xib; sourceTree = "<group>"; };
-		4CC52F7C14819BB60006C278 /* PresetsPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PresetsPane.xib; sourceTree = "<group>"; };
+		4CC52F7C14819BB60006C278 /* FavoritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesPane.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
 		4CD4B7A61482B4C8002DC1F2 /* PreferencesDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreferencesDefaults.plist; sourceTree = "<group>"; };
 		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
-		4CF8842714926DC2000EE2D7 /* RMFPresetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFPresetManager.h; sourceTree = "<group>"; };
-		4CF8842814926DC2000EE2D7 /* RMFPresetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFPresetManager.m; sourceTree = "<group>"; };
+		4CF8842714926DC2000EE2D7 /* RMFFavoriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoriteManager.h; sourceTree = "<group>"; };
+		4CF8842814926DC2000EE2D7 /* RMFFavoriteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoriteManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +126,7 @@
 				4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */,
 				4CC52F7E1481A1400006C278 /* SettingsWindow.xib */,
 				4CC52F7914819A360006C278 /* GeneralPane.xib */,
-				4CC52F7C14819BB60006C278 /* PresetsPane.xib */,
+				4CC52F7C14819BB60006C278 /* FavoritesPane.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -138,8 +138,8 @@
 				4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */,
 				4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */,
 				4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */,
-				4C2A4AE41486DDDE009F3AB0 /* RMFPresetSettingsController.h */,
-				4C2A4AE51486DDDE009F3AB0 /* RMFPresetSettingsController.m */,
+				4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */,
+				4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */,
 				4C4FA61B149816060082981C /* RMFMenuController.h */,
 				4C4FA61C149816060082981C /* RMFMenuController.m */,
 			);
@@ -287,10 +287,10 @@
 		4CEF3E74148ED25100232818 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4CB61003148AA2DD00166397 /* RMFVolumePreset.h */,
-				4CB61004148AA2DE00166397 /* RMFVolumePreset.m */,
-				4CF8842714926DC2000EE2D7 /* RMFPresetManager.h */,
-				4CF8842814926DC2000EE2D7 /* RMFPresetManager.m */,
+				4CB61003148AA2DD00166397 /* RMFRamdisk.h */,
+				4CB61004148AA2DE00166397 /* RMFRamdisk.m */,
+				4CF8842714926DC2000EE2D7 /* RMFFavoriteManager.h */,
+				4CF8842814926DC2000EE2D7 /* RMFFavoriteManager.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@
 				4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */,
 				4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */,
 				4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */,
-				4CC52F7D14819BB60006C278 /* PresetsPane.xib in Resources */,
+				4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */,
 				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
 				4CD4B7A71482B4C8002DC1F2 /* PreferencesDefaults.plist in Resources */,
 				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
@@ -414,12 +414,12 @@
 				4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */,
 				4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */,
 				4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */,
-				4C2A4AE71486DDDF009F3AB0 /* RMFPresetSettingsController.m in Sources */,
+				4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */,
 				4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */,
 				4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */,
-				4CB61006148AA2DE00166397 /* RMFVolumePreset.m in Sources */,
+				4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */,
 				4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */,
-				4CF8842914926DC2000EE2D7 /* RMFPresetManager.m in Sources */,
+				4CF8842914926DC2000EE2D7 /* RMFFavoriteManager.m in Sources */,
 				4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */,
 				4C4FA61D149816060082981C /* RMFMenuController.m in Sources */,
 				4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */,

@@ -7,28 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFVolumePreset.h"
+#import "RMFRamdisk.h"
 
 @interface RMFMenuController : NSObject
 {
   @private
   NSMenu *menu;
-  NSMenu *presetsMenu;
+  NSMenu *favoritesMenu;
   NSStatusItem *statusItem;
   NSOperationQueue *queue;
   NSMutableDictionary *presetMap;
   
 }
 
-
-
 - (void) createStatusItem;
 - (void) createMenu;
-- (void) createPresetsMenu;
+- (void) createFavouritesMenu;
 - (void) updatePresetsMenu;
 - (void) quitApplication;
-- (void) mount:(RMFVolumePreset*) preset;
-- (void) eject:(RMFVolumePreset*) preset;
+- (void) mount:(RMFRamdisk*) preset;
+- (void) eject:(RMFRamdisk*) preset;
 
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;

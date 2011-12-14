@@ -6,11 +6,11 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFPresetSettingsController.h"
-#import "RMFVolumePreset.h"
+#import "RMFFavoritesSettingsController.h"
+#import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
 
-@implementation RMFPresetSettingsController
+@implementation RMFFavoritesSettingsController
 
 @synthesize tableDelegate = _tableDelegate;
 
@@ -26,16 +26,16 @@
 
 + (NSToolbarItem *) toolbarItem
 {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFPresetSettingsController identifier]];
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]];
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
-  [item setLabel:[RMFPresetSettingsController label]];
+  [item setLabel:[RMFFavoritesSettingsController label]];
   [item setAction:@selector(showSettings:)];
   return [item autorelease];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-  self = [super initWithNibName:@"PresetsPane" bundle:[NSBundle mainBundle]];
+  self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
   if (self)
   {
     columIdentifier = [NSDictionary dictionaryWithObjectsAndKeys:@"automount", [NSNumber numberWithInt:RMFColumnAutomount],
@@ -45,7 +45,7 @@
     
     _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
     //[tableView addTableColumn:[[NSTableColumn alloc] initWithIdentifier:@"automount"]];
-    tableView.dataSource = [[NSApp delegate] presetsManager];
+    tableView.dataSource = [[NSApp delegate] favoritesManager];
     tableView.delegate = self.tableDelegate;
   }
   
@@ -59,7 +59,7 @@
 - (void)addPreset:(id)sender
 {
   RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.presetsManager addNewVolumePreset];
+  [delegate.favoritesManager addNewFavourite];
   [tableView reloadData];
 }
 
@@ -67,7 +67,7 @@
 {
   // find the selected preset
   RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.presetsManager deleteVolumePreset:nil];
+  [delegate.favoritesManager deleteFavourite:nil];
   [tableView reloadData];
   
 }

@@ -17,7 +17,7 @@ enum RMFColumIdentifier {
 };
 
 
-@interface RMFPresetSettingsController : NSViewController <RMFSettingsControllerProtocol>
+@interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol>
 {
   IBOutlet NSTableView* tableView;
   NSDictionary *columIdentifier;

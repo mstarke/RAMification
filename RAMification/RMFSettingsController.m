@@ -24,12 +24,12 @@
     
     // Initalize the controllers
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
-    _presetSettingsController = [[RMFPresetSettingsController alloc] initWithNibName:nil bundle:nil];
+    _presetSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
     
     settingsPaneControler = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
                                                                         [RMFGeneralSettingsController identifier],
                                                                         _presetSettingsController,
-                                                                        [RMFPresetSettingsController identifier], nil];
+                                                                        [RMFFavoritesSettingsController identifier], nil];
     
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = YES;

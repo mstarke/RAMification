@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RMFGeneralSettingsController.h"
-#import "RMFPresetSettingsController.h"
+#import "RMFFavoritesSettingsController.h"
 
 @interface RMFSettingsController : NSObject <NSToolbarDelegate>
 {
@@ -16,7 +16,7 @@
 }
 
 @property (retain) RMFGeneralSettingsController *generalSettingsController;
-@property (retain) RMFPresetSettingsController *presetSettingsController;
+@property (retain) RMFFavoritesSettingsController *presetSettingsController;
 @property (retain) NSToolbar* toolbar;
 @property (assign) IBOutlet NSWindow *settingsWindow;
 

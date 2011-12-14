@@ -8,15 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsController.h"
-#import "RMFPresetManager.h"
+#import "RMFFavoriteManager.h"
 #import "RMFMenuController.h"
 #import "RMFMountWatcher.h"
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (retain) RMFSettingsController *settingsController;
-@property (retain) NSMutableDictionary *mountedVolumes;
-@property (retain) RMFPresetManager* presetsManager;
+@property (retain) RMFFavoriteManager* favoritesManager;
 @property (readonly) RMFMenuController *menuController;
 @property (readonly) RMFMountWatcher *mountWatcher;
 

@@ -7,8 +7,8 @@
 //
 
 #import "RMFMenuController.h"
-#import "RMFVolumePreset.h"
-#import "RMFPresetManager.h"
+#import "RMFRamdisk.h"
+#import "RMFFavoriteManager.h"
 #import "RMFAppDelegate.h"
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
@@ -47,31 +47,30 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 # pragma mark create/update menu
 
-- (void)createPresetsMenu
+- (void)createFavouritesMenu
 {
   NSMenuItem *item;
-  RMFPresetManager *presetsManager = ((RMFAppDelegate*)[NSApp delegate]).presetsManager;
-  presetsMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
+  RMFFavoriteManager *manager = ((RMFAppDelegate*)[NSApp delegate]).favoritesManager;
+  favoritesMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   
-  for(RMFVolumePreset *preset in presetsManager.presets)
+  for(RMFRamdisk *favorite in manager.favourites)
   {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(updatePresetState:) keyEquivalent:@""];
+    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:favorite.label action:@selector(updatePresetState:) keyEquivalent:@""];
     //[item setState:NSMixedState];
     [item setTarget:self];
-    [presetsMenu addItem:item];
-    [presetMap setObject:preset forKey:[NSValue valueWithPointer:item]];
-    [preset addObserver:self forKeyPath:@"isMounted" options:0 context:nil];
+    [favoritesMenu addItem:item];
+    [presetMap setObject:favorite forKey:[NSValue valueWithPointer:item]];
     [item release];
   }
   
-  if([presetsManager.presets count] == 0)
+  if([manager.favourites count] == 0)
   {
     item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"No Presets defined" action:nil keyEquivalent:@""];
-    [presetsMenu addItem:item];
+    [favoritesMenu addItem:item];
     [item release];
   }
   
-  [presetsMenu addItem:[NSMenuItem separatorItem]];
+  [favoritesMenu addItem:[NSMenuItem separatorItem]];
 }
 
 - (void) createMenu
@@ -97,19 +96,19 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   // Separation
   [menu addItem:[NSMenuItem separatorItem]];
   
-  [self createPresetsMenu];
+  [self createFavouritesMenu];
   
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFPresetSettingsController identifier]];
+  [item setRepresentedObject:[RMFFavoritesSettingsController identifier]];
   [item setEnabled:YES];
   [item setTarget:self];
-  [presetsMenu addItem:item];
+  [favoritesMenu addItem:item];
   [item release];
   
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
   [item setEnabled:YES];
   [item setTarget:self];
-  [item setSubmenu:presetsMenu];
+  [item setSubmenu:favoritesMenu];
   [menu addItem:item];
   [item release];
   
@@ -148,9 +147,9 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 - (void)updatePresetsMenu
 {
-  for(NSMenuItem *item in [presetsMenu itemArray])
+  for(NSMenuItem *item in [favoritesMenu itemArray])
   {
-    RMFVolumePreset *preset = [presetMap objectForKey:[NSValue valueWithPointer:item]];
+    RMFRamdisk *preset = [presetMap objectForKey:[NSValue valueWithPointer:item]];
     if(preset != nil)
     {
       if(preset.isMounted)
@@ -182,7 +181,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 - (void)updatePresetState:(id)sender
 {
   NSMenuItem* item = sender;
-  RMFVolumePreset* itemPreset = [[presetMap objectForKey:[NSValue valueWithPointer:item]] retain];
+  RMFRamdisk* itemPreset = [[presetMap objectForKey:[NSValue valueWithPointer:item]] retain];
   if(itemPreset.isMounted)
   {
     [self eject:itemPreset];
@@ -196,17 +195,17 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 # pragma mark mount/unmount
 
-- (void) mount:(RMFVolumePreset*) preset
+- (void) mount:(RMFRamdisk*) preset
 {
-  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithPreset:preset];
+  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:preset];
   [queue cancelAllOperations];
   [queue addOperation:mountOperation];
   [mountOperation release];
 }
 
-- (void)eject:(RMFVolumePreset *)preset
+- (void)eject:(RMFRamdisk *)preset
 {
-  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[preset.volumeLabel volumePath]];
+  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[preset.label volumePath]];
 }
 
 - (void) removeRamdisk
@@ -214,16 +213,6 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [queue cancelAllOperations];
   // search if a ramdisk is active and detach it by calling
   // hdutil detach <Device>
-}
-
-#pragma mark KVO
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-  if([object isMemberOfClass:[RMFVolumePreset class]])
-  {
-    [self updatePresetsMenu];
-  }
 }
 
 @end

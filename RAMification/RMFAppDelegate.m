@@ -7,13 +7,12 @@
 //
 
 #import "RMFAppDelegate.h"
-#import "RMFVolumePreset.h"
+#import "RMFFavoriteManager.h"
 #import "RMFMountWatcher.h"
 
 @implementation RMFAppDelegate
 
-@synthesize mountedVolumes = _mountedVolumes;
-@synthesize presetsManager = _presetsManager;
+@synthesize favoritesManager = _presetsManager;
 @synthesize settingsController = _settingsController;
 @synthesize menuController = _menuController;
 @synthesize mountWatcher = _mountWatcher;
@@ -32,10 +31,9 @@
 
 - (void)dealloc
 {
-  self.settingsController = nil;
-  self.mountedVolumes = nil;
-  
+  self.settingsController = nil;  
   [super dealloc];
+  
   // remove the toolbardelegate from the 
 }
 
@@ -45,7 +43,7 @@
 {
   // initalize alle controller and the preset manager
   _settingsController = [[RMFSettingsController alloc] init];
-  _presetsManager = [[RMFPresetManager alloc] init];
+  _presetsManager = [[RMFFavoriteManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
 }

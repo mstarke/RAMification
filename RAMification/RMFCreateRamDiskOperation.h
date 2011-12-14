@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFVolumePreset.h"
+#import "RMFRamdisk.h"
 
 @interface RMFCreateRamDiskOperation : NSOperation
 
-@property (retain) RMFVolumePreset* preset;
+@property (retain) RMFRamdisk* ramdisk;
 
-- (id) initWithPreset:(RMFVolumePreset *)preset;
+- (id) initWithRamdisk:(RMFRamdisk *)ramdisk;
 
 @end

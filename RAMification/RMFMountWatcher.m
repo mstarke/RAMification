@@ -7,6 +7,8 @@
 //
 
 #import "RMFMountWatcher.h"
+#import "RMFAppDelegate.h"
+#import "RMFFavoriteManager.h"
 
 @implementation RMFMountWatcher
 
@@ -23,19 +25,20 @@
   return self;
 }
 
-- (void)volumeDidMount:(NSString *)devicePath
+- (void)volumeDidMount:(NSNotification *)notification
 {
-  NSLog(@"Did Mount %@!", devicePath);
+  RMFAppDelegate *delegate = [NSApp delegate];
+  [delegate.favoritesManager updateFavourites];
 }
 
-- (void)volumeWillUnmount:(NSString *)devicePath
+- (void)volumeWillUnmount:(NSNotification *)notification
 {
-  NSLog(@"Will Unmount %@!", devicePath);
+
 }
 
-- (void)volumeDidUnmount:(NSString *)devicePath
+- (void)volumeDidUnmount:(NSNotification *)notification
 {
-  NSLog(@"Did Unmount %@!", devicePath);
+
 }
 
 @end

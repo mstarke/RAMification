@@ -10,8 +10,8 @@
 
 @interface RMFMountWatcher : NSObject
 
-- (void) volumeDidMount:(NSString*)devicePath;
-- (void) volumeDidUnmount:(NSString*)devicePath;
-- (void) volumeWillUnmount:(NSString*)devicePath;
+- (void) volumeDidMount:(NSNotification*)notification;
+- (void) volumeDidUnmount:(NSNotification*)notification;
+- (void) volumeWillUnmount:(NSNotification*)notification;
 
 @end

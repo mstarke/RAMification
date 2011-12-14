@@ -12,30 +12,30 @@
 
 @implementation RMFCreateRamDiskOperation
 
-@synthesize preset = _preset;
+@synthesize ramdisk = _ramdisk;
 
-- (id) initWithPreset:(RMFVolumePreset *)preset
+- (id) initWithRamdisk:(RMFRamdisk *)ramdisk
 {
   self = [super init];
   if (self)
   {
-    self.preset = preset;
+    self.ramdisk = ramdisk;
   }
   return self;
 }
 
 - (id) init
 {
-  RMFVolumePreset* preset = [[RMFVolumePreset alloc] init];
-  self = [self initWithPreset:preset];
-  [preset release];
+  RMFRamdisk* ramdisk= [[RMFRamdisk alloc] init];
+  self = [self initWithRamdisk:ramdisk];
+  [ramdisk release];
   return self;
 }
 
 - (void) main
 {  
   // stop if we are cancelled or are a already mounted volume
-  if([self isCancelled] || [self.preset.volumeLabel isUsedAsVolumeName])
+  if([self isCancelled] || [self.ramdisk.label isUsedAsVolumeName])
   {  
     NSLog(@"We got canceld or the Volume is already present!");
     return;
@@ -51,7 +51,7 @@
   // hdiutil attach -nomount ram://MB*2048
   
   // create the string for the desired ramdisksize
-  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.preset.diskSize*2048];
+  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%d", self.ramdisk.size*2048];
   
   // create the task and run it
   [createDisk setLaunchPath:@"/usr/bin/hdiutil"];
@@ -64,6 +64,7 @@
   NSFileHandle *outputFileHandle = [output fileHandleForReading];
   NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
   NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  self.ramdisk.devicePath = deviceName;
   [deviceName release];
   [createDisk release];
   
@@ -71,19 +72,13 @@
   // diskutil erasevolume HFS+ <NAME> <DEVICE>
   createDisk = [[NSTask alloc] init];
   [createDisk setLaunchPath:@"/usr/sbin/diskutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.preset.volumeLabel, strippedDeviceName, nil]];
+  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName, nil]];
   [createDisk launch];
   [createDisk release];
   
   [pool drain];
-  
-  // if the Mount finished tell the application that this thing is mounted
-  RMFAppDelegate *appDelegate = [NSApp delegate];
-  NSLog(@"Adding %@ with device name %@", self.preset.volumeLabel, strippedDeviceName);
-  [appDelegate.mountedVolumes setObject:self.preset.volumeLabel forKey:strippedDeviceName];
-  
-  self.preset.isMounted = YES;
-  //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
+  // we could set the mountes state here or let the MountWatcher take care of it
+  // self.ramdisk.isMounted = YES;
 }
 
 @end

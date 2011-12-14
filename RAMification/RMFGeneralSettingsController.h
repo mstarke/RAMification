@@ -10,5 +10,10 @@
 #import "RMFSettingsControllerProtocol.h"
 
 @interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
+{
+  IBOutlet NSPopUpButton *backupPathSelection;
+}
+
+- (IBAction)setBackupPath:(id)sender;
 
 @end
