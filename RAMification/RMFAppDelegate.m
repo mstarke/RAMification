@@ -8,6 +8,7 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFVolumePreset.h"
+#import "RMFMountWatcher.h"
 
 @implementation RMFAppDelegate
 
@@ -15,6 +16,7 @@
 @synthesize presetsManager = _presetsManager;
 @synthesize settingsController = _settingsController;
 @synthesize menuController = _menuController;
+@synthesize mountWatcher = _mountWatcher;
 
 # pragma mark object lifecycle
 
@@ -45,15 +47,7 @@
   _settingsController = [[RMFSettingsController alloc] init];
   _presetsManager = [[RMFPresetManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
+  _mountWatcher = [[RMFMountWatcher alloc] init];
 }
-
-//
-// catch mount/unmounte events?
-// NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-// NSNotificationCenter *center = [workspace notificationCenter];
-//[center addObserver:[VolumeNotifier class] selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
-//[center addObserver:[VolumeNotifier class] selector:@selector(volumeDidUnmount:) name:NSWorkspaceDidUnmountNotification object:nil];
-//[center addObserver:[VolumeNotifier class] selector:@selector(volumeWillUnmount:) name:NSWorkspaceWillUnmountNotification object:nil];
-
 
 @end

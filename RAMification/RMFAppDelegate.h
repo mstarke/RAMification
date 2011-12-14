@@ -10,6 +10,7 @@
 #import "RMFSettingsController.h"
 #import "RMFPresetManager.h"
 #import "RMFMenuController.h"
+#import "RMFMountWatcher.h"
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -17,5 +18,6 @@
 @property (retain) NSMutableDictionary *mountedVolumes;
 @property (retain) RMFPresetManager* presetsManager;
 @property (readonly) RMFMenuController *menuController;
+@property (readonly) RMFMountWatcher *mountWatcher;
 
 @end

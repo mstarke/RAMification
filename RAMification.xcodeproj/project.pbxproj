@@ -21,6 +21,7 @@
 		4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
+		4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
 		4CB61006148AA2DE00166397 /* RMFVolumePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFVolumePreset.m */; };
@@ -75,6 +76,8 @@
 		4C5BDB81147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RAMificationTests.h; sourceTree = "<group>"; };
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
+		4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountWatcher.h; sourceTree = "<group>"; };
+		4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountWatcher.m; sourceTree = "<group>"; };
 		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
 		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
 		4CB61001148AA2DD00166397 /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFGeneralSettingsController.h; sourceTree = "<group>"; };
@@ -176,6 +179,8 @@
 			children = (
 				4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */,
 				4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */,
+				4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */,
+				4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -417,6 +422,7 @@
 				4CF8842914926DC2000EE2D7 /* RMFPresetManager.m in Sources */,
 				4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */,
 				4C4FA61D149816060082981C /* RMFMenuController.m in Sources */,
+				4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
