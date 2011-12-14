@@ -82,6 +82,7 @@
   NSLog(@"Adding %@ with device name %@", self.preset.volumeLabel, strippedDeviceName);
   [appDelegate.mountedVolumes setObject:self.preset.volumeLabel forKey:strippedDeviceName];
   
+  self.preset.isMounted = YES;
   //diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://MB*2048`
 }
 

@@ -12,5 +12,6 @@
 
 + (NSString *) uniqueVolumeName:(NSString*)baseName inFolder:(NSString*)path;
 - (BOOL) isUsedAsVolumeName;
+- (NSString*) volumePath;
 
 @end

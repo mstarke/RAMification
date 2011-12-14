@@ -44,6 +44,9 @@
   return [mountedVolumeNames containsObject:self];
 }
 
-
+- (NSString *)volumePath
+{
+  return [[[NSString alloc] initWithFormat:@"/Volumes/", self] autorelease];
+}
 
 @end

@@ -15,6 +15,7 @@
 
 + (NSString*) presetsPreferencesKey;
 
+- (NSArray*) mountedPresets;
 - (BOOL) addVolumePreset:(RMFVolumePreset*) preset;
 - (RMFVolumePreset*) addNewVolumePreset;
 - (RMFVolumePreset*) createUniqueVolumePreset;

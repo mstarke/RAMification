@@ -13,6 +13,7 @@
 @synthesize diskSize;
 @synthesize volumeLabel;
 @synthesize shouldAutoMount;
+@synthesize isMounted;
 
 + (RMFVolumePreset *) VolumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount
 {
@@ -59,6 +60,7 @@
       self.volumeLabel = [RMFVolumePreset defaultVolumeLabel];
     } 
     self.shouldAutoMount = mount;
+    self.isMounted = NO;
   }
   return self;
 }

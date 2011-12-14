@@ -73,6 +73,11 @@
   return newPreset;
 }
 
+- (NSArray *)mountedPresets
+{
+  return [self.presets filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
+}
+
 - (BOOL) addVolumePreset:(RMFVolumePreset *)preset
 {
   BOOL volumePresent = [_presets containsObject:preset];

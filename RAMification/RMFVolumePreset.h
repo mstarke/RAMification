@@ -14,6 +14,7 @@
 @property (retain) NSString* volumeLabel;
 @property (assign) NSUInteger diskSize;
 @property (assign) BOOL shouldAutoMount;
+@property (assign) BOOL isMounted;
 
 + (RMFVolumePreset*) VolumePresetWithData:(NSData*)data;
 + (RMFVolumePreset*) VolumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;

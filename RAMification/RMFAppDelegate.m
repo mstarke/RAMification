@@ -7,24 +7,16 @@
 //
 
 #import "RMFAppDelegate.h"
-#import "RMFCreateRamDiskOperation.h"
 #import "RMFVolumePreset.h"
-
-// predefined values (private)
-NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate"; 
-
-// actual implemenation
 
 @implementation RMFAppDelegate
 
-@synthesize statusItem = _statusItem;
-@synthesize settingsController = _settingsController;
-@synthesize menu = _menu;
 @synthesize mountedVolumes = _mountedVolumes;
-@synthesize presetsSubMenu = _presetsSubMenu;
 @synthesize presetsManager = _presetsManager;
+@synthesize settingsController = _settingsController;
+@synthesize menuController = _menuController;
 
-# pragma mark init/dealloc
+# pragma mark object lifecycle
 
 + (void) initialize
 {
@@ -38,150 +30,30 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 - (void)dealloc
 {
-  self.statusItem  = nil;
   self.settingsController = nil;
-  self.menu = nil;
   self.mountedVolumes = nil;
   
   [super dealloc];
   // remove the toolbardelegate from the 
 }
 
+#pragma mark NSApplicationDelegate protocoll
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-  // intialize settings window toolbar delegate
-  queue = [[NSOperationQueue alloc] init];
-  
-  // initialize our settings controller
+  // initalize alle controller and the preset manager
   _settingsController = [[RMFSettingsController alloc] init];
   _presetsManager = [[RMFPresetManager alloc] init];
-  
-  [self createMenu];
-  [self createStatusItem];
+  _menuController = [[RMFMenuController alloc] init];
 }
 
-# pragma mark Actions
+//
+// catch mount/unmounte events?
+// NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+// NSNotificationCenter *center = [workspace notificationCenter];
+//[center addObserver:[VolumeNotifier class] selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
+//[center addObserver:[VolumeNotifier class] selector:@selector(volumeDidUnmount:) name:NSWorkspaceDidUnmountNotification object:nil];
+//[center addObserver:[VolumeNotifier class] selector:@selector(volumeWillUnmount:) name:NSWorkspaceWillUnmountNotification object:nil];
 
-- (void) quitApplication
-{
-  //Unmount ramdisk?
-  [[NSApplication sharedApplication] terminate:nil];
-}
 
-- (void) showSettingsTab:(id)sender
-{
-  [self.settingsController showSettings:[sender representedObject]];
-}
-
-- (void) mountRamdisk:(RMFVolumePreset*) preset
-{
-  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] init];
-  [queue cancelAllOperations];
-  [queue addOperation:mountOperation];
-  [mountOperation release];
-}
-
-- (void) removeRamdisk
-{
-  [queue cancelAllOperations];
-  // search if a ramdisk is active and detach it by calling
-  // hdutil detach <Device>
-}
-
-# pragma mark Menu
-
-- (void)updatePresetsMenu
-{
-  NSMenuItem *item;
-  _presetsSubMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
-  
-  for(RMFVolumePreset *preset in self.presetsManager.presets)
-  {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:preset.volumeLabel action:@selector(mountRamdisk:) keyEquivalent:@""];
-    [item setState:NSOffState];
-    [_presetsSubMenu addItem:item];
-    [item release];
-  }
-  
-  if([self.presetsManager.presets count] == 0)
-  {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"No Presets defined" action:nil keyEquivalent:@""];
-    [_presetsSubMenu addItem:item];
-    [item release];
-  }
-  
-  [_presetsSubMenu addItem:[NSMenuItem separatorItem]];
-}
-
-- (void) createMenu
-{
-  _menu = [[NSMenu alloc] initWithTitle:@"menu"];
-  // Create ramdisk
-  NSMenuItem *item;
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(createRamdisk:) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Destroy ramdisk
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Destroy Ramdisk" action:@selector(removeRamdisk) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-  
-  [self updatePresetsMenu];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFPresetSettingsController identifier]];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [self.presetsSubMenu addItem:item];
-  [item release];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [item setSubmenu:self.presetsSubMenu];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-  
-  // Separation
-  [self.menu addItem:[NSMenuItem separatorItem]];
-  
-  // Quit
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Quit" action:@selector(quitApplication) keyEquivalent:@""];
-  [item setEnabled:YES];
-  [item setTarget:self];
-  [self.menu addItem:item];
-  [item release];
-}
-
-- (void) createStatusItem
-{
-  NSStatusBar *bar = [NSStatusBar systemStatusBar];
-  self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
-  NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
-  [self.statusItem setImage:menuIconImage];
-  [self.statusItem setEnabled:YES];
-  [self.statusItem setHighlightMode:YES];
-  [self.statusItem setMenu:self.menu];
-}
 @end
