@@ -61,7 +61,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   {
     item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:favorite.label action:@selector(updateFavouriteState:) keyEquivalent:@""];
     //[item setState:NSMixedState];
-    [item addObserver:self forKeyPath:@"label" options:0 context:nil];
+    [favorite addObserver:self forKeyPath:@"label" options:0 context:nil];
     [item setTarget:self];
     [favoritesMenu addItem:item];
     [favouritesMap setObject:favorite forKey:[NSValue valueWithPointer:item]];

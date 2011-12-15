@@ -113,10 +113,11 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
   return !volumePresent;
 }
 
-- (void)deleteFavourite:(RMFRamdisk *)preset
+- (void)deleteFavourite:(RMFRamdisk *)favourite
 {
-  [[NSApp delegate] unmountAndEjectDeviceAtPath:@""];
-  [_favourites removeObject:preset];
+  //[[NSApp delegate] unmountAndEjectDeviceAtPath:favourite.devicePath];
+  [self.favourites removeObject:favourite];
+  [self synchronizeDefaults];
 }
 
 - (void)updateFavourites

@@ -19,7 +19,7 @@ extern NSString *const RMFPresetsPreferencesKey;
 - (BOOL) addFavourite:(RMFRamdisk*) ramdisk;
 - (RMFRamdisk*) addNewFavourite;
 - (RMFRamdisk*) createUniqueFavourite;
-- (void) deleteFavourite:(RMFRamdisk *)preset;
+- (void) deleteFavourite:(RMFRamdisk *)favourite;
 - (void) synchronizeDefaults;
 - (void) updateFavourites;
 

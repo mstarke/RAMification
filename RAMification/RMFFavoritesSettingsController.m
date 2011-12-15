@@ -91,7 +91,7 @@
 {
   // find the selected preset
   RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.favoritesManager deleteFavourite:nil];
+  [delegate.favoritesManager deleteFavourite:[delegate.favoritesManager.favourites objectAtIndex:[tableView selectedRow]]];
   [tableView reloadData];
   
 }
