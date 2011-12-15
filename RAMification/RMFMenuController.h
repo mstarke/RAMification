@@ -16,20 +16,20 @@
   NSMenu *favoritesMenu;
   NSStatusItem *statusItem;
   NSOperationQueue *queue;
-  NSMutableDictionary *presetMap;
+  NSMutableDictionary *favouritesMap;
   
 }
 
 - (void) createStatusItem;
 - (void) createMenu;
 - (void) createFavouritesMenu;
-- (void) updatePresetsMenu;
+- (void) updateFavouritesMenu;
 - (void) quitApplication;
 - (void) mount:(RMFRamdisk*) preset;
 - (void) eject:(RMFRamdisk*) preset;
 
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;
-- (void) updatePresetState:(id)sender;
+- (void) updateFavouriteState:(id)sender;
 
 @end

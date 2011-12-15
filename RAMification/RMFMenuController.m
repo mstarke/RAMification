@@ -24,7 +24,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   if (self)
   {
     queue = [[NSOperationQueue alloc] init];
-    presetMap = [[NSMutableDictionary alloc] init];
+    favouritesMap = [[NSMutableDictionary alloc] init];
     [self createMenu];
     [self createStatusItem];
     [((RMFAppDelegate*)[NSApp delegate]).favoritesManager addObserver:self
@@ -39,12 +39,12 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [queue release];
   [statusItem release];
   [menu release];
-  [presetMap release];
+  [favouritesMap release];
   
   queue = nil;
   statusItem = nil;
   menu = nil;
-  presetMap = nil;
+  favouritesMap = nil;
   
   [super dealloc];
 }
@@ -59,11 +59,12 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   
   for(RMFRamdisk *favorite in manager.favourites)
   {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:favorite.label action:@selector(updatePresetState:) keyEquivalent:@""];
+    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:favorite.label action:@selector(updateFavouriteState:) keyEquivalent:@""];
     //[item setState:NSMixedState];
+    [item addObserver:self forKeyPath:@"label" options:0 context:nil];
     [item setTarget:self];
     [favoritesMenu addItem:item];
-    [presetMap setObject:favorite forKey:[NSValue valueWithPointer:item]];
+    [favouritesMap setObject:favorite forKey:[NSValue valueWithPointer:item]];
     [item release];
   }
   
@@ -82,7 +83,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   menu = [[NSMenu alloc] initWithTitle:@"menu"];
   // Create ramdisk
   NSMenuItem *item;
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(updatePresetState:) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(updateFavouriteState:) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -149,20 +150,21 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [statusItem setMenu:menu];
 }
 
-- (void)updatePresetsMenu
+- (void)updateFavouritesMenu
 {
   for(NSMenuItem *item in [favoritesMenu itemArray])
   {
-    RMFRamdisk *preset = [presetMap objectForKey:[NSValue valueWithPointer:item]];
+    RMFRamdisk *preset = [favouritesMap objectForKey:[NSValue valueWithPointer:item]];
     if(preset != nil)
     {
+      [item setTitle:preset.label];
       if(preset.isMounted)
       {
-        [item setState:NSOnState];
+        //[item setState:NSOnState];
       }
       else
       {
-        [item setState:NSOffState];
+        //[item setState:NSOffState];
       }
     }
   }
@@ -182,10 +184,10 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [((RMFAppDelegate*)[NSApp delegate]).settingsController showSettings:[sender representedObject]];
 }
 
-- (void)updatePresetState:(id)sender
+- (void)updateFavouriteState:(id)sender
 {
   NSMenuItem* item = sender;
-  RMFRamdisk* itemPreset = [[presetMap objectForKey:[NSValue valueWithPointer:item]] retain];
+  RMFRamdisk* itemPreset = [[favouritesMap objectForKey:[NSValue valueWithPointer:item]] retain];
   if(itemPreset.isMounted)
   {
     [self eject:itemPreset];
@@ -223,6 +225,6 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-  NSLog(@"Favourites changed");
+  [self updateFavouritesMenu];
 }
 @end

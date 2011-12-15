@@ -13,9 +13,9 @@ extern NSString *const RMFPresetsPreferencesKey;
 
 @interface RMFFavoriteManager : NSObject <NSTableViewDataSource>
 
-@property (readonly, retain) NSMutableSet *favourites;
+@property (readonly, retain) NSMutableArray *favourites;
 
-- (NSSet*) mountedFavourites;
+- (NSArray*) mountedFavourites;
 - (BOOL) addFavourite:(RMFRamdisk*) ramdisk;
 - (RMFRamdisk*) addNewFavourite;
 - (RMFRamdisk*) createUniqueFavourite;

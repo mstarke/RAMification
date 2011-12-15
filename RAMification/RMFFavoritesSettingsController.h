@@ -10,12 +10,6 @@
 #import "RMFSettingsControllerProtocol.h"
 #import "RMFPresetsTableViewDelegate.h"
 
-enum RMFColumIdentifier {
-  RMFColumnAutomount,
-  RMFColumnLabel,
-  RMFColumnSize,
-};
-
 
 @interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol>
 {
@@ -27,5 +21,6 @@ enum RMFColumIdentifier {
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;
+- (void) didLoadView;
 
 @end
