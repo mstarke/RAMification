@@ -8,6 +8,13 @@
 
 #import "RMFFavoriteManager.h"
 
+// add private write access to proterties
+@interface RMFFavoriteManager ()
+
+@property (retain) NSMutableSet *favourites;
+
+@end
+
 NSString *const RMFPresetsPreferencesKey = @"Favourites";
 
 @implementation RMFFavoriteManager
@@ -21,15 +28,14 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
   if (self)
   {
     NSLog(@"Trying to load presets!");
-    _favourites = [[NSMutableArray array] retain];
-    NSData *presetData = [[NSUserDefaults standardUserDefaults] dataForKey:RMFPresetsPreferencesKey];
-    if(presetData != nil)
+    self.favourites = [NSMutableSet set];
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFPresetsPreferencesKey];
+    if(data != nil)
     {
-      NSArray *presetArray = [NSKeyedUnarchiver unarchiveObjectWithData:presetData];
-      if(presetArray != nil)
+      NSSet *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+      if(favourites != nil)
       {
-        [_favourites release];
-        _favourites = [[NSMutableArray arrayWithArray:presetArray] retain];
+        self.favourites = [NSMutableSet setWithSet:favourites];
       }
     }
   }
@@ -37,7 +43,7 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
 }
 
 - (void)dealloc {
-  [_favourites release];
+  self.favourites = nil;
   [super dealloc];
 }
 
@@ -57,28 +63,27 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
 
 - (RMFRamdisk *)createUniqueFavourite
 {
-  // todo implement
   return [RMFRamdisk VolumePreset];
 }
 
 -(RMFRamdisk *)addNewFavourite
 {
-  RMFRamdisk* newPreset = [self createUniqueFavourite];
-  [self addFavourite:newPreset];
-  return newPreset;
+  RMFRamdisk* ramdisk = [self createUniqueFavourite];
+  [self addFavourite:ramdisk];
+  return ramdisk;
 }
 
-- (NSArray *)mountedPresets
+- (NSSet *)mountedFavourites
 {
-  return [self.favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
+  return [self.favourites filteredSetUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
 }
 
 - (BOOL) addFavourite:(RMFRamdisk *)ramdisk
 {
-  BOOL volumePresent = [_favourites containsObject:ramdisk];
-  if(!ramdisk)
+  BOOL volumePresent = [self.favourites containsObject:ramdisk];
+  if(!volumePresent)
   {
-    [_favourites addObject:ramdisk];
+    [[self mutableSetValueForKey:@"favourites"] addObject:ramdisk];
     [self synchronizeDefaults];
   }
   

@@ -27,6 +27,10 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
     presetMap = [[NSMutableDictionary alloc] init];
     [self createMenu];
     [self createStatusItem];
+    [((RMFAppDelegate*)[NSApp delegate]).favoritesManager addObserver:self
+                                                          forKeyPath:@"favourites"
+                                                          options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial)
+                                                          context:nil];
   }
   return self;
 }
@@ -215,4 +219,10 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   // hdutil detach <Device>
 }
 
+# pragma mark KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+  NSLog(@"Favourites changed");
+}
 @end
