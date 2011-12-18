@@ -7,10 +7,8 @@
 //
 
 #import "RMFRamdisk.h"
+#import "RMFSettingsKeys.h"
 
-// Defaults
-NSString *const RMFDefaultRamdiskLabel = @"Ramdisk";
-const NSUInteger RMFDefaultRamdiskSize = 4096;
 // NSCodingKeys
 NSString *const RMFKeyForLabel = @"label";
 NSString *const RMFKeyForAutomount = @"automount";
@@ -24,6 +22,9 @@ NSString *const RMFKeyForSize = @"size";
 @synthesize devicePath;
 @synthesize automount;
 @synthesize isMounted;
+@synthesize backup;
+
+#pragma mark convinent object creation
 
 + (RMFRamdisk *) VolumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount
 {
@@ -40,9 +41,24 @@ NSString *const RMFKeyForSize = @"size";
   return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
+#pragma mark defaults
+
++ (NSString *)defaultLabel
+{
+  return [[NSUserDefaults standardUserDefaults] stringForKey:RMFSettingsKeyLabel];
+}
+
++ (NSUInteger)defaultSize
+{
+  return [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeySize];
+}
+
+
+#pragma mark object lifecycle
+
 - (id)init
 {
-  return [self initWithLabel:RMFDefaultRamdiskLabel andSize:RMFDefaultRamdiskSize shouldMount:NO];
+  return [self initWithLabel:[RMFRamdisk defaultLabel] andSize:[RMFRamdisk defaultSize] shouldMount:NO];
 }
 
 - (id)initWithLabel:(NSString *)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount{
@@ -56,7 +72,7 @@ NSString *const RMFKeyForSize = @"size";
     }
     else
     {
-      self.label = RMFDefaultRamdiskLabel;
+      self.label = [RMFRamdisk defaultLabel];
     } 
     self.automount = mount;
     self.isMounted = NO;

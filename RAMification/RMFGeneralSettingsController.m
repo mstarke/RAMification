@@ -8,8 +8,12 @@
 
 #import "RMFGeneralSettingsController.h"
 #import "RMFAppDelegate.h"
+#import "RMFSettingsKeys.h"
 
 @implementation RMFGeneralSettingsController
+
+
+#pragma mark RMFSettingsController Protocol
 
 + (NSString *) identifier
 {
@@ -30,6 +34,8 @@
   return [item autorelease];
 }
 
+#pragma mark object lifecylce
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
   self = [super initWithNibName:@"GeneralPane" bundle:[NSBundle mainBundle]];
@@ -41,7 +47,32 @@
     return self;
 }
 
-- (IBAction)setBackupPath:(id)sender
+#pragma mark viewLoad overrides
+- (void)loadView
+{
+  [super loadView];
+  [self didLoadView];
+}
+
+- (void)didLoadView
+{
+  // label
+  NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
+  [label bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  
+  // size
+  keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
+  [size bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+ 
+  // backup interval
+  keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
+  [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+}
+
+
+#pragma mark actions
+
+- (IBAction)setBackupInterval:(id)sender
 {
 
 }

@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Default values
-extern NSString *const RMFDefaultRamdiskLabel;
-extern const NSUInteger RMFDefaultRamdiskSize;
-
 // NSKeyArchiver Keys
 extern NSString *const RMFKeyForLabel;
 extern NSString *const RMFKeyForAutomount;
@@ -26,10 +22,13 @@ extern NSString *const RMFKeyForSize;
 @property (retain) NSString* devicePath;
 @property (assign) BOOL automount;
 @property (assign) BOOL isMounted;
+@property (assign) BOOL backup;
 
 + (RMFRamdisk*) VolumePresetWithData:(NSData*)data;
 + (RMFRamdisk*) VolumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
 + (RMFRamdisk*) VolumePreset;
++ (NSString*) defaultLabel;
++ (NSUInteger) defaultSize;
 
 - (id) initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
 

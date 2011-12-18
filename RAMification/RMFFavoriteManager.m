@@ -7,6 +7,7 @@
 //
 
 #import "RMFFavoriteManager.h"
+#import "RMFSettingsKeys.h"
 
 // add private write access to proterties
 @interface RMFFavoriteManager ()
@@ -15,8 +16,8 @@
 
 @end
 
-NSString *const RMFPresetsPreferencesKey = @"Favourites";
 
+// actual implementation
 @implementation RMFFavoriteManager
 
 @synthesize favourites = _favourites;
@@ -29,7 +30,7 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
   {
     NSLog(@"Trying to load presets!");
     self.favourites = [NSMutableArray array];
-    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFPresetsPreferencesKey];
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFSettingsKeyFavourites];
     if(data != nil)
     {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -115,7 +116,6 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
 
 - (void)deleteFavourite:(RMFRamdisk *)favourite
 {
-  //[[NSApp delegate] unmountAndEjectDeviceAtPath:favourite.devicePath];
   [self.favourites removeObject:favourite];
   [self synchronizeDefaults];
 }
@@ -129,7 +129,7 @@ NSString *const RMFPresetsPreferencesKey = @"Favourites";
 {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:self.favourites];
   
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFPresetsPreferencesKey];
+  [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

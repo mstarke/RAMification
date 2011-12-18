@@ -2,11 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LaunchAtLogin</key>
-	<false/>
-	<key>DefaultVolumeName</key>
+	<key>Label</key>
 	<string>RAMdisk</string>
-	<key>DefaultSize</key>
+	<key>Size</key>
 	<integer>4096</integer>
+	<key>BackupPath</key>
+	<string>/RamdiskBackup</string>
+	<key>BackupInterval</key>
+	<integer>600</integer>
 </dict>
 </plist>

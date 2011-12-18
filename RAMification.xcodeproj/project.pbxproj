@@ -32,7 +32,10 @@
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
 		4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavoritesPane.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
-		4CD4B7A71482B4C8002DC1F2 /* PreferencesDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* PreferencesDefaults.plist */; };
+		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
+		4CDBC8BE149D532E00CDBDEC /* RMFSyncDaemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */; };
+		4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */; };
+		4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */; };
 		4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */; };
 		4CF8842914926DC2000EE2D7 /* RMFFavoriteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFFavoriteManager.m */; };
 /* End PBXBuildFile section */
@@ -93,7 +96,13 @@
 		4CC52F7914819A360006C278 /* GeneralPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralPane.xib; sourceTree = "<group>"; };
 		4CC52F7C14819BB60006C278 /* FavoritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesPane.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
-		4CD4B7A61482B4C8002DC1F2 /* PreferencesDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PreferencesDefaults.plist; sourceTree = "<group>"; };
+		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		4CDBC8BC149D532E00CDBDEC /* RMFSyncDaemon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSyncDaemon.h; sourceTree = "<group>"; };
+		4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncDaemon.m; sourceTree = "<group>"; };
+		4CDBC8C0149D552100CDBDEC /* RMFSettingsKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsKeys.h; sourceTree = "<group>"; };
+		4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsKeys.m; sourceTree = "<group>"; };
+		4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RMFSizeFormatter.h; sourceTree = "<group>"; };
+		4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSizeFormatter.m; sourceTree = "<group>"; };
 		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
 		4CF8842714926DC2000EE2D7 /* RMFFavoriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoriteManager.h; sourceTree = "<group>"; };
 		4CF8842814926DC2000EE2D7 /* RMFFavoriteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoriteManager.m; sourceTree = "<group>"; };
@@ -181,6 +190,12 @@
 				4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */,
 				4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */,
 				4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */,
+				4CDBC8BC149D532E00CDBDEC /* RMFSyncDaemon.h */,
+				4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */,
+				4CDBC8C0149D552100CDBDEC /* RMFSettingsKeys.h */,
+				4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */,
+				4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */,
+				4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -250,7 +265,7 @@
 				4C5BDB66147EF6AD000E19B0 /* main.m */,
 				4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */,
 				4C5BDB69147EF6AD000E19B0 /* Credits.rtf */,
-				4CD4B7A61482B4C8002DC1F2 /* PreferencesDefaults.plist */,
+				4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -372,7 +387,7 @@
 				4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */,
 				4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */,
 				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
-				4CD4B7A71482B4C8002DC1F2 /* PreferencesDefaults.plist in Resources */,
+				4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */,
 				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
 				4CB6100B148AA3D800166397 /* Localizable.strings in Resources */,
 				4CBE8D71148C30D100747A33 /* README.md in Resources */,
@@ -423,6 +438,9 @@
 				4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */,
 				4C4FA61D149816060082981C /* RMFMenuController.m in Sources */,
 				4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */,
+				4CDBC8BE149D532E00CDBDEC /* RMFSyncDaemon.m in Sources */,
+				4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */,
+				4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

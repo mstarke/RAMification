@@ -14,6 +14,8 @@
 @synthesize presetSettingsController = _presetSettingsController;
 @synthesize generalSettingsController = _generalSettingsController;
 
+# pragma mark object lifecycle
+
 - (id)init
 {
   self = [super init];
@@ -45,6 +47,8 @@
   [settingsPaneControler release];
   [super dealloc];
 }
+
+#pragma mark actions
 
 - (void)showSettings:(id)sender
 {

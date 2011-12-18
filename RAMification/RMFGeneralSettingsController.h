@@ -12,8 +12,12 @@
 @interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
 {
   IBOutlet NSPopUpButton *backupPathSelection;
+  IBOutlet NSTextField *backupInterval;
+  IBOutlet NSTextField *label;
+  IBOutlet NSTextField *size;
 }
 
-- (IBAction)setBackupPath:(id)sender;
+- (IBAction)setBackupInterval:(id)sender;
+- (void)didLoadView;
 
 @end

@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "RMFRamdisk.h"
 
-extern NSString *const RMFPresetsPreferencesKey;
-
 @interface RMFFavoriteManager : NSObject <NSTableViewDataSource>
 
 @property (readonly, retain) NSMutableArray *favourites;
