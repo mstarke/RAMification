@@ -101,7 +101,7 @@
 		4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncDaemon.m; sourceTree = "<group>"; };
 		4CDBC8C0149D552100CDBDEC /* RMFSettingsKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsKeys.h; sourceTree = "<group>"; };
 		4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsKeys.m; sourceTree = "<group>"; };
-		4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; path = RMFSizeFormatter.h; sourceTree = "<group>"; };
+		4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSizeFormatter.h; sourceTree = "<group>"; };
 		4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSizeFormatter.m; sourceTree = "<group>"; };
 		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
 		4CF8842714926DC2000EE2D7 /* RMFFavoriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoriteManager.h; sourceTree = "<group>"; };

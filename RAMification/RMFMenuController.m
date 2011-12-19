@@ -70,7 +70,8 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   
   if([manager.favourites count] == 0)
   {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"No Presets defined" action:nil keyEquivalent:@""];
+    
+    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_NO_FAVOURITES_DEFINED", @"Menu Item - No Favourites defined") action:nil keyEquivalent:@""];
     [favoritesMenu addItem:item];
     [item release];
   }
@@ -81,9 +82,30 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 - (void) createMenu
 {
   menu = [[NSMenu alloc] initWithTitle:@"menu"];
-  // Create ramdisk
   NSMenuItem *item;
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Create Ramdisk" action:@selector(updateFavouriteState:) keyEquivalent:@""];
+
+  // About
+  NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+  NSString *aboutString = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"MENU_ABOUT", @"The lolcalized Version of About"), appName];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:aboutString action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
+  [item setEnabled:YES];
+  [item setTarget:NSApp];
+  [menu addItem:item];
+  [item release];
+  
+  // Preferences
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"MENU_ITEM_PREFERENCES", @"Menu Item - Preferences")] action:@selector(showSettingsTab:) keyEquivalent:@""];
+  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
+  [item setEnabled:YES];
+  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
+  [item setTarget:self];
+  [menu addItem:item];
+  [item release];
+  
+  [menu addItem:[NSMenuItem separatorItem]];
+  
+  // Create ramdisk
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_CREATE_RAMDISK", @"Create Ramdisk") action:@selector(updateFavouriteState:) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -91,26 +113,24 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [item release];
   
   // Destroy ramdisk
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Destroy Ramdisk" action:@selector(removeRamdisk) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_UNMOUNT_RAMDISK", @"Destroy Ramdisk") action:@selector(removeRamdisk) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
   [menu addItem:item];
   [item release];
   
-  // Separation
-  [menu addItem:[NSMenuItem separatorItem]];
-  
+  // Favourites
   [self createFavouritesMenu];
   
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Manage Presets..." action:@selector(showSettingsTab:) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"MENU_MANAGE_FAVOURITES", @"Menu Manage Favourites")] action:@selector(showSettingsTab:) keyEquivalent:@""];
   [item setRepresentedObject:[RMFFavoritesSettingsController identifier]];
   [item setEnabled:YES];
   [item setTarget:self];
   [favoritesMenu addItem:item];
   [item release];
   
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Presets" action:nil keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_PLURAL_FAVOURITE", @"Favourites") action:nil keyEquivalent:@""];
   [item setEnabled:YES];
   [item setTarget:self];
   [item setSubmenu:favoritesMenu];
@@ -119,20 +139,9 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   
   // Separation
   [menu addItem:[NSMenuItem separatorItem]];
-  
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Preferences..." action:@selector(showSettingsTab:) keyEquivalent:@""];
-  [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
-  [item setEnabled:YES];
-  [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item setTarget:self];
-  [menu addItem:item];
-  [item release];
-  
-  // Separation
-  [menu addItem:[NSMenuItem separatorItem]];
-  
+   
   // Quit
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Quit" action:@selector(quitApplication) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_QUIT", @"Quit") action:@selector(quitApplication) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setTarget:self];
   [menu addItem:item];

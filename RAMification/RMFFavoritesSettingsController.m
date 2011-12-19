@@ -21,7 +21,7 @@
 
 + (NSString *) label
 {
-  return NSLocalizedString(@"PRESET_SETTINGS_LABEL", @"Label for the Preset Settings");
+  return NSLocalizedString(@"FAVOURITE_SETTINGS_LABEL", @"Label for the Preset Settings");
 }
 
 + (NSToolbarItem *) toolbarItem

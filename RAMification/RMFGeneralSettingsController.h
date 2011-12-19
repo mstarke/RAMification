@@ -15,6 +15,8 @@
   IBOutlet NSTextField *backupInterval;
   IBOutlet NSTextField *label;
   IBOutlet NSTextField *size;
+  IBOutlet NSStepper *sizeStepper;
+  IBOutlet NSStepper *backupIntervalStepper;
 }
 
 - (IBAction)setBackupInterval:(id)sender;

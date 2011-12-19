@@ -56,17 +56,29 @@
 
 - (void)didLoadView
 {
+  // Set up the bindings for the Interface
+  
   // label
   NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
   [label bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
+  
   // size
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
   [size bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
- 
+  [sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [sizeStepper setMaxValue:1000000000];
+  [sizeStepper setMinValue:1048];
+  [sizeStepper setIncrement:1048];
+  
   // backup interval
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
   [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [backupIntervalStepper setMinValue:60];
+  [backupIntervalStepper setMaxValue:100000000000000];
+  [backupIntervalStepper setIncrement:60];
+  
 }
 
 
