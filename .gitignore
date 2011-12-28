@@ -1,3 +1,6 @@
+# Finder stuff
+._*
+.DS_Store
 # Xcode
 build/*
 *.pbxuser

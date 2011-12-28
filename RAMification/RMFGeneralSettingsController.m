@@ -10,6 +10,13 @@
 #import "RMFAppDelegate.h"
 #import "RMFSettingsKeys.h"
 
+const NSUInteger MinimumBackupInterval = 15;      // 15s
+const NSUInteger MaxiumumBackupInterval = 86400;  // 24h 
+const NSUInteger BackupdIntervalStepSize = 15;    // 15s
+const NSUInteger MinumumRamdiskSize = 1024;       // 1Mb
+const NSUInteger MaxiumumRamdiskSize = 33554432;  // 32Gb
+const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
+
 @implementation RMFGeneralSettingsController
 
 
@@ -66,18 +73,20 @@
   // size
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
   [size bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  [sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   [sizeStepper setMaxValue:1000000000];
   [sizeStepper setMinValue:1048];
   [sizeStepper setIncrement:1048];
+  [sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+
   
   // backup interval
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
   [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   [backupIntervalStepper setMinValue:60];
   [backupIntervalStepper setMaxValue:100000000000000];
   [backupIntervalStepper setIncrement:60];
+  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+
   
 }
 
