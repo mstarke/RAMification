@@ -8,6 +8,7 @@
 
 #import "RMFFavoriteManager.h"
 #import "RMFSettingsKeys.h"
+#import "NSString+RMFVolumeTools.h"
 
 // add private write access to proterties
 @interface RMFFavoriteManager ()
@@ -87,6 +88,8 @@
 
 - (RMFRamdisk *)createUniqueFavourite
 {
+  NSString *testpath = @"/Users/michael/Desktop/Test";
+  NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
   return [RMFRamdisk VolumePreset];
 }
 

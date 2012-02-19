@@ -13,7 +13,7 @@
 
 + (NSString *)uniqueVolumeName:(NSString *)baseName inFolder:(NSString *)path
 {
-  NSString *uniqueName = @"default";
+  NSString *uniqueName = baseName;
   NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
   NSMutableSet *files = [NSMutableSet setWithCapacity:[filePaths count]];
   for(NSString* filePath in filePaths)
@@ -23,8 +23,19 @@
   
   if([files containsObject:baseName])
   {
-    NSPredicate *nameMatcher = [NSPredicate predicateWithFormat:@"SELF MATCHES '%@_[0-9]*'",baseName];
+    // search for all matching files to our pattern
+    NSPredicate *nameMatcher = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [baseName stringByAppendingString:@"_[0-9]+"]];
     [files filterUsingPredicate:nameMatcher];
+    NSMutableSet *suffixes = [NSMutableSet setWithCapacity:[files count]];
+    
+    // gather all the numerical extensions
+    for(NSString *filename in files)
+    {
+      [suffixes addObject:[filename stringByReplacingOccurrencesOfString:[baseName stringByAppendingString:@"_"] withString:@""]];
+    }
+    
+    
+    
   }
   
   return uniqueName;
