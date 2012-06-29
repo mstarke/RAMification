@@ -15,7 +15,6 @@
 - (id)init {
   self = [super init];
   if (self) {
-    
     NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
     NSNotificationCenter *center = [workspace notificationCenter];
     [center addObserver:self selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];

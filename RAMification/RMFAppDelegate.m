@@ -10,9 +10,19 @@
 #import "RMFFavoriteManager.h"
 #import "RMFMountWatcher.h"
 
+@interface RMFAppDelegate ()
+
+@property (retain) RMFSettingsController *settingsController;
+@property (retain) RMFFavoriteManager* favoritesManager;
+@property (retain) RMFMenuController *menuController;
+@property (retain) RMFMountWatcher *mountWatcher;
+
+@end
+
+
 @implementation RMFAppDelegate
 
-@synthesize favoritesManager = _presetsManager;
+@synthesize favoritesManager = _favourtiesManager;
 @synthesize settingsController = _settingsController;
 @synthesize menuController = _menuController;
 @synthesize mountWatcher = _mountWatcher;
@@ -43,7 +53,7 @@
 {
   // initalize alle controller and the preset manager
   _settingsController = [[RMFSettingsController alloc] init];
-  _presetsManager = [[RMFFavoriteManager alloc] init];
+  _favourtiesManager = [[RMFFavoriteManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
 }

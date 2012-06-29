@@ -13,8 +13,10 @@
 
 + (NSString *)uniqueVolumeName:(NSString *)baseName inFolder:(NSString *)path
 {
-  NSString *uniqueName = baseName;
-  NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+  NSString *uniqueName = [baseName retain];
+  NSError *anError = nil;
+  NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&anError];
+  //TODO: add error handling
   NSMutableSet *files = [NSMutableSet setWithCapacity:[filePaths count]];
   for(NSString* filePath in filePaths)
   {
@@ -31,13 +33,28 @@
     // gather all the numerical extensions
     for(NSString *filename in files)
     {
-      [suffixes addObject:[filename stringByReplacingOccurrencesOfString:[baseName stringByAppendingString:@"_"] withString:@""]];
+      NSString *suffixString = [filename stringByReplacingOccurrencesOfString:[baseName stringByAppendingString:@"_"] withString:@""];
+      NSInteger suffix;
+      [[NSScanner scannerWithString:suffixString] scanInteger:&suffix];
+      [suffixes addObject:[NSNumber numberWithInteger:suffix]];
     }
+    // Sort the numbers ascending
+    NSArray *descriptor = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"integerValue" ascending:YES]];
+    NSArray *sortedSuffixed = [suffixes sortedArrayUsingDescriptors:descriptor];
+    // Calculate next number based on biggest found
+    // We do not try to fill holes
+    NSNumber *maximum = sortedSuffixed.lastObject;
+    NSNumber *nextSuffix = [NSNumber numberWithInteger:( [maximum integerValue] + 1 ) ];
     
-    
-    
+    NSString *newName = [uniqueName stringByAppendingFormat:@"%@", nextSuffix];
+    // release retained old string as we do not need it anymore
+    [uniqueName release];
+    uniqueName = newName;
   }
-  
+  else {
+    // Autorelease because we collected ownership
+    [uniqueName autorelease];
+  }
   return uniqueName;
 }
 

@@ -90,6 +90,7 @@
 {
   NSString *testpath = @"/Users/michael/Desktop/Test";
   NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
+  NSLog(@"Unique Volume name: %@", unique);
   return [RMFRamdisk VolumePreset];
 }
 

@@ -14,9 +14,9 @@
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (retain) RMFSettingsController *settingsController;
-@property (retain) RMFFavoriteManager* favoritesManager;
-@property (readonly) RMFMenuController *menuController;
-@property (readonly) RMFMountWatcher *mountWatcher;
+@property (retain, readonly) RMFSettingsController *settingsController;
+@property (retain, readonly) RMFFavoriteManager* favoritesManager;
+@property (retain, readonly) RMFMenuController *menuController;
+@property (retain, readonly) RMFMountWatcher *mountWatcher;
 
 @end

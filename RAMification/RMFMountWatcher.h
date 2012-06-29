@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+/* Mount Watchter listens to all mount/unmount notifications */
 @interface RMFMountWatcher : NSObject
 
 - (void) volumeDidMount:(NSNotification*)notification;

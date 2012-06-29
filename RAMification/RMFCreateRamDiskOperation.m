@@ -37,7 +37,7 @@
   // stop if we are cancelled or are a already mounted volume
   if([self isCancelled] || [self.ramdisk.label isUsedAsVolumeName])
   {  
-    NSLog(@"We got canceld or the Volume is already present!");
+    NSLog(@"We got canceled or the Volume is already present!");
     return;
   }
   
