@@ -59,7 +59,6 @@
   [createDisk setStandardOutput:output];
   [createDisk launch];
   
-  
   // retrieve the device name
   NSFileHandle *outputFileHandle = [output fileHandleForReading];
   NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];

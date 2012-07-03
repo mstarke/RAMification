@@ -13,7 +13,31 @@
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
 
-NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate"; 
+NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
+NSString *const RMFFavouritesManagerFavourites = @"favourites";
+NSString *const RMFRamDiskLabel = @"label";
+
+@interface RMFMenuController ()
+
+- (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
+
+/* creates the status item to be inserted in the menu bar */
+- (void) createStatusItem;
+
+/* creates the menu that is added to the status item*/
+- (void) createMenu;
+/* create the inital favourites menu */
+- (void) createFavouritesMenu;
+/* updates the favourites menu for new additions */
+- (void) updateFavouritesMenu;
+/* updates the menu item represneting this favourite */
+- (void) updateFavourite:(RMFRamdisk *)favourite;
+/* callback to for a single favourite menu item */
+- (void) updateFavouriteState:(id)sender;
+
+
+@end
+
 
 @implementation RMFMenuController
 
@@ -24,13 +48,13 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   if (self)
   {
     queue = [[NSOperationQueue alloc] init];
-    favouritesMap = [[NSMutableDictionary alloc] init];
+    favouritesToMenuItemsMap = [[NSMutableDictionary alloc] init];
     [self createMenu];
     [self createStatusItem];
     [((RMFAppDelegate*)[NSApp delegate]).favoritesManager addObserver:self
-                                                          forKeyPath:@"favourites"
-                                                          options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial)
-                                                          context:nil];
+                                                           forKeyPath:RMFFavouritesManagerFavourites
+                                                              options:0
+                                                              context:nil];
   }
   return self;
 }
@@ -39,12 +63,12 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [queue release];
   [statusItem release];
   [menu release];
-  [favouritesMap release];
+  [favouritesToMenuItemsMap release];
   
   queue = nil;
   statusItem = nil;
   menu = nil;
-  favouritesMap = nil;
+  favouritesToMenuItemsMap = nil;
   
   [super dealloc];
 }
@@ -59,13 +83,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   
   for(RMFRamdisk *favorite in manager.favourites)
   {
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:favorite.label action:@selector(updateFavouriteState:) keyEquivalent:@""];
-    //[item setState:NSMixedState];
-    [favorite addObserver:self forKeyPath:@"label" options:0 context:nil];
-    [item setTarget:self];
-    [favoritesMenu addItem:item];
-    [favouritesMap setObject:favorite forKey:[NSValue valueWithPointer:item]];
-    [item release];
+    [self addFavouriteMenuItem:favorite atEnd:YES];
   }
   
   if([manager.favourites count] == 0)
@@ -83,7 +101,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 {
   menu = [[NSMenu alloc] initWithTitle:@"menu"];
   NSMenuItem *item;
-
+  
   // About
   NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
   NSString *aboutString = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"MENU_ABOUT", @"The lolcalized Version of About"), appName];
@@ -139,7 +157,7 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   
   // Separation
   [menu addItem:[NSMenuItem separatorItem]];
-   
+  
   // Quit
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_QUIT", @"Quit") action:@selector(quitApplication) keyEquivalent:@""];
   [item setEnabled:YES];
@@ -159,22 +177,67 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   [statusItem setMenu:menu];
 }
 
+- (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favorite atEnd:(BOOL)atEnd {
+  
+  // The item is already present
+  if( [[favouritesToMenuItemsMap allValues] containsObject:favorite] ) {
+    return FALSE;
+  }
+  // New item needs to be created and added to the menu
+  else
+  {
+    NSUInteger index;
+    if( atEnd )
+    {
+      index = [favoritesMenu numberOfItems];
+    }
+    else {
+      index = [favoritesMenu numberOfItems] - 2;
+    }
+    NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
+                        initWithTitle:favorite.label
+                        action:@selector(updateFavouriteState:)
+                        keyEquivalent:@""];
+    // Add ourselves as observer for label changes on the favourite
+    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:nil];
+    [item setTarget:self];
+    [favoritesMenu insertItem:item atIndex:index];
+    [favouritesToMenuItemsMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
+    [item release];
+    
+    return TRUE;
+  }
+} 
+
+
 - (void)updateFavouritesMenu
 {
-  for(NSMenuItem *item in [favoritesMenu itemArray])
+  // Holds all the current menu items so we find obsolete ones
+  NSMutableSet *validItems= [NSMutableSet setWithCapacity:[favouritesToMenuItemsMap count]];
+  RMFAppDelegate *delegate = [NSApp delegate];
+  RMFFavoriteManager *favouriteManager = delegate.favoritesManager;
+  for( RMFRamdisk *ramdisk in favouriteManager.favourites )
   {
-    RMFRamdisk *preset = [favouritesMap objectForKey:[NSValue valueWithPointer:item]];
-    if(preset != nil)
+    if( [[favouritesToMenuItemsMap allValues] containsObject:[NSValue valueWithNonretainedObject:ramdisk]] )
     {
-      [item setTitle:preset.label];
-      if(preset.isMounted)
-      {
-        //[item setState:NSOnState];
-      }
-      else
-      {
-        //[item setState:NSOffState];
-      }
+      // Favourite is in the menu so just mark it as updated
+      NSValue *itemId = [[favouritesToMenuItemsMap allKeysForObject:[NSValue valueWithNonretainedObject:ramdisk]] lastObject];
+      [validItems addObject:itemId];
+    }
+    else
+    {
+      // Favourte is not in the menu, so lets add it
+      [self addFavouriteMenuItem:ramdisk atEnd:NO];
+    }
+  }
+  // now run through all menu items and throw the ones away that have no favoureite anymore
+  for( NSMenuItem *item in [favouritesToMenuItemsMap allKeys] )
+  {
+    // Remove obsolte menu items
+    if( ! [validItems containsObject:[NSValue valueWithNonretainedObject:item]] )
+    {
+      //[favoritesMenu removeItem:item];
+      //[favouritesToMenuItemsMap removeObjectForKey:[NSValue valueWithNonretainedObject:item]];
     }
   }
 }
@@ -196,7 +259,8 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 - (void)updateFavouriteState:(id)sender
 {
   NSMenuItem* item = sender;
-  RMFRamdisk* itemPreset = [[favouritesMap objectForKey:[NSValue valueWithPointer:item]] retain];
+  NSValue *presetId = [favouritesToMenuItemsMap objectForKey:[NSValue valueWithNonretainedObject:item]];
+  RMFRamdisk* itemPreset = [presetId nonretainedObjectValue];
   if(itemPreset.isMounted)
   {
     [self eject:itemPreset];
@@ -205,7 +269,13 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
   {
     [self mount:itemPreset];
   }
-  [itemPreset release];
+}
+
+- (void) updateFavourite:(RMFRamdisk *)favourite
+{
+  NSValue *itemId = [[favouritesToMenuItemsMap allKeysForObject:[NSValue valueWithNonretainedObject:favourite]] lastObject];
+  NSMenuItem *item = [itemId nonretainedObjectValue];
+  [item setTitle:favourite.label];
 }
 
 # pragma mark mount/unmount
@@ -234,6 +304,20 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-  [self updateFavouritesMenu];
+  if( [keyPath isEqualToString:RMFRamDiskLabel] )
+  {
+    if( [object isMemberOfClass:[RMFRamdisk class]] )
+    {
+      RMFRamdisk *ramDisk = (RMFRamdisk *)object;
+      [self updateFavourite:ramDisk];    
+      return;
+    }
+  }
+  if( [keyPath isEqualToString:RMFFavouritesManagerFavourites] )
+  {
+    // clean up old key/value observing
+    [self updateFavouritesMenu];
+    return;
+  }
 }
 @end

@@ -17,7 +17,8 @@
 - (BOOL) addFavourite:(RMFRamdisk*) ramdisk;
 - (RMFRamdisk*) addNewFavourite;
 - (RMFRamdisk*) createUniqueFavourite;
-- (void) deleteFavourite:(RMFRamdisk *)favourite;
+- (RMFRamdisk*) findFavouriteForName:(NSString*)name;
+- (void) deleteFavourite:(RMFRamdisk *)ramdisk;
 - (void) synchronizeDefaults;
 - (void) updateFavourites;
 

@@ -111,22 +111,40 @@
   BOOL volumePresent = [self.favourites containsObject:ramdisk];
   if(!volumePresent)
   {
-    [[self mutableArrayValueForKey:@"favourites"] addObject:ramdisk];
+    [self insertObject:ramdisk inFavouritesAtIndex:[self.favourites count]];
     [self synchronizeDefaults];
   }
   
   return !volumePresent;
 }
 
-- (void)deleteFavourite:(RMFRamdisk *)favourite
+- (void)deleteFavourite:(RMFRamdisk *)ramdisk
 {
-  [self.favourites removeObject:favourite];
+  NSUInteger index = [self.favourites indexOfObject:ramdisk];
+  [self removeObjectFromFavouritesAtIndex:index];
   [self synchronizeDefaults];
+}
+
+- (RMFRamdisk*) findFavouriteForName:(NSString*)name
+{
+  return nil;
 }
 
 - (void)updateFavourites
 {
   // update favourites
+}
+
+# pragma mark KVM
+
+- (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index
+{
+  [self.favourites removeObjectAtIndex:index];
+}
+
+- (void)insertObject:(RMFRamdisk *)ramdisk inFavouritesAtIndex:(NSUInteger)index
+{
+  [self.favourites insertObject:ramdisk atIndex:index];
 }
 
 - (void)synchronizeDefaults

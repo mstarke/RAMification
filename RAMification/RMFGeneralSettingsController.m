@@ -17,8 +17,14 @@ const NSUInteger MinumumRamdiskSize = 1024;       // 1Mb
 const NSUInteger MaxiumumRamdiskSize = 33554432;  // 32Gb
 const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
-@implementation RMFGeneralSettingsController
 
+@interface RMFGeneralSettingsController ()
+
+- (void) checkHibernationMode;
+
+@end
+
+@implementation RMFGeneralSettingsController
 
 #pragma mark RMFSettingsController Protocol
 
@@ -64,11 +70,11 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 - (void)didLoadView
 {
   // Set up the bindings for the Interface
-  
+  //[self.warningIcon setImage:[NSImage imageNamed:NSImageNameCaution]];
+ 
   // label
   NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
   [label bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  
   
   // size
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
@@ -78,7 +84,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [sizeStepper setIncrement:1048];
   [sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
 
-  
   // backup interval
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
   [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
@@ -86,8 +91,13 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [backupIntervalStepper setMaxValue:100000000000000];
   [backupIntervalStepper setIncrement:60];
   [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+}
 
-  
+- (void) checkHibernationMode
+{
+  // run schell command pmset -g | grep hibernamemode
+  // check for mode
+  // or look for cocoa api to get this data
 }
 
 
