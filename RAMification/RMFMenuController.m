@@ -16,18 +16,19 @@
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 NSString *const RMFFavouritesManagerFavourites = @"favourites";
 NSString *const RMFRamDiskLabel = @"label";
+const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
 
 - (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
-
 /* creates the status item to be inserted in the menu bar */
 - (void) createStatusItem;
-
 /* creates the menu that is added to the status item*/
 - (void) createMenu;
 /* create the inital favourites menu */
 - (void) createFavouritesMenu;
+/* adds a info note that there are not favourites */
+- (void) addNoFavouritesInfoAtEnd:(BOOL)atEnd;
 /* updates the favourites menu for new additions */
 - (void) updateFavouritesMenu;
 /* updates the menu item represneting this favourite */
@@ -77,7 +78,6 @@ NSString *const RMFRamDiskLabel = @"label";
 
 - (void)createFavouritesMenu
 {
-  NSMenuItem *item;
   RMFFavoriteManager *manager = ((RMFAppDelegate*)[NSApp delegate]).favoritesManager;
   favoritesMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   
@@ -88,10 +88,7 @@ NSString *const RMFRamDiskLabel = @"label";
   
   if([manager.favourites count] == 0)
   {
-    
-    item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_NO_FAVOURITES_DEFINED", @"Menu Item - No Favourites defined") action:nil keyEquivalent:@""];
-    [favoritesMenu addItem:item];
-    [item release];
+    [self addNoFavouritesInfoAtEnd:YES];
   }
   
   [favoritesMenu addItem:[NSMenuItem separatorItem]];
@@ -177,7 +174,18 @@ NSString *const RMFRamDiskLabel = @"label";
   [statusItem setMenu:menu];
 }
 
-- (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favorite atEnd:(BOOL)atEnd {
+- (void)addNoFavouritesInfoAtEnd:(BOOL)atEnd
+{
+  NSUInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
+  NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
+                      initWithTitle:NSLocalizedString(@"MENU_NO_FAVOURITES_DEFINED", @"Menu Item - No Favourites defined")
+                      action:nil
+                      keyEquivalent:@""];
+  [favoritesMenu insertItem:item atIndex:index];
+  [item release];
+}
+
+- (BOOL)addFavouriteMenuItem:(RMFRamdisk *)favorite atEnd:(BOOL)atEnd {
   
   // The item is already present
   if( [[favouritesToMenuItemsMap allValues] containsObject:favorite] ) {
@@ -186,14 +194,7 @@ NSString *const RMFRamDiskLabel = @"label";
   // New item needs to be created and added to the menu
   else
   {
-    NSUInteger index;
-    if( atEnd )
-    {
-      index = [favoritesMenu numberOfItems];
-    }
-    else {
-      index = [favoritesMenu numberOfItems] - 2;
-    }
+    NSUInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
                         initWithTitle:favorite.label
                         action:@selector(updateFavouriteState:)
@@ -231,14 +232,18 @@ NSString *const RMFRamDiskLabel = @"label";
     }
   }
   // now run through all menu items and throw the ones away that have no favoureite anymore
-  for( NSMenuItem *item in [favouritesToMenuItemsMap allKeys] )
+  for( NSValue *itemId in [favouritesToMenuItemsMap allKeys] )
   {
     // Remove obsolte menu items
-    if( ! [validItems containsObject:[NSValue valueWithNonretainedObject:item]] )
+    if( ! [validItems containsObject:itemId] )
     {
-      //[favoritesMenu removeItem:item];
-      //[favouritesToMenuItemsMap removeObjectForKey:[NSValue valueWithNonretainedObject:item]];
+      [favoritesMenu removeItem:[itemId nonretainedObjectValue]];
+      [favouritesToMenuItemsMap removeObjectForKey:itemId];
     }
+  }
+  if( [favouriteManager.favourites count] == 0)
+  {
+    [self addNoFavouritesInfoAtEnd:FALSE];
   }
 }
 
@@ -261,14 +266,7 @@ NSString *const RMFRamDiskLabel = @"label";
   NSMenuItem* item = sender;
   NSValue *presetId = [favouritesToMenuItemsMap objectForKey:[NSValue valueWithNonretainedObject:item]];
   RMFRamdisk* itemPreset = [presetId nonretainedObjectValue];
-  if(itemPreset.isMounted)
-  {
-    [self eject:itemPreset];
-  }
-  else
-  {
-    [self mount:itemPreset];
-  }
+  itemPreset.isMounted ? [self eject:itemPreset] : [self mount:itemPreset];
 }
 
 - (void) updateFavourite:(RMFRamdisk *)favourite
