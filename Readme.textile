@@ -1,6 +1,7 @@
 h1. RAMification
 
 A Tool to manage RAM disks.
+This is a small pet project and in no way finished. I'm working on it on a very irregular basis and the current code if far from complete.
 
 h2. Features
 
