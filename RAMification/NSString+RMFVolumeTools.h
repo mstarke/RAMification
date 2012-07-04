@@ -21,11 +21,14 @@
 // Returns: file_1
 + (NSString *) uniqueVolumeName:(NSString*)baseName inFolder:(NSString*)path;
 
+
 // Returns YES if the string is used als Volume name
 // Returns NO if the string is not used als Volume name.
 - (BOOL) isUsedAsVolumeName;
 
 // Returns the Volumepath for a given string?
 - (NSString*) volumePath;
+
+
 
 @end

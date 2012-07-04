@@ -43,10 +43,10 @@
     NSArray *sortedSuffixed = [suffixes sortedArrayUsingDescriptors:descriptor];
     // Calculate next number based on biggest found
     // We do not try to fill holes
-    NSNumber *maximum = sortedSuffixed.lastObject;
+    NSNumber *maximum = [sortedSuffixed lastObject];
     NSNumber *nextSuffix = [NSNumber numberWithInteger:( [maximum integerValue] + 1 ) ];
     
-    NSString *newName = [uniqueName stringByAppendingFormat:@"%@", nextSuffix];
+    NSString *newName = [uniqueName stringByAppendingFormat:@"%@_", nextSuffix];
     // release retained old string as we do not need it anymore
     [uniqueName release];
     uniqueName = newName;

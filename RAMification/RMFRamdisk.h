@@ -17,16 +17,18 @@ extern NSString *const RMFKeyForSize;
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
 
-@property (retain) NSString* label;
-@property (assign) NSUInteger size;
+@property (nonatomic, retain, setter=setLabel:) NSString* label;
+@property (nonatomic, assign, setter=setSize:) NSUInteger size;
 @property (retain) NSString* devicePath;
 @property (assign) BOOL automount;
-@property (assign) BOOL isMounted;
+@property (nonatomic, assign, setter=setIsMounted:) BOOL isMounted;
 @property (assign) BOOL backup;
+// indicates that changes were made after mounting
+@property (readonly) BOOL isDirty;
 
-+ (RMFRamdisk*) VolumePresetWithData:(NSData*)data;
-+ (RMFRamdisk*) VolumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
-+ (RMFRamdisk*) VolumePreset;
++ (RMFRamdisk*) volumePresetWithData:(NSData*)data;
++ (RMFRamdisk*) volumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
++ (RMFRamdisk*) volumePreset;
 + (NSString*) defaultLabel;
 + (NSUInteger) defaultSize;
 

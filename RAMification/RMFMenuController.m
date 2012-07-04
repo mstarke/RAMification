@@ -16,25 +16,31 @@
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 NSString *const RMFFavouritesManagerFavourites = @"favourites";
 NSString *const RMFRamDiskLabel = @"label";
+NSString *const RMFRamDiskIsDirty = @"isDirty";
 const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
 
 - (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
-/* creates the status item to be inserted in the menu bar */
+// creates the status item to be inserted in the menu bar 
 - (void) createStatusItem;
-/* creates the menu that is added to the status item*/
+// creates the menu that is added to the status item
 - (void) createMenu;
-/* create the inital favourites menu */
+// create the inital favourites menu
 - (void) createFavouritesMenu;
-/* adds a info note that there are not favourites */
+// adds a info note that there are not favourites
 - (void) addNoFavouritesInfoAtEnd:(BOOL)atEnd;
-/* updates the favourites menu for new additions */
+// updates the favourites menu for new additions
 - (void) updateFavouritesMenu;
-/* updates the menu item represneting this favourite */
+// updates the menu item represneting this favourite
 - (void) updateFavourite:(RMFRamdisk *)favourite;
-/* callback to for a single favourite menu item */
+// callback to for a single favourite menu item
 - (void) updateFavouriteState:(id)sender;
+
+// Updates the menuitem to the changes in the ramdisk
+// @param item MenuItem to update
+// @param ramDisk Updated ramDisk
+- (void) updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk;
 
 
 @end
@@ -200,7 +206,9 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         action:@selector(updateFavouriteState:)
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
-    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:nil];
+    // WARNING this might be a very bad idea to use non retained values
+    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:[NSValue valueWithNonretainedObject:item]];
+    [favorite addObserver:self forKeyPath:RMFRamDiskIsDirty options:0 context:[NSValue valueWithNonretainedObject:item]];
     [item setTarget:self];
     [favoritesMenu insertItem:item atIndex:index];
     [favouritesToMenuItemsMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
@@ -209,7 +217,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     return TRUE;
   }
 } 
-
 
 - (void)updateFavouritesMenu
 {
@@ -247,6 +254,13 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   }
 }
 
+- (void)updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk
+{
+  if( [[favoritesMenu itemArray] containsObject:item] )
+  {
+    [item setTitle:ramDisk.label];
+  }
+}
 
 # pragma mark actions
 
@@ -302,12 +316,13 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-  if( [keyPath isEqualToString:RMFRamDiskLabel] )
+  if( [keyPath isEqualToString:RMFRamDiskLabel] || [keyPath isEqualToString:RMFRamDiskIsDirty] )
   {
     if( [object isMemberOfClass:[RMFRamdisk class]] )
     {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
-      [self updateFavourite:ramDisk];    
+      NSValue *itemId = (NSValue *)context;
+      [self updateMenuItem:[itemId nonretainedObjectValue] ramDisk:ramDisk];
       return;
     }
   }

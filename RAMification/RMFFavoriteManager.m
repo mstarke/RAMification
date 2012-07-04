@@ -10,10 +10,20 @@
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 
-// add private write access to proterties
+// private interface
 @interface RMFFavoriteManager ()
 
 @property (retain) NSMutableArray *favourites;
+
+// Adds the given ramdisk to the favourites
+// @param ramdisk favourite to add
+// @return true if the favourite was added, false otherwise
+- (BOOL) addFavourite:(RMFRamdisk*) ramdisk;
+// creates a default favourite with a unique name
+// @return the unique favourite
+- (RMFRamdisk*) createUniqueFavourite;
+// flushes changes to the preferences file
+- (void) synchronizeDefaults;
 
 @end
 
@@ -91,7 +101,7 @@
   NSString *testpath = @"/Users/michael/Desktop/Test";
   NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
   NSLog(@"Unique Volume name: %@", unique);
-  return [RMFRamdisk VolumePreset];
+  return [RMFRamdisk volumePreset];
 }
 
 -(RMFRamdisk *)addNewFavourite
@@ -108,14 +118,14 @@
 
 - (BOOL) addFavourite:(RMFRamdisk *)ramdisk
 {
-  BOOL volumePresent = [self.favourites containsObject:ramdisk];
-  if(!volumePresent)
+  BOOL isDuplicate = [self.favourites containsObject:ramdisk];
+  if(!isDuplicate)
   {
     [self insertObject:ramdisk inFavouritesAtIndex:[self.favourites count]];
     [self synchronizeDefaults];
   }
   
-  return !volumePresent;
+  return !isDuplicate;
 }
 
 - (void)deleteFavourite:(RMFRamdisk *)ramdisk
