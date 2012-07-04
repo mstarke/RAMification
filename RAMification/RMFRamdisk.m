@@ -14,9 +14,9 @@ NSString *const RMFKeyForLabel = @"label";
 NSString *const RMFKeyForAutomount = @"automount";
 NSString *const RMFKeyForSize = @"size";
 
-@interface RMFRamdisk (private)
+@interface RMFRamdisk ()
 
-@property (assign) BOOL isDirty;
+@property (readwrite) BOOL isDirty;
 
 - (void) setLabel:(NSString *)label;
 - (void) setSize:(NSUInteger)size;
@@ -118,10 +118,10 @@ NSString *const RMFKeyForSize = @"size";
 
 - (void) setLabel:(NSString *)label
 {
-  if( ! [self.label isEqualToString:label] )
+  if( self.label  != label )
   {
-    [self.label release];
-    self.label = [label retain];
+    [_label release];
+    _label = [label retain];
     // If we are mounted we are dirty,
     // otherwise we just stay the way we were
     self.isDirty |= self.isMounted;
@@ -132,7 +132,7 @@ NSString *const RMFKeyForSize = @"size";
 {
   if( self.size != size )
   {
-    self.size = size;
+    _size = size;
     // Only get dirty if mounted
     // Otherwise keep dirty state
     self.isDirty |= self.isMounted;
@@ -145,7 +145,7 @@ NSString *const RMFKeyForSize = @"size";
   {
     self.isMounted = isMounted;
     // Mounting clears the dirty flag
-    self.isDirty &= isMounted;
+    self.isDirty &= self.isMounted;
   }
 }
 
@@ -157,7 +157,7 @@ NSString *const RMFKeyForSize = @"size";
   {
     RMFRamdisk* other = (RMFRamdisk*)object;
     isEqual = [self.label isEqualToString:other.label];
-    isEqual = ( self.size == other.size );
+    isEqual &= ( self.size == other.size );
   }
   return isEqual;
 }

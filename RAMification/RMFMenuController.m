@@ -21,13 +21,16 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
 
-- (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
 // creates the status item to be inserted in the menu bar 
 - (void) createStatusItem;
 // creates the menu that is added to the status item
 - (void) createMenu;
 // create the inital favourites menu
 - (void) createFavouritesMenu;
+- (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
+- (BOOL) addFavouriteMenuItems:(NSArray *)favourites atEnd:(BOOL)atEnd;
+- (void) removeFavouriteMenuItems:(NSArray *)favourites;
+- (BOOL) removeFavouriteMenuItem:(RMFRamdisk *)favourite;
 // adds a info note that there are not favourites
 - (void) addNoFavouritesInfoAtEnd:(BOOL)atEnd;
 // updates the favourites menu for new additions
@@ -60,7 +63,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [self createStatusItem];
     [((RMFAppDelegate*)[NSApp delegate]).favoritesManager addObserver:self
                                                            forKeyPath:RMFFavouritesManagerFavourites
-                                                              options:0
+                                                              options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld )
                                                               context:nil];
   }
   return self;
@@ -180,14 +183,28 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [statusItem setMenu:menu];
 }
 
+# pragma mark Favourite Menu updates
+
+- (BOOL)addFavouriteMenuItems:(NSArray *)favourites atEnd:(BOOL)atEnd
+{
+  BOOL didAddAllItems = YES;
+  for( RMFRamdisk *disk in favourites )
+  {
+    didAddAllItems &= [self addFavouriteMenuItem:disk atEnd:atEnd];
+  }
+  return didAddAllItems;
+}
+
 - (void)addNoFavouritesInfoAtEnd:(BOOL)atEnd
 {
-  NSUInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
+  NSInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
+  NSArray *indexArray = [NSArray arrayWithObjects:[NSNumber numberWithInteger:index], [NSNumber numberWithInt:0], nil];
+  NSNumber *minimum = [indexArray valueForKeyPath:@"@min.intValue"];
   NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
                       initWithTitle:NSLocalizedString(@"MENU_NO_FAVOURITES_DEFINED", @"Menu Item - No Favourites defined")
                       action:nil
                       keyEquivalent:@""];
-  [favoritesMenu insertItem:item atIndex:index];
+  [favoritesMenu insertItem:item atIndex:[minimum integerValue]];
   [item release];
 }
 
@@ -262,6 +279,31 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   }
 }
 
+- (void) removeFavouriteMenuItems:(NSArray *)favourites
+{
+  for(RMFRamdisk *disk in favourites)
+  {
+    [self removeFavouriteMenuItem:disk]; 
+  }
+}
+
+- (BOOL) removeFavouriteMenuItem:(RMFRamdisk *)favourite
+{
+  NSValue *favouriteId = [NSValue valueWithNonretainedObject:favourite];
+  NSValue *itemId = [[favouritesToMenuItemsMap allKeysForObject:favouriteId] lastObject];
+  if(itemId != nil)
+  {
+    // remove all key-value-observer from the removed ramdisk
+    [favourite removeObserver:self forKeyPath:RMFRamDiskLabel];
+    [favourite removeObserver:self forKeyPath:RMFRamDiskIsDirty];
+    NSMenuItem *item = [itemId nonretainedObjectValue];
+    [favoritesMenu removeItem:item];
+    
+    return YES;
+  }
+  return NO;
+}
+
 # pragma mark actions
 
 - (void) quitApplication
@@ -328,7 +370,22 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   }
   if( [keyPath isEqualToString:RMFFavouritesManagerFavourites] )
   {
-    // clean up old key/value observing
+    NSUInteger changeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
+    switch (changeKind) {
+      case NSKeyValueChangeInsertion: {
+        NSArray *insertedItems = [change objectForKey:NSKeyValueChangeNewKey];
+        [self addFavouriteMenuItems:insertedItems atEnd:YES];
+      }
+      case NSKeyValueChangeRemoval:
+      default:{
+        
+        NSArray *removedItems = [change objectForKey:NSKeyValueChangeOldKey];
+        [self removeFavouriteMenuItems:removedItems];
+        break;
+      }
+    }
+    
+    
     [self updateFavouritesMenu];
     return;
   }

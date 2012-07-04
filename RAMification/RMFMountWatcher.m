@@ -28,7 +28,7 @@
 
 - (void)volumeDidMount:(NSNotification *)notification
 {
-  NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
+  //NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.favoritesManager updateFavourites];
 }
@@ -40,7 +40,7 @@
 
 - (void)volumeDidUnmount:(NSNotification *)notification
 {
-  NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
+  //NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.favoritesManager updateFavourites];
 }
