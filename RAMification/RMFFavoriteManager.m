@@ -137,8 +137,27 @@
 
 - (RMFRamdisk*) findFavouriteForName:(NSString*)name
 {
+  for(RMFRamdisk *ramdisk in self.favourites)
+  {
+    if([ramdisk.label isEqualToString:name])
+    {
+      return ramdisk;
+    }
+  } 
+  return nil;}
+
+- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path
+{
+  for(RMFRamdisk *ramdisk in self.favourites)
+  {
+    if([ramdisk.devicePath isEqualToString:path])
+    {
+      return ramdisk;
+    }
+  } 
   return nil;
 }
+
 
 - (void)updateFavourites
 {

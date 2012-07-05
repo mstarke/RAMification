@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreFoundation/CoreFoundation.h>
 
 @interface RMFSyncDaemon : NSObject
 

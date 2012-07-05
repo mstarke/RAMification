@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
+		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
@@ -51,6 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C264E5615A631E500D358B5 /* RMFMountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountController.h; sourceTree = "<group>"; };
+		4C264E5715A631E500D358B5 /* RMFMountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountController.m; sourceTree = "<group>"; };
+		4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
 		4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoritesSettingsController.h; sourceTree = "<group>"; };
 		4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoritesSettingsController.m; sourceTree = "<group>"; };
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsControllerProtocol.h; sourceTree = "<group>"; };
@@ -113,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */,
 				4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,6 +157,8 @@
 				4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */,
 				4C4FA61B149816060082981C /* RMFMenuController.h */,
 				4C4FA61C149816060082981C /* RMFMenuController.m */,
+				4C264E5615A631E500D358B5 /* RMFMountController.h */,
+				4C264E5715A631E500D358B5 /* RMFMountController.m */,
 			);
 			name = Controler;
 			sourceTree = "<group>";
@@ -203,6 +211,7 @@
 		4C5BDB4B147EF6AD000E19B0 = {
 			isa = PBXGroup;
 			children = (
+				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
 				4CBE8D6C148C30D100747A33 /* LaunchAtLoginController */,
 				4C5BDB60147EF6AD000E19B0 /* RAMification */,
 				4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */,
@@ -441,6 +450,7 @@
 				4CDBC8BE149D532E00CDBDEC /* RMFSyncDaemon.m in Sources */,
 				4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */,
 				4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */,
+				4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

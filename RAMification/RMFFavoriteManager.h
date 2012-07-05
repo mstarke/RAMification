@@ -17,16 +17,21 @@
 
 // Finds all mounted favourites
 // @return array of mounted favourites
-- (NSArray*) mountedFavourites;
+- (NSArray *)mountedFavourites;
 
 // Add a new Favourite
 // @return created ramdisk, nil if none was created
-- (RMFRamdisk*) addNewFavourite;
+- (RMFRamdisk *)addNewFavourite;
 
 // Find a favourite with the exact given name (no wildcards, no substring)
 // @param name the name to search
 // @return mathing favourite, nil if none was found
-- (RMFRamdisk *) findFavouriteForName:(NSString*)name;
+- (RMFRamdisk *)findFavouriteForName:(NSString *)name;
+
+// Find a favourite with the given device path
+// @param path the Device path to look for
+// @return matching favourite, nil if nothing was found
+- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path;
 
 // Delete the given favourite
 // @param ramdisk favourite to delete

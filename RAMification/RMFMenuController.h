@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFRamdisk.h"
 
 @interface RMFMenuController : NSObject
 {
@@ -17,12 +16,9 @@
   NSStatusItem *statusItem;
   NSOperationQueue *queue;
   NSMutableDictionary *favouritesToMenuItemsMap;
-  
 }
 
 - (void) quitApplication;
-- (void) mount:(RMFRamdisk*) preset;
-- (void) eject:(RMFRamdisk*) preset;
 
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;

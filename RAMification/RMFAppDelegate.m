@@ -8,7 +8,11 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFFavoriteManager.h"
+#import "RMFSettingsController.h"
+#import "RMFMenuController.h"
 #import "RMFMountWatcher.h"
+#import "RMFMountController.h"
+#import "RMFSyncDaemon.h"
 
 @interface RMFAppDelegate ()
 
@@ -16,6 +20,8 @@
 @property (retain) RMFFavoriteManager* favoritesManager;
 @property (retain) RMFMenuController *menuController;
 @property (retain) RMFMountWatcher *mountWatcher;
+@property (retain) RMFMountController *mountController;
+@property (retain) RMFSyncDaemon *synchDaemon;
 
 @end
 
@@ -26,6 +32,8 @@
 @synthesize settingsController = _settingsController;
 @synthesize menuController = _menuController;
 @synthesize mountWatcher = _mountWatcher;
+@synthesize mountController = _mountController;
+@synthesize synchDaemon = _synchDaemon;
 
 # pragma mark object lifecycle
 
@@ -56,6 +64,8 @@
   _favourtiesManager = [[RMFFavoriteManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
+  _mountController = [[RMFMountController alloc] init];
+  _synchDaemon = [[RMFSyncDaemon alloc] init];
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "RMFFavoritesSettingsController.h"
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
+#import "RMFFavoriteManager.h"
 
 @implementation RMFFavoritesSettingsController
 

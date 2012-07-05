@@ -7,10 +7,13 @@
 //
 
 #import "RMFMenuController.h"
+
 #import "RMFRamdisk.h"
 #import "RMFFavoriteManager.h"
 #import "RMFAppDelegate.h"
 #import "RMFCreateRamDiskOperation.h"
+#import "RMFSettingsController.h"
+#import "RMFMountController.h"
 #import "NSString+RMFVolumeTools.h"
 
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
@@ -38,13 +41,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 // updates the menu item represneting this favourite
 - (void) updateFavourite:(RMFRamdisk *)favourite;
 // callback to for a single favourite menu item
-- (void) updateFavouriteState:(id)sender;
+- (void) handleFavouriteClicked:(id)sender;
 
 // Updates the menuitem to the changes in the ramdisk
 // @param item MenuItem to update
 // @param ramDisk Updated ramDisk
 - (void) updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk;
-
 
 @end
 
@@ -57,7 +59,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   self = [super init];
   if (self)
   {
-    queue = [[NSOperationQueue alloc] init];
     favouritesToMenuItemsMap = [[NSMutableDictionary alloc] init];
     [self createMenu];
     [self createStatusItem];
@@ -70,15 +71,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 - (void)dealloc {
-  [queue release];
   [statusItem release];
   [menu release];
-  [favouritesToMenuItemsMap release];
+  favouritesToMenuItemsMap = nil;
   
-  queue = nil;
   statusItem = nil;
   menu = nil;
-  favouritesToMenuItemsMap = nil;
   
   [super dealloc];
 }
@@ -124,12 +122,13 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
   [menu addItem:item];
+  // add to map!
   [item release];
   
   [menu addItem:[NSMenuItem separatorItem]];
   
   // Create ramdisk
-  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_CREATE_RAMDISK", @"Create Ramdisk") action:@selector(updateFavouriteState:) keyEquivalent:@""];
+  item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"MENU_CREATE_RAMDISK", @"Create Ramdisk") action:@selector(handleFavouriteClicked:) keyEquivalent:@""];
   [item setEnabled:YES];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
   [item setTarget:self];
@@ -220,12 +219,11 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     NSUInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
                         initWithTitle:favorite.label
-                        action:@selector(updateFavouriteState:)
+                        action:@selector(handleFavouriteClicked:)
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
-    // WARNING this might be a very bad idea to use non retained values
-    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:[NSValue valueWithNonretainedObject:item]];
-    [favorite addObserver:self forKeyPath:RMFRamDiskIsDirty options:0 context:[NSValue valueWithNonretainedObject:item]];
+    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:item];
+    [favorite addObserver:self forKeyPath:RMFRamDiskIsDirty options:0 context:item];
     [item setTarget:self];
     [favoritesMenu insertItem:item atIndex:index];
     [favouritesToMenuItemsMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
@@ -276,6 +274,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   if( [[favoritesMenu itemArray] containsObject:item] )
   {
     [item setTitle:ramDisk.label];
+    [item setState:NSOnState];
   }
 }
 
@@ -317,12 +316,15 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [((RMFAppDelegate*)[NSApp delegate]).settingsController showSettings:[sender representedObject]];
 }
 
-- (void)updateFavouriteState:(id)sender
+- (void)handleFavouriteClicked:(id)sender
 {
   NSMenuItem* item = sender;
   NSValue *presetId = [favouritesToMenuItemsMap objectForKey:[NSValue valueWithNonretainedObject:item]];
-  RMFRamdisk* itemPreset = [presetId nonretainedObjectValue];
-  itemPreset.isMounted ? [self eject:itemPreset] : [self mount:itemPreset];
+  RMFRamdisk* ramdisk = [presetId nonretainedObjectValue];
+  RMFAppDelegate* delegate = [NSApp delegate];
+  RMFMountController* mountController = delegate.mountController;
+  [mountController toggleMounted:ramdisk];
+  
 }
 
 - (void) updateFavourite:(RMFRamdisk *)favourite
@@ -330,21 +332,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   NSValue *itemId = [[favouritesToMenuItemsMap allKeysForObject:[NSValue valueWithNonretainedObject:favourite]] lastObject];
   NSMenuItem *item = [itemId nonretainedObjectValue];
   [item setTitle:favourite.label];
-}
-
-# pragma mark mount/unmount
-
-- (void) mount:(RMFRamdisk*) preset
-{
-  RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:preset];
-  [queue cancelAllOperations];
-  [queue addOperation:mountOperation];
-  [mountOperation release];
-}
-
-- (void)eject:(RMFRamdisk *)preset
-{
-  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[preset.label volumePath]];
 }
 
 - (void) removeRamdisk
@@ -363,8 +350,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     if( [object isMemberOfClass:[RMFRamdisk class]] )
     {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
-      NSValue *itemId = (NSValue *)context;
-      [self updateMenuItem:[itemId nonretainedObjectValue] ramDisk:ramDisk];
+      NSMenuItem *item = context;
+      [self updateMenuItem:item ramDisk:ramDisk];
       return;
     }
   }
