@@ -35,7 +35,8 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   self = [super init];
   if (self) {
     DAApprovalSessionRef approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
-    DARegisterDiskUnmountApprovalCallback(approvalSession, 0, &unmountCallback, self);
+    DAApprovalSessionScheduleWithRunLoop(approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+    DARegisterDiskUnmountApprovalCallback(approvalSession, NULL, unmountCallback, self);
   }
   return self;
 }
