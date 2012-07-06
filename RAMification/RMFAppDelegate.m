@@ -21,7 +21,7 @@
 @property (retain) RMFMenuController *menuController;
 @property (retain) RMFMountWatcher *mountWatcher;
 @property (retain) RMFMountController *mountController;
-@property (retain) RMFSyncDaemon *synchDaemon;
+@property (retain) RMFSyncDaemon *syncDaemon;
 
 @end
 
@@ -33,7 +33,7 @@
 @synthesize menuController = _menuController;
 @synthesize mountWatcher = _mountWatcher;
 @synthesize mountController = _mountController;
-@synthesize synchDaemon = _synchDaemon;
+@synthesize syncDaemon = _syncDaemon;
 
 # pragma mark object lifecycle
 
@@ -65,7 +65,7 @@
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
   _mountController = [[RMFMountController alloc] init];
-  _synchDaemon = [[RMFSyncDaemon alloc] init];
+  _syncDaemon = [[RMFSyncDaemon alloc] init];
 }
 
 @end

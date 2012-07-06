@@ -13,7 +13,7 @@
 @class RMFMenuController;
 @class RMFMountWatcher;
 @class RMFMountController;
-
+@class RMFSyncDaemon;
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -22,5 +22,6 @@
 @property (retain, readonly) RMFMenuController *menuController;
 @property (retain, readonly) RMFMountWatcher *mountWatcher;
 @property (retain, readonly) RMFMountController *mountController;
+@property (retain, readonly) RMFSyncDaemon *syncDaemon;
 
 @end

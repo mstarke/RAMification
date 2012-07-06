@@ -82,7 +82,7 @@
   
   if([tableColumn identifier] == RMFKeyForAutomount)
   {
-    favourite.automount = [object boolValue];
+    favourite.isAutomount = [object boolValue];
   }
   
   if([tableColumn identifier] == RMFKeyForLabel)

@@ -7,7 +7,9 @@
 //
 
 #import "RMFRamdisk.h"
+#import "RMFAppDelegate.h"
 #import "RMFSettingsKeys.h"
+#import "RMFSyncDaemon.h"
 
 // NSCodingKeys
 NSString *const RMFKeyForLabel = @"label";
@@ -21,6 +23,7 @@ NSString *const RMFKeyForSize = @"size";
 - (void) setLabel:(NSString *)label;
 - (void) setSize:(NSUInteger)size;
 - (void) setIsMounted:(BOOL)isMounted;
+- (void) setIsBackupEnabled:(BOOL)isBackupEnabled;
 
 @end
 
@@ -30,9 +33,9 @@ NSString *const RMFKeyForSize = @"size";
 @synthesize size = _size;
 @synthesize label = _label;
 @synthesize devicePath;
-@synthesize automount;
+@synthesize isAutomount;
 @synthesize isMounted = _isMounted;
-@synthesize backup;
+@synthesize isBackupEnabled = _isBackupEnabled;
 @synthesize isDirty = _isDirty;
 
 #pragma mark convinent object creation
@@ -85,10 +88,17 @@ NSString *const RMFKeyForSize = @"size";
     {
       self.label = [RMFRamdisk defaultLabel];
     } 
-    self.automount = mount;
+    self.isAutomount = mount;
     self.isMounted = NO;
   }
   return self;
+}
+
+- (void)dealloc
+{
+  RMFAppDelegate *delegate = [NSApp delegate];
+  [delegate.syncDaemon disableBackupForRamdisk:self];
+  [super dealloc];
 }
 
 #pragma mark NSCoder
@@ -99,7 +109,7 @@ NSString *const RMFKeyForSize = @"size";
   {
     self = [[RMFRamdisk alloc] init];
     self.label = [aDecoder decodeObjectForKey:RMFKeyForLabel];
-    self.automount = [aDecoder decodeBoolForKey:RMFKeyForAutomount];
+    self.isAutomount = [aDecoder decodeBoolForKey:RMFKeyForAutomount];
     self.size = [aDecoder decodeIntegerForKey:RMFKeyForSize];
   }
   return self;
@@ -110,7 +120,7 @@ NSString *const RMFKeyForSize = @"size";
   if([aCoder isKindOfClass:[NSKeyedArchiver class]])
   {
     //[super encodeWithCoder:aCoder];
-    [aCoder encodeBool:self.automount forKey:RMFKeyForAutomount];
+    [aCoder encodeBool:self.isAutomount forKey:RMFKeyForAutomount];
     [aCoder encodeInteger:self.size forKey:RMFKeyForSize];
     [aCoder encodeObject:self.label forKey:RMFKeyForLabel];
   }
@@ -146,6 +156,20 @@ NSString *const RMFKeyForSize = @"size";
     self.isMounted = isMounted;
     // Mounting clears the dirty flag
     self.isDirty &= self.isMounted;
+  }
+}
+
+- (void)setIsBackupEnabled:(BOOL)isBackupEnabled {
+  if( self.isBackupEnabled != isBackupEnabled ) {
+    _isBackupEnabled = isBackupEnabled;
+    RMFAppDelegate *delegate = [NSApp delegate];
+    if(self.isBackupEnabled) {
+      [delegate.syncDaemon enableBackupForRamdisk:self];
+    }
+    else
+    {
+      [delegate.syncDaemon disableBackupForRamdisk:self];
+    }
   }
 }
 
