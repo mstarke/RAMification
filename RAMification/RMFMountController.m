@@ -27,8 +27,7 @@
 
 @synthesize queue = _queue;
 
-- (id)init
-{
+- (id)init {
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
@@ -36,39 +35,31 @@
   return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
   self.queue = nil;
   [super dealloc];
 }
 
-- (void) mount:(RMFRamdisk *)ramdisk
-{
+- (void) mount:(RMFRamdisk *)ramdisk {
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:ramdisk];
   [self.queue cancelAllOperations];
   [self.queue addOperation:mountOperation];
   [mountOperation release];
 }
 
-- (void) unmount:(RMFRamdisk *)ramdisk
-{
+- (void) unmount:(RMFRamdisk *)ramdisk {
   [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[ramdisk.label volumePath]];
 }
 
-- (BOOL) toggleMounted:(RMFRamdisk *)ramdisk
-{
+- (BOOL) toggleMounted:(RMFRamdisk *)ramdisk {
   return NO;
 }
 
-- (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted
-{
+- (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted {
   RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
   RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:path];
-  if(ramdisk != nil)
-  {
+  if(ramdisk != nil) {
     ramdisk.isMounted = mounted;
   }
 }
-
-
 @end

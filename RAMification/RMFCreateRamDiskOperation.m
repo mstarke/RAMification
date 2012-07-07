@@ -7,36 +7,37 @@
 //
 
 #import "RMFCreateRamDiskOperation.h"
+
 #import "RMFAppDelegate.h"
+#import "RMFRamdisk.h"
 #import "NSString+RMFVolumeTools.h"
+
+@interface RMFCreateRamDiskOperation ()
+  @property (retain) RMFRamdisk* ramdisk;
+@end
 
 @implementation RMFCreateRamDiskOperation
 
 @synthesize ramdisk = _ramdisk;
 
-- (id) initWithRamdisk:(RMFRamdisk *)ramdisk
-{
+- (id) initWithRamdisk:(RMFRamdisk *)ramdisk {
   self = [super init];
-  if (self)
-  {
+  if (self) {
     self.ramdisk = ramdisk;
   }
   return self;
 }
 
-- (id) init
-{
+- (id) init {
   RMFRamdisk* ramdisk= [[RMFRamdisk alloc] init];
   self = [self initWithRamdisk:ramdisk];
   [ramdisk release];
   return self;
 }
 
-- (void) main
-{  
+- (void) main {  
   // stop if we are cancelled or are a already mounted volume
-  if([self isCancelled] || [self.ramdisk.label isUsedAsVolumeName])
-  {  
+  if([self isCancelled] || [self.ramdisk.label isUsedAsVolumeName]) {  
     NSLog(@"We got canceled or the Volume is already present!");
     return;
   }

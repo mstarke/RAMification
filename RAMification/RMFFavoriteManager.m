@@ -37,16 +37,16 @@
 
 - (id)init {
   self = [super init];
-  if (self)
-  {
+  
+  if (self) {
     NSLog(@"Trying to load presets!");
     self.favourites = [NSMutableArray array];
     NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFSettingsKeyFavourites];
-    if(data != nil)
-    {
+    
+    if(data != nil) {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-      if(favourites != nil)
-      {
+      
+      if(favourites != nil) {
         self.favourites = [NSMutableArray arrayWithArray:favourites];
       }
     }
@@ -61,32 +61,26 @@
 
 #pragma mark NSTabelDataSource protocoll
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
-{
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
   return [self.favourites count];
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
   return [favourite valueForKey:[tableColumn identifier]];
 }
 
-- (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
+- (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
-  if([tableColumn identifier] == RMFKeyForSize)
-  {
+  if([tableColumn identifier] == RMFKeyForSize) {
     favourite.size = [object integerValue];
   }
   
-  if([tableColumn identifier] == RMFKeyForAutomount)
-  {
+  if([tableColumn identifier] == RMFKeyForAutomount) {
     favourite.isAutomount = [object boolValue];
   }
   
-  if([tableColumn identifier] == RMFKeyForLabel)
-  {
+  if([tableColumn identifier] == RMFKeyForLabel) {
     favourite.label = object;
   }
   
@@ -96,31 +90,26 @@
 
 #pragma mark preset handling
 
-- (RMFRamdisk *)createUniqueFavourite
-{
+- (RMFRamdisk *)createUniqueFavourite {
   NSString *testpath = @"/Users/michael/Desktop/Test";
   NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
   NSLog(@"Unique Volume name: %@", unique);
   return [RMFRamdisk volumePreset];
 }
 
--(RMFRamdisk *)addNewFavourite
-{
+-(RMFRamdisk *)addNewFavourite {
   RMFRamdisk* ramdisk = [self createUniqueFavourite];
   [self addFavourite:ramdisk];
   return ramdisk;
 }
 
-- (NSArray *)mountedFavourites
-{
+- (NSArray *)mountedFavourites {
   return [self.favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
 }
 
-- (BOOL) addFavourite:(RMFRamdisk *)ramdisk
-{
+- (BOOL) addFavourite:(RMFRamdisk *)ramdisk {
   BOOL isDuplicate = [self.favourites containsObject:ramdisk];
-  if(!isDuplicate)
-  {
+  if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[self.favourites count]];
     [self synchronizeDefaults];
   }
@@ -128,30 +117,23 @@
   return !isDuplicate;
 }
 
-- (void)deleteFavourite:(RMFRamdisk *)ramdisk
-{
+- (void)deleteFavourite:(RMFRamdisk *)ramdisk {
   NSUInteger index = [self.favourites indexOfObject:ramdisk];
   [self removeObjectFromFavouritesAtIndex:index];
   [self synchronizeDefaults];
 }
 
-- (RMFRamdisk*) findFavouriteForName:(NSString*)name
-{
-  for(RMFRamdisk *ramdisk in self.favourites)
-  {
-    if([ramdisk.label isEqualToString:name])
-    {
+- (RMFRamdisk*) findFavouriteForName:(NSString*)name {
+  for(RMFRamdisk *ramdisk in self.favourites) {
+    if([ramdisk.label isEqualToString:name]) {
       return ramdisk;
     }
   } 
   return nil;}
 
-- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path
-{
-  for(RMFRamdisk *ramdisk in self.favourites)
-  {
-    if([ramdisk.devicePath isEqualToString:path])
-    {
+- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path {
+  for(RMFRamdisk *ramdisk in self.favourites) {
+    if([ramdisk.devicePath isEqualToString:path]) {
       return ramdisk;
     }
   } 
@@ -159,25 +141,21 @@
 }
 
 
-- (void)updateFavourites
-{
+- (void)updateFavourites {
   // update favourites
 }
 
-# pragma mark KVM
+# pragma mark KVC
 
-- (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index
-{
+- (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index {
   [self.favourites removeObjectAtIndex:index];
 }
 
-- (void)insertObject:(RMFRamdisk *)ramdisk inFavouritesAtIndex:(NSUInteger)index
-{
+- (void)insertObject:(RMFRamdisk *)ramdisk inFavouritesAtIndex:(NSUInteger)index {
   [self.favourites insertObject:ramdisk atIndex:index];
 }
 
-- (void)synchronizeDefaults
-{
+- (void)synchronizeDefaults {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:self.favourites];
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];

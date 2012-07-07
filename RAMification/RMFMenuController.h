@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RMFMenuController : NSObject
-{
+@interface RMFMenuController : NSObject {
   @private
   NSMenu *menu;
   NSMenu *favoritesMenu;

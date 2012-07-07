@@ -22,11 +22,9 @@
 
 # pragma mark object lifecycle
 
-- (id)init
-{
+- (id)init {
   self = [super init];
-  if (self)
-  {
+  if (self) {
     // load the window and create all the necessary gui elements
     [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
     
@@ -47,8 +45,7 @@
   return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
   self.toolbar = nil;
   [settingsPaneControler release];
   [super dealloc];
@@ -56,37 +53,31 @@
 
 #pragma mark actions
 
-- (void)showSettings:(id)sender
-{
+- (void)showSettings:(id)sender {
   NSString* settingsIdentifier = nil;
   
   // the call can originate from a NSMenuItem or a NSToolbarItem
-  // the NSMenuItem delivers just sends a identifier string as sender
-  // the NSToolbarItem delivers itselv as the sender
+  // the NSMenuItem just sends a identifier string as sender
+  // the NSToolbarItem delivers itself as the sender
   //
   // We get a NSToolbarItem
-  if([sender isMemberOfClass:[NSToolbarItem class]])
-  {
+  if([sender isMemberOfClass:[NSToolbarItem class]]) {
     settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
   // or the otherwise, we collect the string.
-  else
-  {
-    if ([sender isKindOfClass:[NSString class]])
-    {
+  else {
+    if ([sender isKindOfClass:[NSString class]]) {
       settingsIdentifier = sender;
     }
   }
   
   // if something went wrong, we go for the defautl identitifer (first tab)
-  if(sender == nil)
-  {
+  if(sender == nil) {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
   }
   id<RMFSettingsControllerProtocol> visibleSettings = [settingsPaneControler objectForKey:settingsIdentifier];
   
-  if(visibleSettings == nil)
-  {
+  if(visibleSettings == nil) {
     visibleSettings = _generalSettingsController;
   }
   // highlight the toolbar item
@@ -101,23 +92,19 @@
 
 #pragma mark NSToolbarDelegateProtocol
 
-- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar
-{
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
   return [settingsPaneControler allKeys];
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar
-{
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
   return [settingsPaneControler allKeys];
 }
 
-- (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
-{
+- (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
   return [settingsPaneControler allKeys];
 }
 
-- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
-{
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
   id controller = [settingsPaneControler objectForKey:itemIdentifier];
   NSToolbarItem *item = [[controller class ]toolbarItem];
   [item setAction:@selector(showSettings:)];

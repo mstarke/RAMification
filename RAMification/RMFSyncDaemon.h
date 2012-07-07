@@ -21,5 +21,6 @@
 - (void)enableBackupForRamdisk: (RMFRamdisk *)ramdisk;
 // Unregesiter the given ramdisk to stop backups
 - (void)disableBackupForRamdisk:(RMFRamdisk *)ramdisk;
-
+// Restores the ramdisk to it's backed up content
+- (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
 @end

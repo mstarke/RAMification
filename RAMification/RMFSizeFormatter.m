@@ -10,24 +10,28 @@
 
 @implementation RMFSizeFormatter
 
-- (NSString *)stringForObjectValue:(id)obj
-{
+- (NSString *)stringForObjectValue:(id)obj {
   return @"";
 }
 
-- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString **)error
-{
+- (BOOL)getObjectValue:(id *)obj
+             forString:(NSString *)string
+      errorDescription:(NSString **)error {
   obj = nil;
   return true;
 }
 
-- (BOOL)isPartialStringValid:(NSString *)partialString newEditingString:(NSString **)newString errorDescription:(NSString **)error
-{
+- (BOOL)isPartialStringValid:(NSString *)partialString
+            newEditingString:(NSString **)newString
+            errorDescription:(NSString **)error {
   return true;
 }
 
-- (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
-{
+- (BOOL)isPartialStringValid:(NSString **)partialStringPtr
+       proposedSelectedRange:(NSRangePointer)proposedSelRangePtr
+              originalString:(NSString *)origString
+       originalSelectedRange:(NSRange)origSelRange
+            errorDescription:(NSString **)error {
   return true;
 }
 

@@ -10,6 +10,7 @@
 		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
 		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */; };
+		4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
 		4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */; };
@@ -59,6 +60,8 @@
 		4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoritesSettingsController.h; sourceTree = "<group>"; };
 		4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoritesSettingsController.m; sourceTree = "<group>"; };
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsControllerProtocol.h; sourceTree = "<group>"; };
+		4C2EA37615A8EDF600F0D2EA /* RMFSyncRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSyncRamDiskOperation.h; sourceTree = "<group>"; };
+		4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncRamDiskOperation.m; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFPresetsTableViewDelegate.h; sourceTree = "<group>"; };
 		4C34B6AC1486FBDD008CFB00 /* RMFPresetsTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFPresetsTableViewDelegate.m; sourceTree = "<group>"; };
 		4C4FA61B149816060082981C /* RMFMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMenuController.h; sourceTree = "<group>"; };
@@ -168,6 +171,8 @@
 			children = (
 				4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */,
 				4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */,
+				4C2EA37615A8EDF600F0D2EA /* RMFSyncRamDiskOperation.h */,
+				4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */,
 			);
 			name = Operations;
 			sourceTree = "<group>";
@@ -451,6 +456,7 @@
 				4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */,
 				4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */,
 				4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */,
+				4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

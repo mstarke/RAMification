@@ -19,18 +19,15 @@
 
 @synthesize tableDelegate = _tableDelegate;
 
-+ (NSString *) identifier
-{
++ (NSString *) identifier {
   return @"PresetSettings";
 }
 
-+ (NSString *) label
-{
++ (NSString *) label {
   return NSLocalizedString(@"FAVOURITE_SETTINGS_LABEL", @"Label for the Preset Settings");
 }
 
-+ (NSToolbarItem *) toolbarItem
-{
++ (NSToolbarItem *) toolbarItem {
   NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]];
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
   [item setLabel:[RMFFavoritesSettingsController label]];
@@ -40,14 +37,11 @@
 
 #pragma mark init/dealloc
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
-  if (self)
-  {    
+  if (self) {    
     // nothing to do;
   }
-  
   return self;
 }
 
@@ -58,14 +52,12 @@
 #pragma mark view loading
 
 // override to wait if a view was loaded
-- (void)loadView
-{
+- (void)loadView {
   [super loadView];
   [self didLoadView];
 }
 
-- (void)didLoadView
-{
+- (void)didLoadView {
   _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
   NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForAutomount];
   NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForLabel];
@@ -84,15 +76,13 @@
 
 # pragma mark actions
 
-- (void)addPreset:(id)sender
-{
+- (void)addPreset:(id)sender {
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.favoritesManager addNewFavourite];
   [tableView reloadData];
 }
 
-- (void)deletePreset:(id)sender
-{
+- (void)deletePreset:(id)sender {
   // find the selected preset
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.favoritesManager deleteFavourite:[delegate.favoritesManager.favourites objectAtIndex:[tableView selectedRow]]];

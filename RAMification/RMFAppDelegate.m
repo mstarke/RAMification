@@ -37,18 +37,15 @@
 
 # pragma mark object lifecycle
 
-+ (void) initialize
-{
++ (void) initialize {
   NSURL *defaultsPlistURL = [[NSBundle mainBundle] URLForResource:@"Defaults" withExtension:@"plist"];
-  if(defaultsPlistURL != nil)
-  {
+  if(defaultsPlistURL != nil) {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithContentsOfURL:defaultsPlistURL]];
     [[NSUserDefaults standardUserDefaults] synchronize];
   }
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
   self.settingsController = nil;  
   [super dealloc];
   
@@ -57,8 +54,7 @@
 
 #pragma mark NSApplicationDelegate protocoll
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   // initalize alle controller and the preset manager
   _settingsController = [[RMFSettingsController alloc] init];
   _favourtiesManager = [[RMFFavoriteManager alloc] init];

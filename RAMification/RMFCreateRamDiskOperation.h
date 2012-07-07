@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFRamdisk.h"
+
+@class RMFRamdisk;
 
 @interface RMFCreateRamDiskOperation : NSOperation
-
-@property (retain) RMFRamdisk* ramdisk;
 
 - (id) initWithRamdisk:(RMFRamdisk *)ramdisk;
 

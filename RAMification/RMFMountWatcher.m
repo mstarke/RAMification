@@ -12,11 +12,9 @@
 
 @implementation RMFMountWatcher
 
-- (id)init
-{
+- (id)init {
   self = [super init];
-  if (self)
-  {
+  if (self) {
     NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
     NSNotificationCenter *center = [workspace notificationCenter];
     [center addObserver:self selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
@@ -26,20 +24,17 @@
   return self;
 }
 
-- (void)volumeDidMount:(NSNotification *)notification
-{
+- (void)volumeDidMount:(NSNotification *)notification {
   //NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   //NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
   NSLog(@"%@", notification);
 }
 
-- (void)volumeWillUnmount:(NSNotification *)notification
-{
+- (void)volumeWillUnmount:(NSNotification *)notification {
   NSLog(@"%@", notification);
 }
 
-- (void)volumeDidUnmount:(NSNotification *)notification
-{
+- (void)volumeDidUnmount:(NSNotification *)notification {
   //NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   //RMFAppDelegate *delegate = [NSApp delegate];
   //[delegate.favoritesManager updateFavourites];

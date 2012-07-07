@@ -10,33 +10,27 @@
 
 @implementation RMFPresetsTableViewDelegate
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
-{
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
   return 10;
 }
 
 - (id)init {
   self = [super init];
-  if (self)
-  {
-    
+  if (self) {
+    // Nothing to do
   }
   return self;
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   id value;
   
-  if(tableView.identifier == @"automount")
-  {
+  if(tableView.identifier == @"automount") {
     value = [NSNumber numberWithBool:YES];
   }
-  else
-  {
+  else {
     value = @"Test";
   }
-  
   return value;
 }
 

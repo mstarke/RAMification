@@ -9,6 +9,7 @@
 #import "RMFSyncDaemon.h"
 
 #import "RMFRamdisk.h"
+#import "RMFAppDelegate.h"
 
 #import <DiskArbitration/DiskArbitration.h>
 #import <DiskArbitration/DADissenter.h>
@@ -21,6 +22,7 @@
 - (void) unmountCallback;
 - (void) unregisterCallback;
 - (void) registerCallback;
+- (void) synchronize:(RMFRamdisk *)ramdisk;
 @end
 
 /* static callback for removal */
@@ -37,8 +39,7 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 @synthesize approvalSession = _approvalSession;
 @synthesize enabledBackups = _enabledBackups;
 
-- (id)init
-{
+- (id)init {
   self = [super init];
   if (self) {
     _enabledBackups = [[NSMutableDictionary alloc] init];
@@ -46,8 +47,7 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
   // unregister and cleanup
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   CFRelease(_approvalSession);
@@ -55,31 +55,25 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   [super dealloc];
 }
 
-- (void)unmountCallback
-{
+- (void)unmountCallback {
   NSLog(@"Got called as unmount callback!");
 }
 
-- (void)disableBackupForRamdisk:(RMFRamdisk *)ramdisk
-{
+- (void)disableBackupForRamdisk:(RMFRamdisk *)ramdisk {
   [self.enabledBackups removeObjectForKey:ramdisk.label];
-  if( [self.enabledBackups count] == 0 )
-  {
+  if( [self.enabledBackups count] == 0 ) {
     [self unregisterCallback];
   }
 }
 
-- (void)enableBackupForRamdisk:(RMFRamdisk *)ramdisk
-{
+- (void)enableBackupForRamdisk:(RMFRamdisk *)ramdisk {
   [self.enabledBackups setObject:[NSValue valueWithNonretainedObject:ramdisk] forKey:ramdisk.label];
-  if( [self.enabledBackups count] == 1 )
-  {
+  if( [self.enabledBackups count] == 1 ) {
     [self registerCallback];
   }
 }
 
-- (void)registerCallback
-{
+- (void)registerCallback {
   // register for callbacks
   _approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
   DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
@@ -87,11 +81,24 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 
 }
 
-- (void)unregisterCallback
-{
+- (void)unregisterCallback {
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   CFRelease(_approvalSession);
   self.approvalSession = NULL;
+}
+
+- (void)synchronize:(RMFRamdisk *)ramdisk {
+  if (ramdisk.isBackupEnabled == NO) {
+    return; // Stop synchronizeation we got a wrong ramdisk
+  }
+  //RMFAppDelegate *delegate = [NSApp delegate];
+}
+
+- (void)restoreRamdisk:(RMFRamdisk *)ramdisk {
+  if(ramdisk.isBackupEnabled == NO ) {
+    return;
+  }
+
 }
 
 @end

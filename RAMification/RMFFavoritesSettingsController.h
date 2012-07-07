@@ -11,8 +11,7 @@
 #import "RMFPresetsTableViewDelegate.h"
 
 
-@interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol>
-{
+@interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
   IBOutlet NSTableView* tableView;
   NSDictionary *columIdentifier;
 }

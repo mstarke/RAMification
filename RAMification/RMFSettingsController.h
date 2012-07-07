@@ -10,8 +10,7 @@
 #import "RMFGeneralSettingsController.h"
 #import "RMFFavoritesSettingsController.h"
 
-@interface RMFSettingsController : NSObject <NSToolbarDelegate>
-{
+@interface RMFSettingsController : NSObject <NSToolbarDelegate> {
   @private
   NSDictionary *settingsPaneControler;
 }

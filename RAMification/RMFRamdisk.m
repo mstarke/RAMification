@@ -40,52 +40,43 @@ NSString *const RMFKeyForSize = @"size";
 
 #pragma mark convinent object creation
 
-+ (RMFRamdisk *) volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount
-{
++ (RMFRamdisk *) volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount {
   return [[[RMFRamdisk alloc] initWithLabel:aLabel andSize:aSize shouldMount:mount] autorelease];
 }
 
-+ (RMFRamdisk *) volumePreset
-{
++ (RMFRamdisk *) volumePreset {
   return [[[RMFRamdisk alloc] init] autorelease];
 }
 
-+ (RMFRamdisk *)volumePresetWithData:(NSData *)data
-{
++ (RMFRamdisk *)volumePresetWithData:(NSData *)data {
   return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
 #pragma mark defaults
 
-+ (NSString *)defaultLabel
-{
++ (NSString *)defaultLabel {
   return [[NSUserDefaults standardUserDefaults] stringForKey:RMFSettingsKeyLabel];
 }
 
-+ (NSUInteger)defaultSize
-{
++ (NSUInteger)defaultSize {
   return [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeySize];
 }
 
 
 #pragma mark object lifecycle
 
-- (id)init
-{
+- (id)init {
   return [self initWithLabel:[RMFRamdisk defaultLabel] andSize:[RMFRamdisk defaultSize] shouldMount:NO];
 }
 
-- (id)initWithLabel:(NSString *)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount{
+- (id)initWithLabel:(NSString *)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount {
   self = [super init];
-  if (self)
-  {
+  if (self)   {
     self.size = aSize;
-    if(aLable != nil)
-    {
+    if(aLable != nil) {
       self.label = aLable;
     }
-    else
-    {
+    else {
       self.label = [RMFRamdisk defaultLabel];
     } 
     self.isAutomount = mount;
@@ -94,8 +85,7 @@ NSString *const RMFKeyForSize = @"size";
   return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
   RMFAppDelegate *delegate = [NSApp delegate];
   [delegate.syncDaemon disableBackupForRamdisk:self];
   [super dealloc];
@@ -103,10 +93,8 @@ NSString *const RMFKeyForSize = @"size";
 
 #pragma mark NSCoder
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-  if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]])
-  {
+- (id)initWithCoder:(NSCoder *)aDecoder {
+  if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [[RMFRamdisk alloc] init];
     self.label = [aDecoder decodeObjectForKey:RMFKeyForLabel];
     self.isAutomount = [aDecoder decodeBoolForKey:RMFKeyForAutomount];
@@ -115,10 +103,8 @@ NSString *const RMFKeyForSize = @"size";
   return self;
 }
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-  if([aCoder isKindOfClass:[NSKeyedArchiver class]])
-  {
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
     //[super encodeWithCoder:aCoder];
     [aCoder encodeBool:self.isAutomount forKey:RMFKeyForAutomount];
     [aCoder encodeInteger:self.size forKey:RMFKeyForSize];
@@ -126,10 +112,8 @@ NSString *const RMFKeyForSize = @"size";
   }
 }
 
-- (void) setLabel:(NSString *)label
-{
-  if( self.label  != label )
-  {
+- (void) setLabel:(NSString *)label {
+  if( self.label  != label ) {
     [_label release];
     _label = [label retain];
     // If we are mounted we are dirty,
@@ -138,10 +122,8 @@ NSString *const RMFKeyForSize = @"size";
   }
 }
 
-- (void) setSize:(NSUInteger)size
-{
-  if( self.size != size )
-  {
+- (void) setSize:(NSUInteger)size {
+  if( self.size != size ) {
     _size = size;
     // Only get dirty if mounted
     // Otherwise keep dirty state
@@ -149,10 +131,8 @@ NSString *const RMFKeyForSize = @"size";
   }
 }
 
-- (void) setIsMounted:(BOOL)isMounted
-{
-  if( self.isMounted != isMounted )
-  {
+- (void) setIsMounted:(BOOL)isMounted {
+  if( self.isMounted != isMounted ) {
     self.isMounted = isMounted;
     // Mounting clears the dirty flag
     self.isDirty &= self.isMounted;
@@ -166,19 +146,16 @@ NSString *const RMFKeyForSize = @"size";
     if(self.isBackupEnabled) {
       [delegate.syncDaemon enableBackupForRamdisk:self];
     }
-    else
-    {
+    else {
       [delegate.syncDaemon disableBackupForRamdisk:self];
     }
   }
 }
 
-- (BOOL)isEqual:(id)object
-{
+- (BOOL)isEqual:(id)object {
   BOOL isEqual = NO;
   
-  if([object isMemberOfClass:[RMFRamdisk class]])
-  {
+  if([object isMemberOfClass:[RMFRamdisk class]]) {
     RMFRamdisk* other = (RMFRamdisk*)object;
     isEqual = [self.label isEqualToString:other.label];
     isEqual &= ( self.size == other.size );
