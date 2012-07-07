@@ -27,6 +27,5 @@ extern const NSUInteger RamdiskSizeStepSize;
 }
 
 - (IBAction)setBackupInterval:(id)sender;
-- (void)didLoadView;
 
 @end

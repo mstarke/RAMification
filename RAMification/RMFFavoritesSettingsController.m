@@ -11,6 +11,10 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavoriteManager.h"
 
+@interface RMFFavoritesSettingsController ()
+- (void) didLoadView;
+@end
+
 @implementation RMFFavoritesSettingsController
 
 @synthesize tableDelegate = _tableDelegate;
@@ -76,7 +80,6 @@
   [tableView addTableColumn:sizeColumn];
   tableView.dataSource = [[NSApp delegate] favoritesManager];
   tableView.delegate = self.tableDelegate;
-
 }
 
 # pragma mark actions

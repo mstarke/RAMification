@@ -6,6 +6,12 @@
 
 #import "RMFSettingsController.h"
 
+@interface RMFSettingsController ()
+@property (retain) RMFGeneralSettingsController *generalSettingsController;
+@property (retain) RMFFavoritesSettingsController *presetSettingsController;
+@property (retain) NSToolbar* toolbar;
+@end
+
 
 @implementation RMFSettingsController
 

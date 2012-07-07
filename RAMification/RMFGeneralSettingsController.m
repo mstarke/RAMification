@@ -21,6 +21,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 @interface RMFGeneralSettingsController ()
 
 - (void) checkHibernationMode;
+- (void)didLoadView;
 
 @end
 
@@ -95,7 +96,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 - (void) checkHibernationMode
 {
-  // run schell command pmset -g | grep hibernamemode
+  // run shell command pmset -g | grep hibernamemode
   // check for mode
   // or look for cocoa api to get this data
 }

@@ -12,12 +12,10 @@
 
 @interface RMFSettingsController : NSObject <NSToolbarDelegate>
 {
+  @private
   NSDictionary *settingsPaneControler;
 }
 
-@property (retain) RMFGeneralSettingsController *generalSettingsController;
-@property (retain) RMFFavoritesSettingsController *presetSettingsController;
-@property (retain) NSToolbar* toolbar;
 @property (assign) IBOutlet NSWindow *settingsWindow;
 
 - (void) showSettings: (id)sender;

@@ -21,6 +21,5 @@
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;
-- (void) didLoadView;
 
 @end

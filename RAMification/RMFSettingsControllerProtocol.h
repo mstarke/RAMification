@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ Protocoll for Settings controller that can be added in the Settings window
+ */
 @protocol RMFSettingsControllerProtocol <NSObject>
 
 @required
-
+// Unique identifier for the settings controller
 + (NSString*) identifier;
+// Label for the settings tab (is used in the toolbar item by the controller itself)
 + (NSString*) label;
+// item to be placed in the Toolbar
 + (NSToolbarItem*) toolbarItem;
 
 @end
