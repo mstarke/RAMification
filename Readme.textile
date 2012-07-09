@@ -1,16 +1,25 @@
 h1. RAMification
 
 A Tool to manage RAM disks.
+
+h2. ATTENTION
+
 This is a small pet project and in no way finished. I'm working on it on a very irregular basis and the current code if far from complete.
 
 h2. Features
 
-* Create RAM Disks
-* Remove RAM Disks
-* Create Favourites
-** Automount _planned_
-** Autosync _planned_
+The list of planned features includes:
+
+* Create, Mount and Unmount a default RAM disks
+* Create, Mount and Unmount favourites
+** Manage favourites (Name, Size, Synchronize, Automount)
+** Automount favourites 
+** Autosync favourites (Backup on unmount, Restore on mount, etc. )
 
 h2. Disclaimer
 
-This tool is a simple test for me to play with some fundamental stuff on OS X. In no way do i gurantee for the safty or correctness of this software. Use at your own risk.
+The tool is in heavy development and may very well not work at all or break things on your machine. Use at your own risk.
+
+h2. Contribution
+
+If you feel like adding things or commenting on the development directions feel free to contact me.
