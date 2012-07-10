@@ -10,6 +10,7 @@
 
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
+#import "RMFFavoriteManager.h"
 #import "RMFSyncRamDiskOperation.h"
 #import "RMFSettingsKeys.h"
 
@@ -17,7 +18,6 @@
 
 @interface RMFSyncDaemon ()
 @property (assign) DAApprovalSessionRef approvalSession;
-@property (retain) NSMutableDictionary *enabledBackups;
 @property (retain) NSOperationQueue *queue;
 @property (retain) NSTimer *backupTimer;
 - (void) performBackup;
@@ -27,15 +27,15 @@
 - (void) backupRamdisk:(RMFRamdisk *)ramdisk;
 - (void) disableTimer;
 - (void) enableTimer;
-- (RMFRamdisk *) findRamdiskByName:(NSString *)name;
 @end
 
 /* static callback for removal */
 static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
-  NSDictionary *description = (NSDictionary *) DADiskCopyDescription(disk);
-  RMFRamdisk *ramdisk = [syncDamon findRamdiskByName:[description objectForKey:(NSString *)kDADiskDescriptionVolumeNameKey]];
+  RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
+  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:bsdName];
   BOOL isReady = [syncDamon canUnmount:ramdisk];
   if (isReady) {
     return NULL;
@@ -48,14 +48,12 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 @implementation RMFSyncDaemon
 
 @synthesize approvalSession = _approvalSession;
-@synthesize enabledBackups = _enabledBackups;
 @synthesize queue = _queue;
 @synthesize backupTimer;
 
 - (id)init {
   self = [super init];
   if (self) {
-    _enabledBackups = [[NSMutableDictionary alloc] init];
     _queue = [[NSOperationQueue alloc] init];
   }
   return self;
@@ -66,36 +64,33 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   CFRelease(_approvalSession);
   self.approvalSession = NULL;
-  self.enabledBackups = nil;
   self.queue = nil;
   [super dealloc];
 }
 
 - (void)performBackup {
-  // Iterate over all our registerd backups
-  for(NSValue *ramdiskId in self.enabledBackups) {
-    RMFRamdisk *ramdisk = [[self.enabledBackups objectForKey:ramdiskId] nonretainedObjectValue];
+  // Ask the favourites manager for all mounted favourties
+  // and iterate over them to back them up
+  RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  NSArray *mountedDisk = [[favouriteManager mountedFavourites] retain];
+  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+    return ((RMFRamdisk *)evaluatedObject).isBackupEnabled;
+  }]];
+  for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk];
   }
 }
 
 - (BOOL)canUnmount:(RMFRamdisk *)ramdisk {
-  NSLog(@"Got called as unmount callback!");
-  return YES;
-}
-
-- (void)disableBackupForRamdisk:(RMFRamdisk *)ramdisk {
-  [self.enabledBackups removeObjectForKey:ramdisk.label];
-  if( [self.enabledBackups count] == 0 ) {
-    [self unregisterCallbackForRamdisk:ramdisk];
+  
+  if(ramdisk.isBackupEnabled == NO) {
+    return YES; // Disk with no backusp can always be unmounted
   }
-}
-
-- (void)enableBackupForRamdisk:(RMFRamdisk *)ramdisk {
-  [self.enabledBackups setObject:[NSValue valueWithNonretainedObject:ramdisk] forKey:ramdisk.label];
-  if( [self.enabledBackups count] == 1 ) {
-    [self registerCallbackForRamdisk:ramdisk];
-  }
+  NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id operation, NSDictionary *bindings) {
+    return [((RMFSyncRamDiskOperation *)operation).ramdisk isEqual:ramdisk];
+  }]];
+  BOOL hasNoPendingBackups = ([backups count] == 0); 
+  return hasNoPendingBackups;
 }
 
 - (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk {
@@ -134,12 +129,7 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   }
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeRestore];
   [self.queue addOperation:operation];
-  [self.queue name];
   [operation release];
-}
-
-- (RMFRamdisk *)findRamdiskByName:(NSString *)name {
-  return [[self.enabledBackups objectForKey:name] nonretainedObjectValue];
 }
 
 - (void)backupIntervallChanged:(NSUInteger)interval {

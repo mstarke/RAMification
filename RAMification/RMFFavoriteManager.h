@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RMFRamdisk.h"
+
+@class RMFRamdisk;
 
 // Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
 @interface RMFFavoriteManager : NSObject <NSTableViewDataSource>

@@ -23,7 +23,6 @@ NSString *const RMFKeyForSize = @"size";
 - (void) setLabel:(NSString *)label;
 - (void) setSize:(NSUInteger)size;
 - (void) setIsMounted:(BOOL)isMounted;
-- (void) setIsBackupEnabled:(BOOL)isBackupEnabled;
 
 @end
 
@@ -85,12 +84,6 @@ NSString *const RMFKeyForSize = @"size";
   return self;
 }
 
-- (void)dealloc {
-  RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.syncDaemon disableBackupForRamdisk:self];
-  [super dealloc];
-}
-
 #pragma mark NSCoder
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -136,19 +129,6 @@ NSString *const RMFKeyForSize = @"size";
     self.isMounted = isMounted;
     // Mounting clears the dirty flag
     self.isDirty &= self.isMounted;
-  }
-}
-
-- (void)setIsBackupEnabled:(BOOL)isBackupEnabled {
-  if( self.isBackupEnabled != isBackupEnabled ) {
-    _isBackupEnabled = isBackupEnabled;
-    RMFAppDelegate *delegate = [NSApp delegate];
-    if(self.isBackupEnabled) {
-      [delegate.syncDaemon enableBackupForRamdisk:self];
-    }
-    else {
-      [delegate.syncDaemon disableBackupForRamdisk:self];
-    }
   }
 }
 

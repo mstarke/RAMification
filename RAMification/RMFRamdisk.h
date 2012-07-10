@@ -22,7 +22,7 @@ extern NSString *const RMFKeyForSize;
 @property (retain) NSString* devicePath;
 @property (assign) BOOL isAutomount;
 @property (nonatomic, assign, setter=setIsMounted:) BOOL isMounted;
-@property (nonatomic, assign, setter=setIsBackupEnabled:) BOOL isBackupEnabled;
+@property (assign) BOOL isBackupEnabled;
 // indicates that changes were made after mounting
 @property (readonly) BOOL isDirty;
 

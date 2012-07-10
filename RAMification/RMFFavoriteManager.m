@@ -7,6 +7,8 @@
 //
 
 #import "RMFFavoriteManager.h"
+
+#import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 

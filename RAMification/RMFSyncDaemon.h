@@ -17,10 +17,6 @@
  */
 @interface RMFSyncDaemon : NSObject
 
-// Register the given ramdisk for backups.
-- (void)enableBackupForRamdisk: (RMFRamdisk *)ramdisk;
-// Unregesiter the given ramdisk to stop backups
-- (void)disableBackupForRamdisk:(RMFRamdisk *)ramdisk;
 // Restores the ramdisk to it's backed up content
 - (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
 // This message should be sent to the sync deamon to update the backup intervall
