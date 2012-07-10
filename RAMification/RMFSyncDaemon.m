@@ -30,7 +30,7 @@
 @end
 
 /* static callback for removal */
-static DADissenterRef unmountCallback(DADiskRef disk, void * context)
+static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
   RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
@@ -55,6 +55,7 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
+    [self enableTimer];
   }
   return self;
 }
@@ -69,13 +70,18 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 }
 
 - (void)performBackup {
-  // Ask the favourites manager for all mounted favourties
-  // and iterate over them to back them up
+
+  BOOL (^isBackupBlock)(id,NSDictionary *);
+  isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
+    return ((RMFRamdisk *)ramdisk).isBackupEnabled; 
+  };
   RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  if(favouriteManager == nil ) {
+    return; // No Manager found, just return (and try agaoin next time)
+  }
   NSArray *mountedDisk = [[favouriteManager mountedFavourites] retain];
-  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-    return ((RMFRamdisk *)evaluatedObject).isBackupEnabled;
-  }]];
+  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]];
+  [mountedDisk release];
   for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk];
   }
@@ -83,12 +89,15 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
 
 - (BOOL)canUnmount:(RMFRamdisk *)ramdisk {
   
+  BOOL (^isEqualBlock)(id, NSDictionary *);
+  isEqualBlock = ^BOOL(id operation,NSDictionary *bindings){
+    return [((RMFSyncRamDiskOperation *)operation).ramdisk isEqual:ramdisk];
+  };
+  
   if(ramdisk.isBackupEnabled == NO) {
     return YES; // Disk with no backusp can always be unmounted
   }
-  NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id operation, NSDictionary *bindings) {
-    return [((RMFSyncRamDiskOperation *)operation).ramdisk isEqual:ramdisk];
-  }]];
+  NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
   BOOL hasNoPendingBackups = ([backups count] == 0); 
   return hasNoPendingBackups;
 }
@@ -99,7 +108,7 @@ static DADissenterRef unmountCallback(DADiskRef disk, void * context)
   DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   // create description dictionory to just match the volumes names that are equal to the ramdisks label
   NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
-  DARegisterDiskUnmountApprovalCallback(self.approvalSession, (CFDictionaryRef)description, unmountCallback, self);
+  DARegisterDiskUnmountApprovalCallback(self.approvalSession, (CFDictionaryRef)description, createUnmountReply, self);
 }
 
 - (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk {
