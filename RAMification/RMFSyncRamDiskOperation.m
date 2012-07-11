@@ -39,6 +39,7 @@
 }
 
 - (void)main {
+  self.ramdisk.activity = RMFRamdiskIdle;
   if( self.isCancelled ) {
     NSLog(@"Synchronization got canceled!");
     return;
@@ -48,10 +49,22 @@
     NSLog(@"Synchronization was aborted due to wrong status of ramdisk!");
     return;
   }
-  
+  switch (self.syncMode) {
+    case RMFSyncModeBackup:
+      self.ramdisk.activity = RMFRamdiskBackup;
+      break;
+    case RMFSyncModeRestore:
+      self.ramdisk.activity = RMFRamdiskRestoring;
+      break;
+    case RMFSyncModeNone:
+      self.ramdisk.activity = RMFRamdiskIdle;
+      break;
+  }
   /* Create an autorelease pool and build the correct rsync operation */
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
+  // We create the backup folder on restore and on sync
+  // It might be better to just create the folder if we actually need it - that it on backup not on restore
   NSString *backupPath = [[[NSUserDefaults standardUserDefaults] stringForKey:RMFSettingsKeyBackupPath] stringByAppendingString:self.ramdisk.label];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   BOOL isDirectory = false;
@@ -66,13 +79,22 @@
     }
   }
   NSString *sourcePath = [self.ramdisk.label volumePath];
-  NSArray *arguments = [NSArray arrayWithObjects:@"-a", sourcePath, backupPath, nil];
+  // in restore mode, we sync from backup to ramdisk
+  // in backup mode, we sync from ramdisk to backup
+  NSArray *arguments= nil;
+  if( self.syncMode == RMFSyncModeBackup) {
+    arguments = [NSArray arrayWithObjects:@"-a", "--delete", sourcePath, backupPath, nil];
+  }
+  else {
+    arguments = [NSArray arrayWithObjects:@"-a", backupPath, sourcePath, nil];
+  }
   /* Setup the rsycn task and run it */
   NSTask *rsync = [[NSTask alloc] init];
   [rsync setLaunchPath:@"/usr/bin/rsync"];
   [rsync setArguments:arguments];
   [rsync launch];
   [rsync waitUntilExit];
+  self.ramdisk.activity = RMFRamdiskIdle;
   NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
   [rsync release];
   [pool drain];

@@ -13,6 +13,12 @@ extern NSString *const RMFKeyForLabel;
 extern NSString *const RMFKeyForAutomount;
 extern NSString *const RMFKeyForSize;
 
+typedef enum RMFRamdiskAcitivyMode {
+  RMFRamdiskIdle, // Ramdisk is ready
+  RMFRamdiskRestoring, // Ramdisk is being restored
+  RMFRamdiskBackup, // Ramdisk is being backed up
+} RMFRamdiskAcitivity;
+
 // A Ramdisk structure for holding all the information about a ramdisk
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
@@ -23,6 +29,7 @@ extern NSString *const RMFKeyForSize;
 @property (assign) BOOL isAutomount;
 @property (nonatomic, assign, setter=setIsMounted:) BOOL isMounted;
 @property (assign) BOOL isBackupEnabled;
+@property (assign) RMFRamdiskAcitivity activity;
 // indicates that changes were made after mounting
 @property (readonly) BOOL isDirty;
 

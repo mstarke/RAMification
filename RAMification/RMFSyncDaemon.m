@@ -28,9 +28,10 @@
 - (void) backupRamdisk:(RMFRamdisk *)ramdisk;
 - (void) disableTimer;
 - (void) enableTimer;
+- (void) volumeDidMount:(NSNotification *)notification;
 @end
 
-/* static callback for removal */
+// Static callback to be used to pipe the call back to the foundation object
 static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
@@ -56,6 +57,10 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
+    // Register to the mount events so we can handle restoreation of favourites
+    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+    NSNotificationCenter *center = [workspace notificationCenter];
+    [center addObserver:self selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
     [self enableTimer];
   }
   return self;
@@ -131,15 +136,29 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)restoreRamdisk:(RMFRamdisk *)ramdisk {
-  /*
-   If we have no backup for the ramdisk enabled there is no need to restore the ramdisk
-   */
   if(ramdisk.isBackupEnabled == NO ) {
-    return;
+    return; // No backup enabled so no restore needed
   }
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeRestore];
   [self.queue addOperation:operation];
   [operation release];
+}
+
+- (void)volumeDidMount:(NSNotification *)notification {
+  NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+  
+  RMFAppDelegate *delegate = [NSApp delegate];
+  RMFFavoriteManager *favouriteManager = delegate.favoritesManager;
+  if(favouriteManager == nil) {
+    return; // no favourite Manager availabe
+  }
+  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:devicePath];
+  if(ramdisk == nil) {
+    return; // no Favourite found for the mounted volume
+  }
+  if(ramdisk.isBackupEnabled) {
+    [self restoreRamdisk:ramdisk];
+  }
 }
 
 - (void)backupIntervallChanged:(NSUInteger)interval {

@@ -36,6 +36,7 @@ NSString *const RMFKeyForSize = @"size";
 @synthesize isMounted = _isMounted;
 @synthesize isBackupEnabled = _isBackupEnabled;
 @synthesize isDirty = _isDirty;
+@synthesize activity = _activity;
 
 #pragma mark convinent object creation
 
@@ -80,6 +81,9 @@ NSString *const RMFKeyForSize = @"size";
     } 
     self.isAutomount = mount;
     self.isMounted = NO;
+    self.isBackupEnabled = NO;
+    self.activity = RMFRamdiskIdle;
+    ;
   }
   return self;
 }

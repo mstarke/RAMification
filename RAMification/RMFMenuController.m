@@ -23,27 +23,28 @@ NSString *const RMFRamDiskIsDirty = @"isDirty";
 const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
-
 // creates the status item to be inserted in the menu bar 
 - (void) createStatusItem;
 // creates the menu that is added to the status item
 - (void) createMenu;
 // create the inital favourites menu
 - (void) createFavouritesMenu;
+// adds a menu item for the given favourite
 - (BOOL) addFavouriteMenuItem:(RMFRamdisk *)favourite atEnd:(BOOL)atEnd;
+// adds a liste of favourites to the menu
 - (BOOL) addFavouriteMenuItems:(NSArray *)favourites atEnd:(BOOL)atEnd;
+// removes a list of favouriest from the menu
 - (void) removeFavouriteMenuItems:(NSArray *)favourites;
+// removes the menu item associated with this favourite
 - (BOOL) removeFavouriteMenuItem:(RMFRamdisk *)favourite;
 // adds a info note that there are not favourites
-- (void) addNoFavouritesInfoAtEnd:(BOOL)atEnd;
+- (void) addNoFavouritesWarningAtEnd:(BOOL)atEnd;
 // updates the menu item represneting this favourite
 - (void) updateFavourite:(RMFRamdisk *)favourite;
 // callback to for a single favourite menu item
 - (void) handleFavouriteClicked:(id)sender;
 
 // Updates the menuitem to the changes in the ramdisk
-// @param item MenuItem to update
-// @param ramDisk Updated ramDisk
 - (void) updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk;
 
 @end
@@ -70,7 +71,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [statusItem release];
   [menu release];
   favouritesToMenuItemsMap = nil;
-  
   statusItem = nil;
   menu = nil;
   
@@ -88,7 +88,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   }
   
   if([manager.favourites count] == 0) {
-    [self addNoFavouritesInfoAtEnd:YES];
+    [self addNoFavouritesWarningAtEnd:YES];
   }
   [favoritesMenu addItem:[NSMenuItem separatorItem]];
 }
@@ -183,7 +183,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   return didAddAllItems;
 }
 
-- (void)addNoFavouritesInfoAtEnd:(BOOL)atEnd {
+- (void)addNoFavouritesWarningAtEnd:(BOOL)atEnd {
   NSInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
   NSArray *indexArray = [NSArray arrayWithObjects:[NSNumber numberWithInteger:index], [NSNumber numberWithInt:0], nil];
   NSNumber *minimum = [indexArray valueForKeyPath:@"@min.intValue"];
@@ -196,12 +196,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 - (BOOL)addFavouriteMenuItem:(RMFRamdisk *)favorite atEnd:(BOOL)atEnd {
-  // The item is already present
-  if( [[favouritesToMenuItemsMap allValues] containsObject:favorite] ) {
-    return FALSE;
+  NSValue *favouriteId = [NSValue valueWithNonretainedObject:favorite];
+  if( [[favouritesToMenuItemsMap allValues] containsObject:favouriteId] ) {
+    return FALSE; // The item is already present
   }
-  // New item needs to be created and added to the menu
   else {
+    // We need to add a new menu item
     NSUInteger index = atEnd ? [favoritesMenu numberOfItems] : [favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
                         initWithTitle:favorite.label
