@@ -14,6 +14,7 @@
 #import "RMFSyncRamDiskOperation.h"
 #import "RMFSettingsKeys.h"
 
+#import <CoreFoundation/CoreFoundation.h>
 #import <DiskArbitration/DiskArbitration.h>
 
 @interface RMFSyncDaemon ()
@@ -107,8 +108,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   _approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
   DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   // create description dictionory to just match the volumes names that are equal to the ramdisks label
-  NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
-  DARegisterDiskUnmountApprovalCallback(self.approvalSession, (CFDictionaryRef)description, createUnmountReply, self);
+  // NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
+  DARegisterDiskUnmountApprovalCallback(self.approvalSession, nil, createUnmountReply, self);
 }
 
 - (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk {

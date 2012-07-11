@@ -12,6 +12,5 @@
 
 - (void) volumeDidMount:(NSNotification*)notification;
 - (void) volumeDidUnmount:(NSNotification*)notification;
-- (void) volumeWillUnmount:(NSNotification*)notification;
 
 @end

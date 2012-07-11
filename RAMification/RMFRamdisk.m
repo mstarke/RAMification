@@ -84,6 +84,11 @@ NSString *const RMFKeyForSize = @"size";
   return self;
 }
 
+- (NSString *)description {
+  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%b Dirty:%b Automount:%b Backup:%b", self.label, self.devicePath, self.isMounted, self.isAutomount, self.isBackupEnabled];
+  return description;
+}
+
 #pragma mark NSCoder
 
 - (id)initWithCoder:(NSCoder *)aDecoder {

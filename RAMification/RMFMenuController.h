@@ -18,7 +18,6 @@
 }
 
 - (void) quitApplication;
-
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;
 
