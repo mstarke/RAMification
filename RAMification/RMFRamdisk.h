@@ -12,6 +12,7 @@
 extern NSString *const RMFKeyForLabel;
 extern NSString *const RMFKeyForAutomount;
 extern NSString *const RMFKeyForSize;
+extern NSString *const RMFKeyForBackupEnabled;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready

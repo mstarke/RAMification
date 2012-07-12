@@ -69,6 +69,10 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
+  // We need to wrap the identifier in a Number with bool to get the checkbox right
+  if([tableColumn.identifier isEqualToString:RMFKeyForAutomount]) {
+    return [NSNumber numberWithBool: favourite.isAutomount];
+  }
   return [favourite valueForKey:[tableColumn identifier]];
 }
 

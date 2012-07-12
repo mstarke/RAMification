@@ -72,7 +72,7 @@
     DASessionRef renameSession = DASessionCreate(CFAllocatorGetDefault());
     DASessionScheduleWithRunLoop(renameSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
     DADiskRef disk = DADiskCreateFromVolumePath(CFAllocatorGetDefault(), renameSession, (CFURLRef)newPath);
-    DADiskRename(disk, (CFStringRef)oldName, NULL, NULL, NULL);
+    //DADiskRename(disk, (CFStringRef)oldName, NULL, NULL, NULL);
     CFRelease(disk);
     CFRelease(renameSession);
   }

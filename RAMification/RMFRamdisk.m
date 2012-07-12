@@ -11,10 +11,11 @@
 #import "RMFSettingsKeys.h"
 #import "RMFSyncDaemon.h"
 
-// NSCodingKeys
+// NSCodingKeys or for KVC accesssors
 NSString *const RMFKeyForLabel = @"label";
 NSString *const RMFKeyForAutomount = @"automount";
 NSString *const RMFKeyForSize = @"size";
+NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
 
 @interface RMFRamdisk ()
 

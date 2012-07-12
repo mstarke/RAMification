@@ -8,11 +8,9 @@
 
 #import "RMFPresetsTableViewDelegate.h"
 
-@implementation RMFPresetsTableViewDelegate
+#import "RMFRamdisk.h"
 
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-  return 10;
-}
+@implementation RMFPresetsTableViewDelegate
 
 - (id)init {
   self = [super init];
@@ -22,16 +20,21 @@
   return self;
 }
 
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  id value;
-  
-  if(tableView.identifier == @"automount") {
-    value = [NSNumber numberWithBool:YES];
+- (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+  if(tableColumn == nil) {
+    return nil;
+  }
+  NSCell *cell;
+  if([[tableColumn identifier] isEqualToString:RMFKeyForAutomount]) {
+    cell = [[NSButtonCell alloc] init];
+    NSButtonCell *buttonCell = (NSButtonCell *)cell;
+    [buttonCell setButtonType:NSSwitchButton];
+    [buttonCell setTitle:@""];
   }
   else {
-    value = @"Test";
+    cell = [[NSTextFieldCell alloc] init];
   }
-  return value;
+  return cell;
 }
 
 @end
