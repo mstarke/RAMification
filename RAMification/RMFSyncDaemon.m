@@ -175,7 +175,9 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)enableTimer {
-  NSTimeInterval interval = [[[NSUserDefaultsController sharedUserDefaultsController] valueForKey:RMFSettingsKeyBackupInterval] doubleValue];
+  NSString *backupKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
+  NSTimeInterval interval = [[[NSUserDefaultsController sharedUserDefaultsController] valueForKeyPath:backupKeypath] doubleValue];
+  NSLog(@"Backup Interval is set to: %@ seconds", interval);
   if (self.backupTimer != nil) {
     interval = [self.backupTimer timeInterval];
     [self.backupTimer invalidate];

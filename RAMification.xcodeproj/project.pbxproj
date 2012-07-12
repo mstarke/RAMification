@@ -216,7 +216,6 @@
 		4C5BDB4B147EF6AD000E19B0 = {
 			isa = PBXGroup;
 			children = (
-				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
 				4CBE8D6C148C30D100747A33 /* LaunchAtLoginController */,
 				4C5BDB60147EF6AD000E19B0 /* RAMification */,
 				4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */,
@@ -237,6 +236,7 @@
 		4C5BDB59147EF6AD000E19B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
 				4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */,
 				4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */,
 				4C5BDB5C147EF6AD000E19B0 /* Other Frameworks */,
