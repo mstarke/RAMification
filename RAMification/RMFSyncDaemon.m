@@ -79,7 +79,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
   BOOL (^isBackupBlock)(id,NSDictionary *);
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
-    return ((RMFRamdisk *)ramdisk).isBackupEnabled; 
+    return ((RMFRamdisk *)ramdisk).backupMode != RMFNoBackup; 
   };
   RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
   if(favouriteManager == nil ) {
@@ -100,11 +100,17 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     return [((RMFSyncRamDiskOperation *)operation).ramdisk isEqual:ramdisk];
   };
   
-  if(ramdisk.isBackupEnabled == NO) {
+  if(ramdisk.backupMode == RMFNoBackup) {
     return YES; // Disk with no backusp can always be unmounted
   }
   NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
-  BOOL hasNoPendingBackups = ([backups count] == 0); 
+  BOOL hasNoPendingBackups = ([backups count] == 0);
+  // ramdisk has no backups in the loop so we check for the oldest backup
+  if(hasNoPendingBackups) {
+    // The time interval for the last backup should take into account
+    // the backup interval since we might overtake ourselves in backups?
+    
+  }
   return hasNoPendingBackups;
 }
 
@@ -124,11 +130,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)backupRamdisk:(RMFRamdisk *)ramdisk {
-  /*
-   If the disk is not enabled for backup we do nothing
-   */
-  if (ramdisk.isBackupEnabled == NO) {
-    return; // Stop synchronizeation we got a wrong ramdisk
+  if (ramdisk.backupMode == RMFNoBackup || ramdisk.activity == RMFRamdiskBackup) {
+    return; // no backups enabeld or at leas one backup in processs
   }
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeBackup];
   [self.queue addOperation:operation];
@@ -136,7 +139,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)restoreRamdisk:(RMFRamdisk *)ramdisk {
-  if(ramdisk.isBackupEnabled == NO ) {
+  if(ramdisk.backupMode == RMFNoBackup ) {
     return; // No backup enabled so no restore needed
   }
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeRestore];
@@ -156,7 +159,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   if(ramdisk == nil) {
     return; // no Favourite found for the mounted volume
   }
-  if(ramdisk.isBackupEnabled) {
+  if(ramdisk.backupMode != RMFNoBackup) {
     [self restoreRamdisk:ramdisk];
   }
 }

@@ -14,7 +14,7 @@
   NSMenu *favoritesMenu;
   NSStatusItem *statusItem;
   NSOperationQueue *queue;
-  NSMutableDictionary *favouritesToMenuItemsMap;
+  NSMutableDictionary *menuItemsToFavouritesMap;
 }
 
 - (void) quitApplication;

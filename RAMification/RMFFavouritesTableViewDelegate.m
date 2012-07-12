@@ -6,16 +6,16 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFPresetsTableViewDelegate.h"
+#import "RMFFavouritesTableViewDelegate.h"
 
 #import "RMFRamdisk.h"
 
-@implementation RMFPresetsTableViewDelegate
+@implementation RMFFavouritesTableViewDelegate
 
 - (id)init {
   self = [super init];
   if (self) {
-    // Nothing to do
+    // Just create the Menu vor the popup once so we do not have to built it ever time;
   }
   return self;
 }
@@ -24,20 +24,43 @@
   if(tableColumn == nil) {
     return nil;
   }
-  NSCell *cell;
-  if([[tableColumn identifier] isEqualToString:RMFKeyForAutomount] || [[tableColumn identifier] isEqualToString:RMFKeyForBackupEnabled]) {
-    cell = [[NSButtonCell alloc] init];
-    NSButtonCell *buttonCell = (NSButtonCell *)cell;
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForAutomount]) {
+    NSButtonCell *buttonCell = [[NSButtonCell alloc] init];
     [buttonCell setButtonType:NSSwitchButton];
     [buttonCell setTitle:@""];
     [buttonCell setAlignment:NSCenterTextAlignment];
+    return  [buttonCell autorelease]; // Checkbox cells
   }
-  else {
-    cell = [[NSTextFieldCell alloc] init];
-    NSTextFieldCell *textCell = (NSTextFieldCell *)cell;
-    [textCell setEditable:YES];
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
+    NSPopUpButtonCell *popUpCell = [[NSPopUpButtonCell alloc] init];
+    [popUpCell setControlSize:NSMiniControlSize];
+    NSMenu *buttonMenu = [self allocBackupModePopupMenu];
+    [popUpCell setMenu:buttonMenu];
+    [buttonMenu release];
+    return  [popUpCell autorelease]; // PopUp cells
   }
-  return [cell autorelease];
+  NSTextFieldCell *textCell = [[NSTextFieldCell alloc] init];
+  [textCell setEditable:YES];
+  
+  return [textCell autorelease]; // TextField cells
+}
+
+- (NSMenu *)allocBackupModePopupMenu {
+  NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+  for(NSUInteger eMode = 0; eMode < RMFBackupModeCount; eMode++) {
+    switch (eMode) {
+      case RMFNoBackup:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_NO_BACKUP", @"Backup mode No Backup") action:NULL keyEquivalent:@""];
+        break;
+      case RMFBackupOnEject:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_EJECT_ONLY", @"Backup mode Backup on Eject") action:NULL keyEquivalent:@""];
+        break;
+      case RMFBackupPeriodically:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_PERIODICALLY", @"Backup mode Continously Backup") action:NULL keyEquivalent:@""];
+        break;
+    }
+  }
+  return  backupMenu;
 }
 
 @end

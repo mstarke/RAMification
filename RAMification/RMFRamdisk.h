@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 
 // NSKeyArchiver Keys
-extern NSString *const RMFKeyForLabel;
-extern NSString *const RMFKeyForAutomount;
-extern NSString *const RMFKeyForSize;
-extern NSString *const RMFKeyForBackupEnabled;
+extern NSString *const RMFRamdiskKeyForLabel;
+extern NSString *const RMFRamdiskKeyForAutomount;
+extern NSString *const RMFRamdiskKeyForSize;
+extern NSString *const RMFRamdiskKeyForBackupEnabled;
+extern NSString *const RMFRamdiskKeyForBackupMode;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -20,26 +21,36 @@ typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskBackup, // Ramdisk is being backed up
 } RMFRamdiskAcitivity;
 
+typedef enum RMFRamdiskBackupModeType {
+  RMFNoBackup,
+  RMFBackupPeriodically,
+  RMFBackupOnEject,
+  RMFBackupModeCount // Counter not to be assigned!
+} RMFRamdiskBackupMode;
+
 // A Ramdisk structure for holding all the information about a ramdisk
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
 
 @property (nonatomic, retain, setter=setLabel:) NSString* label;
 @property (nonatomic, assign, setter=setSize:) NSUInteger size;
-@property (retain) NSString* devicePath;
+@property (retain) NSString *devicePath;
 @property (assign) BOOL isAutomount;
 @property (nonatomic, assign, setter=setIsMounted:) BOOL isMounted;
-@property (assign) BOOL isBackupEnabled;
 @property (assign) RMFRamdiskAcitivity activity;
+@property (assign) RMFRamdiskBackupMode backupMode;
+@property (retain, readonly) NSDate *lastBackupDate;
 // indicates that changes were made after mounting
 @property (readonly) BOOL isDirty;
 
-+ (RMFRamdisk*) volumePresetWithData:(NSData*)data;
-+ (RMFRamdisk*) volumePresetWithLable:(NSString*)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
-+ (RMFRamdisk*) volumePreset;
-+ (NSString*) defaultLabel;
-+ (NSUInteger) defaultSize;
++ (RMFRamdisk *)volumePresetWithData:(NSData *)data;
++ (RMFRamdisk *)volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
++ (RMFRamdisk *)volumePreset;
++ (NSString *)defaultLabel;
++ (NSUInteger)defaultSize;
 
-- (id) initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
+- (id)initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
+// Call this function to indicate that this ramdisk was just backed up
+- (void)finishedBackup;
 
 @end

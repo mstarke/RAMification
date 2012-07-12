@@ -12,14 +12,15 @@
 #import "RMFSyncDaemon.h"
 
 // NSCodingKeys or for KVC accesssors
-NSString *const RMFKeyForLabel = @"label";
-NSString *const RMFKeyForAutomount = @"automount";
-NSString *const RMFKeyForSize = @"size";
-NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
+NSString *const RMFRamdiskKeyForLabel = @"label";
+NSString *const RMFRamdiskKeyForAutomount = @"automount";
+NSString *const RMFRamdiskKeyForSize = @"size";
+NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 
 @interface RMFRamdisk ()
 
 @property (readwrite) BOOL isDirty;
+@property (retain) NSDate *lastBackupDate;
 
 - (void) setLabel:(NSString *)label;
 - (void) setSize:(NSUInteger)size;
@@ -34,9 +35,10 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
 @synthesize devicePath;
 @synthesize isAutomount;
 @synthesize isMounted = _isMounted;
-@synthesize isBackupEnabled = _isBackupEnabled;
 @synthesize isDirty = _isDirty;
 @synthesize activity = _activity;
+@synthesize lastBackupDate = _lastBackupDate;
+@synthesize backupMode = _backupMode;
 
 #pragma mark convinent object creation
 
@@ -81,15 +83,16 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
     } 
     self.isAutomount = mount;
     self.isMounted = NO;
-    self.isBackupEnabled = NO;
     self.activity = RMFRamdiskIdle;
+    self.backupMode = RMFNoBackup;
+    self.lastBackupDate = [NSDate distantPast];
     ;
   }
   return self;
 }
 
 - (NSString *)description {
-  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%b Dirty:%b Automount:%b Backup:%b", self.label, self.devicePath, self.isMounted, self.isAutomount, self.isBackupEnabled];
+  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%B Dirty:%B Automount:%B Backup:%B", self.label, self.devicePath, self.isMounted, self.isAutomount, self.backupMode];
   return description;
 }
 
@@ -98,10 +101,10 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
 - (id)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [[RMFRamdisk alloc] init];
-    self.label = [aDecoder decodeObjectForKey:RMFKeyForLabel];
-    self.isAutomount = [aDecoder decodeBoolForKey:RMFKeyForAutomount];
-    self.size = [aDecoder decodeIntegerForKey:RMFKeyForSize];
-    self.isBackupEnabled = [aDecoder decodeBoolForKey:RMFKeyForBackupEnabled];
+    self.label = [aDecoder decodeObjectForKey:RMFRamdiskKeyForLabel];
+    self.isAutomount = [aDecoder decodeBoolForKey:RMFRamdiskKeyForAutomount];
+    self.size = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForSize];
+    self.backupMode = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForBackupMode];
   }
   return self;
 }
@@ -109,10 +112,10 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
     //[super encodeWithCoder:aCoder];
-    [aCoder encodeBool:self.isAutomount forKey:RMFKeyForAutomount];
-    [aCoder encodeInteger:self.size forKey:RMFKeyForSize];
-    [aCoder encodeObject:self.label forKey:RMFKeyForLabel];
-    [aCoder encodeBool:self.isBackupEnabled forKey:RMFKeyForBackupEnabled];
+    [aCoder encodeBool:self.isAutomount forKey:RMFRamdiskKeyForAutomount];
+    [aCoder encodeInteger:self.size forKey:RMFRamdiskKeyForSize];
+    [aCoder encodeObject:self.label forKey:RMFRamdiskKeyForLabel];
+    [aCoder encodeInteger:self.backupMode forKey:RMFRamdiskKeyForBackupMode];
   }
 }
 
@@ -152,6 +155,10 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
     isEqual &= ( self.size == other.size );
   }
   return isEqual;
+}
+
+- (void)finishedBackup {
+  self.lastBackupDate = [NSDate date];
 }
 
 @end

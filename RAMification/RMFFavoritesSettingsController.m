@@ -12,7 +12,10 @@
 #import "RMFFavoriteManager.h"
 
 @interface RMFFavoritesSettingsController ()
+
+@property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
 - (void) didLoadView;
+
 @end
 
 @implementation RMFFavoritesSettingsController
@@ -58,26 +61,26 @@
 }
 
 - (void)didLoadView {
-  _tableDelegate = [[RMFPresetsTableViewDelegate alloc] init];
-  NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForAutomount];
-  NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForLabel];
-  NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForSize];
-  NSTableColumn *backupColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForBackupEnabled];
+  _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
+  NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForAutomount];
+  NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForLabel];
+  NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForSize];
+  NSTableColumn *backupModeColum = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForBackupMode];
   
   [[automountColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_AUTOMOUNT", @"Column Header for the automount column")];
   [[labelColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_LABEL", @"Column header for the label column")];
   [[sizeColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_SIZE", @"Column header for the size column")];
-  [[backupColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_BACKUP", @"Column header for autobackup column")];
+  [[backupModeColum headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_BACKUP_MODE", @"The mode that backups are created")];
   
   [tableView addTableColumn:automountColumn];
   [tableView addTableColumn:labelColumn];
   [tableView addTableColumn:sizeColumn];
-  [tableView addTableColumn:backupColumn];
+  [tableView addTableColumn:backupModeColum];
   
   [automountColumn release];
   [labelColumn release];
   [sizeColumn release];
-  [backupColumn release];
+  [backupModeColum release];
   
   tableView.dataSource = [[NSApp delegate] favoritesManager];
   tableView.delegate = self.tableDelegate;

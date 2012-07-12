@@ -11,6 +11,7 @@
 #import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
+#import "RMFFavouritesTableViewDelegate.h"
 
 // private interface
 @interface RMFFavoriteManager ()
@@ -70,31 +71,28 @@
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
   // We need to wrap the identifier in a Number with bool to get the checkbox right
-  if([tableColumn.identifier isEqualToString:RMFKeyForAutomount]) {
+  if([tableColumn.identifier isEqualToString:RMFRamdiskKeyForAutomount]) {
     return [NSNumber numberWithBool:favourite.isAutomount];
-  }
-  if([tableColumn.identifier isEqualToString:RMFKeyForBackupEnabled]) {
-    return [NSNumber numberWithBool:favourite.isBackupEnabled];
   }
   return [favourite valueForKey:[tableColumn identifier]];
 }
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
-  if([[tableColumn identifier] isEqualToString:RMFKeyForSize]) {
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
     favourite.size = [object integerValue];
   }
   
-  if([[tableColumn identifier] isEqualToString:RMFKeyForAutomount]) {
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForAutomount]) {
     favourite.isAutomount = [object boolValue];
   }
   
-  if([[tableColumn identifier] isEqualToString:RMFKeyForLabel]) {
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForLabel]) {
     favourite.label = object;
   }
   
-  if([[tableColumn identifier] isEqualToString:RMFKeyForBackupEnabled]) {
-    favourite.isBackupEnabled = [object boolValue];
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
+    favourite.backupMode = [object intValue];
   }
 
   [self synchronizeDefaults];

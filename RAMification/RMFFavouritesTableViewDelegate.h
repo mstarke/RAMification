@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RMFPresetsTableViewDelegate : NSObject <NSTableViewDelegate>
+@interface RMFFavouritesTableViewDelegate : NSObject <NSTableViewDelegate>
+
+- (NSMenu *)allocBackupModePopupMenu;
 
 @end

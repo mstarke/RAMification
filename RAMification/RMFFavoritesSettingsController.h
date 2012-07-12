@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsControllerProtocol.h"
-#import "RMFPresetsTableViewDelegate.h"
+#import "RMFFavouritesTableViewDelegate.h"
 
 
 @interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
@@ -16,7 +16,7 @@
   NSDictionary *columIdentifier;
 }
 
-@property (retain, readonly) RMFPresetsTableViewDelegate *tableDelegate;
+@property (retain, readonly) RMFFavouritesTableViewDelegate *tableDelegate;
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;
