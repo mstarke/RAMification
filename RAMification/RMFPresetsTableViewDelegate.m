@@ -25,16 +25,19 @@
     return nil;
   }
   NSCell *cell;
-  if([[tableColumn identifier] isEqualToString:RMFKeyForAutomount]) {
+  if([[tableColumn identifier] isEqualToString:RMFKeyForAutomount] || [[tableColumn identifier] isEqualToString:RMFKeyForBackupEnabled]) {
     cell = [[NSButtonCell alloc] init];
     NSButtonCell *buttonCell = (NSButtonCell *)cell;
     [buttonCell setButtonType:NSSwitchButton];
     [buttonCell setTitle:@""];
+    [buttonCell setAlignment:NSCenterTextAlignment];
   }
   else {
     cell = [[NSTextFieldCell alloc] init];
+    NSTextFieldCell *textCell = (NSTextFieldCell *)cell;
+    [textCell setEditable:YES];
   }
-  return cell;
+  return [cell autorelease];
 }
 
 @end

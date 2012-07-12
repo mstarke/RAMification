@@ -62,14 +62,23 @@
   NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForAutomount];
   NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForLabel];
   NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForSize];
+  NSTableColumn *backupColumn = [[NSTableColumn alloc] initWithIdentifier:RMFKeyForBackupEnabled];
   
   [[automountColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_AUTOMOUNT", @"Column Header for the automount column")];
   [[labelColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_LABEL", @"Column header for the label column")];
   [[sizeColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_SIZE", @"Column header for the size column")];
+  [[backupColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_BACKUP", @"Column header for autobackup column")];
   
   [tableView addTableColumn:automountColumn];
   [tableView addTableColumn:labelColumn];
   [tableView addTableColumn:sizeColumn];
+  [tableView addTableColumn:backupColumn];
+  
+  [automountColumn release];
+  [labelColumn release];
+  [sizeColumn release];
+  [backupColumn release];
+  
   tableView.dataSource = [[NSApp delegate] favoritesManager];
   tableView.delegate = self.tableDelegate;
 }

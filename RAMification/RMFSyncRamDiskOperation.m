@@ -83,7 +83,7 @@
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;
   if( self.syncMode == RMFSyncModeBackup) {
-    arguments = [NSArray arrayWithObjects:@"-a", "--delete", sourcePath, backupPath, nil];
+    arguments = [NSArray arrayWithObjects:@"-a", @"--delete", sourcePath, backupPath, nil];
   }
   else {
     arguments = [NSArray arrayWithObjects:@"-a", backupPath, sourcePath, nil];

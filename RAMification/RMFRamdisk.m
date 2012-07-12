@@ -27,7 +27,6 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
 
 @end
 
-
 @implementation RMFRamdisk
 
 @synthesize size = _size;
@@ -102,6 +101,7 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
     self.label = [aDecoder decodeObjectForKey:RMFKeyForLabel];
     self.isAutomount = [aDecoder decodeBoolForKey:RMFKeyForAutomount];
     self.size = [aDecoder decodeIntegerForKey:RMFKeyForSize];
+    self.isBackupEnabled = [aDecoder decodeBoolForKey:RMFKeyForBackupEnabled];
   }
   return self;
 }
@@ -112,6 +112,7 @@ NSString *const RMFKeyForBackupEnabled = @"backupEnabled";
     [aCoder encodeBool:self.isAutomount forKey:RMFKeyForAutomount];
     [aCoder encodeInteger:self.size forKey:RMFKeyForSize];
     [aCoder encodeObject:self.label forKey:RMFKeyForLabel];
+    [aCoder encodeBool:self.isBackupEnabled forKey:RMFKeyForBackupEnabled];
   }
 }
 
