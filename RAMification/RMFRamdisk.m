@@ -33,7 +33,7 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 @synthesize size = _size;
 @synthesize label = _label;
 @synthesize devicePath;
-@synthesize isAutomount;
+@synthesize isAutomount = _isAutomount;
 @synthesize isMounted = _isMounted;
 @synthesize isDirty = _isDirty;
 @synthesize activity = _activity;
@@ -76,16 +76,16 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
   if (self)   {
     self.size = aSize;
     if(aLable != nil) {
-      self.label = aLable;
+      _label = [aLable retain];
     }
     else {
-      self.label = [RMFRamdisk defaultLabel];
+      _label = [[RMFRamdisk defaultLabel] retain];
     } 
-    self.isAutomount = mount;
-    self.isMounted = NO;
-    self.activity = RMFRamdiskIdle;
-    self.backupMode = RMFNoBackup;
-    self.lastBackupDate = [NSDate distantPast];
+    _isAutomount = mount;
+    _isMounted = NO;
+    _activity = RMFRamdiskIdle;
+    _backupMode = RMFNoBackup;
+    _lastBackupDate = [NSDate distantPast];
     ;
   }
   return self;
@@ -101,10 +101,10 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 - (id)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [[RMFRamdisk alloc] init];
-    self.label = [aDecoder decodeObjectForKey:RMFRamdiskKeyForLabel];
-    self.isAutomount = [aDecoder decodeBoolForKey:RMFRamdiskKeyForAutomount];
-    self.size = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForSize];
-    self.backupMode = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForBackupMode];
+    _label = [[aDecoder decodeObjectForKey:RMFRamdiskKeyForLabel] retain];
+    _isAutomount = [aDecoder decodeBoolForKey:RMFRamdiskKeyForAutomount];
+    _size = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForSize];
+    _backupMode = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForBackupMode];
   }
   return self;
 }
@@ -134,15 +134,15 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
     _size = size;
     // Only get dirty if mounted
     // Otherwise keep dirty state
-    self.isDirty |= self.isMounted;
+    _isDirty |= _isMounted;
   }
 }
 
 - (void) setIsMounted:(BOOL)isMounted {
-  if( self.isMounted != isMounted ) {
-    self.isMounted = isMounted;
+  if( _isMounted != isMounted ) {
+    _isMounted = isMounted;
     // Mounting clears the dirty flag
-    self.isDirty &= self.isMounted;
+    _isDirty &= _isMounted;
   }
 }
 

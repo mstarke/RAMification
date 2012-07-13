@@ -17,15 +17,11 @@ extern const NSUInteger MaxiumumRamdiskSize;
 extern const NSUInteger RamdiskSizeStepSize;
 
 @interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
-{
-  IBOutlet NSPopUpButton *backupPathSelection;
-  IBOutlet NSTextField *backupInterval;
-  IBOutlet NSTextField *label;
-  IBOutlet NSTextField *size;
-  IBOutlet NSStepper *sizeStepper;
-  IBOutlet NSStepper *backupIntervalStepper;
-}
 
-- (IBAction)setBackupInterval:(id)sender;
+@property (assign) IBOutlet NSTextField *labelInput;
+@property (assign) IBOutlet NSTextField *sizeInput;
+@property (assign) IBOutlet NSTextField *backupIntervalInput;
+@property (assign) IBOutlet NSStepper *sizeStepper;
+@property (assign) IBOutlet NSStepper *backupIntervalStepper;
 
 @end

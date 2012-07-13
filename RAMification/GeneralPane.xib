@@ -326,35 +326,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">label</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="991750935"/>
-					</object>
-					<int key="connectionID">83</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">size</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="208198259"/>
-					</object>
-					<int key="connectionID">84</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">backupInterval</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="502043948"/>
-					</object>
-					<int key="connectionID">86</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">sizeStepper</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="342558461"/>
 					</object>
-					<int key="connectionID">102</int>
+					<int key="connectionID">129</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -362,7 +338,31 @@
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="896169044"/>
 					</object>
-					<int key="connectionID">103</int>
+					<int key="connectionID">130</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">backupIntervalInput</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="502043948"/>
+					</object>
+					<int key="connectionID">131</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">sizeInput</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="208198259"/>
+					</object>
+					<int key="connectionID">132</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">labelInput</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="991750935"/>
+					</object>
+					<int key="connectionID">133</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -598,7 +598,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">123</int>
+			<int key="maxID">133</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -613,44 +613,28 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">RMFGeneralSettingsController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">setBackupInterval:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">setBackupInterval:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">setBackupInterval:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="backupInterval">NSTextField</string>
+						<string key="backupIntervalInput">NSTextField</string>
 						<string key="backupIntervalStepper">NSStepper</string>
-						<string key="backupPathSelection">NSPopUpButton</string>
-						<string key="label">NSTextField</string>
-						<string key="size">NSTextField</string>
+						<string key="labelInput">NSTextField</string>
+						<string key="sizeInput">NSTextField</string>
 						<string key="sizeStepper">NSStepper</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="backupInterval">
-							<string key="name">backupInterval</string>
+						<object class="IBToOneOutletInfo" key="backupIntervalInput">
+							<string key="name">backupIntervalInput</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="backupIntervalStepper">
 							<string key="name">backupIntervalStepper</string>
 							<string key="candidateClassName">NSStepper</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="backupPathSelection">
-							<string key="name">backupPathSelection</string>
-							<string key="candidateClassName">NSPopUpButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="label">
-							<string key="name">label</string>
+						<object class="IBToOneOutletInfo" key="labelInput">
+							<string key="name">labelInput</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="size">
-							<string key="name">size</string>
+						<object class="IBToOneOutletInfo" key="sizeInput">
+							<string key="name">sizeInput</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="sizeStepper">

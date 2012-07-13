@@ -20,6 +20,22 @@
   return self;
 }
 
+- (BOOL)tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+  if(tableColumn == nil) {
+    return false;
+  }
+  NSArray *columns = [NSArray arrayWithObjects:RMFRamdiskKeyForLabel, RMFRamdiskKeyForSize, nil];
+  if([columns containsObject:[tableColumn identifier]]) {
+    id<NSTableViewDataSource> dataSource = [tableView dataSource];
+    RMFRamdisk *ramdisk = [dataSource tableView:tableView objectValueForTableColumn:tableColumn row:row];
+    // We just prevent edition of the label and the size of mounted disks
+    // Since these values would need us to remount the disk
+    return (ramdisk.isMounted == NO);
+  }
+  return YES;
+}
+
+// return the cell for a column
 - (NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   if(tableColumn == nil) {
     return nil;

@@ -16,6 +16,18 @@ The list of planned features includes:
 ** Automount favourites 
 ** Autosync favourites (Backup on unmount, Restore on mount, etc. )
 
+h2. Feature Considerations
+
+* Can the user change the name of a mounted disk?
+** Directly change the Disk name (in the Finder or elsewhere)
+** Indirectly change the Name in the Favourites manger
+** Mirror the changes to the disk and the favourite?
+* Can the user change the size of a mounted disk?
+** Backup, Remount and Restore the disk with the new size?
+* Display the last Backup of a RAM disk?
+* Display the backup activity of a RAM in the Menu? In the Settings?
+* Warn the user if hibernate is set to store to HD which leads to unmounted RAM disks after wake up?
+
 h2. Disclaimer
 
 The tool is in heavy development and may very well not work at all or break things on your machine. Use at your own risk.

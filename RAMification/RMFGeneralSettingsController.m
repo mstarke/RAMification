@@ -27,6 +27,12 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 @implementation RMFGeneralSettingsController
 
+@synthesize labelInput = _label;
+@synthesize sizeInput = _size;
+@synthesize backupIntervalInput = _backupInterval;
+@synthesize sizeStepper = _sizeStepper;
+@synthesize backupIntervalStepper = _backupIntervalStepper;
+
 #pragma mark RMFSettingsController Protocol
 
 + (NSString *) identifier {
@@ -67,36 +73,30 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   
   // label
   NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
-  [label bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [self.labelInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // size
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
-  [size bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  [sizeStepper setMaxValue:1000000000];
-  [sizeStepper setMinValue:1048];
-  [sizeStepper setIncrement:1048];
-  [sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [self.sizeStepper setMaxValue:1000000000];
+  [self.sizeStepper setMinValue:1048];
+  [self.sizeStepper setIncrement:1048];
+  [self.sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // backup interval
+  NSDictionary *bindinOptions = [NSDictionary dictionaryWithObjectsAndKeys:@"Something missing", NSNullPlaceholderBindingOption, nil];
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
-  [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-//  [backupIntervalStepper setMinValue:60];
-//  [backupIntervalStepper setMaxValue:100000000000000];
-//  [backupIntervalStepper setIncrement:60];
-//  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+  [self.backupIntervalInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:bindinOptions];
+  [self.backupIntervalStepper setMinValue:60];
+  [self.backupIntervalStepper setMaxValue:100000000000000];
+  [self.backupIntervalStepper setIncrement:60];
+  [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
 }
 
 - (void) checkHibernationMode {
   // run shell command pmset -g | grep hibernamemode
   // check for mode
   // or look for cocoa api to get this data
-}
-
-
-#pragma mark actions
-
-- (IBAction)setBackupInterval:(id)sender {
-  
 }
 
 @end
