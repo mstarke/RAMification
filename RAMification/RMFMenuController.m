@@ -188,7 +188,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 - (void)addNoFavouritesWarningAtEnd:(BOOL)atEnd {
   if(self.noFavouritesMenuItem == nil) {
-    self.noFavouritesMenuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
+    _noFavouritesMenuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]]
                                  initWithTitle:NSLocalizedString(@"MENU_NO_FAVOURITES_DEFINED", @"Menu Item - No Favourites defined")
                                  action:NULL
                                  keyEquivalent:@""];

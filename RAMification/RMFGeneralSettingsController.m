@@ -80,10 +80,10 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   // backup interval
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
   [backupInterval bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  [backupIntervalStepper setMinValue:60];
-  [backupIntervalStepper setMaxValue:100000000000000];
-  [backupIntervalStepper setIncrement:60];
-  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+//  [backupIntervalStepper setMinValue:60];
+//  [backupIntervalStepper setMaxValue:100000000000000];
+//  [backupIntervalStepper setIncrement:60];
+//  [backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
 }
 
 - (void) checkHibernationMode {

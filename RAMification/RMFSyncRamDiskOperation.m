@@ -65,9 +65,20 @@
   
   // We create the backup folder on restore and on sync
   // It might be better to just create the folder if we actually need it - that it on backup not on restore
-  NSString *backupPath = [[[NSUserDefaults standardUserDefaults] stringForKey:RMFSettingsKeyBackupPath] stringByAppendingString:self.ramdisk.label];
+  NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+  NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/%@",self.ramdisk.label];
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  BOOL isDirectory = false;
+  NSError *error = nil;
+  NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+  if(error != nil) {
+    NSLog(@"Error occured while trying to locate the Application Support direcotry for the User. %@", error);
+    self.ramdisk.activity = RMFRamdiskIdle;
+    return;
+  }
+ 
+  NSURL *ramificationSupportURL = [applicationSupportURL URLByAppendingPathComponent:backupSubfolder isDirectory:YES];
+  NSString *backupPath = [ramificationSupportURL path];
+  BOOL isDirectory = FALSE;
   BOOL isPresent= [fileManager fileExistsAtPath:backupPath isDirectory:&isDirectory];
   // The Path is not there
   if(NO == (isPresent && isDirectory)) {

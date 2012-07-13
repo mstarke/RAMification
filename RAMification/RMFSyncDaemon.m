@@ -79,15 +79,18 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
   BOOL (^isBackupBlock)(id,NSDictionary *);
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
-    return ((RMFRamdisk *)ramdisk).backupMode != RMFNoBackup; 
+    return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically; 
   };
   RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
   if(favouriteManager == nil ) {
     return; // No Manager found, just return (and try agaoin next time)
   }
   NSArray *mountedDisk = [[favouriteManager mountedFavourites] retain];
-  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]];
+  NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
+  NSArray *backupDisks = [[mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]] retain];
+  NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
   [mountedDisk release];
+  [backupDisks release];
   for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk];
   }
@@ -167,7 +170,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)backupIntervallChanged:(NSUInteger)interval {
   NSTimeInterval timeInterval = interval;
   [self disableTimer];
-  self.backupTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(performBackups) userInfo:nil repeats:YES];
+  self.backupTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(performBackup) userInfo:nil repeats:YES];
 }
 
 - (void)disableTimer {
@@ -178,9 +181,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)enableTimer {
-  NSString *backupKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
-  NSTimeInterval interval = [[[NSUserDefaultsController sharedUserDefaultsController] valueForKeyPath:backupKeypath] doubleValue];
-  NSLog(@"Backup Interval is set to: %@ seconds", interval);
+  NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
+  NSTimeInterval interval = backupInterval;
   if (self.backupTimer != nil) {
     interval = [self.backupTimer timeInterval];
     [self.backupTimer invalidate];
