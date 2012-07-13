@@ -8,6 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+OBJC_EXTERN NSString *const RMFSizeFormatterValueKey;// the value
+OBJC_EXTERN NSString *const RMFSizeFormatterSuffixKey; // the suffix for the number
+
+typedef enum RMFSizeSuffixType {
+  RMFSizeSuffixNone,
+  RMFSizeSuffixKilo,
+  RMFSizeSuffixMega,
+  RMFSizeSuffixGiga,
+  RMFSizeSuffixCount // Count value, do not use!
+} RMFSizeSuffix;
+
 @interface RMFSizeFormatter : NSFormatter
+
++ (NSString *)nameForSuffix:(RMFSizeSuffix)suffix;
++ (NSNumber *)exponentVorSuffix:(RMFSizeSuffix)suffix;
++ (RMFSizeSuffix)suffixForString:(NSString *)string; 
 
 @end

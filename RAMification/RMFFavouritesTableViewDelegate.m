@@ -8,6 +8,8 @@
 
 #import "RMFFavouritesTableViewDelegate.h"
 
+#import "RMFFavoriteManager.h"
+#import "RMFSizeFormatter.h"
 #import "RMFRamdisk.h"
 
 @implementation RMFFavouritesTableViewDelegate
@@ -26,8 +28,8 @@
   }
   NSArray *columns = [NSArray arrayWithObjects:RMFRamdiskKeyForLabel, RMFRamdiskKeyForSize, nil];
   if([columns containsObject:[tableColumn identifier]]) {
-    id<NSTableViewDataSource> dataSource = [tableView dataSource];
-    RMFRamdisk *ramdisk = [dataSource tableView:tableView objectValueForTableColumn:tableColumn row:row];
+    RMFFavoriteManager *favouriteManager = [tableView dataSource];
+    RMFRamdisk *ramdisk = [favouriteManager.favourites objectAtIndex:row];
     // We just prevent edition of the label and the size of mounted disks
     // Since these values would need us to remount the disk
     return (ramdisk.isMounted == NO);
@@ -56,6 +58,11 @@
     return  [popUpCell autorelease]; // PopUp cells
   }
   NSTextFieldCell *textCell = [[NSTextFieldCell alloc] init];
+  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
+    RMFSizeFormatter *formatter = [[RMFSizeFormatter alloc] init];
+    [textCell setFormatter:formatter];
+    [formatter release];
+  }
   [textCell setEditable:YES];
   
   return [textCell autorelease]; // TextField cells
