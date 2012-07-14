@@ -23,6 +23,8 @@ typedef enum RMFSizeSuffixType {
 
 + (NSString *)nameForSuffix:(RMFSizeSuffix)suffix;
 + (NSNumber *)exponentVorSuffix:(RMFSizeSuffix)suffix;
-+ (RMFSizeSuffix)suffixForString:(NSString *)string; 
++ (RMFSizeSuffix)suffixForString:(NSString *)string;
++ (NSDictionary *)suffixExponents;
++ (NSDictionary *)suffixNames;
 
 @end
