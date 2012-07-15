@@ -59,9 +59,7 @@
   }
   NSTextFieldCell *textCell = [[NSTextFieldCell alloc] init];
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
-    RMFSizeFormatter *formatter = [[RMFSizeFormatter alloc] init];
-    [textCell setFormatter:formatter];
-    [formatter release];
+    [textCell setFormatter:[RMFSizeFormatter formatter]];
   }
   [textCell setEditable:YES];
   

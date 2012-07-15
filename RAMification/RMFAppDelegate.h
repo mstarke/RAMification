@@ -24,4 +24,6 @@
 @property (retain, readonly) RMFMountController *mountController;
 @property (retain, readonly) RMFSyncDaemon *syncDaemon;
 
+- (NSString *)executabelName;
+
 @end

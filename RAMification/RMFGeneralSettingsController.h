@@ -23,5 +23,6 @@ extern const NSUInteger RamdiskSizeStepSize;
 @property (assign) IBOutlet NSTextField *backupIntervalInput;
 @property (assign) IBOutlet NSStepper *sizeStepper;
 @property (assign) IBOutlet NSStepper *backupIntervalStepper;
+@property (assign) IBOutlet NSButton *startAtLoginCheckButton;
 
 @end

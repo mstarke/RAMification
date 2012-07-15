@@ -64,4 +64,8 @@
   _syncDaemon = [[RMFSyncDaemon alloc] init];
 }
 
+- (NSString *)executabelName {
+  return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+}
+
 @end

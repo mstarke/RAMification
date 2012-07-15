@@ -7,8 +7,10 @@
 //
 
 #import "RMFGeneralSettingsController.h"
+
 #import "RMFAppDelegate.h"
 #import "RMFSettingsKeys.h"
+#import "RMFSizeFormatter.h"
 
 const NSUInteger MinimumBackupInterval = 15;      // 15s
 const NSUInteger MaxiumumBackupInterval = 86400;  // 24h 
@@ -32,6 +34,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 @synthesize backupIntervalInput = _backupInterval;
 @synthesize sizeStepper = _sizeStepper;
 @synthesize backupIntervalStepper = _backupIntervalStepper;
+@synthesize startAtLoginCheckButton = _startAtLoginCheckButton;
 
 #pragma mark RMFSettingsController Protocol
 
@@ -68,9 +71,15 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 }
 
 - (void)didLoadView {
-  // Set up the bindings for the Interface
-  //[self.warningIcon setImage:[NSImage imageNamed:NSImageNameCaution]];
+  // Setup correct names
+  NSString *template = NSLocalizedString(@"GENERALE_SETTINNGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
+  RMFAppDelegate *delegate = [NSApp delegate];
+  [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
+
+  // attach the number formatter to the size label
+  [self.sizeInput setFormatter:[RMFSizeFormatter formatter]];
   
+  // Set up the bindings for the Interface
   // label
   NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
   [self.labelInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
@@ -79,8 +88,8 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
   [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   [self.sizeStepper setMaxValue:1000000000];
-  [self.sizeStepper setMinValue:1048];
-  [self.sizeStepper setIncrement:1048];
+  [self.sizeStepper setMinValue:1024];
+  [self.sizeStepper setIncrement:1024];
   [self.sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // backup interval
