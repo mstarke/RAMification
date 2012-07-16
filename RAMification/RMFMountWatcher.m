@@ -57,6 +57,7 @@
     return; // No known favourite was unmounted, ignore
   }
   ramdisk.isMounted = NO;
+  ramdisk.devicePath = nil;
   NSLog(@"%@ was unmounted!", ramdisk);
 }
 

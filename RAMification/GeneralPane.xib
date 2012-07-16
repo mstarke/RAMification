@@ -42,26 +42,25 @@
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="NSTextField" id="63706248">
+					<object class="NSTextField" id="70718631">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{143, 69}, {223, 74}}</string>
+						<string key="NSFrame">{{257, 181}, {159, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<string key="NSReuseIdentifierKey">_NS:360</string>
-						<string key="NSAntiCompressionPriority">{250, 750}</string>
+						<string key="NSReuseIdentifierKey">_NS:1505</string>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSTextFieldCell" key="NSCell" id="1056252675">
-							<int key="NSCellFlags">67239424</int>
-							<int key="NSCellFlags2">272629760</int>
-							<string key="NSContents">Backups will be stored as a folder named after the ramdisk inside Application Support Folder.</string>
-							<object class="NSFont" key="NSSupport">
+						<object class="NSTextFieldCell" key="NSCell" id="939758320">
+							<int key="NSCellFlags">68288064</int>
+							<int key="NSCellFlags2">272630784</int>
+							<string key="NSContents">Maxium 6GB</string>
+							<object class="NSFont" key="NSSupport" id="696211119">
 								<string key="NSName">LucidaGrande</string>
-								<double key="NSSize">13</double>
+								<double key="NSSize">11</double>
 								<int key="NSfFlags">16</int>
 							</object>
-							<string key="NSCellIdentifier">_NS:360</string>
-							<reference key="NSControlView" ref="63706248"/>
+							<string key="NSCellIdentifier">_NS:1505</string>
+							<reference key="NSControlView" ref="70718631"/>
 							<object class="NSColor" key="NSBackgroundColor" id="331616218">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
@@ -71,7 +70,7 @@
 									<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 								</object>
 							</object>
-							<object class="NSColor" key="NSTextColor">
+							<object class="NSColor" key="NSTextColor" id="453665777">
 								<int key="NSColorSpace">6</int>
 								<string key="NSCatalogName">System</string>
 								<string key="NSColorName">disabledControlTextColor</string>
@@ -82,10 +81,30 @@
 							</object>
 						</object>
 					</object>
+					<object class="NSTextField" id="63706248">
+						<reference key="NSNextResponder" ref="1005"/>
+						<int key="NSvFlags">268</int>
+						<string key="NSFrame">{{143, 68}, {223, 74}}</string>
+						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
+						<string key="NSReuseIdentifierKey">_NS:360</string>
+						<string key="NSAntiCompressionPriority">{250, 750}</string>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSTextFieldCell" key="NSCell" id="1056252675">
+							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags2">272629760</int>
+							<string key="NSContents">Backups will be stored as a randomly named folder named for each favourite inside the Application Support Folder.</string>
+							<reference key="NSSupport" ref="696211119"/>
+							<string key="NSCellIdentifier">_NS:360</string>
+							<reference key="NSControlView" ref="63706248"/>
+							<reference key="NSBackgroundColor" ref="331616218"/>
+							<reference key="NSTextColor" ref="453665777"/>
+						</object>
+					</object>
 					<object class="NSStepper" id="896169044">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{236, 148}, {19, 27}}</string>
+						<string key="NSFrame">{{236, 147}, {19, 27}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="63706248"/>
@@ -104,7 +123,7 @@
 					<object class="NSTextField" id="469103016">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{40, 154}, {101, 17}}</string>
+						<string key="NSFrame">{{41, 153}, {101, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="502043948"/>
@@ -136,7 +155,7 @@
 					<object class="NSTextField" id="502043948">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{146, 151}, {85, 22}}</string>
+						<string key="NSFrame">{{146, 150}, {85, 22}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="896169044"/>
@@ -173,7 +192,7 @@
 						<string key="NSFrame">{{236, 178}, {19, 27}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="469103016"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:3914</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSStepperCell" key="NSCell" id="953719041">
@@ -372,6 +391,14 @@
 					<int key="connectionID">145</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">sizeInfo</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="70718631"/>
+					</object>
+					<int key="connectionID">152</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: launchAtLogin</string>
 						<reference key="source" ref="624861917"/>
@@ -422,12 +449,13 @@
 							<reference ref="624861917"/>
 							<reference ref="432728548"/>
 							<reference ref="815116257"/>
+							<reference ref="208198259"/>
+							<reference ref="342558461"/>
 							<reference ref="502043948"/>
+							<reference ref="896169044"/>
 							<reference ref="469103016"/>
 							<reference ref="63706248"/>
-							<reference ref="208198259"/>
-							<reference ref="896169044"/>
-							<reference ref="342558461"/>
+							<reference ref="70718631"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -571,6 +599,19 @@
 						<reference key="object" ref="478681964"/>
 						<reference key="parent" ref="0"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">148</int>
+						<reference key="object" ref="70718631"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="939758320"/>
+						</array>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">149</int>
+						<reference key="object" ref="939758320"/>
+						<reference key="parent" ref="70718631"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -579,6 +620,8 @@
 				<string key="-3.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="1.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="118.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="148.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="149.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="21.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="38.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="39.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -605,7 +648,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">145</int>
+			<int key="maxID">152</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -624,6 +667,7 @@
 						<string key="backupIntervalInput">NSTextField</string>
 						<string key="backupIntervalStepper">NSStepper</string>
 						<string key="labelInput">NSTextField</string>
+						<string key="sizeInfo">NSTextField</string>
 						<string key="sizeInput">NSTextField</string>
 						<string key="sizeStepper">NSStepper</string>
 						<string key="startAtLoginCheckButton">NSButton</string>
@@ -639,6 +683,10 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="labelInput">
 							<string key="name">labelInput</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="sizeInfo">
+							<string key="name">sizeInfo</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="sizeInput">

@@ -22,8 +22,9 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 @interface RMFGeneralSettingsController ()
 
-- (void) checkHibernationMode;
+- (void)checkHibernationMode;
 - (void)didLoadView;
+- (NSString *)memoryInfoText;
 
 @end
 
@@ -35,6 +36,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 @synthesize sizeStepper = _sizeStepper;
 @synthesize backupIntervalStepper = _backupIntervalStepper;
 @synthesize startAtLoginCheckButton = _startAtLoginCheckButton;
+@synthesize sizeInfo = _sizeInfo;
 
 #pragma mark RMFSettingsController Protocol
 
@@ -72,10 +74,13 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 - (void)didLoadView {
   // Setup correct names
-  NSString *template = NSLocalizedString(@"GENERALE_SETTINNGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
+  NSString *template = NSLocalizedString(@"GENERAL_SETTINNGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
   RMFAppDelegate *delegate = [NSApp delegate];
   [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
 
+  
+  [self.sizeInfo setStringValue:[self memoryInfoText]];
+  
   // attach the number formatter to the size label
   [self.sizeInput setFormatter:[RMFSizeFormatter formatter]];
   
@@ -100,6 +105,12 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [self.backupIntervalStepper setMaxValue:100000000000000];
   [self.backupIntervalStepper setIncrement:60];
   [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+}
+
+- (NSString *)memoryInfoText {
+  unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
+  NSString *warningTemplate = NSLocalizedString(@"GENERAL_SETTINNGS_MAXIUMUM_SIZE", @"Label for the maxiumum size for a ramdisk. Insert 1 object placeholder" );
+  return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 1024 * 1024 * 1024 ) ) ];
 }
 
 - (void) checkHibernationMode {
