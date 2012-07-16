@@ -61,20 +61,25 @@
 }
 
 - (void)didRenameVolume:(NSNotification *)notification {
-  NSString *oldName = [[notification userInfo] objectForKey:NSWorkspaceVolumeOldLocalizedNameKey];
-  //NSString *newName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   NSURL *newPath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+  NSString *newName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
+  // Create DA session and schedule it with run loop
+  DASessionRef session = DASessionCreate(kCFAllocatorDefault);
+  DASessionScheduleWithRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+  // Get the disk for the path of the renamed volume
+  DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (CFURLRef)newPath);
+  NSString *devicePath = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
+  // Unschedule our session and clean up
+  DASessionUnscheduleFromRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+  CFRelease(disk);
+  CFRelease(session);
+  
   RMFAppDelegate *delegate = [NSApp delegate];
-  RMFFavoriteManager *favouriteManager = delegate.favoritesManager;
-  RMFRamdisk *renamedDisk = [favouriteManager findFavouriteForName:oldName];
-  // Might work better in a differen fashion?
-  if(renamedDisk.isMounted) {
-    DASessionRef renameSession = DASessionCreate(CFAllocatorGetDefault());
-    DASessionScheduleWithRunLoop(renameSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-    DADiskRef disk = DADiskCreateFromVolumePath(CFAllocatorGetDefault(), renameSession, (CFURLRef)newPath);
-    //DADiskRename(disk, (CFStringRef)oldName, NULL, NULL, NULL);
-    CFRelease(disk);
-    CFRelease(renameSession);
+  RMFRamdisk *renamedDisk = [delegate.favoritesManager findFavouriteForDevicePath:devicePath];
+  
+  if(renamedDisk != nil) {
+    renamedDisk.label = newName;
+    renamedDisk.devicePath = devicePath;
   }
 }
 

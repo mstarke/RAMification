@@ -40,7 +40,6 @@ typedef enum RMFRamdiskBackupModeType {
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (retain, readonly) NSDate *lastBackupDate;
-// indicates that changes were made after mounting
 @property (readonly) BOOL isDirty;
 
 + (RMFRamdisk *)volumePresetWithData:(NSData *)data;

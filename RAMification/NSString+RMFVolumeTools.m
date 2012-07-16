@@ -61,20 +61,21 @@
 - (BOOL)isUsedAsVolumeName
 {
   // get all the mounted removable volumes
-  NSArray *mountedMedia = [[NSWorkspace sharedWorkspace] mountedRemovableMedia];
-  NSMutableSet *mountedVolumeNames = [NSMutableSet set];
-  // strip the names and just leave the volume name
-  for(NSString *path in mountedMedia)
-  {
-    [mountedVolumeNames addObject:[path lastPathComponent]];
-  }
+  NSArray *mountedMedia = [[NSFileManager defaultManager] mountedVolumeURLsIncludingResourceValuesForKeys:nil options:NSVolumeEnumerationSkipHiddenVolumes];
+  BOOL(^pathBlock)(id,NSDictionary*);
+  pathBlock = ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+    return [[((NSURL *)evaluatedObject) lastPathComponent] isEqualToString:self];
+  };
+  
+  NSPredicate *pathPredicate = [NSPredicate predicateWithBlock:pathBlock];
+  NSArray *matchingPaths = [mountedMedia filteredArrayUsingPredicate:pathPredicate];
   // return if we are in the array (name based search)
-  return [mountedVolumeNames containsObject:self];
+  return ([matchingPaths count] == 0);
 }
 
 - (NSString *)volumePath
 {
-  return [[[NSString alloc] initWithFormat:@"/Volumes/", self] autorelease];
+  return [NSString stringWithFormat:@"/Volumes/", self];
 }
 
 @end

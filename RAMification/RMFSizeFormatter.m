@@ -71,6 +71,7 @@ NSString *const RMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number {
   NSUInteger suffixIndex = 0;
   double value = [number intValue];
+  // loop through suffixes and count exponents
   while((value / 1024.0) >= 1 && suffixIndex < (RMFSizeSuffixCount - 1)) {
     suffixIndex++;
     value /= 1024.0;
