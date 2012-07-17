@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C05C6DB15B4E01000495255 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DA15B4E01000495255 /* IOKit.framework */; };
+		4C05C6DE15B4E64E00495255 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */; };
 		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
 		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */; };
@@ -55,6 +57,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C05C6DA15B4E01000495255 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C264E5615A631E500D358B5 /* RMFMountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountController.h; sourceTree = "<group>"; };
 		4C264E5715A631E500D358B5 /* RMFMountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountController.m; sourceTree = "<group>"; };
 		4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
@@ -124,6 +128,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C05C6DE15B4E64E00495255 /* SystemConfiguration.framework in Frameworks */,
+				4C05C6DB15B4E01000495255 /* IOKit.framework in Frameworks */,
 				4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */,
 				4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
 			);
@@ -239,8 +245,10 @@
 		4C5BDB59147EF6AD000E19B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
 				4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */,
+				4C05C6DA15B4E01000495255 /* IOKit.framework */,
+				4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */,
+				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
 				4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */,
 				4C5BDB5C147EF6AD000E19B0 /* Other Frameworks */,
 			);

@@ -12,6 +12,10 @@
 #import "RMFSettingsKeys.h"
 #import "RMFSizeFormatter.h"
 
+#import <IOKit/ps/IOPSKeys.h>
+#import <IOKit/ps/IOPowerSources.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+
 const NSUInteger MinimumBackupInterval = 15;      // 15s
 const NSUInteger MaxiumumBackupInterval = 86400;  // 24h 
 const NSUInteger BackupdIntervalStepSize = 15;    // 15s
@@ -110,10 +114,22 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 - (NSString *)memoryInfoText {
   unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
   NSString *warningTemplate = NSLocalizedString(@"GENERAL_SETTINNGS_MAXIUMUM_SIZE", @"Label for the maxiumum size for a ramdisk. Insert 1 object placeholder" );
-  return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 1024 * 1024 * 1024 ) ) ];
+  // Get the system memory and calculate the Gb theoretical maxium RAM disk size
+  // The disk is 2 times the storage as it's ram bufferd.
+  // 1024 * 1024 * 1024 * 2 = 2147483648
+  return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 2147483648 ) ) ];
 }
 
 - (void) checkHibernationMode {
+  SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
+  // read current settings from SCDynamicStore key
+  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, CFSTR("State:/IOKit/PowerManagement/CurrentSettings"));
+  if(!liveValues) 
+    return;
+  //show_pm_settings_dict(live, 0, true, true);
+  
+  CFRelease(liveValues);
+  CFRelease(dynamicStore);
   // run shell command pmset -g | grep hibernamemode
   // check for mode
   // or look for cocoa api to get this data
