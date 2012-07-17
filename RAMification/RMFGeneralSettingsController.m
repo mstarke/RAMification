@@ -84,6 +84,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
   
   [self.sizeInfo setStringValue:[self memoryInfoText]];
+  [self.sizeInfo sizeToFit];
   
   // attach the number formatter to the size label
   [self.sizeInput setFormatter:[RMFSizeFormatter formatter]];
