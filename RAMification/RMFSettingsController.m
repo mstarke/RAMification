@@ -6,10 +6,21 @@
 
 #import "RMFSettingsController.h"
 
+#import <IOKit/ps/IOPSKeys.h>
+#import <IOKit/ps/IOPowerSources.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+
+NSString *const kHiberNateModeKey = @"Hibernate Mode";
+NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerManagement/CurrentSettings";
+
+
 @interface RMFSettingsController ()
 @property (retain) RMFGeneralSettingsController *generalSettingsController;
 @property (retain) RMFFavoritesSettingsController *presetSettingsController;
 @property (retain) NSToolbar* toolbar;
+@property (retain) NSDictionary *paneController;
+@property (assign) NSUInteger hibernateMode;
+- (void) readHibernateMode;
 @end
 
 
@@ -19,6 +30,8 @@
 @synthesize toolbar = _toolbar;
 @synthesize presetSettingsController = _presetSettingsController;
 @synthesize generalSettingsController = _generalSettingsController;
+@synthesize paneController = _paneController;
+@synthesize hibernateMode = _hibernateMode;
 
 # pragma mark object lifecycle
 
@@ -32,7 +45,7 @@
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
     _presetSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
     
-    settingsPaneControler = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
+    _paneController = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
                                                                         [RMFGeneralSettingsController identifier],
                                                                         _presetSettingsController,
                                                                         [RMFFavoritesSettingsController identifier], nil];
@@ -47,7 +60,9 @@
 
 - (void)dealloc {
   self.toolbar = nil;
-  [settingsPaneControler release];
+  self.paneController = nil;
+  self.generalSettingsController = nil;
+  self.presetSettingsController = nil;
   [super dealloc];
 }
 
@@ -75,7 +90,7 @@
   if(sender == nil) {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
   }
-  id<RMFSettingsControllerProtocol> visibleSettings = [settingsPaneControler objectForKey:settingsIdentifier];
+  id<RMFSettingsControllerProtocol> visibleSettings = [_paneController objectForKey:settingsIdentifier];
   
   if(visibleSettings == nil) {
     visibleSettings = _generalSettingsController;
@@ -90,22 +105,37 @@
   [self.settingsWindow setIsVisible:YES];
 }
 
+#pragma mark system env retrieval
+
+- (void) readHibernateMode {
+  SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
+  // read current settings from SCDynamicStore key
+  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, (CFStringRef)kIOKitPowerManagementCurrentSettingsPath);
+  if(!liveValues) {
+    return; // The values return is NULL
+  }
+  NSDictionary *valuesDict = liveValues;
+  self.hibernateMode = [[valuesDict objectForKey:kHiberNateModeKey] intValue];
+  CFRelease(liveValues);
+  CFRelease(dynamicStore);
+}
+
 #pragma mark NSToolbarDelegateProtocol
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
-  return [settingsPaneControler allKeys];
+  return [_paneController allKeys];
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-  return [settingsPaneControler allKeys];
+  return [_paneController allKeys];
 }
 
 - (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
-  return [settingsPaneControler allKeys];
+  return [_paneController allKeys];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
-  id controller = [settingsPaneControler objectForKey:itemIdentifier];
+  id controller = [_paneController objectForKey:itemIdentifier];
   NSToolbarItem *item = [[controller class ]toolbarItem];
   [item setAction:@selector(showSettings:)];
   [item setTarget:self];

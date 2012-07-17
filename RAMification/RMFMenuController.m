@@ -115,7 +115,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   NSMenuItem *item;
   
   // About
-  NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+  NSString *appName = [((RMFAppDelegate *)[NSApp delegate]) executabelName];
   NSString *aboutString = [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"MENU_ABOUT", @"The lolcalized Version of About"), appName];
   item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:aboutString action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
   [item setEnabled:YES];
@@ -177,6 +177,10 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [item setTarget:self];
   [self.menu addItem:item];
   [item release];
+  
+  RMFAppDelegate *delegate = [NSApp delegate];
+  BOOL shouldDisplayWarning = ( [delegate.settingsController hibernateMode] != 0);
+  [self setHibernateWarningVisible:shouldDisplayWarning];
 }
 
 - (void) createStatusItem {
@@ -319,9 +323,13 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                                      action:NULL
                                      keyEquivalent:@""];
       }
+      [_menu insertItem:[NSMenuItem separatorItem] atIndex:0];
       [_menu insertItem:_hibernateWarningMenuItem atIndex:0];
     }
     else {
+      if([[_menu itemAtIndex:0] isSeparatorItem]) {
+        [_menu removeItemAtIndex:0];
+      }
       [_menu removeItem:_hibernateWarningMenuItem];
     }
   } 

@@ -10,13 +10,10 @@
 #import "RMFGeneralSettingsController.h"
 #import "RMFFavoritesSettingsController.h"
 
-@interface RMFSettingsController : NSObject <NSToolbarDelegate> {
-  @private
-  NSDictionary *settingsPaneControler;
-}
+@interface RMFSettingsController : NSObject <NSToolbarDelegate>
 
+@property (readonly) NSUInteger hibernateMode;
 @property (assign) IBOutlet NSWindow *settingsWindow;
-
 - (void) showSettings: (id)sender;
 
 @end

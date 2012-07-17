@@ -25,5 +25,7 @@ extern const NSUInteger RamdiskSizeStepSize;
 @property (assign) IBOutlet NSStepper *backupIntervalStepper;
 @property (assign) IBOutlet NSButton *startAtLoginCheckButton;
 @property (assign) IBOutlet NSTextField *sizeInfo;
+@property (assign) IBOutlet NSTextField *hibernateWarning;
+@property (assign) IBOutlet NSImageView *warningImage;
 
 @end

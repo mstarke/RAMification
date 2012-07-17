@@ -11,11 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFSettingsKeys.h"
 #import "RMFSizeFormatter.h"
-#import "RMFMenuController.h"
-
-#import <IOKit/ps/IOPSKeys.h>
-#import <IOKit/ps/IOPowerSources.h>
-#import <SystemConfiguration/SystemConfiguration.h>
+#import "RMFSettingsController.h"
 
 const NSUInteger MinimumBackupInterval = 15;      // 15s
 const NSUInteger MaxiumumBackupInterval = 86400;  // 24h 
@@ -24,13 +20,8 @@ const NSUInteger MinumumRamdiskSize = 1024;       // 1Mb
 const NSUInteger MaxiumumRamdiskSize = 33554432;  // 32Gb
 const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
-NSString *const kHiberNateModeKey = @"Hibernate Mode";
-NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerManagement/CurrentSettings";
-
-
 @interface RMFGeneralSettingsController ()
 
-- (void)checkHibernationMode;
 - (void)didLoadView;
 - (NSString *)memoryInfoText;
 
@@ -45,6 +36,8 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 @synthesize backupIntervalStepper = _backupIntervalStepper;
 @synthesize startAtLoginCheckButton = _startAtLoginCheckButton;
 @synthesize sizeInfo = _sizeInfo;
+@synthesize hibernateWarning = _hibernateWarning;
+@synthesize warningImage = _warningImage;
 
 #pragma mark RMFSettingsController Protocol
 
@@ -113,10 +106,11 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   [self.backupIntervalStepper setMaxValue:100000000000000];
   [self.backupIntervalStepper setIncrement:60];
   [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-
-  // Check the hibernate settings
-  [self checkHibernationMode];
   
+  [self.warningImage setImage:[NSImage imageNamed:NSImageNameCaution]];
+  BOOL shouldHide = (0 != [((RMFAppDelegate *)[NSApp delegate]).settingsController hibernateMode]);
+  [self.hibernateWarning setHidden:shouldHide];
+  [self.warningImage setHidden:shouldHide];
 }
 
 - (NSString *)memoryInfoText {
@@ -126,22 +120,6 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   // The disk is 2 times the storage as it's ram bufferd.
   // 1024 * 1024 * 1024 * 2 = 2147483648
   return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 2147483648 ) ) ];
-}
-
-- (void) checkHibernationMode {
-  SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
-  // read current settings from SCDynamicStore key
-  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, (CFStringRef)kIOKitPowerManagementCurrentSettingsPath);
-  if(!liveValues) {
-    return; // The values return is NULL
-  }
-  NSDictionary *valuesDict = liveValues;
-  NSNumber *hibernateMode = [valuesDict objectForKey:kHiberNateModeKey];
-  RMFAppDelegate *delegate = [NSApp delegate];
-  // Show the warning if we got a hibernate mode different that 0
-  [delegate.menuController setHibernateWarningVisible:[hibernateMode intValue] != 0];
-  CFRelease(liveValues);
-  CFRelease(dynamicStore);
 }
 
 @end
