@@ -11,6 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFSettingsKeys.h"
 #import "RMFSizeFormatter.h"
+#import "RMFMenuController.h"
 
 #import <IOKit/ps/IOPSKeys.h>
 #import <IOKit/ps/IOPowerSources.h>
@@ -22,6 +23,9 @@ const NSUInteger BackupdIntervalStepSize = 15;    // 15s
 const NSUInteger MinumumRamdiskSize = 1024;       // 1Mb
 const NSUInteger MaxiumumRamdiskSize = 33554432;  // 32Gb
 const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
+
+NSString *const kHiberNateModeKey = @"Hibernate Mode";
+NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerManagement/CurrentSettings";
 
 
 @interface RMFGeneralSettingsController ()
@@ -81,7 +85,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   NSString *template = NSLocalizedString(@"GENERAL_SETTINNGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
   RMFAppDelegate *delegate = [NSApp delegate];
   [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
-
   
   [self.sizeInfo setStringValue:[self memoryInfoText]];
   [self.sizeInfo sizeToFit];
@@ -110,6 +113,10 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [self.backupIntervalStepper setMaxValue:100000000000000];
   [self.backupIntervalStepper setIncrement:60];
   [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+
+  // Check the hibernate settings
+  [self checkHibernationMode];
+  
 }
 
 - (NSString *)memoryInfoText {
@@ -124,16 +131,17 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 - (void) checkHibernationMode {
   SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
   // read current settings from SCDynamicStore key
-  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, CFSTR("State:/IOKit/PowerManagement/CurrentSettings"));
-  if(!liveValues) 
-    return;
-  //show_pm_settings_dict(live, 0, true, true);
-  
+  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, (CFStringRef)kIOKitPowerManagementCurrentSettingsPath);
+  if(!liveValues) {
+    return; // The values return is NULL
+  }
+  NSDictionary *valuesDict = liveValues;
+  NSNumber *hibernateMode = [valuesDict objectForKey:kHiberNateModeKey];
+  RMFAppDelegate *delegate = [NSApp delegate];
+  // Show the warning if we got a hibernate mode different that 0
+  [delegate.menuController setHibernateWarningVisible:[hibernateMode intValue] != 0];
   CFRelease(liveValues);
   CFRelease(dynamicStore);
-  // run shell command pmset -g | grep hibernamemode
-  // check for mode
-  // or look for cocoa api to get this data
 }
 
 @end

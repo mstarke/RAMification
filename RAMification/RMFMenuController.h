@@ -8,17 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RMFMenuController : NSObject {
-  @private
-  NSMenu *menu;
-  NSMenu *favoritesMenu;
-  NSStatusItem *statusItem;
-  NSOperationQueue *queue;
-  NSMutableDictionary *menuItemsToFavouritesMap;
-}
+@interface RMFMenuController : NSObject
 
 - (void) quitApplication;
 - (void) removeRamdisk;
 - (void) showSettingsTab:(id)sender;
+- (void) setHibernateWarningVisible:(BOOL)isVisible;
 
 @end
