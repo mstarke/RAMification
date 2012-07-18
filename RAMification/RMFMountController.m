@@ -52,7 +52,15 @@
 }
 
 - (BOOL) toggleMounted:(RMFRamdisk *)ramdisk {
-  return NO;
+  
+  if (ramdisk.isMounted) {
+    [self unmount:ramdisk];
+    return YES; // we did mount the ramdisk
+  }
+  else {
+    [self mount:ramdisk];
+    return NO; // we did unmount the ramdisk
+  }
 }
 
 - (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted {

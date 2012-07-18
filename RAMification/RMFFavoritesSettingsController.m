@@ -14,6 +14,7 @@
 @interface RMFFavoritesSettingsController ()
 
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
+
 - (void) didLoadView;
 
 @end
@@ -32,6 +33,7 @@
 
 + (NSToolbarItem *) toolbarItem {
   NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]];
+  
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
   [item setLabel:[RMFFavoritesSettingsController label]];
   [item setAction:@selector(showSettings:)];

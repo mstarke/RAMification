@@ -20,18 +20,20 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 @property (retain) NSToolbar* toolbar;
 @property (retain) NSDictionary *paneController;
 @property (assign) NSUInteger hibernateMode;
+@property (retain) NSView *emptyView;
 - (void) readHibernateMode;
 @end
 
 
 @implementation RMFSettingsController
 
-@synthesize settingsWindow;
+@synthesize settingsWindow = _settingsWindow;
 @synthesize toolbar = _toolbar;
 @synthesize presetSettingsController = _presetSettingsController;
 @synthesize generalSettingsController = _generalSettingsController;
 @synthesize paneController = _paneController;
 @synthesize hibernateMode = _hibernateMode;
+@synthesize emptyView = _emptyView;
 
 # pragma mark object lifecycle
 
@@ -54,6 +56,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
     self.toolbar.allowsUserCustomization = YES;
     self.toolbar.delegate = self;
     self.settingsWindow.toolbar = _toolbar;
+    _emptyView = [[NSView alloc] init];
   }
   return self;
 }
@@ -98,11 +101,17 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   // highlight the toolbar item
   [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
   NSView *settingsView = [(NSViewController*)visibleSettings view];
+  // remove the old content view to store it's size
+  [self.settingsWindow setContentView:_emptyView];
+  NSRect windowRect = [_settingsWindow frameRectForContentRect:[settingsView frame]];
+  windowRect.origin.x = [_settingsWindow frame].origin.x;
+  windowRect.origin.y = [_settingsWindow frame].origin.y + [_settingsWindow frame].size.height - windowRect.size.height;
+  [_settingsWindow setFrame:windowRect display:YES animate:YES];
   //[self.settingsWindow setContentSize:[settingsView frame].size];
   // set the new view
-  [self.settingsWindow setContentView:settingsView];
+  [_settingsWindow setContentView:settingsView];
   // and show the window, if already visible this doesn't hurt.
-  [self.settingsWindow setIsVisible:YES];
+  [_settingsWindow setIsVisible:YES];
 }
 
 #pragma mark system env retrieval

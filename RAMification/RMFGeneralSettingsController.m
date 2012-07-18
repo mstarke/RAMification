@@ -37,7 +37,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 @synthesize startAtLoginCheckButton = _startAtLoginCheckButton;
 @synthesize sizeInfo = _sizeInfo;
 @synthesize hibernateWarning = _hibernateWarning;
-@synthesize warningImage = _warningImage;
 
 #pragma mark RMFSettingsController Protocol
 
@@ -66,6 +65,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   } 
   return self;
 }
+#pragma mark getter/setter
 
 #pragma mark viewLoad overrides
 - (void)loadView {
@@ -93,10 +93,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   // size
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
   [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  [self.sizeStepper setMaxValue:1000000000];
-  [self.sizeStepper setMinValue:1024];
-  [self.sizeStepper setIncrement:1024];
-  [self.sizeStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // backup interval
   NSDictionary *bindinOptions = [NSDictionary dictionaryWithObjectsAndKeys:@"Something missing", NSNullPlaceholderBindingOption, nil];
@@ -107,10 +103,13 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [self.backupIntervalStepper setIncrement:60];
   [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
-  [self.warningImage setImage:[NSImage imageNamed:NSImageNameCaution]];
+  [self.sizeStepper setMinValue:0];
+  [self.sizeStepper setMaxValue:10];
+  [self.sizeStepper setIncrement:1];
+  //[self.sizeStepper bind:@"value" toObject:self withKeyPath:@"sizeBridgeValue" options:nil];
+  
   BOOL shouldHide = (0 != [((RMFAppDelegate *)[NSApp delegate]).settingsController hibernateMode]);
   [self.hibernateWarning setHidden:shouldHide];
-  [self.warningImage setHidden:shouldHide];
 }
 
 - (NSString *)memoryInfoText {
