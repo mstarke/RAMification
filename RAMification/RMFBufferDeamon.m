@@ -13,19 +13,34 @@
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 
-@interface RMFBufferDeamon (PrivateMethods)
+@interface RMFBufferDeamon ()
+@property (retain) NSMutableSet *watchedDisks;
+
 - (void)update;
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
-- (void)watchForChanges:(BOOL)shouldWath onRamdisk:(RMFRamdisk *)ramdisk;
+- (void)watchRamdisk:(RMFRamdisk *)ramdisk;
+- (void)unwatchRamdisk:(RMFRamdisk *)ramdisk;
 - (void)disableCache:(BOOL)disable forFile:(NSString*)file;
 @end
 
+
+static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
+                                    void *userData,
+                                    size_t numEvents,
+                                    void *eventPaths,
+                                    const FSEventStreamEventFlags eventFlags[],
+                                    const FSEventStreamEventId eventIds[])
+{
+  RMFBufferDeamon *bufferDaemon = (RMFBufferDeamon *)userData;
+  [bufferDaemon update];
+}
 
 @implementation RMFBufferDeamon
 
 - (id)init {
   self = [super init];
   if (self) {
+    _watchedDisks = [[NSMutableSet alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(update) name:NSUserDefaultsDidChangeNotification object:nil];
   }
   return self;
@@ -42,7 +57,8 @@
 }
 
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
-  [self watchForChanges:shouldBuffer onRamdisk:ramdisk];
+  
+  shouldBuffer ? [self watchRamdisk:ramdisk] : [self unwatchRamdisk:ramdisk];
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSString *volumePath = [ramdisk.label volumePath];
@@ -53,8 +69,23 @@
   }
 }
 
-- (void)watchForChanges:(BOOL)shouldWath onRamdisk:(RMFRamdisk *)ramdisk {
-  // register for file changes on ramdisk
+- (void)watchRamdisk:(RMFRamdisk *)ramdisk {
+  [_watchedDisks addObject:ramdisk];
+  FSEventStreamContext context = { 0, (void *)self, NULL, NULL, NULL };
+  NSTimeInterval latency = 2.0;
+  FSEventStreamRef streamRef = FSEventStreamCreate(NULL,
+                                                       &fileSystemEventCallback,
+                                                       &context,
+                                                       (CFArrayRef)[NSArray arrayWithObject:[ramdisk.label volumePath]],
+                                                       FSEventsGetCurrentEventId(),
+                                                       (CFTimeInterval)latency,
+                                                       kFSEventStreamCreateFlagUseCFTypes);
+  FSEventStreamScheduleWithRunLoop(streamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+  FSEventStreamStart(streamRef);
+}
+
+- (void)unwatchRamdisk:(RMFRamdisk *)ramdisk {
+  [_watchedDisks removeObject:ramdisk];
 }
 
 - (void)disableCache:(BOOL)disable forFile:(NSString *)file {
