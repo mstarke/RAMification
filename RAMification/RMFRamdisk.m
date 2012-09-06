@@ -92,7 +92,7 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 }
 
 - (NSString *)description {
-  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%B Dirty:%B Automount:%B Backup:%B", self.label, self.devicePath, self.isMounted, self.isAutomount, self.backupMode];
+  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%i Automount:%i Backup:%i", self.label, self.devicePath, self.isMounted, self.isAutomount, self.backupMode];
   return description;
 }
 
@@ -104,7 +104,7 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
     _label = [[aDecoder decodeObjectForKey:RMFRamdiskKeyForLabel] retain];
     _isAutomount = [aDecoder decodeBoolForKey:RMFRamdiskKeyForAutomount];
     _size = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForSize];
-    _backupMode = [aDecoder decodeIntegerForKey:RMFRamdiskKeyForBackupMode];
+    _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:RMFRamdiskKeyForBackupMode];
   }
   return self;
 }

@@ -76,7 +76,7 @@ NSString *const RMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
     suffixIndex++;
     value /= 1024.0;
   }
-  return [RMFSizeFormatter dictForSuffix:suffixIndex andValue:value];
+  return [RMFSizeFormatter dictForSuffix:(RMFSizeSuffix)suffixIndex andValue:value];
 }
 
 + (NSString *)stringForSizeRepresentation:(NSDictionary *)dict {

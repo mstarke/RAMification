@@ -75,7 +75,7 @@
 
 - (NSString *)volumePath
 {
-  return [NSString stringWithFormat:@"/Volumes/", self];
+  return [NSString stringWithFormat:@"/Volumes/%@", self];
 }
 
 @end

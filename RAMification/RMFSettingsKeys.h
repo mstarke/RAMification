@@ -13,3 +13,4 @@ extern NSString * const RMFSettingsKeySize;
 extern NSString * const RMFSettingsKeyBackupPath;
 extern NSString * const RMFSettingsKeyBackupInterval;
 extern NSString * const RMFSettingsKeyFavourites;
+extern NSString * const RMFSettingsKeyDisableUnifiedBuffer;

@@ -16,6 +16,9 @@
 // List of all known favourites
 @property (readonly, retain) NSMutableArray *favourites;
 
+// Returns the global favourites manager
++ (RMFFavoriteManager *)manager;
+
 // Finds all mounted favourites
 // @return array of mounted favourites
 - (NSArray *)mountedFavourites;

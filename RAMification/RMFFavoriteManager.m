@@ -8,6 +8,7 @@
 
 #import "RMFFavoriteManager.h"
 
+#import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
@@ -35,6 +36,13 @@
 @implementation RMFFavoriteManager
 
 @synthesize favourites = _favourites;
+
+#pragma mark convenience functions
+
++ (RMFFavoriteManager *)manager {
+  RMFAppDelegate *delegate = [NSApp delegate];
+  return [delegate favoritesManager];
+}
 
 #pragma mark object lifecycle
 
