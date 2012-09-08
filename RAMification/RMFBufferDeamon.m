@@ -13,14 +13,18 @@
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 
-@interface RMFBufferDeamon ()
+@interface RMFBufferDeamon () {
+  FSEventStreamRef _eventStream;
+}
 @property (retain) NSMutableSet *watchedDisks;
+@property (assign) NSDate *lastUpdate;
 
 - (void)update;
+- (void)updateCallback;
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
-- (void)watchRamdisk:(RMFRamdisk *)ramdisk;
-- (void)unwatchRamdisk:(RMFRamdisk *)ramdisk;
-- (void)disableCache:(BOOL)disable forFile:(NSString*)file;
+- (void)addWatchedPath:(NSString *)path;
+- (void)removeWatchedPath:(NSString *)path;
+- (void)disableCache:(BOOL)disable forPath:(NSString*)file;
 @end
 
 
@@ -41,54 +45,94 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
   self = [super init];
   if (self) {
     _watchedDisks = [[NSMutableSet alloc] init];
+    _eventStream = NULL;
+    _lastUpdate = [[NSDate alloc] init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(update) name:NSUserDefaultsDidChangeNotification object:nil];
   }
   return self;
 }
 
 - (void)update {
-  BOOL shouldBuffer = [[NSUserDefaults standardUserDefaults] boolForKey:RMFSettingsKeyDisableUnifiedBuffer];
+  //BOOL shouldBuffer = [[NSUserDefaults standardUserDefaults] boolForKey:RMFSettingsKeyDisableUnifiedBuffer];
   
   RMFFavoriteManager *favoriteManager = [RMFFavoriteManager manager];
   NSArray *mountedFavourites = [favoriteManager mountedFavourites];
   for(RMFRamdisk *ramdisk in mountedFavourites) {
-    [self setShouldBuffer:shouldBuffer forRamdisk:ramdisk];
+    //[self setShouldBuffer:shouldBuffer forRamdisk:ramdisk];
   }
+  NSLog(@"Updating buffer");
+  // test for changed files
+  self.lastUpdate = [NSDate date];
+}
+
+- (void)updateCallback {
+  // remove possible old
+  FSEventStreamEventId lastEventId = FSEventsGetCurrentEventId();
+  if( _eventStream != NULL ) {
+    lastEventId = FSEventStreamGetLatestEventId(_eventStream);
+    FSEventStreamStop(_eventStream);
+    FSEventStreamUnscheduleFromRunLoop(_eventStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    FSEventStreamRelease(_eventStream);
+    _eventStream = NULL;
+  }
+  FSEventStreamContext context = { 0, (void *)self, NULL, NULL, NULL };
+  NSTimeInterval latency = 2.0;
+  
+  _eventStream = FSEventStreamCreate(NULL,
+                                     &fileSystemEventCallback,
+                                     &context,
+                                     (CFArrayRef)[self.watchedDisks allObjects],
+                                     lastEventId,
+                                     (CFTimeInterval)latency,
+                                     kFSEventStreamCreateFlagUseCFTypes);
+  FSEventStreamScheduleWithRunLoop(_eventStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+  FSEventStreamStart(_eventStream);
 }
 
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
   
-  shouldBuffer ? [self watchRamdisk:ramdisk] : [self unwatchRamdisk:ramdisk];
+  NSString *path = [ramdisk.label volumePath];
+  if( shouldBuffer ) {
+    [self addWatchedPath:path];
+  }
+  else {
+    [self removeWatchedPath:path];
+  }
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSString *volumePath = [ramdisk.label volumePath];
   NSDirectoryEnumerator *dirEnumerator = [fileManager enumeratorAtPath:volumePath];
   NSString *file;
   while( file = [dirEnumerator nextObject] ) {
-    [self disableCache:(!shouldBuffer) forFile:file];
+    [self disableCache:(!shouldBuffer) forPath:file];
   }
 }
 
-- (void)watchRamdisk:(RMFRamdisk *)ramdisk {
-  [_watchedDisks addObject:ramdisk];
-  FSEventStreamContext context = { 0, (void *)self, NULL, NULL, NULL };
-  NSTimeInterval latency = 2.0;
-  FSEventStreamRef streamRef = FSEventStreamCreate(NULL,
-                                                       &fileSystemEventCallback,
-                                                       &context,
-                                                       (CFArrayRef)[NSArray arrayWithObject:[ramdisk.label volumePath]],
-                                                       FSEventsGetCurrentEventId(),
-                                                       (CFTimeInterval)latency,
-                                                       kFSEventStreamCreateFlagUseCFTypes);
-  FSEventStreamScheduleWithRunLoop(streamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
-  FSEventStreamStart(streamRef);
+- (void)addWatchedPath:(NSString *)path {
+  // Add the volume path to the watched paths
+  BOOL isDirectory = NO;
+  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
+  if( ! fileExists || ! isDirectory ) {
+    return; // ramdisk path is not valid
+  }
+  
+  // Insert path into watched paths
+  [self.watchedDisks addObject:path];
+  [self updateCallback];
 }
 
-- (void)unwatchRamdisk:(RMFRamdisk *)ramdisk {
-  [_watchedDisks removeObject:ramdisk];
+- (void)removeWatchedPath:(NSString *)path {
+  [self.watchedDisks removeObject:path];
+  [self updateCallback];
 }
 
-- (void)disableCache:(BOOL)disable forFile:(NSString *)file {
+- (void)disableCache:(BOOL)disable forPath:(NSString *)file {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  if ( NO == [fileManager fileExistsAtPath:file] ) {
+    return; // No valid file found
+  }
+  
+  // Convert String to C useable char array
   char filename[1024];
   [file getCString:filename maxLength:1024 encoding:NSUTF8StringEncoding];
   
