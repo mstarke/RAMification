@@ -10,7 +10,7 @@
 
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFSyncRamDiskOperation.h"
 #import "RMFSettingsKeys.h"
 
@@ -36,7 +36,7 @@
 static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
-  RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
   NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
   RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:bsdName];
   BOOL isReady = [syncDamon canUnmount:ramdisk];
@@ -124,7 +124,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
     return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically; 
   };
-  RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  RMFFavouriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
   if(favouriteManager == nil ) {
     return; // No Manager found, just return (and try agaoin next time)
   }
@@ -163,8 +163,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)volumeDidMount:(NSNotification *)notification {
   NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
   
-  RMFAppDelegate *delegate = [NSApp delegate];
-  RMFFavoriteManager *favouriteManager = delegate.favoritesManager;
+  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
   if(favouriteManager == nil) {
     return; // no favourite Manager availabe
   }

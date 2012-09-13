@@ -8,13 +8,13 @@
 
 #import "FavouriteManagerTest.h"
 
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 
 @implementation FavouriteManagerTest
 
 - (void)setUp {
   [super setUp];
-  favouriteManager = [[RMFFavoriteManager alloc] init];
+  favouriteManager = [[RMFFavouriteManager alloc] init];
 }
 
 - (void)tearDown {

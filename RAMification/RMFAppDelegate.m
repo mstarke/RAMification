@@ -7,7 +7,7 @@
 //
 
 #import "RMFAppDelegate.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFSettingsController.h"
 #import "RMFMenuController.h"
 #import "RMFMountWatcher.h"
@@ -17,7 +17,7 @@
 @interface RMFAppDelegate ()
 
 @property (retain) RMFSettingsController *settingsController;
-@property (retain) RMFFavoriteManager* favoritesManager;
+@property (retain) RMFFavouriteManager* favoritesManager;
 @property (retain) RMFMenuController *menuController;
 @property (retain) RMFMountWatcher *mountWatcher;
 @property (retain) RMFMountController *mountController;
@@ -57,7 +57,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   // initalize alle controller and the preset manager
   _settingsController = [[RMFSettingsController alloc] init];
-  _favourtiesManager = [[RMFFavoriteManager alloc] init];
+  _favourtiesManager = [[RMFFavouriteManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
   _mountController = [[RMFMountController alloc] init];

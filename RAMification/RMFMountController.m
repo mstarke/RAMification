@@ -10,7 +10,7 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
 
@@ -64,7 +64,7 @@
 }
 
 - (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted {
-  RMFFavoriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  RMFFavouriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
   RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:path];
   if(ramdisk != nil) {
     ramdisk.isMounted = mounted;

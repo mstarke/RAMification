@@ -9,10 +9,16 @@
 #import "RMFMountWatcher.h"
 
 #import "RMFAppDelegate.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFRamdisk.h"
 
 #import <DiskArbitration/DiskArbitration.h>
+
+NSString * const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
+NSString * const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
+NSString * const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
+NSString * const RMFRamdiskKey = @"RMFRamdiskKey";
+NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 @interface RMFMountWatcher ()
 
@@ -40,12 +46,14 @@
 - (void)didMountVolume:(NSNotification *)notification {
   NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
-  RMFAppDelegate *delegate = [NSApp delegate];
-  RMFRamdisk *ramdisk = [delegate.favoritesManager findFavouriteForDevicePath:devicePath];
+  RMFFavouriteManager *favouritesManager = [RMFFavouriteManager manager];
+  RMFRamdisk *ramdisk = [favouritesManager findFavouriteForDevicePath:devicePath];
   if(ramdisk == nil || ramdisk.label != deviceName) {
     return; // No known favourite was mounted, ignore
   }
   ramdisk.isMounted = YES;
+  NSDictionary *userInfo = @{ RMFRamdiskKey : ramdisk };
+  [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@ was mounted!", ramdisk);
 }
 
@@ -58,6 +66,8 @@
   }
   ramdisk.isMounted = NO;
   ramdisk.devicePath = nil;
+  NSDictionary *userInfo = @{ RMFRamdiskKey : ramdisk };
+  [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidUnmountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@ was unmounted!", ramdisk);
 }
 
@@ -75,12 +85,14 @@
   CFRelease(disk);
   CFRelease(session);
   
-  RMFAppDelegate *delegate = [NSApp delegate];
-  RMFRamdisk *renamedDisk = [delegate.favoritesManager findFavouriteForDevicePath:devicePath];
+  RMFFavouriteManager *favouritesManager = [RMFFavouriteManager manager];
+  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteForDevicePath:devicePath];
   
   if(renamedDisk != nil) {
+    NSDictionary *userInfo = @{ RMFRamdiskKey : renamedDisk, RMFOldRamdiskLabelKey : renamedDisk.label };
     renamedDisk.label = newName;
     renamedDisk.devicePath = devicePath;
+    [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
   }
 }
 

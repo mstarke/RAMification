@@ -8,7 +8,8 @@
 
 #import "RMFBufferDeamon.h"
 
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
+#import "RMFMountWatcher.h"
 #import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
@@ -20,6 +21,9 @@
 @property (assign) NSDate *lastUpdate;
 
 - (void)update;
+- (void)didUnmountRamdisk:(NSNotification *)notification;
+- (void)didMountRamdisk:(NSNotification *)notification;
+- (void)didRenameRamdisk:(NSNotification *)notification;
 - (void)updateCallback;
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
 - (void)addWatchedPath:(NSString *)path;
@@ -47,7 +51,11 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
     _watchedDisks = [[NSMutableSet alloc] init];
     _eventStream = NULL;
     _lastUpdate = [[NSDate alloc] init];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(update) name:NSUserDefaultsDidChangeNotification object:nil];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    //[defaultCenter addObserver:self selector:@selector(update) name:NSUserDefaultsDidChangeNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didUnmountRamdisk:) name:RMFDidUnmountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didRenameRamdisk:) name:RMFDidRenameRamdiskNotification object:nil];
   }
   return self;
 }
@@ -55,7 +63,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
 - (void)update {
   //BOOL shouldBuffer = [[NSUserDefaults standardUserDefaults] boolForKey:RMFSettingsKeyDisableUnifiedBuffer];
   
-  RMFFavoriteManager *favoriteManager = [RMFFavoriteManager manager];
+  RMFFavouriteManager *favoriteManager = [RMFFavouriteManager manager];
   NSArray *mountedFavourites = [favoriteManager mountedFavourites];
   for(RMFRamdisk *ramdisk in mountedFavourites) {
     //[self setShouldBuffer:shouldBuffer forRamdisk:ramdisk];
@@ -108,6 +116,29 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
   }
 }
 
+- (void)didMountRamdisk:(NSNotification *)notification {
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  if(ramdisk != nil) {
+    [self addWatchedPath:[ramdisk.label volumePath]];
+  }
+}
+
+- (void)didUnmountRamdisk:(NSNotification *)notification {
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  if(ramdisk != nil) {
+    [self removeWatchedPath:[ramdisk.label volumePath]];
+  }
+}
+
+- (void)didRenameRamdisk:(NSNotification *)notification {
+  NSString *oldLabel = [[[notification userInfo] objectForKey:RMFOldRamdiskLabelKey] volumePath];
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  if(ramdisk != nil) {
+    [self removeWatchedPath:[oldLabel volumePath]];
+    [self addWatchedPath:[ramdisk.label volumePath]];
+  }
+}
+
 - (void)addWatchedPath:(NSString *)path {
   // Add the volume path to the watched paths
   BOOL isDirectory = NO;
@@ -117,18 +148,23 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
   }
   
   // Insert path into watched paths
+  if(![self.watchedDisks containsObject:path]) {
+    return; // path is already in watchlist
+  }
   [self.watchedDisks addObject:path];
   [self updateCallback];
 }
 
 - (void)removeWatchedPath:(NSString *)path {
-  [self.watchedDisks removeObject:path];
-  [self updateCallback];
+  if([self.watchedDisks containsObject:path]) {
+    [self.watchedDisks removeObject:path];
+    [self updateCallback];
+  }
 }
 
 - (void)disableCache:(BOOL)disable forPath:(NSString *)file {
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  if ( NO == [fileManager fileExistsAtPath:file] ) {
+  if(NO == [fileManager fileExistsAtPath:file]) {
     return; // No valid file found
   }
   

@@ -9,7 +9,7 @@
 #import "RMFFavoritesSettingsController.h"
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 
 @interface RMFFavoritesSettingsController ()
 
@@ -91,15 +91,16 @@
 # pragma mark actions
 
 - (void)addPreset:(id)sender {
-  RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.favoritesManager addNewFavourite];
+  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  [favouriteManager addNewFavourite];
   [tableView reloadData];
 }
 
 - (void)deletePreset:(id)sender {
   // find the selected preset
-  RMFAppDelegate *delegate = [NSApp delegate];
-  [delegate.favoritesManager deleteFavourite:[delegate.favoritesManager.favourites objectAtIndex:[tableView selectedRow]]];
+  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:[tableView selectedRow]];
+  [favouriteManager deleteFavourite:selectedFavourite];
   [tableView reloadData];
   
 }

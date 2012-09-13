@@ -8,7 +8,7 @@
 
 #import "RMFFavouritesTableViewDelegate.h"
 
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFSizeFormatter.h"
 #import "RMFRamdisk.h"
 
@@ -28,7 +28,7 @@
   }
   NSArray *columns = [NSArray arrayWithObjects:RMFRamdiskKeyForLabel, RMFRamdiskKeyForSize, nil];
   if([columns containsObject:[tableColumn identifier]]) {
-    RMFFavoriteManager *favouriteManager = [tableView dataSource];
+    RMFFavouriteManager *favouriteManager = [tableView dataSource];
     RMFRamdisk *ramdisk = [favouriteManager.favourites objectAtIndex:row];
     // We just prevent edition of the label and the size of mounted disks
     // Since these values would need us to remount the disk

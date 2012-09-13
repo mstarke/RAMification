@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
@@ -15,7 +15,7 @@
 #import "RMFFavouritesTableViewDelegate.h"
 
 // private interface
-@interface RMFFavoriteManager ()
+@interface RMFFavouriteManager ()
 
 @property (retain) NSMutableArray *favourites;
 
@@ -33,13 +33,13 @@
 
 
 // actual implementation
-@implementation RMFFavoriteManager
+@implementation RMFFavouriteManager
 
 @synthesize favourites = _favourites;
 
 #pragma mark convenience functions
 
-+ (RMFFavoriteManager *)manager {
++ (RMFFavouriteManager *)manager {
   RMFAppDelegate *delegate = [NSApp delegate];
   return [delegate favoritesManager];
 }

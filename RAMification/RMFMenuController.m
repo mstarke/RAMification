@@ -9,7 +9,7 @@
 #import "RMFMenuController.h"
 
 #import "RMFRamdisk.h"
-#import "RMFFavoriteManager.h"
+#import "RMFFavouriteManager.h"
 #import "RMFAppDelegate.h"
 #import "RMFCreateRamDiskOperation.h"
 #import "RMFSettingsController.h"
@@ -96,7 +96,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark create/update menu
 
 - (void)createFavouritesMenu {
-  RMFFavoriteManager *manager = ((RMFAppDelegate*)[NSApp delegate]).favoritesManager;
+  RMFFavouriteManager *manager = ((RMFAppDelegate*)[NSApp delegate]).favoritesManager;
   _favoritesMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   
   for(RMFRamdisk *favorite in manager.favourites) {
