@@ -9,11 +9,11 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 
-@class RMFFavouriteManager;
+@class RMFFavouritesManager;
 
 @interface FavouriteManagerTest : SenTestCase
 {
-  RMFFavouriteManager *favouriteManager;
+  RMFFavouritesManager *favouriteManager;
 
 }
 

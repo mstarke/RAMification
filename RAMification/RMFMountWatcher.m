@@ -9,7 +9,7 @@
 #import "RMFMountWatcher.h"
 
 #import "RMFAppDelegate.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFRamdisk.h"
 
 #import <DiskArbitration/DiskArbitration.h>
@@ -46,7 +46,7 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 - (void)didMountVolume:(NSNotification *)notification {
   NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
   NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
-  RMFFavouriteManager *favouritesManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *ramdisk = [favouritesManager findFavouriteForDevicePath:devicePath];
   if(ramdisk == nil || ramdisk.label != deviceName) {
     return; // No known favourite was mounted, ignore
@@ -59,8 +59,8 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 - (void)didUnmountVolume:(NSNotification *)notification {
   NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
-  RMFAppDelegate *delegate = [NSApp delegate];
-  RMFRamdisk *ramdisk = [delegate.favoritesManager findFavouriteForDevicePath:devicePath];
+  RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
+  RMFRamdisk *ramdisk = [favouritesManager findFavouriteForDevicePath:devicePath];
   if( ramdisk == nil ) {
     return; // No known favourite was unmounted, ignore
   }
@@ -85,7 +85,7 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   CFRelease(disk);
   CFRelease(session);
   
-  RMFFavouriteManager *favouritesManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *renamedDisk = [favouritesManager findFavouriteForDevicePath:devicePath];
   
   if(renamedDisk != nil) {

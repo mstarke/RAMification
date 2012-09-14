@@ -6,6 +6,8 @@
 
 #import "RMFSettingsController.h"
 
+#import "RMFAppDelegate.h"
+
 #import <IOKit/ps/IOPSKeys.h>
 #import <IOKit/ps/IOPowerSources.h>
 #import <SystemConfiguration/SystemConfiguration.h>
@@ -13,27 +15,35 @@
 NSString *const kHiberNateModeKey = @"Hibernate Mode";
 NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerManagement/CurrentSettings";
 
+static RMFSettingsController *sharedSingleton;
 
 @interface RMFSettingsController ()
+
 @property (retain) RMFGeneralSettingsController *generalSettingsController;
 @property (retain) RMFFavoritesSettingsController *presetSettingsController;
 @property (retain) NSToolbar* toolbar;
 @property (retain) NSDictionary *paneController;
 @property (assign) NSUInteger hibernateMode;
 @property (retain) NSView *emptyView;
+
 - (void) readHibernateMode;
+
 @end
 
 
 @implementation RMFSettingsController
 
-@synthesize settingsWindow = _settingsWindow;
-@synthesize toolbar = _toolbar;
-@synthesize presetSettingsController = _presetSettingsController;
-@synthesize generalSettingsController = _generalSettingsController;
-@synthesize paneController = _paneController;
-@synthesize hibernateMode = _hibernateMode;
-@synthesize emptyView = _emptyView;
++ (void)initialize {
+  static BOOL initialized = NO;
+  if(!initialized) {
+    initialized = YES;
+    sharedSingleton = [[RMFSettingsController alloc] init];
+  }
+}
+
++ (RMFSettingsController *)sharedController {
+  return sharedSingleton;
+}
 
 # pragma mark object lifecycle
 

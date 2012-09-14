@@ -9,7 +9,7 @@
 #import "RMFMenuController.h"
 
 #import "RMFRamdisk.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFAppDelegate.h"
 #import "RMFCreateRamDiskOperation.h"
 #import "RMFSettingsController.h"
@@ -31,7 +31,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 @property (retain) NSOperationQueue *queue;
 @property (retain) NSMutableDictionary *menuItemsToFavouritesMap;
 
-// creates the status item to be inserted in the menu bar 
+// creates the status item to be inserted in the menu bar
 - (void) createStatusItem;
 // creates the menu that is added to the status item
 - (void) createMenu;
@@ -58,14 +58,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @implementation RMFMenuController
 
-@synthesize noFavouritesMenuItem = _noFavouritesMenuItem;
-@synthesize hibernateWarningMenuItem = _hibernateWarningMenuItem;
-@synthesize menu = _menu;
-@synthesize favoritesMenu = _favoritesMenu;
-@synthesize statusItem = _statusItem;
-@synthesize queue = _queue;
-@synthesize menuItemsToFavouritesMap = _menuItemsToFavouritesMap;
-
 #pragma mark object lifecycle
 - (id)init {
   self = [super init];
@@ -73,10 +65,11 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     _menuItemsToFavouritesMap = [[NSMutableDictionary alloc] init];
     [self createMenu];
     [self createStatusItem];
-    [((RMFAppDelegate*)[NSApp delegate]).favoritesManager addObserver:self
-                                                           forKeyPath:RMFFavouritesManagerFavourites
-                                                              options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld )
-                                                              context:nil];
+    RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
+    [favouritesManager addObserver:self
+                        forKeyPath:RMFFavouritesManagerFavourites
+                           options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld )
+                           context:nil];
   }
   return self;
 }
@@ -96,7 +89,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark create/update menu
 
 - (void)createFavouritesMenu {
-  RMFFavouriteManager *manager = ((RMFAppDelegate*)[NSApp delegate]).favoritesManager;
+  RMFFavouritesManager *manager = [RMFFavouritesManager sharedManager];
   _favoritesMenu = [[NSMenu alloc] initWithTitle:@"PresetsSubmenu"];
   
   for(RMFRamdisk *favorite in manager.favourites) {
@@ -178,8 +171,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [self.menu addItem:item];
   [item release];
   
-  RMFAppDelegate *delegate = [NSApp delegate];
-  BOOL shouldDisplayWarning = ( [delegate.settingsController hibernateMode] != 0);
+  RMFSettingsController *settingsController = [RMFSettingsController sharedController];
+  BOOL shouldDisplayWarning = ( [settingsController hibernateMode] != 0);
   [self setHibernateWarningVisible:shouldDisplayWarning];
 }
 
@@ -243,7 +236,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     
     return TRUE;
   }
-} 
+}
 
 - (void)updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk {
   if( [[_favoritesMenu itemArray] containsObject:item] ) {
@@ -254,7 +247,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 - (void) removeFavouriteMenuItems:(NSArray *)favourites {
   for(RMFRamdisk *disk in favourites) {
-    [self removeFavouriteMenuItem:disk]; 
+    [self removeFavouriteMenuItem:disk];
   }
 }
 
@@ -287,7 +280,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 - (void) showSettingsTab:(id)sender {
-  [((RMFAppDelegate*)[NSApp delegate]).settingsController showSettings:[sender representedObject]];
+  RMFSettingsController *settingsController = [RMFSettingsController sharedController];
+  [settingsController showSettings:[sender representedObject]];
 }
 
 - (void)handleFavouriteClicked:(id)sender {
@@ -332,7 +326,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
       }
       [_menu removeItem:_hibernateWarningMenuItem];
     }
-  } 
+  }
 }
 
 # pragma mark KVO

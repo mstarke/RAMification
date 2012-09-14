@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class RMFSettingsController;
-@class RMFFavouriteManager;
+@class RMFFavouritesManager;
 @class RMFMenuController;
 @class RMFMountWatcher;
 @class RMFMountController;
@@ -17,9 +17,6 @@
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (retain, readonly) RMFSettingsController *settingsController;
-@property (retain, readonly) RMFFavouriteManager* favoritesManager;
-@property (retain, readonly) RMFMenuController *menuController;
 @property (retain, readonly) RMFMountWatcher *mountWatcher;
 @property (retain, readonly) RMFMountController *mountController;
 @property (retain, readonly) RMFSyncDaemon *syncDaemon;

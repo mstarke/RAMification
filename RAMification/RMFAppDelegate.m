@@ -7,7 +7,7 @@
 //
 
 #import "RMFAppDelegate.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFSettingsController.h"
 #import "RMFMenuController.h"
 #import "RMFMountWatcher.h"
@@ -16,8 +16,6 @@
 
 @interface RMFAppDelegate ()
 
-@property (retain) RMFSettingsController *settingsController;
-@property (retain) RMFFavouriteManager* favoritesManager;
 @property (retain) RMFMenuController *menuController;
 @property (retain) RMFMountWatcher *mountWatcher;
 @property (retain) RMFMountController *mountController;
@@ -27,13 +25,6 @@
 
 
 @implementation RMFAppDelegate
-
-@synthesize favoritesManager = _favourtiesManager;
-@synthesize settingsController = _settingsController;
-@synthesize menuController = _menuController;
-@synthesize mountWatcher = _mountWatcher;
-@synthesize mountController = _mountController;
-@synthesize syncDaemon = _syncDaemon;
 
 # pragma mark object lifecycle
 
@@ -46,9 +37,7 @@
 }
 
 - (void)dealloc {
-  self.settingsController = nil;  
   [super dealloc];
-  
   // remove the toolbardelegate from the 
 }
 
@@ -56,8 +45,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   // initalize alle controller and the preset manager
-  _settingsController = [[RMFSettingsController alloc] init];
-  _favourtiesManager = [[RMFFavouriteManager alloc] init];
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
   _mountController = [[RMFMountController alloc] init];

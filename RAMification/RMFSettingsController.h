@@ -14,6 +14,9 @@
 
 @property (readonly) NSUInteger hibernateMode;
 @property (assign) IBOutlet NSWindow *settingsWindow;
+
++ (RMFSettingsController *)sharedController;
+
 - (void) showSettings: (id)sender;
 
 @end

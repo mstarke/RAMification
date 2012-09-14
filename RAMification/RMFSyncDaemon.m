@@ -10,7 +10,7 @@
 
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFSyncRamDiskOperation.h"
 #import "RMFSettingsKeys.h"
 
@@ -18,9 +18,11 @@
 #import <DiskArbitration/DiskArbitration.h>
 
 @interface RMFSyncDaemon ()
+
 @property (assign) DAApprovalSessionRef approvalSession;
 @property (retain) NSOperationQueue *queue;
 @property (retain) NSTimer *backupTimer;
+
 - (void) performBackup;
 - (BOOL) canUnmount:(RMFRamdisk *)ramdisk;
 - (void) unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk;
@@ -30,13 +32,14 @@
 - (void) enableTimer;
 - (void) volumeDidMount:(NSNotification *)notification;
 - (void) userDefaultsDidChange:(NSNotification *)notification;
+
 @end
 
 // Static callback to be used to pipe the call back to the foundation object
 static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
-  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
   RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:bsdName];
   BOOL isReady = [syncDamon canUnmount:ramdisk];
@@ -49,10 +52,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 @implementation RMFSyncDaemon
-
-@synthesize approvalSession = _approvalSession;
-@synthesize queue = _queue;
-@synthesize backupTimer;
 
 #pragma mark lifecylce
 
@@ -124,7 +123,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
     return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically; 
   };
-  RMFFavouriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   if(favouriteManager == nil ) {
     return; // No Manager found, just return (and try agaoin next time)
   }
@@ -163,7 +162,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)volumeDidMount:(NSNotification *)notification {
   NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
   
-  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   if(favouriteManager == nil) {
     return; // no favourite Manager availabe
   }

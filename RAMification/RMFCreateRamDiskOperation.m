@@ -18,8 +18,6 @@
 
 @implementation RMFCreateRamDiskOperation
 
-@synthesize ramdisk = _ramdisk;
-
 - (id) initWithRamdisk:(RMFRamdisk *)ramdisk {
   self = [super init];
   if (self) {

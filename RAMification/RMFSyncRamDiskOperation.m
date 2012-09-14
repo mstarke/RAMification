@@ -21,9 +21,6 @@
 
 @implementation RMFSyncRamDiskOperation
 
-@synthesize ramdisk = _ramdisk;
-@synthesize syncMode = _syncMode;
-
 - (id)init {
   self = [self initWithRamdisk:nil mode:RMFSyncModeNone];
   return self;

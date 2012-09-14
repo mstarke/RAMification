@@ -8,7 +8,7 @@
 
 #import "RMFBufferDeamon.h"
 
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFMountWatcher.h"
 #import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
@@ -63,7 +63,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
 - (void)update {
   //BOOL shouldBuffer = [[NSUserDefaults standardUserDefaults] boolForKey:RMFSettingsKeyDisableUnifiedBuffer];
   
-  RMFFavouriteManager *favoriteManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favoriteManager = [RMFFavouritesManager sharedManager];
   NSArray *mountedFavourites = [favoriteManager mountedFavourites];
   for(RMFRamdisk *ramdisk in mountedFavourites) {
     //[self setShouldBuffer:shouldBuffer forRamdisk:ramdisk];

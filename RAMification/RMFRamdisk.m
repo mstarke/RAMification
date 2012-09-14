@@ -30,16 +30,6 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 
 @implementation RMFRamdisk
 
-@synthesize size = _size;
-@synthesize label = _label;
-@synthesize devicePath;
-@synthesize isAutomount = _isAutomount;
-@synthesize isMounted = _isMounted;
-@synthesize isDirty = _isDirty;
-@synthesize activity = _activity;
-@synthesize lastBackupDate = _lastBackupDate;
-@synthesize backupMode = _backupMode;
-
 #pragma mark convinent object creation
 
 + (RMFRamdisk *) volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount {

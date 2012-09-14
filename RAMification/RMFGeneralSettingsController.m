@@ -29,16 +29,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 @implementation RMFGeneralSettingsController
 
-@synthesize labelInput = _label;
-@synthesize sizeInput = _size;
-@synthesize backupIntervalInput = _backupInterval;
-@synthesize sizeStepper = _sizeStepper;
-@synthesize backupIntervalStepper = _backupIntervalStepper;
-@synthesize startAtLoginCheckButton = _startAtLoginCheckButton;
-@synthesize sizeInfo = _sizeInfo;
-@synthesize hibernateWarning = _hibernateWarning;
-@synthesize isBufferDisabled = _isBufferDisabeld;
-
 #pragma mark RMFSettingsController Protocol
 
 + (NSString *) identifier {
@@ -112,7 +102,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   [self.isBufferDisabled bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   
-  BOOL shouldHide = (0 != [((RMFAppDelegate *)[NSApp delegate]).settingsController hibernateMode]);
+  BOOL shouldHide = (0 != [[RMFSettingsController sharedController] hibernateMode]);
   [self.hibernateWarning setHidden:shouldHide];
 }
 

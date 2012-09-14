@@ -11,13 +11,13 @@
 @class RMFRamdisk;
 
 // Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
-@interface RMFFavouriteManager : NSObject <NSTableViewDataSource>
+@interface RMFFavouritesManager : NSObject <NSTableViewDataSource>
 
 // List of all known favourites
 @property (readonly, retain) NSMutableArray *favourites;
 
 // Returns the global favourites manager
-+ (RMFFavouriteManager *)manager;
++ (RMFFavouritesManager *)sharedManager;
 
 // Finds all mounted favourites
 // @return array of mounted favourites

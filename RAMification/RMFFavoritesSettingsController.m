@@ -9,7 +9,7 @@
 #import "RMFFavoritesSettingsController.h"
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 
 @interface RMFFavoritesSettingsController ()
 
@@ -20,8 +20,6 @@
 @end
 
 @implementation RMFFavoritesSettingsController
-
-@synthesize tableDelegate = _tableDelegate;
 
 + (NSString *) identifier {
   return @"PresetSettings";
@@ -84,21 +82,21 @@
   [sizeColumn release];
   [backupModeColum release];
   
-  tableView.dataSource = [[NSApp delegate] favoritesManager];
+  tableView.dataSource = [RMFFavouritesManager sharedManager];
   tableView.delegate = self.tableDelegate;
 }
 
 # pragma mark actions
 
 - (void)addPreset:(id)sender {
-  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   [favouriteManager addNewFavourite];
   [tableView reloadData];
 }
 
 - (void)deletePreset:(id)sender {
   // find the selected preset
-  RMFFavouriteManager *favouriteManager = [RMFFavouriteManager manager];
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:[tableView selectedRow]];
   [favouriteManager deleteFavourite:selectedFavourite];
   [tableView reloadData];

@@ -10,9 +10,11 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
-#import "RMFFavouriteManager.h"
+#import "RMFFavouritesManager.h"
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
+
+static RMFMountController *sharedSingleton;
 
 @interface RMFMountController ()
 
@@ -25,7 +27,17 @@
 
 @implementation RMFMountController
 
-@synthesize queue = _queue;
++ (void)initialize {
+  static BOOL initialized = NO;
+  if(!initialized) {
+    initialized = YES;
+    sharedSingleton = [[RMFMountController alloc] init];
+  }
+}
+
++ (RMFMountController *)sharedController {
+  return sharedSingleton;
+}
 
 - (id)init {
   self = [super init];
@@ -64,7 +76,7 @@
 }
 
 - (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted {
-  RMFFavouriteManager *favouriteManager = ((RMFAppDelegate *)[NSApp delegate]).favoritesManager;
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:path];
   if(ramdisk != nil) {
     ramdisk.isMounted = mounted;
