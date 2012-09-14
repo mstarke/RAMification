@@ -44,7 +44,7 @@
 		4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */; };
 		4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */; };
 		4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */; };
-		4CF8842914926DC2000EE2D7 /* RMFFavouriteManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFFavouriteManager.m */; };
+		4CF8842914926DC2000EE2D7 /* RMFFavouritesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,8 +122,8 @@
 		4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSizeFormatter.h; sourceTree = "<group>"; };
 		4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSizeFormatter.m; sourceTree = "<group>"; };
 		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
-		4CF8842714926DC2000EE2D7 /* RMFFavouriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouriteManager.h; sourceTree = "<group>"; };
-		4CF8842814926DC2000EE2D7 /* RMFFavouriteManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouriteManager.m; sourceTree = "<group>"; };
+		4CF8842714926DC2000EE2D7 /* RMFFavouritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesManager.h; sourceTree = "<group>"; };
+		4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,8 +336,8 @@
 			children = (
 				4CB61003148AA2DD00166397 /* RMFRamdisk.h */,
 				4CB61004148AA2DE00166397 /* RMFRamdisk.m */,
-				4CF8842714926DC2000EE2D7 /* RMFFavouriteManager.h */,
-				4CF8842814926DC2000EE2D7 /* RMFFavouriteManager.m */,
+				4CF8842714926DC2000EE2D7 /* RMFFavouritesManager.h */,
+				4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -466,7 +466,7 @@
 				4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */,
 				4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */,
 				4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */,
-				4CF8842914926DC2000EE2D7 /* RMFFavouriteManager.m in Sources */,
+				4CF8842914926DC2000EE2D7 /* RMFFavouritesManager.m in Sources */,
 				4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */,
 				4C4FA61D149816060082981C /* RMFMenuController.m in Sources */,
 				4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */,
