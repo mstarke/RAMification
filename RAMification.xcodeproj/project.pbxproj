@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C05C6DB15B4E01000495255 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DA15B4E01000495255 /* IOKit.framework */; };
 		4C05C6DE15B4E64E00495255 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */; };
+		4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1BC6FF1609212000A7720C /* NSString+RMFMenuTools.m */; };
 		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
 		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27BF9015F92323008F723D /* RMFBufferDeamon.m */; };
@@ -60,6 +61,8 @@
 /* Begin PBXFileReference section */
 		4C05C6DA15B4E01000495255 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4C1BC6FE1609212000A7720C /* NSString+RMFMenuTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFMenuTools.h"; sourceTree = "<group>"; };
+		4C1BC6FF1609212000A7720C /* NSString+RMFMenuTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RMFMenuTools.m"; sourceTree = "<group>"; };
 		4C264E5615A631E500D358B5 /* RMFMountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountController.h; sourceTree = "<group>"; };
 		4C264E5715A631E500D358B5 /* RMFMountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountController.m; sourceTree = "<group>"; };
 		4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
@@ -150,6 +153,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C1BC7021609248600A7720C /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */,
+				4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */,
+				4C1BC6FE1609212000A7720C /* NSString+RMFMenuTools.h */,
+				4C1BC6FF1609212000A7720C /* NSString+RMFMenuTools.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		4C2A4AEE1486ED07009F3AB0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,8 +225,6 @@
 		4C5039931495663500089F86 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */,
-				4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */,
 				4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */,
 				4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */,
 				4CDBC8BC149D532E00CDBDEC /* RMFSyncDaemon.h */,
@@ -273,6 +285,7 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
+				4C1BC7021609248600A7720C /* Categories */,
 				4C5039931495663500089F86 /* Tools */,
 				4CEF3E74148ED25100232818 /* Model */,
 				4C2A4AF11486ED8D009F3AB0 /* Protcols */,
@@ -476,6 +489,7 @@
 				4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */,
 				4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */,
 				4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */,
+				4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

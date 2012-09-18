@@ -61,10 +61,8 @@ static RMFFavouritesManager *sharedSingleton;
     NSLog(@"Trying to load presets!");
     self.favourites = [NSMutableArray array];
     NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFSettingsKeyFavourites];
-    
     if(data != nil) {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-      
       if(favourites != nil) {
         self.favourites = [NSMutableArray arrayWithArray:favourites];
       }
@@ -99,19 +97,15 @@ static RMFFavouritesManager *sharedSingleton;
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
     favourite.size = [object integerValue];
   }
-  
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForAutomount]) {
     favourite.isAutomount = [object boolValue];
   }
-  
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForLabel]) {
     favourite.label = object;
   }
-  
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
     favourite.backupMode = [object intValue];
   }
-  
   [self synchronizeDefaults];
 }
 
@@ -140,8 +134,7 @@ static RMFFavouritesManager *sharedSingleton;
   if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[self.favourites count]];
     [self synchronizeDefaults];
-  }
-  
+  } 
   return !isDuplicate;
 }
 
@@ -177,9 +170,17 @@ static RMFFavouritesManager *sharedSingleton;
   return nil;
 }
 
-
 - (void)updateFavourites {
   // update favourites
+}
+
+- (void)initializeFavourites {
+  for(RMFRamdisk *ramdisk in self.favourites) {
+    if(ramdisk.isAutomount) {
+      RMFMountController *mountController = [RMFMountController sharedController];
+      [mountController mount:ramdisk];
+    }
+  }
 }
 
 # pragma mark KVC
@@ -197,16 +198,6 @@ static RMFFavouritesManager *sharedSingleton;
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)initializeFavourites {
-  for(RMFRamdisk *ramdisk in self.favourites) {
-    if(ramdisk.isAutomount) {
-      RMFMountController *mountController = [RMFMountController sharedController];
-      [mountController mount:ramdisk];
-    }
-  }
-  
 }
 
 @end
