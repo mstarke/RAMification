@@ -273,7 +273,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 # pragma mark actions
-
 - (void) quitApplication {
   //Unmount ramdisk?
   [[NSApplication sharedApplication] terminate:nil];
@@ -342,9 +341,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [self updateFavourite:ramdisk];
 }
 
-
 # pragma mark KVO
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
   if( [keyPath isEqualToString:RMFRamDiskLabel] || [keyPath isEqualToString:RMFRamDiskIsDirty] ) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {

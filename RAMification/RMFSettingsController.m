@@ -20,7 +20,7 @@ static RMFSettingsController *sharedSingleton;
 @interface RMFSettingsController ()
 
 @property (retain) RMFGeneralSettingsController *generalSettingsController;
-@property (retain) RMFFavoritesSettingsController *presetSettingsController;
+@property (retain) RMFFavoritesSettingsController *favouriteSettingsController;
 @property (retain) NSToolbar* toolbar;
 @property (retain) NSDictionary *paneController;
 @property (assign) NSUInteger hibernateMode;
@@ -46,22 +46,17 @@ static RMFSettingsController *sharedSingleton;
 }
 
 # pragma mark object lifecycle
-
 - (id)init {
   self = [super init];
   if (self) {
     // load the window and create all the necessary gui elements
     [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
-    
     // Initalize the controllers
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
-    _presetSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
-    
-    _paneController = [[NSDictionary alloc] initWithObjectsAndKeys:_generalSettingsController,
-                                                                        [RMFGeneralSettingsController identifier],
-                                                                        _presetSettingsController,
-                                                                        [RMFFavoritesSettingsController identifier], nil];
-    
+    _favouriteSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
+      
+    _paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavoritesSettingsController identifier] : _favouriteSettingsController };
+ 
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = YES;
     self.toolbar.delegate = self;
@@ -76,7 +71,7 @@ static RMFSettingsController *sharedSingleton;
   self.toolbar = nil;
   self.paneController = nil;
   self.generalSettingsController = nil;
-  self.presetSettingsController = nil;
+  self.favouriteSettingsController = nil;
   [super dealloc];
 }
 

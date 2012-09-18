@@ -30,8 +30,7 @@
 }
 
 + (NSToolbarItem *) toolbarItem {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]];
-  
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]]; 
   [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
   [item setLabel:[RMFFavoritesSettingsController label]];
   [item setAction:@selector(showSettings:)];
@@ -39,7 +38,6 @@
 }
 
 #pragma mark init/dealloc
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
   if (self) {    
@@ -53,7 +51,6 @@
 }
 
 #pragma mark view loading
-
 // override to wait if a view was loaded
 - (void)loadView {
   [super loadView];
@@ -87,7 +84,6 @@
 }
 
 # pragma mark actions
-
 - (void)addPreset:(id)sender {
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   [favouriteManager addNewFavourite];

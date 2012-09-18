@@ -76,7 +76,6 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
     _activity = RMFRamdiskIdle;
     _backupMode = RMFNoBackup;
     _lastBackupDate = [NSDate distantPast];
-    ;
   }
   return self;
 }
@@ -93,7 +92,6 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 }
 
 #pragma mark NSCoder
-
 - (id)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [[RMFRamdisk alloc] init];
@@ -115,8 +113,8 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
   }
 }
 
-- (void) setLabel:(NSString *)label {
-  if( self.label  != label ) {
+- (void)setLabel:(NSString *)label {
+  if(self.label  != label) {
     [_label release];
     _label = [label retain];
     // If we are mounted we are dirty,
@@ -125,8 +123,8 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
   }
 }
 
-- (void) setSize:(NSUInteger)size {
-  if( self.size != size ) {
+- (void)setSize:(NSUInteger)size {
+  if(self.size != size) {
     _size = size;
     // Only get dirty if mounted
     // Otherwise keep dirty state
@@ -134,8 +132,8 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
   }
 }
 
-- (void) setIsMounted:(BOOL)isMounted {
-  if( _isMounted != isMounted ) {
+- (void)setIsMounted:(BOOL)isMounted {
+  if(_isMounted != isMounted) {
     _isMounted = isMounted;
     // Mounting clears the dirty flag
     _isDirty &= _isMounted;
@@ -144,11 +142,10 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 
 - (BOOL)isEqual:(id)object {
   BOOL isEqual = NO;
-  
   if([object isMemberOfClass:[RMFRamdisk class]]) {
     RMFRamdisk* other = (RMFRamdisk*)object;
     isEqual = [self.label isEqualToString:other.label];
-    isEqual &= ( self.size == other.size );
+    isEqual &= (self.size == other.size);
   }
   return isEqual;
 }
