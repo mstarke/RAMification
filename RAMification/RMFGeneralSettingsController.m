@@ -52,7 +52,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"GeneralPane" bundle:[NSBundle mainBundle]];
   if (self) {
-    // init
+    NSLog(@"Created %@", [self class]);
   } 
   return self;
 }

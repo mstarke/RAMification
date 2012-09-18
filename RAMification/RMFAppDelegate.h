@@ -17,10 +17,6 @@
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
-@property (retain, readonly) RMFMountWatcher *mountWatcher;
-@property (retain, readonly) RMFMountController *mountController;
-@property (retain, readonly) RMFSyncDaemon *syncDaemon;
-
 - (NSString *)executabelName;
 
 @end

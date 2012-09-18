@@ -35,8 +35,12 @@
 
 - (void) main {  
   // stop if we are cancelled or are a already mounted volume
-  if([self isCancelled] || [self.ramdisk.label isUsedAsVolumeName]) {  
-    NSLog(@"We got canceled or the Volume is already present!");
+  if([self isCancelled]) {
+    NSLog(@"We got canceled!");
+    return;
+  }
+  if([self.ramdisk.label isUsedAsVolumeName]) {
+    NSLog(@"The Volume is already present!");
     return;
   }
   
@@ -62,7 +66,7 @@
   NSFileHandle *outputFileHandle = [output fileHandleForReading];
   NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
   NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-  self.ramdisk.devicePath = deviceName;
+  self.ramdisk.bsdDevice = [strippedDeviceName lastPathComponent];
   [deviceName release];
   [createDisk release];
   

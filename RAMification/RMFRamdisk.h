@@ -35,6 +35,7 @@ typedef enum RMFRamdiskBackupModeType {
 @property (nonatomic, retain, setter=setLabel:) NSString* label;
 @property (nonatomic, assign, setter=setSize:) NSUInteger size;
 @property (retain) NSString *devicePath;
+@property (retain) NSString *bsdDevice;
 @property (assign) BOOL isAutomount;
 @property (nonatomic, assign, setter=setIsMounted:) BOOL isMounted;
 @property (assign) RMFRamdiskAcitivity activity;

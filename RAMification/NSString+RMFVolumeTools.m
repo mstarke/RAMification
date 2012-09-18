@@ -70,7 +70,7 @@
   NSPredicate *pathPredicate = [NSPredicate predicateWithBlock:pathBlock];
   NSArray *matchingPaths = [mountedMedia filteredArrayUsingPredicate:pathPredicate];
   // return if we are in the array (name based search)
-  return ([matchingPaths count] == 0);
+  return ([matchingPaths count] > 0);
 }
 
 - (NSString *)volumePath

@@ -8,18 +8,17 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
-#import "RMFSettingsController.h"
 #import "RMFMenuController.h"
 #import "RMFMountWatcher.h"
-#import "RMFMountController.h"
 #import "RMFSyncDaemon.h"
+#import "RMFBufferDeamon.h"
 
 @interface RMFAppDelegate ()
 
 @property (retain) RMFMenuController *menuController;
 @property (retain) RMFMountWatcher *mountWatcher;
-@property (retain) RMFMountController *mountController;
 @property (retain) RMFSyncDaemon *syncDaemon;
+@property (retain) RMFBufferDeamon *bufferDaemon;
 
 @end
 
@@ -44,11 +43,15 @@
 #pragma mark NSApplicationDelegate protocoll
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  // initalize alle controller and the preset manager
+  /*
+   Initialize all Controllers and Daemons that work independently
+   */
   _menuController = [[RMFMenuController alloc] init];
   _mountWatcher = [[RMFMountWatcher alloc] init];
-  _mountController = [[RMFMountController alloc] init];
   _syncDaemon = [[RMFSyncDaemon alloc] init];
+  _bufferDaemon = [[RMFBufferDeamon alloc] init];
+  
+  [[RMFFavouritesManager sharedManager] initializeFavourites];
 }
 
 - (NSString *)executabelName {

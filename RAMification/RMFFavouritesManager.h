@@ -10,39 +10,70 @@
 
 @class RMFRamdisk;
 
-// Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
+/*
+ Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
+ 
+ It gives a interface to search for favourites based on different criteria
+ 
+ */
 @interface RMFFavouritesManager : NSObject <NSTableViewDataSource>
 
-// List of all known favourites
+/*
+ List of all known favourites
+ */
 @property (readonly, retain) NSMutableArray *favourites;
 
-// Returns the global favourites manager
+/*
+ Returns the global favourites manager
+ */
 + (RMFFavouritesManager *)sharedManager;
 
-// Finds all mounted favourites
-// @return array of mounted favourites
+/*
+ Finds all mounted favourites
+ @return array of mounted favourites
+ */
 - (NSArray *)mountedFavourites;
 
-// Add a new Favourite
-// @return created ramdisk, nil if none was created
+/*
+ Add a new Favourite
+ @return created ramdisk, nil if none was created
+ */
 - (RMFRamdisk *)addNewFavourite;
 
-// Find a favourite with the exact given name (no wildcards, no substring)
-// @param name the name to search
-// @return mathing favourite, nil if none was found
+/*
+ Find a favourite with the exact given name (no wildcards, no substring)
+ @param name the name to search
+ @return mathing favourite, nil if none was found
+ */
 - (RMFRamdisk *)findFavouriteForName:(NSString *)name;
 
-// Find a favourite with the given device path
-// @param path the Device path to look for
-// @return matching favourite, nil if nothing was found
+/*
+ Find a favourite with the given device path
+ @param path the Device path to look for
+ @return matching favourite, nil if nothing was found
+ */
 - (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path;
 
-// Delete the given favourite
-// @param ramdisk favourite to delete
+/*
+ Looks for the Favourite with the given bsd device name
+ */
+- (RMFRamdisk *)findFavouriteForBsdDevice:(NSString *)device;
+
+/*
+ Delete the given favourite
+ @param ramdisk favourite to delete
+ */
 - (void) deleteFavourite:(RMFRamdisk *)ramdisk;
 
-// update favourites
+/*
+ update favourites
+ */
 - (void) updateFavourites;
+
+/*
+ initalize Favourites
+ */
+- (void) initializeFavourites;
 
 
 @end

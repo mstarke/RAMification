@@ -43,7 +43,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
   if (self) {    
-    // nothing to do;
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }

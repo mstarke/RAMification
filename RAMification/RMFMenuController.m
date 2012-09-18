@@ -14,6 +14,7 @@
 #import "RMFCreateRamDiskOperation.h"
 #import "RMFSettingsController.h"
 #import "RMFMountController.h"
+#import "RMFMountWatcher.h"
 #import "NSString+RMFVolumeTools.h"
 
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
@@ -53,6 +54,9 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 - (void) handleFavouriteClicked:(id)sender;
 // Updates the menuitem to the changes in the ramdisk
 - (void) updateMenuItem:(NSMenuItem *)item ramDisk:(RMFRamdisk *)ramDisk;
+
+- (void)ramDiskChanged:(NSNotification *)notification;
+
 @end
 
 
@@ -66,10 +70,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [self createMenu];
     [self createStatusItem];
     RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-    [favouritesManager addObserver:self
-                        forKeyPath:RMFFavouritesManagerFavourites
-                           options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld )
-                           context:nil];
+    [favouritesManager addObserver:self forKeyPath:RMFFavouritesManagerFavourites options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidMountRamdiskNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidUnmountRamdiskNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidRenameRamdiskNotification object:nil];
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }
@@ -288,15 +294,15 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   NSMenuItem* item = sender;
   NSValue *presetId = [_menuItemsToFavouritesMap objectForKey:[NSValue valueWithNonretainedObject:item]];
   RMFRamdisk* ramdisk = [presetId nonretainedObjectValue];
-  RMFAppDelegate* delegate = [NSApp delegate];
-  RMFMountController* mountController = delegate.mountController;
-  [mountController toggleMounted:ramdisk];
+  [[RMFMountController sharedController] toggleMounted:ramdisk];
 }
 
-- (void) updateFavourite:(RMFRamdisk *)favourite {
+- (void)updateFavourite:(RMFRamdisk *)favourite {
   NSValue *itemId = [[_menuItemsToFavouritesMap allKeysForObject:[NSValue valueWithNonretainedObject:favourite]] lastObject];
   NSMenuItem *item = [itemId nonretainedObjectValue];
   [item setTitle:favourite.label];
+  NSInteger state = favourite.isMounted ? NSOnState : NSOffState;
+  [item setState:state];
 }
 
 - (void) removeRamdisk {
@@ -328,6 +334,17 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     }
   }
 }
+
+# pragma mark Notifications
+- (void)ramDiskChanged:(NSNotification *)notification {
+  NSDictionary *userInfo = [notification userInfo];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFRamdiskKey];
+  if(ramdisk == nil) {
+    return; // no ramdisk sent
+  }
+  [self updateFavourite:ramdisk];
+}
+
 
 # pragma mark KVO
 

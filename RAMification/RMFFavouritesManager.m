@@ -10,6 +10,7 @@
 
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
+#import "RMFMountController.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 #import "RMFFavouritesTableViewDelegate.h"
@@ -68,6 +69,7 @@ static RMFFavouritesManager *sharedSingleton;
         self.favourites = [NSMutableArray arrayWithArray:favourites];
       }
     }
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }
@@ -109,7 +111,7 @@ static RMFFavouritesManager *sharedSingleton;
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
     favourite.backupMode = [object intValue];
   }
-
+  
   [self synchronizeDefaults];
 }
 
@@ -154,7 +156,7 @@ static RMFFavouritesManager *sharedSingleton;
     if([ramdisk.label isEqualToString:name]) {
       return ramdisk;
     }
-  } 
+  }
   return nil;}
 
 - (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path {
@@ -162,9 +164,19 @@ static RMFFavouritesManager *sharedSingleton;
     if([ramdisk.devicePath isEqualToString:path]) {
       return ramdisk;
     }
-  } 
+  }
   return nil;
 }
+
+- (RMFRamdisk *)findFavouriteForBsdDevice:(NSString *)device {
+  for(RMFRamdisk *ramdisk in self.favourites){
+    if([ramdisk.bsdDevice isEqualToString:device]) {
+      return ramdisk;
+    }
+  }
+  return nil;
+}
+
 
 - (void)updateFavourites {
   // update favourites
@@ -185,6 +197,16 @@ static RMFFavouritesManager *sharedSingleton;
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)initializeFavourites {
+  for(RMFRamdisk *ramdisk in self.favourites) {
+    if(ramdisk.isAutomount) {
+      RMFMountController *mountController = [RMFMountController sharedController];
+      [mountController mount:ramdisk];
+    }
+  }
+  
 }
 
 @end

@@ -70,7 +70,7 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
     }
     else {
       _label = [[RMFRamdisk defaultLabel] retain];
-    } 
+    }
     _isAutomount = mount;
     _isMounted = NO;
     _activity = RMFRamdiskIdle;
@@ -82,7 +82,13 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
 }
 
 - (NSString *)description {
-  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ DevicePath:%@ Mounted:%i Automount:%i Backup:%i", self.label, self.devicePath, self.isMounted, self.isAutomount, self.backupMode];
+  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ BDSDevice:%@ DevicePath:%@ Mounted:%i Automount:%i Backup:%i"
+                           , self.label
+                           , self.bsdDevice
+                           , self.devicePath
+                           , self.isMounted
+                           , self.isAutomount
+                           , self.backupMode];
   return description;
 }
 

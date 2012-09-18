@@ -20,9 +20,6 @@ static RMFMountController *sharedSingleton;
 
 @property (retain) NSOperationQueue *queue;
 
-- (void) mount:(RMFRamdisk *)ramdisk;
-- (void) unmount:(RMFRamdisk *)ramdisk;
-
 @end
 
 @implementation RMFMountController
@@ -43,6 +40,7 @@ static RMFMountController *sharedSingleton;
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }
@@ -53,6 +51,9 @@ static RMFMountController *sharedSingleton;
 }
 
 - (void) mount:(RMFRamdisk *)ramdisk {
+  if(ramdisk.isMounted) {
+    return; // already mounted
+  }
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:ramdisk];
   [self.queue cancelAllOperations];
   [self.queue addOperation:mountOperation];
@@ -60,6 +61,9 @@ static RMFMountController *sharedSingleton;
 }
 
 - (void) unmount:(RMFRamdisk *)ramdisk {
+  if(NO == ramdisk.isMounted) {
+    return; // Already unmounted
+  }
   [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[ramdisk.label volumePath]];
 }
 

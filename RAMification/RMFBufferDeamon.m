@@ -56,6 +56,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef,
     [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(didUnmountRamdisk:) name:RMFDidUnmountRamdiskNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(didRenameRamdisk:) name:RMFDidRenameRamdiskNotification object:nil];
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }

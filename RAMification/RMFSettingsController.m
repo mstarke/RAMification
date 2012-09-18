@@ -67,6 +67,7 @@ static RMFSettingsController *sharedSingleton;
     self.toolbar.delegate = self;
     self.settingsWindow.toolbar = _toolbar;
     _emptyView = [[NSView alloc] init];
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }

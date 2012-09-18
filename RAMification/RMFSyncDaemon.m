@@ -41,7 +41,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
-  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:bsdName];
+  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForBsdDevice:bsdName];
   BOOL isReady = [syncDamon canUnmount:ramdisk];
   if (isReady) {
     return NULL;
@@ -65,6 +65,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     [center addObserver:self selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
     [center addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
     [self enableTimer];
+    NSLog(@"Created %@", [self class]);
   }
   return self;
 }
@@ -171,6 +172,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     return; // no Favourite found for the mounted volume
   }
   if(ramdisk.backupMode != RMFNoBackup) {
+    NSLog(@"Ramdisk %@ mounted. Restoring content!", ramdisk.label);
     [self restoreRamdisk:ramdisk];
   }
 }
