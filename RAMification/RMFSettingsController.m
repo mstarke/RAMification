@@ -54,9 +54,10 @@ static RMFSettingsController *sharedSingleton;
     // Initalize the controllers
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
     _favouriteSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
-      
-    _paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavoritesSettingsController identifier] : _favouriteSettingsController };
- 
+    
+    // Setup the controllermap
+    self.paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavoritesSettingsController identifier] : _favouriteSettingsController };
+    
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = YES;
     self.toolbar.delegate = self;
@@ -95,7 +96,7 @@ static RMFSettingsController *sharedSingleton;
     }
   }
   
-  // if something went wrong, we go for the defautl identitifer (first tab)
+  // if something went wrong, we go for the default identitifer (first tab)
   if(sender == nil) {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
   }

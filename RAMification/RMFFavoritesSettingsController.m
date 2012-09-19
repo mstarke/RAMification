@@ -10,12 +10,14 @@
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
+#import "RMFMountWatcher.h"
 
 @interface RMFFavoritesSettingsController ()
 
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
 
-- (void) didLoadView;
+- (void)didLoadView;
+- (void)didRenameFavourite:(NSNotification *)notification;
 
 @end
 
@@ -40,7 +42,8 @@
 #pragma mark init/dealloc
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
-  if (self) {    
+  if (self) {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFDidRenameRamdiskNotification object:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
@@ -96,7 +99,16 @@
   RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:[tableView selectedRow]];
   [favouriteManager deleteFavourite:selectedFavourite];
   [tableView reloadData];
-  
+}
+
+#pragma mark Notifications
+- (void)didRenameFavourite:(NSNotification *)notification {
+  NSDictionary *userInfo = [notification userInfo];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFRamdiskKey];
+  NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
+  NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
+  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:RMFRamdiskKeyForLabel]];
+  [tableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columnIndexSet];
 }
 
 @end

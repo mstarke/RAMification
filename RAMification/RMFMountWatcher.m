@@ -106,10 +106,10 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   
   NSLog(@"Volume %@ got renamed to %@", oldName, newName);
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteForDevicePath:[oldPath path]];
   
+  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteForDevicePath:[oldPath path]];
   if(renamedDisk != nil) {
-    NSDictionary *userInfo = @{ RMFRamdiskKey : renamedDisk, RMFOldRamdiskLabelKey : renamedDisk.label };
+    NSDictionary *userInfo = @{ RMFRamdiskKey : renamedDisk, RMFOldRamdiskLabelKey : oldName };
     renamedDisk.label = newName;
     renamedDisk.devicePath = [newPath path];
     [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
