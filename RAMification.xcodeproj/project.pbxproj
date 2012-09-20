@@ -400,7 +400,7 @@
 		4C5BDB4D147EF6AD000E19B0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "HicknHack Software GmbH";
 			};
 			buildConfigurationList = 4C5BDB50147EF6AD000E19B0 /* Build configuration list for PBXProject "RAMification" */;

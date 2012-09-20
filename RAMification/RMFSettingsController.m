@@ -119,6 +119,7 @@ static RMFSettingsController *sharedSingleton;
   [_settingsWindow setContentView:settingsView];
   // and show the window, if already visible this doesn't hurt.
   [_settingsWindow setIsVisible:YES];
+  [_settingsWindow makeKeyAndOrderFront:self];
 }
 
 #pragma mark system env retrieval
