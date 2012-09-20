@@ -15,9 +15,9 @@
 
 + (RMFMountController *)sharedController;
 
-- (BOOL) toggleMounted:(RMFRamdisk *)ramdisk;
-- (void) mount:(RMFRamdisk *)ramdisk;
-- (void) unmount:(RMFRamdisk *)ramdisk;
-- (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted;
+- (BOOL)toggleMounted:(RMFRamdisk *)ramdisk;
+- (void)mount:(RMFRamdisk *)ramdisk;
+- (void)unmount:(RMFRamdisk *)ramdisk;
+- (void)renameVolume:(RMFRamdisk *)ramdisk mountedAs:(NSString *)currentName;
 
 @end

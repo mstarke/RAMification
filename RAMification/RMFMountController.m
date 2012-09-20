@@ -79,11 +79,8 @@ static RMFMountController *sharedSingleton;
   }
 }
 
-- (void) volumeAtPath:(NSString *)path wasMounted:(BOOL)mounted {
-  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:path];
-  if(ramdisk != nil) {
-    ramdisk.isMounted = mounted;
-  }
+- (void)renameVolume:(RMFRamdisk *)ramdisk mountedAs:(NSString *)currentName {
+  
 }
+
 @end

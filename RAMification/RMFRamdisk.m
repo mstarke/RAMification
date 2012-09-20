@@ -154,4 +154,19 @@ NSString *const RMFRamdiskKeyForBackupMode = @"backupMode";
   self.lastBackupDate = [NSDate date];
 }
 
+- (void)markAsRamdisk {
+  if(self.isMounted) {
+    /*
+     
+     Todo:
+     
+     - check if disk is mounted
+     - test if it really is a ramdisk (as good as we can)
+     
+     
+     
+     */
+  }
+}
+
 @end

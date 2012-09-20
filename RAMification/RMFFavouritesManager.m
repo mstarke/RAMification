@@ -101,7 +101,13 @@ static RMFFavouritesManager *sharedSingleton;
     favourite.isAutomount = [object boolValue];
   }
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForLabel]) {
+    NSString *oldLable = [NSString stringWithString:favourite.label];
     favourite.label = object;
+    // Test for actual label change
+    if(![oldLable isEqualToString:favourite.label]) {
+      // as the mounter to rename the volume?
+    }
+    
   }
   if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
     favourite.backupMode = [object intValue];

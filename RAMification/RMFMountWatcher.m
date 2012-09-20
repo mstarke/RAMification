@@ -70,6 +70,12 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   }
   ramdisk.isMounted = YES;
   ramdisk.devicePath = devicePath;
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSURL *tokeUrl = [deviceUrl URLByAppendingPathComponent:@".isramdisk"];
+  BOOL sucess = [fileManager createFileAtPath:[tokeUrl path] contents:nil attributes:nil];
+  if(!sucess) {
+    NSLog(@"Could not create ramdisk identifier token");
+  }
   NSDictionary *userInfo = @{ RMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@ was mounted!", ramdisk);

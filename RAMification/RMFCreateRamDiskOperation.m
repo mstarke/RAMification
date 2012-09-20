@@ -48,8 +48,7 @@
   // wrap the creation method in a block to call it asynchrounous.
   
   NSPipe *output = [NSPipe pipe];  
-  NSTask *createDisk = [[NSTask alloc] init];
-  
+ 
   // create the device
   // hdiutil attach -nomount ram://MB*2048
   
@@ -57,10 +56,11 @@
   NSString *ramdisksize = [NSString stringWithFormat:@"ram://%ld", self.ramdisk.size*2048];
   
   // create the task and run it
-  [createDisk setLaunchPath:@"/usr/bin/hdiutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"attach", @"-nomount", ramdisksize, nil]];
-  [createDisk setStandardOutput:output];
-  [createDisk launch];
+  NSTask *createBlockDevice = [[NSTask alloc] init];
+  [createBlockDevice setLaunchPath:@"/usr/bin/hdiutil"];
+  [createBlockDevice setArguments:[NSArray arrayWithObjects:@"attach", @"-nomount", ramdisksize, nil]];
+  [createBlockDevice setStandardOutput:output];
+  [createBlockDevice launch];
   
   // retrieve the device name
   NSFileHandle *outputFileHandle = [output fileHandleForReading];
@@ -68,16 +68,16 @@
   NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   self.ramdisk.bsdDevice = [strippedDeviceName lastPathComponent];
   [deviceName release];
-  [createDisk release];
+  [createBlockDevice release];
   
   // and format it
   // diskutil erasevolume HFS+ <NAME> <DEVICE>
-  createDisk = [[NSTask alloc] init];
-  [createDisk setLaunchPath:@"/usr/sbin/diskutil"];
-  [createDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName, nil]];
-  [createDisk launch];
-  [createDisk release];
-  
+  NSTask *formatDisk = [[NSTask alloc] init];
+  [formatDisk setLaunchPath:@"/usr/sbin/diskutil"];
+  [formatDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName, nil]];
+  [formatDisk launch];
+  [formatDisk release];
+ 
   [pool drain];
   // we could set the mountes state here or let the MountWatcher take care of it
   // self.ramdisk.isMounted = YES;
