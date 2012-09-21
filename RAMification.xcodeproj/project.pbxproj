@@ -75,6 +75,7 @@
 		4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncRamDiskOperation.m; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesTableViewDelegate.h; sourceTree = "<group>"; };
 		4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesTableViewDelegate.m; sourceTree = "<group>"; };
+		4C491F55160C8BD50024DBE3 /* RAMification.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RAMification.entitlements; sourceTree = "<group>"; };
 		4C4FA61B149816060082981C /* RMFMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMenuController.h; sourceTree = "<group>"; };
 		4C4FA61C149816060082981C /* RMFMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMenuController.m; sourceTree = "<group>"; };
 		4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFVolumeTools.h"; sourceTree = "<group>"; };
@@ -285,6 +286,7 @@
 		4C5BDB60147EF6AD000E19B0 /* RAMification */ = {
 			isa = PBXGroup;
 			children = (
+				4C491F55160C8BD50024DBE3 /* RAMification.entitlements */,
 				4C1BC7021609248600A7720C /* Categories */,
 				4C5039931495663500089F86 /* Tools */,
 				4CEF3E74148ED25100232818 /* Model */,

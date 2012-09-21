@@ -77,15 +77,14 @@ static RMFSettingsController *sharedSingleton;
 }
 
 #pragma mark actions
-
 - (void)showSettings:(id)sender {
+  /*
+   the call can originate from a NSMenuItem or a NSToolbarItem
+   the NSMenuItem just sends a identifier string as sender
+   the NSToolbarItem delivers itself as the sender
+   */
   NSString* settingsIdentifier = nil;
-  
-  // the call can originate from a NSMenuItem or a NSToolbarItem
-  // the NSMenuItem just sends a identifier string as sender
-  // the NSToolbarItem delivers itself as the sender
-  //
-  // We get a NSToolbarItem
+  //We get a NSToolbarItem
   if([sender isMemberOfClass:[NSToolbarItem class]]) {
     settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
@@ -107,23 +106,22 @@ static RMFSettingsController *sharedSingleton;
   }
   // highlight the toolbar item
   [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
+  
   NSView *settingsView = [(NSViewController*)visibleSettings view];
   // remove the old content view to store it's size
   [self.settingsWindow setContentView:_emptyView];
+  
   NSRect windowRect = [_settingsWindow frameRectForContentRect:[settingsView frame]];
   windowRect.origin.x = [_settingsWindow frame].origin.x;
   windowRect.origin.y = [_settingsWindow frame].origin.y + [_settingsWindow frame].size.height - windowRect.size.height;
   [_settingsWindow setFrame:windowRect display:YES animate:YES];
-  //[self.settingsWindow setContentSize:[settingsView frame].size];
-  // set the new view
+  
   [_settingsWindow setContentView:settingsView];
-  // and show the window, if already visible this doesn't hurt.
   [_settingsWindow setIsVisible:YES];
   [_settingsWindow makeKeyAndOrderFront:self];
 }
 
 #pragma mark system env retrieval
-
 - (void) readHibernateMode {
   SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
   // read current settings from SCDynamicStore key
@@ -131,14 +129,15 @@ static RMFSettingsController *sharedSingleton;
   if(!liveValues) {
     return; // The values return is NULL
   }
+  
   NSDictionary *valuesDict = liveValues;
   self.hibernateMode = [[valuesDict objectForKey:kHiberNateModeKey] intValue];
+  
   CFRelease(liveValues);
   CFRelease(dynamicStore);
 }
 
 #pragma mark NSToolbarDelegateProtocol
-
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
   return [_paneController allKeys];
 }
