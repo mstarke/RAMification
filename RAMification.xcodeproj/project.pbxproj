@@ -303,8 +303,8 @@
 		4C5BDB61147EF6AD000E19B0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4CB1D0D0160CCF8700F0073A /* Images */,
 				4CB61009148AA3D800166397 /* Localizable.strings */,
-				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
 				4C5BDB62147EF6AD000E19B0 /* RAMification-Info.plist */,
 				4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */,
 				4C5BDB66147EF6AD000E19B0 /* main.m */,
@@ -334,6 +334,14 @@
 				4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CB1D0D0160CCF8700F0073A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		4CBE8D6C148C30D100747A33 /* LaunchAtLoginController */ = {
