@@ -29,6 +29,7 @@
 		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
 		4C704FEC15B0043600AB8463 /* FavouriteManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */; };
+		4C73968D1614BDB100912443 /* favourite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C73968C1614BDB100912443 /* favourite.tiff */; };
 		4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
@@ -101,6 +102,7 @@
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
 		4C704FEA15B0043600AB8463 /* FavouriteManagerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteManagerTest.h; sourceTree = "<group>"; };
 		4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteManagerTest.m; sourceTree = "<group>"; };
+		4C73968C1614BDB100912443 /* favourite.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = favourite.tiff; path = Images/favourite.tiff; sourceTree = "<group>"; };
 		4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountWatcher.h; sourceTree = "<group>"; };
 		4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountWatcher.m; sourceTree = "<group>"; };
 		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
@@ -125,7 +127,7 @@
 		4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsKeys.m; sourceTree = "<group>"; };
 		4CDBC8C3149D6AAC00CDBDEC /* RMFSizeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSizeFormatter.h; sourceTree = "<group>"; };
 		4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSizeFormatter.m; sourceTree = "<group>"; };
-		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
+		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = MenuItemIconTemplate.pdf; path = Images/MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
 		4CF8842714926DC2000EE2D7 /* RMFFavouritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesManager.h; sourceTree = "<group>"; };
 		4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -339,6 +341,7 @@
 		4CB1D0D0160CCF8700F0073A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C73968C1614BDB100912443 /* favourite.tiff */,
 				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
 			);
 			name = Images;
@@ -446,6 +449,7 @@
 				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
 				4CB6100B148AA3D800166397 /* Localizable.strings in Resources */,
 				4CBE8D71148C30D100747A33 /* README.md in Resources */,
+				4C73968D1614BDB100912443 /* favourite.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

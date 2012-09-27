@@ -33,7 +33,8 @@
 
 + (NSToolbarItem *) toolbarItem {
   NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]]; 
-  [item setImage:[NSImage imageNamed:NSImageNameFolderSmart]];
+  NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
+  [item setImage:toolbarImage];
   [item setLabel:[RMFFavoritesSettingsController label]];
   [item setAction:@selector(showSettings:)];
   return [item autorelease];
