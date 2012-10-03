@@ -20,11 +20,12 @@ h3. Favourite Management
 
 * create, mount and unmount favourites
 * manage favourites (volume name, size, backup mode, automount on launch)
-* automount favourites 
+* automount favourites
 * autosync favourites (backup on unmount, restore on mount, etc. )
-* (If necessary) prevent unmounting of RAM disks without backups
-* rename mounted favourites if user renames the volume in the finder
-* use custom icons for ramdisk
+* autoresize favourites
+* autorename favourites based on file system activity
+* block unmounting of favourites without (configured) backups
+* customize icons for each ramdisk
 
 h2. Disclaimer
 
