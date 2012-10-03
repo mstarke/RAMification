@@ -23,6 +23,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 @interface RMFGeneralSettingsController ()
 
 - (void)didLoadView;
+- (void)setBackupInterval:(id)sender;
 - (NSString *)memoryInfoText;
 
 @end
@@ -88,11 +89,11 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   // backup interval
   NSDictionary *bindingOptions = [NSDictionary dictionaryWithObjectsAndKeys:@"Something missing", NSNullPlaceholderBindingOption, nil];
   keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
-  [self.backupIntervalInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:bindingOptions];
-  [self.backupIntervalStepper setMinValue:60];
-  [self.backupIntervalStepper setMaxValue:100000000000000];
-  [self.backupIntervalStepper setIncrement:60];
-  [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
+//  [self.backupIntervalInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:bindingOptions];
+//  [self.backupIntervalStepper setMinValue:60];
+//  [self.backupIntervalStepper setMaxValue:100000000000000];
+//  [self.backupIntervalStepper setIncrement:60];
+//  [self.backupIntervalStepper bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   [self.sizeStepper setMinValue:0];
   [self.sizeStepper setMaxValue:10];
@@ -104,6 +105,27 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   
   BOOL shouldHide = (0 != [[RMFSettingsController sharedController] hibernateMode]);
   [self.hibernateWarning setHidden:shouldHide];
+  
+  // Generate Popup Menu
+  NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+  NSArray *actionArray = @[ @"every 30 seconds", @"every minute", @"every 30 minutes", @"every hour" ];
+  NSArray *backupIntervals = @[ @30, @60, @1800, @3600 ];
+  for(NSString *label in actionArray) {
+    NSMenuItem *menuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:@selector(setBackupInterval:) keyEquivalent:@""];
+    NSUInteger index = [actionArray indexOfObject:label];
+    [menuItem setRepresentedObject:[backupIntervals objectAtIndex:index]];
+    [menuItem setTarget:self];
+    [backupMenu addItem:menuItem];
+    [menuItem release];
+  }
+  NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:RMFSettingsKeyBackupInterval] integerValue];
+  NSNumber *interval = @(currentInterval);
+  NSUInteger currentIndex = [backupIntervals indexOfObject:interval];
+  if(NSNotFound == currentIndex) {
+    currentIndex = 0;
+  }
+  [self.backupIntervalPopUp setMenu:backupMenu];
+  [self.backupIntervalPopUp selectItemAtIndex:currentIndex]; 
 }
 
 - (NSString *)memoryInfoText {
@@ -115,4 +137,13 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 2147483648 ) ) ];
 }
 
+- (void)setBackupInterval:(id)sender {
+  if([sender isMemberOfClass:[NSMenuItem class]]) {
+    NSMenuItem *menuItem = sender;
+    NSNumber *number = [menuItem representedObject];
+    NSLog(@"Interval changed to %@ Seconds", number);
+    [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:RMFSettingsKeyBackupInterval];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+}
 @end
