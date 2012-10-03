@@ -12,6 +12,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFSyncRamDiskOperation.h"
+#import "RMFMountWatcher.h"
 #import "RMFSettingsKeys.h"
 
 #import <CoreFoundation/CoreFoundation.h>
@@ -30,7 +31,7 @@
 - (void) backupRamdisk:(RMFRamdisk *)ramdisk;
 - (void) disableTimer;
 - (void) enableTimer;
-- (void) volumeDidMount:(NSNotification *)notification;
+- (void) didMountFavourite:(NSNotification *)notification;
 - (void) userDefaultsDidChange:(NSNotification *)notification;
 
 @end
@@ -59,13 +60,13 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
-    // Register to the mount events so we can handle restoreation of favourites
-    NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-    NSNotificationCenter *center = [workspace notificationCenter];
-    [center addObserver:self selector:@selector(volumeDidMount:) name:NSWorkspaceDidMountNotification object:nil];
-    [center addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    
+    [defaultCenter addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didMountFavourite:) name:RMFDidMountRamdiskNotification object:nil];
+    
     [self enableTimer];
-    NSLog(@"Created %@", [self class]);
+    NSLog(@"Created %@", self);
   }
   return self;
 }
@@ -124,16 +125,15 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
     return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically; 
   };
-  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  if(favouriteManager == nil ) {
-    return; // No Manager found, just return (and try agaoin next time)
-  }
-  NSArray *mountedDisk = [[favouriteManager mountedFavourites] retain];
+  
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];  
+  
+  NSArray *mountedDisk = [favouriteManager mountedFavourites];
+  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]];
+ 
   NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
-  NSArray *backupDisks = [[mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]] retain];
   NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
-  [mountedDisk release];
-  [backupDisks release];
+
   for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk];
   }
@@ -160,27 +160,24 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 #pragma mark notification handling
 
-- (void)volumeDidMount:(NSNotification *)notification {
-  NSString *devicePath = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+- (void)didMountFavourite:(NSNotification *)notification {
+  NSDictionary *userInfo = [notification userInfo];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFRamdiskKey];
   
-  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  if(favouriteManager == nil) {
-    return; // no favourite Manager availabe
-  }
-  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForDevicePath:devicePath];
   if(ramdisk == nil) {
-    return; // no Favourite found for the mounted volume
+    return; // ingoring, no ramdisk present
   }
+  
   if(ramdisk.backupMode != RMFNoBackup) {
-    NSLog(@"Ramdisk %@ mounted. Restoring content!", ramdisk.label);
+    NSLog(@"%@: Ramdisk %@ mounted. Restoring content!", self, ramdisk.label);
     [self restoreRamdisk:ramdisk];
   }
 }
 
 - (void)userDefaultsDidChange:(NSNotification *)notification {
-  NSLog(@"SyncDaemon: Defaults did change");
-  // we do not get a special user dictionary
+  NSLog(@"%@: Defaults did change", self);
   NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
+  
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid
     if([self.backupTimer timeInterval] != newInterval) {
@@ -194,7 +191,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 # pragma mark timer handling
 
 - (void)backupIntervallChanged:(NSUInteger)interval {
-  NSLog(@"SyncDaemon: Backup intervall changed. Adjusting to new interval %lu", interval);
+  NSLog(@"%@: Backup intervall changed. Adjusting to new interval %lu", self, interval);
   NSTimeInterval timeInterval = interval;
   [self disableTimer];
   self.backupTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(performBackup) userInfo:nil repeats:YES];

@@ -59,7 +59,7 @@ static RMFSettingsController *sharedSingleton;
     self.paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavoritesSettingsController identifier] : _favouriteSettingsController };
     
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
-    self.toolbar.allowsUserCustomization = YES;
+    self.toolbar.allowsUserCustomization = NO;
     self.toolbar.delegate = self;
     self.settingsWindow.toolbar = _toolbar;
     _emptyView = [[NSView alloc] init];

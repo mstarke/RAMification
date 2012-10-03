@@ -62,10 +62,10 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 
 - (void)setEnabledBuffer:(BOOL)enableBuffer {
-  NSLog(@"Called setEnableBuffer");
+  NSLog(@"%@: Called setEnableBuffer", self);
   if(enableBuffer != _enableBuffer) {
     _enableBuffer = enableBuffer;
-    NSLog(@"%@! buffer!", (enableBuffer ? @"Enabled" : @"Disabled"));
+    NSLog(@"%@: %@! buffer!", self, (enableBuffer ? @"Enabled" : @"Disabled"));
   }
 }
 
@@ -214,7 +214,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   else {
     NSString *actionString = (shouldBuffer ? @"enable" : @"disable");
-    NSLog(@"Could not %@ cache for file %@ becaus the File could not be found!", actionString, file );
+    NSLog(@"%@: Could not %@ cache for file %@ becaus the File could not be found!", self, actionString, file );
   }
 }
 @end
