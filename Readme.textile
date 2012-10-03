@@ -8,25 +8,23 @@ This is a small pet project and in no way finished. I'm working on it on a very 
 
 h2. Features
 
-The list of planned features includes:
+Not all Features are implemented yet.
 
-* Create, Mount and Unmount a default RAM disks
-* Create, Mount and Unmount favourites
-** Manage favourites (Name, Size, Synchronize, Automount)
-** Automount favourites 
-** Autosync favourites (Backup on unmount, Restore on mount, etc. )
+h3. Core Freatures
 
-h2. Feature Considerations
+* create, mount and unmount a default RAM disk
+* optionally disable Unified Media Buffer on RAM disks to reduce memory footprint
+* autolaunch on login
 
-* Can the user change the name of a mounted disk?
-** Directly change the Disk name (in the Finder or elsewhere)
-** Indirectly change the Name in the Favourites manger
-** Mirror the changes to the disk and the favourite?
-* Can the user change the size of a mounted disk?
-** Backup, Remount and Restore the disk with the new size?
-* Display the last Backup of a RAM disk?
-* Display the backup activity of a RAM in the Menu? In the Settings?
-* Warn the user if hibernate is set to store to HD which leads to unmounted RAM disks after wake up?
+h3. Favourite Management
+
+* create, mount and unmount favourites
+* manage favourites (volume name, size, backup mode, automount on launch)
+* automount favourites 
+* autosync favourites (backup on unmount, restore on mount, etc. )
+* (If necessary) prevent unmounting of RAM disks without backups
+* rename mounted favourites if user renames the volume in the finder
+* use custom icons for ramdisk
 
 h2. Disclaimer
 
