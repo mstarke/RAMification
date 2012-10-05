@@ -10,8 +10,8 @@
 
 /*
  
- This Daemon watches for file acitivity on a ramdisk
- and set the unified buffer cache for all files coresponding to the settings
+ This Daemon watches for file acitivity on a RAM disk
+ and sets the unified buffer cache for all files coresponding to the settings
 
  */
 @interface RMFBufferDeamon : NSObject

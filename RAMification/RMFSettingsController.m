@@ -117,6 +117,7 @@ static RMFSettingsController *sharedSingleton;
   [_settingsWindow setFrame:windowRect display:YES animate:YES];
   
   [_settingsWindow setContentView:settingsView];
+  [_settingsWindow setTitle:[[visibleSettings class ]label]];
   [_settingsWindow setIsVisible:YES];
   [_settingsWindow makeKeyAndOrderFront:self];
 }

@@ -45,19 +45,19 @@
  @param name the name to search
  @return mathing favourite, nil if none was found
  */
-- (RMFRamdisk *)findFavouriteForName:(NSString *)name;
+- (RMFRamdisk *)findFavouriteByName:(NSString *)name;
 
 /*
  Find a favourite with the given device path
  @param path the Device path to look for
  @return matching favourite, nil if nothing was found
  */
-- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path;
+- (RMFRamdisk *)findFavouriteWithVolumePath:(NSString *)path;
 
 /*
  Looks for the Favourite with the given bsd device name
  */
-- (RMFRamdisk *)findFavouriteForBsdDevice:(NSString *)device;
+- (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device;
 
 /*
  Delete the given favourite

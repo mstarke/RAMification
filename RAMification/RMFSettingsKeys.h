@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const RMFSettingsKeyLabel;
-extern NSString * const RMFSettingsKeySize;
-extern NSString * const RMFSettingsKeyBackupPath;
-extern NSString * const RMFSettingsKeyBackupInterval;
-extern NSString * const RMFSettingsKeyFavourites;
-extern NSString * const RMFSettingsKeyDisableUnifiedBuffer;
+extern NSString * const kRMFSettingsKeyLabel;
+extern NSString * const kRMFSettingsKeySize;
+extern NSString * const kRMFSettingsKeyBackupPath;
+extern NSString * const kRMFSettingsKeyBackupInterval;
+extern NSString * const kRMFSettingsKeyFavourites;
+extern NSString * const kRMFSettingsKeyDisableUnifiedBuffer;

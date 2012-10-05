@@ -12,8 +12,8 @@ static NSDictionary *suffixNameDict;
 static NSDictionary *suffixExponentDict;
 
 
-NSString *const RMFSizeFormatterValueKey = @"RMFSizeFormatterValueKey";
-NSString *const RMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey"; 
+NSString *const kRMFSizeFormatterValueKey = @"RMFSizeFormatterValueKey";
+NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey"; 
 
 @interface RMFSizeFormatter ()
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number;
@@ -58,14 +58,14 @@ NSString *const RMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
   
 }
 
-+ (NSNumber *)exponentVorSuffix:(RMFSizeSuffix)suffix {
++ (NSNumber *)exponentForSuffix:(RMFSizeSuffix)suffix {
   return [[RMFSizeFormatter suffixExponents] objectForKey:[NSNumber numberWithInt:suffix ]];
 }
 
 + (NSDictionary *)dictForSuffix:(RMFSizeSuffix)suffix andValue:(double)value {
   return [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithInt:suffix], RMFSizeFormatterSuffixKey,
-          [NSNumber numberWithDouble:value], RMFSizeFormatterValueKey, nil];
+          [NSNumber numberWithInt:suffix], kRMFSizeFormatterSuffixKey,
+          [NSNumber numberWithDouble:value], kRMFSizeFormatterValueKey, nil];
 }
 
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number {
@@ -80,13 +80,13 @@ NSString *const RMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
 }
 
 + (NSString *)stringForSizeRepresentation:(NSDictionary *)dict {
-  RMFSizeSuffix suffix = [[dict objectForKey:RMFSizeFormatterSuffixKey] intValue];
+  RMFSizeSuffix suffix = [[dict objectForKey:kRMFSizeFormatterSuffixKey] intValue];
   NSString *suffixName = [RMFSizeFormatter nameForSuffix:suffix];
-  const double preciseValue = [[dict objectForKey:RMFSizeFormatterValueKey] doubleValue];
+  const double preciseValue = [[dict objectForKey:kRMFSizeFormatterValueKey] doubleValue];
   const double displayValue = (floor(preciseValue * 100) / 100);
   const double delta = preciseValue - displayValue;
   NSString *formatString = ( delta >= 0.01 ) ? @"%.0f %@" : @"%.2f %@";
-  return [NSString stringWithFormat:formatString, [[dict objectForKey:RMFSizeFormatterValueKey] doubleValue], suffixName];
+  return [NSString stringWithFormat:formatString, [[dict objectForKey:kRMFSizeFormatterValueKey] doubleValue], suffixName];
 }
 
 + (RMFSizeSuffix)suffixForString:(NSString *)string {

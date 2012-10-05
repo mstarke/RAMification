@@ -64,7 +64,7 @@ static RMFMountController *sharedSingleton;
   if(NO == ramdisk.isMounted) {
     return; // Already unmounted
   }
-  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[ramdisk.label volumePath]];
+  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[ramdisk.label stringAsVolumePath]];
 }
 
 - (BOOL) toggleMounted:(RMFRamdisk *)ramdisk {

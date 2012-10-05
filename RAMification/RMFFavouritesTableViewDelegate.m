@@ -26,7 +26,7 @@
   if(tableColumn == nil) {
     return false;
   }
-  NSArray *columns = [NSArray arrayWithObjects:RMFRamdiskKeyForLabel, RMFRamdiskKeyForSize, nil];
+  NSArray *columns = [NSArray arrayWithObjects:kRMFRamdiskKeyForLabel, kRMFRamdiskKeyForSize, nil];
   if([columns containsObject:[tableColumn identifier]]) {
     RMFFavouritesManager *favouriteManager = [tableView dataSource];
     RMFRamdisk *ramdisk = [favouriteManager.favourites objectAtIndex:row];
@@ -42,14 +42,14 @@
   if(tableColumn == nil) {
     return nil;
   }
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForAutomount]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForAutomount]) {
     NSButtonCell *buttonCell = [[NSButtonCell alloc] init];
     [buttonCell setButtonType:NSSwitchButton];
     [buttonCell setTitle:@""];
     [buttonCell setAlignment:NSCenterTextAlignment];
     return  [buttonCell autorelease]; // Checkbox cells
   }
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForBackupMode]) {
     NSPopUpButtonCell *popUpCell = [[NSPopUpButtonCell alloc] init];
     [popUpCell setControlSize:NSMiniControlSize];
     NSMenu *buttonMenu = [self allocBackupModePopupMenu];
@@ -58,7 +58,7 @@
     return  [popUpCell autorelease]; // PopUp cells
   }
   NSTextFieldCell *textCell = [[NSTextFieldCell alloc] init];
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForSize]) {
     [textCell setFormatter:[RMFSizeFormatter formatter]];
   }
   [textCell setEditable:YES];

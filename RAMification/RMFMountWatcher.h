@@ -14,8 +14,8 @@
 APPKIT_EXTERN NSString * const RMFDidMountRamdiskNotification;
 APPKIT_EXTERN NSString * const RMFDidUnmountRamdiskNotification;
 APPKIT_EXTERN NSString * const RMFDidRenameRamdiskNotification;
-APPKIT_EXTERN NSString * const RMFRamdiskKey;
-APPKIT_EXTERN NSString * const RMFOldRamdiskLabelKey;
+APPKIT_EXTERN NSString * const kRMFRamdiskKey;
+APPKIT_EXTERN NSString * const kRMFOldRamdiskLabelKey;
 
 @interface RMFMountWatcher : NSObject
 

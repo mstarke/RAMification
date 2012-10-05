@@ -86,7 +86,7 @@
       return;
     }
   }
-  NSString *sourcePath = [self.ramdisk.label volumePath];
+  NSString *sourcePath = [self.ramdisk.label stringAsVolumePath];
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;

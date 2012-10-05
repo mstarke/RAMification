@@ -9,13 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "RMFSettingsControllerProtocol.h"
 
-extern const NSUInteger MinimumBackupInterval;
-extern const NSUInteger MaxiumumBackupInterval;
-extern const NSUInteger BackupdIntervalStepSize;
-extern const NSUInteger MinumumRamdiskSize;
-extern const NSUInteger MaxiumumRamdiskSize;
-extern const NSUInteger RamdiskSizeStepSize;
-
 @interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
 
 @property (assign) IBOutlet NSTextField *labelInput;

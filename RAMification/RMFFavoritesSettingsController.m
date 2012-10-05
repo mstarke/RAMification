@@ -63,10 +63,10 @@
 
 - (void)didLoadView {
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
-  NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForAutomount];
-  NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForLabel];
-  NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForSize];
-  NSTableColumn *backupModeColum = [[NSTableColumn alloc] initWithIdentifier:RMFRamdiskKeyForBackupMode];
+  NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForAutomount];
+  NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForLabel];
+  NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForSize];
+  NSTableColumn *backupModeColum = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForBackupMode];
   
   [[automountColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_AUTOMOUNT", @"Column Header for the automount column")];
   [[labelColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_LABEL", @"Column header for the label column")];
@@ -105,10 +105,10 @@
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
-  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:RMFRamdiskKeyForLabel]];
+  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:kRMFRamdiskKeyForLabel]];
   [tableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columnIndexSet];
 }
 

@@ -8,10 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-// Keys to grab the appropriate objects in the interal used dictionaries
-OBJC_EXTERN NSString *const RMFSizeFormatterValueKey;// the value
-OBJC_EXTERN NSString *const RMFSizeFormatterSuffixKey; // the suffix for the number
-
 // We use non-SI suffixes so power of 2 multiplyer
 typedef enum RMFSizeSuffixType {
   RMFSizeSuffixNone,
@@ -22,18 +18,31 @@ typedef enum RMFSizeSuffixType {
 } RMFSizeSuffix;
 
 @interface RMFSizeFormatter : NSFormatter
-// Convenience method for an autoreleased new formatter
+/*
+ Convenience method for an autoreleased new formatter
+ @returns a new autoreleases formatter
+ */
 + (id)formatter;
 
-// Returns the name for a given suffix
+/*
+ @returns the name for a given suffix
+ */
 + (NSString *)nameForSuffix:(RMFSizeSuffix)suffix;
-// returns the exponente for a fiven suffix
-+ (NSNumber *)exponentVorSuffix:(RMFSizeSuffix)suffix;
-// returns the suffix parsed form the given string
+/*
+ @returns the exponente for a fiven suffix
+ */
++ (NSNumber *)exponentForSuffix:(RMFSizeSuffix)suffix;
+/*
+ @returns the suffix parsed form the given string
+ */
 + (RMFSizeSuffix)suffixForString:(NSString *)string;
-// the global mapping from suffix to exponent 
+/*
+ @retuns the global mapping from suffix to exponent
+ */
 + (NSDictionary *)suffixExponents;
-// the global mapping form suffix to name
+/*
+ @returns the global mapping form suffix to name
+ */
 + (NSDictionary *)suffixNames;
 
 @end

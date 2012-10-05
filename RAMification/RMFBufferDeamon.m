@@ -20,7 +20,7 @@
 @property (retain) NSMutableSet *watchedDisks;
 @property (retain) NSDate *lastUpdate;
 @property (assign) FSEventStreamEventId lastEventId;
-@property (nonatomic, setter = setEnabledBuffer:) BOOL enableBuffer;
+@property (nonatomic, setter = setBufferEnabled:) BOOL bufferEnabled;
 
 - (void)update:(const FSEventStreamEventFlags[])flags;
 - (void)enable:(BOOL)enable;
@@ -30,6 +30,7 @@
 - (void)updateCallback;
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
 - (void)addWatchedPath:(NSString *)path;
+- (void)clearWatchedPaths;
 - (void)removeWatchedPath:(NSString *)path;
 - (void)shouldBuffer:(BOOL)disable file:(NSString*)file;
 @end
@@ -54,23 +55,46 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     _eventStream = NULL;
     _lastUpdate = [[NSDate alloc] init];
     NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
-    NSString *keyPath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableUnifiedBuffer];
-    [self bind:@"enableBuffer" toObject:defaultsController withKeyPath:keyPath options:nil];
+    NSString *keyPath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
+    [self bind:@"bufferEnabled" toObject:defaultsController withKeyPath:keyPath options:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
 }
 
-- (void)setEnabledBuffer:(BOOL)enableBuffer {
-  NSLog(@"%@: Called setEnableBuffer", self);
-  if(enableBuffer != _enableBuffer) {
-    _enableBuffer = enableBuffer;
-    NSLog(@"%@: %@! buffer!", self, (enableBuffer ? @"Enabled" : @"Disabled"));
+- (void)setBufferEnabled:(BOOL)bufferEnabled {
+  NSLog(@"%@: Called setBufferEnabled", self);
+  if(bufferEnabled != _bufferEnabled) {
+    _bufferEnabled = bufferEnabled;
+    [self enable:bufferEnabled];
   }
 }
 
 - (void)enable:(BOOL)enable {
   
+  NSArray *mountedRamdisks = [[RMFFavouritesManager sharedManager] mountedFavourites];
+  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+
+  if(enable) {
+    for(RMFRamdisk *ramdisk in mountedRamdisks) {
+      [self setShouldBuffer:enable forRamdisk:ramdisk];
+    }
+    // Register for notifications
+    [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didUnmountRamdisk:) name:RMFDidUnmountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didRenameRamdisk:) name:RMFDidRenameRamdiskNotification object:nil];
+  }
+  else {
+    // Unregister the notifications
+    [defaultCenter removeObserver:self forKeyPath:RMFDidMountRamdiskNotification];
+    [defaultCenter removeObserver:self forKeyPath:RMFDidUnmountRamdiskNotification];
+    [defaultCenter removeObserver:self forKeyPath:RMFDidRenameRamdiskNotification];
+
+    [self clearWatchedPaths];
+    for(RMFRamdisk *ramdisk in mountedRamdisks) {
+      // enable buffer for all files on ramdisk ... potentially dangerous?
+    }
+  }
 }
 
 # pragma mark callback handling
@@ -102,6 +126,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 
 - (void)updateCallback {
   
+  // Unshedule the Eventstream callback but remmber the last eventID
   if( _eventStream != NULL ) {
     FSEventStreamStop(_eventStream);
     FSEventStreamUnscheduleFromRunLoop(_eventStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
@@ -112,6 +137,13 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   else {
     self.lastEventId = FSEventsGetCurrentEventId();
   }
+  
+  // We got no paths to watch, leave
+  if([self.watchedDisks count] == 0) {
+    return; // nothing to watch
+  }
+  
+  // We got some paths to watch so generate a new callback
   FSEventStreamContext context = {0, (void *)self, NULL, NULL, NULL};
   const NSTimeInterval latency = 2.0;
   const FSEventStreamCreateFlags flags = (kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagUseCFTypes);
@@ -129,32 +161,32 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 
 # pragma mark Notifictaions
 - (void)didMountRamdisk:(NSNotification *)notification {
-  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self addWatchedPath:[ramdisk.label volumePath]];
+    [self addWatchedPath:ramdisk.volumePath];
   }
 }
 
 - (void)didUnmountRamdisk:(NSNotification *)notification {
-  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self removeWatchedPath:[ramdisk.label volumePath]];
+    [self removeWatchedPath:ramdisk.volumePath];
   }
 }
 
 - (void)didRenameRamdisk:(NSNotification *)notification {
-  NSString *oldLabel = [[[notification userInfo] objectForKey:RMFOldRamdiskLabelKey] volumePath];
-  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:RMFRamdiskKey];
+  NSString *oldLabel = [[[notification userInfo] objectForKey:kRMFOldRamdiskLabelKey] stringAsVolumePath];
+  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self removeWatchedPath:[oldLabel volumePath]];
-    [self addWatchedPath:[ramdisk.label volumePath]];
+    [self removeWatchedPath:[oldLabel stringAsVolumePath]];
+    [self addWatchedPath:ramdisk.volumePath];
   }
 }
 
 #pragma mark Buffer handling
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
   
-  NSString *path = [ramdisk.label volumePath];
+  NSString *path = ramdisk.volumePath;
   if( shouldBuffer ) {
     [self addWatchedPath:path];
   }
@@ -163,13 +195,15 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSString *volumePath = [ramdisk.label volumePath];
+  NSString *volumePath = ramdisk.volumePath;
   NSDirectoryEnumerator *dirEnumerator = [fileManager enumeratorAtPath:volumePath];
   NSString *file;
   while( file = [dirEnumerator nextObject] ) {
     [self shouldBuffer:(!shouldBuffer) file:file];
   }
 }
+
+#pragma mark path updates
 
 - (void)addWatchedPath:(NSString *)path {
   // Add the volume path to the watched paths
@@ -184,6 +218,11 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     return; // path is already in watchlist
   }
   [self.watchedDisks addObject:path];
+  [self updateCallback];
+}
+
+- (void)clearWatchedPaths {
+  [self.watchedDisks removeAllObjects];
   [self updateCallback];
 }
 

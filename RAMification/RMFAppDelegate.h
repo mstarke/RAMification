@@ -8,13 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class RMFSettingsController;
-@class RMFFavouritesManager;
-@class RMFMenuController;
-@class RMFMountWatcher;
-@class RMFMountController;
-@class RMFSyncDaemon;
-
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate>
 
 - (NSString *)executabelName;

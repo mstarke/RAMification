@@ -60,7 +60,7 @@ static RMFFavouritesManager *sharedSingleton;
   if (self) {
     NSLog(@"Trying to load presets!");
     self.favourites = [NSMutableArray array];
-    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFSettingsKeyFavourites];
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:kRMFSettingsKeyFavourites];
     if(data != nil) {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
       if(favourites != nil) {
@@ -86,7 +86,7 @@ static RMFFavouritesManager *sharedSingleton;
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
   // We need to wrap the identifier in a Number with bool to get the checkbox right
-  if([tableColumn.identifier isEqualToString:RMFRamdiskKeyForAutomount]) {
+  if([tableColumn.identifier isEqualToString:kRMFRamdiskKeyForAutomount]) {
     return [NSNumber numberWithBool:favourite.isAutomount];
   }
   return [favourite valueForKey:[tableColumn identifier]];
@@ -94,13 +94,13 @@ static RMFFavouritesManager *sharedSingleton;
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForSize]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForSize]) {
     favourite.size = [object integerValue];
   }
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForAutomount]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForAutomount]) {
     favourite.isAutomount = [object boolValue];
   }
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForLabel]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForLabel]) {
     NSString *oldLable = [NSString stringWithString:favourite.label];
     favourite.label = object;
     // Test for actual label change
@@ -109,7 +109,7 @@ static RMFFavouritesManager *sharedSingleton;
     }
     
   }
-  if([[tableColumn identifier] isEqualToString:RMFRamdiskKeyForBackupMode]) {
+  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForBackupMode]) {
     favourite.backupMode = [object intValue];
   }
   [self synchronizeDefaults];
@@ -150,7 +150,7 @@ static RMFFavouritesManager *sharedSingleton;
   [self synchronizeDefaults];
 }
 
-- (RMFRamdisk*) findFavouriteForName:(NSString*)name {
+- (RMFRamdisk*) findFavouriteByName:(NSString*)name {
   for(RMFRamdisk *ramdisk in self.favourites) {
     if([ramdisk.label isEqualToString:name]) {
       return ramdisk;
@@ -158,16 +158,16 @@ static RMFFavouritesManager *sharedSingleton;
   }
   return nil;}
 
-- (RMFRamdisk *)findFavouriteForDevicePath:(NSString *)path {
+- (RMFRamdisk *)findFavouriteWithVolumePath:(NSString *)path {
   for(RMFRamdisk *ramdisk in self.favourites) {
-    if([ramdisk.devicePath isEqualToString:path]) {
+    if([ramdisk.volumePath isEqualToString:path]) {
       return ramdisk;
     }
   }
   return nil;
 }
 
-- (RMFRamdisk *)findFavouriteForBsdDevice:(NSString *)device {
+- (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device {
   for(RMFRamdisk *ramdisk in self.favourites){
     if([ramdisk.bsdDevice isEqualToString:device]) {
       return ramdisk;
@@ -202,7 +202,7 @@ static RMFFavouritesManager *sharedSingleton;
 - (void)synchronizeDefaults {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:self.favourites];
   
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];
+  [[NSUserDefaults standardUserDefaults] setObject:data forKey:kRMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

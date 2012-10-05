@@ -42,7 +42,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
-  RMFRamdisk *ramdisk = [favouriteManager findFavouriteForBsdDevice:bsdName];
+  RMFRamdisk *ramdisk = [favouriteManager findFavouriteWithBsdDevice:bsdName];
   BOOL isReady = [syncDamon canUnmount:ramdisk];
   if (isReady) {
     return NULL;
@@ -139,7 +139,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   }
 }
 
-
 - (void)backupRamdisk:(RMFRamdisk *)ramdisk {
   if (ramdisk.backupMode == RMFNoBackup || ramdisk.activity == RMFRamdiskBackup) {
     return; // no backups enabeld or at leas one backup in processs
@@ -162,10 +161,10 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   
   if(ramdisk == nil) {
-    return; // ingoring, no ramdisk present
+    return; // ingoring, no RAM disk present
   }
   
   if(ramdisk.backupMode != RMFNoBackup) {
@@ -176,7 +175,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)userDefaultsDidChange:(NSNotification *)notification {
   NSLog(@"%@: Defaults did change", self);
-  NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
+  NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
   
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid
@@ -205,7 +204,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)enableTimer {
-  NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
+  NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
   NSTimeInterval interval = backupInterval;
   if (self.backupTimer != nil) {
     interval = [self.backupTimer timeInterval];

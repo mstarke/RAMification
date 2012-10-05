@@ -17,8 +17,8 @@
 NSString * const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
 NSString * const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
 NSString * const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
-NSString * const RMFRamdiskKey = @"RMFRamdiskKey";
-NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
+NSString * const kRMFRamdiskKey = @"RMFRamdiskKey";
+NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 @interface RMFMountWatcher ()
 
@@ -45,15 +45,15 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 }
 
 - (void)didMountVolume:(NSNotification *)notification {
-  NSString *deviceName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
-  NSURL *deviceUrl = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
-  NSString *devicePath = [deviceUrl path];
+  NSString *volumeName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
+  NSURL *volumeUrl = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+  NSString *volumePath = [volumeUrl path];
    
   // Create DA session and schedule it with run loop
   DASessionRef session = DASessionCreate(kCFAllocatorDefault);
   DASessionScheduleWithRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   // Get the disk for the path of the renamed volume
-  DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (CFURLRef)deviceUrl);
+  DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (CFURLRef)volumeUrl);
   NSString *bsdDevice = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
   // Unschedule our session and clean up
   DASessionUnscheduleFromRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
@@ -61,22 +61,16 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   CFRelease(session);
   
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *ramdisk = [favouritesManager findFavouriteForBsdDevice:bsdDevice];
+  RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithBsdDevice:bsdDevice];
 
-  NSLog(@"%@: Device %@ got mounted at Path %@", self, bsdDevice, devicePath);
-  if(ramdisk == nil || NO == [ramdisk.label isEqualToString:deviceName]) {
+  NSLog(@"%@: Device %@ got mounted at Path %@", self, bsdDevice, volumePath);
+  if(ramdisk == nil || NO == [ramdisk.label isEqualToString:volumeName]) {
     NSLog(@"%@: No Ramdisk, ignoring!", self);
     return; // No known favourite was mounted, ignore
   }
-  ramdisk.isMounted = YES;
-  ramdisk.devicePath = devicePath;
-  NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSURL *tokeUrl = [deviceUrl URLByAppendingPathComponent:@".isramdisk"];
-  BOOL sucess = [fileManager createFileAtPath:[tokeUrl path] contents:nil attributes:nil];
-  if(!sucess) {
-    NSLog(@"%@: Could not create ramdisk identifier token", self);
-  }
-  NSDictionary *userInfo = @{ RMFRamdiskKey : ramdisk };
+  ramdisk.volumePath = volumePath;
+  
+  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
 }
@@ -85,7 +79,7 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   NSURL *deviceUrl = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
   NSString *devicePath = [deviceUrl path];
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *ramdisk = [favouritesManager findFavouriteForDevicePath:devicePath];
+  RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithVolumePath:devicePath];
   NSLog(@"%@: Device %@ unmounted", self, devicePath);
   if( ramdisk == nil ) {
     NSLog(@"%@: No Ramdisk, ignoring", self);
@@ -93,12 +87,12 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   }
   if(NO == ramdisk.isMounted) {
     NSLog(@"%@: Ramdisk %@ wasn't mounted", self, ramdisk.label);
-    return; // Ramdisk wasnt mounted
+    return; // RAM disk was not mounted
   }
-  ramdisk.isMounted = NO;
-  ramdisk.devicePath = nil;
+ 
   ramdisk.bsdDevice = nil;
-  NSDictionary *userInfo = @{ RMFRamdiskKey : ramdisk };
+  
+  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidUnmountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was unmounted!", self, ramdisk);
 }
@@ -113,11 +107,11 @@ NSString * const RMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   NSLog(@"%@: Volume %@ got renamed to %@", self, oldName, newName);
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   
-  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteForDevicePath:[oldPath path]];
+  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumePath:[oldPath path]];
   if(renamedDisk != nil) {
-    NSDictionary *userInfo = @{ RMFRamdiskKey : renamedDisk, RMFOldRamdiskLabelKey : oldName };
+    NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFOldRamdiskLabelKey : oldName };
     renamedDisk.label = newName;
-    renamedDisk.devicePath = [newPath path];
+    renamedDisk.volumePath = [newPath path];
     [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
   }
 }

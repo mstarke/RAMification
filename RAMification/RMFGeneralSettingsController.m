@@ -79,21 +79,21 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   
   // Set up the bindings for the Interface
   // label
-  NSString * keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyLabel];
+  NSString * keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyLabel];
   [self.labelInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // size
-  keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeySize];
+  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeySize];
   [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   // backup interval
-  keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupInterval];
+  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyBackupInterval];
   
   [self.sizeStepper setMinValue:0];
   [self.sizeStepper setMaxValue:10];
   [self.sizeStepper setIncrement:1];
   //[self.sizeStepper bind:@"value" toObject:self withKeyPath:@"sizeBridgeValue" options:nil];
-  keypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableUnifiedBuffer];
+  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
   [self.isBufferDisabled bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
   
@@ -112,7 +112,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
     [backupMenu addItem:menuItem];
     [menuItem release];
   }
-  NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:RMFSettingsKeyBackupInterval] integerValue];
+  NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:kRMFSettingsKeyBackupInterval] integerValue];
   NSNumber *interval = @(currentInterval);
   NSUInteger currentIndex = [backupIntervals indexOfObject:interval];
   if(NSNotFound == currentIndex) {
@@ -138,7 +138,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   NSMenuItem *menuItem = [self.backupIntervalPopUp selectedItem];
   NSNumber *number = [menuItem representedObject];
   NSLog(@"Interval changed to %@ Seconds", number);
-  [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:RMFSettingsKeyBackupInterval];
+  [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:kRMFSettingsKeyBackupInterval];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 @end

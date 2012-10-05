@@ -73,7 +73,7 @@
   return ([matchingPaths count] > 0);
 }
 
-- (NSString *)volumePath
+- (NSString *)stringAsVolumePath
 {
   return [NSString stringWithFormat:@"/Volumes/%@", self];
 }

@@ -27,7 +27,7 @@
 - (BOOL) isUsedAsVolumeName;
 
 // Returns the Volumepath for a given string?
-- (NSString*) volumePath;
+- (NSString*) stringAsVolumePath;
 
 
 
