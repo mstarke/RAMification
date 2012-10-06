@@ -28,6 +28,7 @@
 		4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
+		4C701A3B161FBDA800547F17 /* Removable.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C701A3A161FBDA800547F17 /* Removable.icns */; };
 		4C704FEC15B0043600AB8463 /* FavouriteManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */; };
 		4C73968D1614BDB100912443 /* favourite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C73968C1614BDB100912443 /* favourite.tiff */; };
 		4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */; };
@@ -42,6 +43,7 @@
 		4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavoritesPane.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
 		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
+		4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */; };
 		4CDBC8BE149D532E00CDBDEC /* RMFSyncDaemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */; };
 		4CDBC8C2149D552100CDBDEC /* RMFSettingsKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C1149D552100CDBDEC /* RMFSettingsKeys.m */; };
 		4CDBC8C5149D6AAC00CDBDEC /* RMFSizeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */; };
@@ -100,6 +102,7 @@
 		4C5BDB81147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RAMificationTests.h; sourceTree = "<group>"; };
 		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
+		4C701A3A161FBDA800547F17 /* Removable.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Removable.icns; sourceTree = "<group>"; };
 		4C704FEA15B0043600AB8463 /* FavouriteManagerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteManagerTest.h; sourceTree = "<group>"; };
 		4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteManagerTest.m; sourceTree = "<group>"; };
 		4C73968C1614BDB100912443 /* favourite.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = favourite.tiff; path = Images/favourite.tiff; sourceTree = "<group>"; };
@@ -121,6 +124,8 @@
 		4CC52F7C14819BB60006C278 /* FavoritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesPane.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
 		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouriteCellView.h; sourceTree = "<group>"; };
+		4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouriteCellView.m; sourceTree = "<group>"; };
 		4CDBC8BC149D532E00CDBDEC /* RMFSyncDaemon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSyncDaemon.h; sourceTree = "<group>"; };
 		4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncDaemon.m; sourceTree = "<group>"; };
 		4CDBC8C0149D552100CDBDEC /* RMFSettingsKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsKeys.h; sourceTree = "<group>"; };
@@ -174,6 +179,8 @@
 				4CC52F7E1481A1400006C278 /* SettingsWindow.xib */,
 				4CC52F7914819A360006C278 /* GeneralPane.xib */,
 				4CC52F7C14819BB60006C278 /* FavoritesPane.xib */,
+				4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */,
+				4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -341,6 +348,7 @@
 		4CB1D0D0160CCF8700F0073A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C701A3A161FBDA800547F17 /* Removable.icns */,
 				4C73968C1614BDB100912443 /* favourite.tiff */,
 				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
 			);
@@ -450,6 +458,7 @@
 				4CB6100B148AA3D800166397 /* Localizable.strings in Resources */,
 				4CBE8D71148C30D100747A33 /* README.md in Resources */,
 				4C73968D1614BDB100912443 /* favourite.tiff in Resources */,
+				4C701A3B161FBDA800547F17 /* Removable.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +513,7 @@
 				4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */,
 				4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */,
 				4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */,
+				4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

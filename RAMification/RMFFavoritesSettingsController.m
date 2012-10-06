@@ -12,12 +12,15 @@
 #import "RMFFavouritesManager.h"
 #import "RMFMountWatcher.h"
 
-@interface RMFFavoritesSettingsController ()
+@interface RMFFavoritesSettingsController () {
+  NSArrayController *_favouritesController;
+}
 
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
+- (NSMenu *)allocBackupModePopupMenu;
 
 @end
 
@@ -62,44 +65,53 @@
 }
 
 - (void)didLoadView {
+  _favouritesController = [[NSArrayController alloc] init];
+  NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
+  [_favouritesController setContent:favourites];
+  [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
+  
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
-  NSTableColumn *automountColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForAutomount];
-  NSTableColumn *labelColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForLabel];
-  NSTableColumn *sizeColumn = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForSize];
-  NSTableColumn *backupModeColum = [[NSTableColumn alloc] initWithIdentifier:kRMFRamdiskKeyForBackupMode];
-  
-  [[automountColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_AUTOMOUNT", @"Column Header for the automount column")];
-  [[labelColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_LABEL", @"Column header for the label column")];
-  [[sizeColumn headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_SIZE", @"Column header for the size column")];
-  [[backupModeColum headerCell] setStringValue:NSLocalizedString(@"COLUMN_HEADER_BACKUP_MODE", @"The mode that backups are created")];
-  
-  [tableView addTableColumn:automountColumn];
-  [tableView addTableColumn:labelColumn];
-  [tableView addTableColumn:sizeColumn];
-  [tableView addTableColumn:backupModeColum];
-  
-  [automountColumn release];
-  [labelColumn release];
-  [sizeColumn release];
-  [backupModeColum release];
-  
-  tableView.dataSource = [RMFFavouritesManager sharedManager];
-  tableView.delegate = self.tableDelegate;
+  _favouritesTableView.delegate = self.tableDelegate;
+  NSBundle *bundle = [NSBundle mainBundle];
+  [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
 }
+
+- (NSMenu *)allocBackupModePopupMenu {
+  NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+  for(NSUInteger eMode = 0; eMode < RMFBackupModeCount; eMode++) {
+    switch (eMode) {
+      case RMFNoBackup:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_NO_BACKUP", @"Backup mode No Backup") action:NULL keyEquivalent:@""];
+        break;
+      case RMFBackupOnEject:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_EJECT_ONLY", @"Backup mode Backup on Eject") action:NULL keyEquivalent:@""];
+        break;
+      case RMFBackupPeriodically:
+        [backupMenu addItemWithTitle:NSLocalizedString(@"RAMDISK_BACKUP_MODE_PERIODICALLY", @"Backup mode Continously Backup") action:NULL keyEquivalent:@""];
+        break;
+    }
+  }
+  return  backupMenu;
+}
+
 
 # pragma mark actions
 - (void)addPreset:(id)sender {
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   [favouriteManager addNewFavourite];
-  [tableView reloadData];
+  //[_favouritesTableView reloadData];
 }
 
 - (void)deletePreset:(id)sender {
   // find the selected preset
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:[tableView selectedRow]];
+  NSInteger selectedRow = [_favouritesTableView selectedRow];
+  if(-1 == selectedRow) {
+    return;
+  }
+  RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:selectedRow];
   [favouriteManager deleteFavourite:selectedFavourite];
-  [tableView reloadData];
+  //[_favouritesTableView reloadData];
 }
 
 #pragma mark Notifications
@@ -108,8 +120,8 @@
   RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
-  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:kRMFRamdiskKeyForLabel]];
-  [tableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columnIndexSet];
+//  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:kRMFRamdiskKeyForLabel]];
+//  [tableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columnIndexSet];
 }
 
 @end

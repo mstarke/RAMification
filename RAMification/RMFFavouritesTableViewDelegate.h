@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface RMFFavouritesTableViewDelegate : NSObject <NSTableViewDelegate>
+@property (assign) IBOutlet NSTextField *labelTextField;
+@property (assign) IBOutlet NSImageView *iconImageView;
+@property (assign) IBOutlet NSTextField *infoTextFiled;
 
 // Creates the popup menu that is dispalyed in the backup mode selection
 - (NSMenu *)allocBackupModePopupMenu;

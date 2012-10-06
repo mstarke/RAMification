@@ -12,11 +12,17 @@
 
 
 @interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
-  IBOutlet NSTableView* tableView;
   NSDictionary *columIdentifier;
 }
 
 @property (retain, readonly) RMFFavouritesTableViewDelegate *tableDelegate;
+@property (assign) IBOutlet NSImageView *volumeIconImageView;
+@property (assign) IBOutlet NSTableColumn *favouriteColumn;
+@property (assign) IBOutlet NSTableView *favouritesTableView;
+@property (assign) IBOutlet NSTextField *detailLabelTextField;
+@property (assign) IBOutlet NSTextField *detailSizeTextFiled;
+@property (assign) IBOutlet NSPopUpButton *detailBackupPopUp;
+@property (assign) IBOutlet NSButton *detailIsAutoMount;
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;

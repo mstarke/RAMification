@@ -11,14 +11,12 @@
 #import "RMFFavouritesManager.h"
 #import "RMFSizeFormatter.h"
 #import "RMFRamdisk.h"
+#import "RMFFavouriteCellView.h"
 
 @implementation RMFFavouritesTableViewDelegate
 
 - (id)init {
   self = [super init];
-  if (self) {
-    // Just create the Menu vor the popup once so we do not have to built it ever time;
-  }
   return self;
 }
 
@@ -35,6 +33,14 @@
     return (ramdisk.isMounted == NO);
   }
   return YES;
+}
+
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
+  RMFFavouriteCellView *cellView = [tableView makeViewWithIdentifier:@"FavouriteCell" owner:self];
+  RMFRamdisk *ramdisk = [[[RMFFavouritesManager sharedManager] favourites] objectAtIndex:row];
+  [cellView.lableTextField setStringValue:ramdisk.label];
+  [cellView.infoTextField setStringValue:[NSString stringWithFormat:@"%ld KB", ramdisk.size]];
+  return cellView;
 }
 
 // return the cell for a column

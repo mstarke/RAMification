@@ -13,6 +13,7 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForLabel;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForAutomount;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForSize;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForBackupMode;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIcon;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -27,23 +28,24 @@ typedef enum RMFRamdiskBackupModeType {
   RMFBackupModeCount // Counter not to be assigned!
 } RMFRamdiskBackupMode;
 
+typedef enum RMFRamdiskVolumeIconType {
+  RMFDefaultVolumeIcon,
+  RMFVolumeIconCount // Counter not to be assigned!
+} RMFRamdiskVolumeIcon;
+
 // A Ramdisk structure for holding all the information about a ramdisk
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
 
-// The label of the RAM disk
 @property (retain) NSString* label;
-// Size in Megabytes
 @property (assign) NSUInteger size;
-// the mount path (if mounted)
 @property (retain) NSString *volumePath;
-// the bsd device name (if created)
 @property (retain) NSString *bsdDevice;
-// should get automatically mounted
-@property (assign) BOOL isAutomount;
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
+@property (assign) RMFRamdiskVolumeIcon volumeIcon;
 @property (retain, readonly) NSDate *lastBackupDate;
+@property (assign) BOOL isAutomount;
 @property (readonly) BOOL isDirty;
 
 + (RMFRamdisk *)volumePresetWithData:(NSData *)data;
@@ -55,6 +57,12 @@ typedef enum RMFRamdiskBackupModeType {
 - (id)initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
 // Call this function to indicate that this ramdisk was just backed up
 - (void)finishedBackup;
+// is the RAM disk mounted?
 - (BOOL)isMounted;
+/*
+ @return Volume icon to use
+ */
+- (NSURL *)urlForVolumeIcon;
+
 
 @end

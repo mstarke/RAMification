@@ -16,15 +16,23 @@ NSString *const kRMFRamdiskKeyForLabel = @"label";
 NSString *const kRMFRamdiskKeyForAutomount = @"automount";
 NSString *const kRMFRamdiskKeyForSize = @"size";
 NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
+NSString *const kRMFRamdiskKeyForVolumeIcon = @"volumeIcon";
+
+static NSDictionary *volumeIconPaths;
 
 @interface RMFRamdisk ()
-
 @property (readwrite) BOOL isDirty;
 @property (retain) NSDate *lastBackupDate;
+
 
 @end
 
 @implementation RMFRamdisk
+
++ (void)initialize {
+  NSBundle *bundle = [NSBundle mainBundle];
+  volumeIconPaths = @{ @(RMFDefaultVolumeIcon): [bundle URLForImageResource:@"Removable"]};
+}
 
 #pragma mark convinent object creation
 
@@ -71,6 +79,7 @@ NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
     _activity = RMFRamdiskIdle;
     _backupMode = RMFNoBackup;
     _lastBackupDate = [NSDate distantPast];
+    _volumeIcon = RMFDefaultVolumeIcon;
   }
   return self;
 }
@@ -94,6 +103,7 @@ NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
     _isAutomount = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForAutomount];
     _size = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForSize];
     _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
+    _volumeIcon = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIcon];
   }
   return self;
 }
@@ -105,7 +115,12 @@ NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
     [aCoder encodeInteger:self.size forKey:kRMFRamdiskKeyForSize];
     [aCoder encodeObject:self.label forKey:kRMFRamdiskKeyForLabel];
     [aCoder encodeInteger:self.backupMode forKey:kRMFRamdiskKeyForBackupMode];
+    [aCoder encodeInteger:self.volumeIcon forKey:kRMFRamdiskKeyForVolumeIcon];
   }
+}
+
+- (NSURL *)urlForVolumeIcon {
+  return [volumeIconPaths objectForKey:@(self.volumeIcon)];
 }
 
 - (BOOL)isEqual:(id)object {
