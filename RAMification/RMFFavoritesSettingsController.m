@@ -20,7 +20,7 @@
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
-- (NSMenu *)allocBackupModePopupMenu;
+- (NSMenu *)backupModePopupMenu;
 
 @end
 
@@ -65,18 +65,33 @@
 }
 
 - (void)didLoadView {
-  _favouritesController = [[NSArrayController alloc] init];
-  NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
-  [_favouritesController setContent:favourites];
-  [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
   
+  // Array controller for the table view selection
+  _favouritesController = [[NSArrayController alloc] init];
+  [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerFavouritesKey options:nil];
+  [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
+ 
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
   _favouritesTableView.delegate = self.tableDelegate;
+  
+  [_detailBackupPopUp setMenu:[self backupModePopupMenu]];
+  
+ 
+  // Setup bindings for the detail view
+  NSString *labelKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForLabel];
+  NSString *automountKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForAutomount];
+  NSString *sizeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForSize];
+  NSString *backupModeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForBackupMode];
+  [_detailLabelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
+  [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
+  [_detailSizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
+  [_detailBackupPopUp bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
+
   NSBundle *bundle = [NSBundle mainBundle];
   [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
 }
 
-- (NSMenu *)allocBackupModePopupMenu {
+- (NSMenu *)backupModePopupMenu {
   NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   for(NSUInteger eMode = 0; eMode < RMFBackupModeCount; eMode++) {
     switch (eMode) {
@@ -91,7 +106,7 @@
         break;
     }
   }
-  return  backupMenu;
+  return [backupMenu autorelease];
 }
 
 
@@ -120,8 +135,8 @@
   RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
-//  NSIndexSet *columnIndexSet = [NSIndexSet indexSetWithIndex:[tableView columnWithIdentifier:kRMFRamdiskKeyForLabel]];
-//  [tableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columnIndexSet];
+  NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];
+  [_favouritesTableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columIndexSet];
 }
 
 @end

@@ -15,6 +15,8 @@
 #import "NSString+RMFVolumeTools.h"
 #import "RMFFavouritesTableViewDelegate.h"
 
+NSString *const kRMFFavouritesManagerFavouritesKey = @"favourites";
+
 // private interface
 @interface RMFFavouritesManager ()
 
@@ -80,11 +82,11 @@ static RMFFavouritesManager *sharedSingleton;
 #pragma mark NSTabelDataSource protocoll
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-  return [self.favourites count];
+  return [_favourites count];
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
+  RMFRamdisk *favourite = [_favourites objectAtIndex:row];
   // We need to wrap the identifier in a Number with bool to get the checkbox right
   if([tableColumn.identifier isEqualToString:kRMFRamdiskKeyForAutomount]) {
     return [NSNumber numberWithBool:favourite.isAutomount];
@@ -93,7 +95,7 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  RMFRamdisk *favourite = [self.favourites objectAtIndex:row];
+  RMFRamdisk *favourite = [_favourites objectAtIndex:row];
   if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForSize]) {
     favourite.size = [object integerValue];
   }
@@ -132,26 +134,26 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 - (NSArray *)mountedFavourites {
-  return [self.favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
+  return [_favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
 }
 
-- (BOOL) addFavourite:(RMFRamdisk *)ramdisk {
-  BOOL isDuplicate = [self.favourites containsObject:ramdisk];
+- (BOOL)addFavourite:(RMFRamdisk *)ramdisk {
+  BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
-    [self insertObject:ramdisk inFavouritesAtIndex:[self.favourites count]];
+    [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
     [self synchronizeDefaults];
   } 
   return !isDuplicate;
 }
 
 - (void)deleteFavourite:(RMFRamdisk *)ramdisk {
-  NSUInteger index = [self.favourites indexOfObject:ramdisk];
+  NSUInteger index = [_favourites indexOfObject:ramdisk];
   [self removeObjectFromFavouritesAtIndex:index];
   [self synchronizeDefaults];
 }
 
-- (RMFRamdisk*) findFavouriteByName:(NSString*)name {
-  for(RMFRamdisk *ramdisk in self.favourites) {
+- (RMFRamdisk *)findFavouriteByName:(NSString*)name {
+  for(RMFRamdisk *ramdisk in _favourites) {
     if([ramdisk.label isEqualToString:name]) {
       return ramdisk;
     }
@@ -159,7 +161,7 @@ static RMFFavouritesManager *sharedSingleton;
   return nil;}
 
 - (RMFRamdisk *)findFavouriteWithVolumePath:(NSString *)path {
-  for(RMFRamdisk *ramdisk in self.favourites) {
+  for(RMFRamdisk *ramdisk in _favourites) {
     if([ramdisk.volumePath isEqualToString:path]) {
       return ramdisk;
     }
@@ -168,7 +170,7 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 - (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device {
-  for(RMFRamdisk *ramdisk in self.favourites){
+  for(RMFRamdisk *ramdisk in _favourites){
     if([ramdisk.bsdDevice isEqualToString:device]) {
       return ramdisk;
     }
@@ -181,7 +183,7 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 - (void)initializeFavourites {
-  for(RMFRamdisk *ramdisk in self.favourites) {
+  for(RMFRamdisk *ramdisk in _favourites) {
     if(ramdisk.isAutomount) {
       RMFMountController *mountController = [RMFMountController sharedController];
       [mountController mount:ramdisk];
@@ -192,15 +194,23 @@ static RMFFavouritesManager *sharedSingleton;
 # pragma mark KVC
 
 - (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index {
-  [self.favourites removeObjectAtIndex:index];
+  [_favourites removeObjectAtIndex:index];
 }
 
 - (void)insertObject:(RMFRamdisk *)ramdisk inFavouritesAtIndex:(NSUInteger)index {
-  [self.favourites insertObject:ramdisk atIndex:index];
+  [_favourites insertObject:ramdisk atIndex:index];
+}
+
+- (id)objectInFavouritesAtIndex:(NSUInteger)index {
+  return [_favourites objectAtIndex:index];
+}
+
+- (NSUInteger)countOfFavourites {
+  return [_favourites count];
 }
 
 - (void)synchronizeDefaults {
-  NSData *data= [NSKeyedArchiver archivedDataWithRootObject:self.favourites];
+  NSData *data= [NSKeyedArchiver archivedDataWithRootObject:_favourites];
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:kRMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];

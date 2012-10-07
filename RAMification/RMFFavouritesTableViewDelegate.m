@@ -38,8 +38,9 @@
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFFavouriteCellView *cellView = [tableView makeViewWithIdentifier:@"FavouriteCell" owner:self];
   RMFRamdisk *ramdisk = [[[RMFFavouritesManager sharedManager] favourites] objectAtIndex:row];
-  [cellView.lableTextField setStringValue:ramdisk.label];
-  [cellView.infoTextField setStringValue:[NSString stringWithFormat:@"%ld KB", ramdisk.size]];
+  // Bind the Cell view to automatically update on changes
+  [cellView.lableTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
+  [cellView.infoTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForSize options:nil];
   return cellView;
 }
 

@@ -20,7 +20,7 @@
 @property (assign) IBOutlet NSTableColumn *favouriteColumn;
 @property (assign) IBOutlet NSTableView *favouritesTableView;
 @property (assign) IBOutlet NSTextField *detailLabelTextField;
-@property (assign) IBOutlet NSTextField *detailSizeTextFiled;
+@property (assign) IBOutlet NSTextField *detailSizeTextField;
 @property (assign) IBOutlet NSPopUpButton *detailBackupPopUp;
 @property (assign) IBOutlet NSButton *detailIsAutoMount;
 

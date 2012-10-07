@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
+
 @class RMFRamdisk;
 
 /*
  Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
- 
  It gives a interface to search for favourites based on different criteria
- 
  */
 @interface RMFFavouritesManager : NSObject <NSTableViewDataSource>
 
