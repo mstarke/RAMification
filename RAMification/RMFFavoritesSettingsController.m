@@ -11,6 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFMountWatcher.h"
+#import "RMFSizeFormatter.h"
 
 @interface RMFFavoritesSettingsController () {
   NSArrayController *_favouritesController;
@@ -75,17 +76,19 @@
   _favouritesTableView.delegate = self.tableDelegate;
   
   [_detailBackupPopUp setMenu:[self backupModePopupMenu]];
-  
+  [_detailSizeTextField setFormatter:[RMFSizeFormatter formatter]];
  
   // Setup bindings for the detail view
   NSString *labelKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForLabel];
   NSString *automountKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForAutomount];
   NSString *sizeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForSize];
   NSString *backupModeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForBackupMode];
+  NSString *volumeIconKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForVolumeIcon];
   [_detailLabelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_detailSizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_detailBackupPopUp bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
+  [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
 
   NSBundle *bundle = [NSBundle mainBundle];
   [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];

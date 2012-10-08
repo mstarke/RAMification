@@ -70,7 +70,7 @@ NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
 
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number {
   NSUInteger suffixIndex = 0;
-  double value = [number intValue];
+  double value = [number doubleValue];
   // loop through suffixes and count exponents
   while((value / 1024.0) >= 1 && suffixIndex < (RMFSizeSuffixCount - 1)) {
     suffixIndex++;
