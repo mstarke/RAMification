@@ -86,9 +86,6 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeySize];
   [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
   
-  // backup interval
-  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyBackupInterval];
-  
   [self.sizeStepper setMinValue:0];
   [self.sizeStepper setMaxValue:10];
   [self.sizeStepper setIncrement:1];
@@ -120,6 +117,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   }
   [self.backupIntervalPopUp setMenu:backupMenu];
   [self.backupIntervalPopUp selectItemAtIndex:currentIndex];
+  [backupMenu release];
 }
 
 - (NSString *)memoryInfoText {

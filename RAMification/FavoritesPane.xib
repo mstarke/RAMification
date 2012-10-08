@@ -658,6 +658,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">addRamdiskButton</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="903516477"/>
+					</object>
+					<int key="connectionID">309</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">removeRamdiskButton</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="615527290"/>
+					</object>
+					<int key="connectionID">310</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">imageView</string>
 						<object class="NSTableCellView" key="source" id="923037732">
 							<nil key="NSNextResponder"/>
@@ -1141,7 +1157,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">308</int>
+			<int key="maxID">310</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1163,15 +1179,21 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="addRamdiskButton">NSButton</string>
 						<string key="detailBackupPopUp">NSPopUpButton</string>
 						<string key="detailIsAutoMount">NSButton</string>
 						<string key="detailLabelTextField">NSTextField</string>
 						<string key="detailSizeTextField">NSTextField</string>
 						<string key="favouriteColumn">NSTableColumn</string>
 						<string key="favouritesTableView">NSTableView</string>
+						<string key="removeRamdiskButton">NSButton</string>
 						<string key="volumeIconImageView">NSImageView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="addRamdiskButton">
+							<string key="name">addRamdiskButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="detailBackupPopUp">
 							<string key="name">detailBackupPopUp</string>
 							<string key="candidateClassName">NSPopUpButton</string>
@@ -1195,6 +1217,10 @@
 						<object class="IBToOneOutletInfo" key="favouritesTableView">
 							<string key="name">favouritesTableView</string>
 							<string key="candidateClassName">NSTableView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="removeRamdiskButton">
+							<string key="name">removeRamdiskButton</string>
+							<string key="candidateClassName">NSButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="volumeIconImageView">
 							<string key="name">volumeIconImageView</string>

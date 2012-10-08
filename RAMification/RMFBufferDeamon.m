@@ -109,7 +109,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
    Ignore Mount, Removal (nothing to do there)
    */
   NSUInteger flagCount = sizeof(*flags) / sizeof(FSEventStreamEventFlags);
-  for(NSUInteger index; index < flagCount; index++) {
+  for(NSUInteger index = 0; index < flagCount; index++) {
     FSEventStreamEventFlags aFlag = flags[index];
     switch (aFlag) {
       case kFSEventStreamEventFlagRootChanged:

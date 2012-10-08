@@ -12,9 +12,12 @@
 #import "RMFFavouritesManager.h"
 #import "RMFMountWatcher.h"
 #import "RMFSizeFormatter.h"
+#import "RMFArrayController.h"
+#import "RMFFavouritesArrayControllerDelegate.h"
 
 @interface RMFFavoritesSettingsController () {
-  NSArrayController *_favouritesController;
+  RMFArrayController *_favouritesController;
+  RMFFavouritesArrayControllerDelegate *_favouritesControllerDelegate;
 }
 
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
@@ -55,6 +58,9 @@
 }
 
 - (void)dealloc {
+  [_favouritesController release];
+  [_favouritesControllerDelegate release];
+  self.tableDelegate = nil;
   [super dealloc];
 }
 
@@ -68,7 +74,10 @@
 - (void)didLoadView {
   
   // Array controller for the table view selection
-  _favouritesController = [[NSArrayController alloc] init];
+  _favouritesController = [[RMFArrayController alloc] init];
+  _favouritesControllerDelegate = [[RMFFavouritesArrayControllerDelegate alloc] init];
+  _favouritesController.delegate = _favouritesControllerDelegate;
+  
   [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerFavouritesKey options:nil];
   [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
  
@@ -90,6 +99,8 @@
   [_detailSizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_detailBackupPopUp bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
+  
+  [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
 
   NSBundle *bundle = [NSBundle mainBundle];
   [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];

@@ -24,15 +24,12 @@
 		4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB69147EF6AD000E19B0 /* Credits.rtf */; };
 		4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */; };
 		4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */; };
-		4C5BDB79147EF6AD000E19B0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */; };
-		4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
-		4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */; };
-		4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */; };
 		4C701A3B161FBDA800547F17 /* Removable.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C701A3A161FBDA800547F17 /* Removable.icns */; };
-		4C704FEC15B0043600AB8463 /* FavouriteManagerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */; };
 		4C73968D1614BDB100912443 /* favourite.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4C73968C1614BDB100912443 /* favourite.tiff */; };
 		4C744ECA149917B90058D2D7 /* RMFMountWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
+		4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */; };
+		4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
 		4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFRamdisk.m */; };
 		4CB6100B148AA3D800166397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB61009148AA3D800166397 /* Localizable.strings */; };
@@ -50,16 +47,6 @@
 		4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */; };
 		4CF8842914926DC2000EE2D7 /* RMFFavouritesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4C5BDB7B147EF6AD000E19B0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4C5BDB4D147EF6AD000E19B0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4C5BDB55147EF6AD000E19B0;
-			remoteInfo = RAMification;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4C05C6DA15B4E01000495255 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -96,20 +83,17 @@
 		4C5BDB6C147EF6AD000E19B0 /* RMFAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMFAppDelegate.h; sourceTree = "<group>"; };
 		4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RMFAppDelegate.m; sourceTree = "<group>"; };
 		4C5BDB70147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RAMificationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		4C5BDB7F147EF6AD000E19B0 /* RAMificationTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RAMificationTests-Info.plist"; sourceTree = "<group>"; };
-		4C5BDB81147EF6AD000E19B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RAMificationTests.h; sourceTree = "<group>"; };
-		4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RAMificationTests.m; sourceTree = "<group>"; };
 		4C701A3A161FBDA800547F17 /* Removable.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Removable.icns; sourceTree = "<group>"; };
-		4C704FEA15B0043600AB8463 /* FavouriteManagerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteManagerTest.h; sourceTree = "<group>"; };
-		4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteManagerTest.m; sourceTree = "<group>"; };
 		4C73968C1614BDB100912443 /* favourite.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = favourite.tiff; path = Images/favourite.tiff; sourceTree = "<group>"; };
 		4C744EC8149917B90058D2D7 /* RMFMountWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountWatcher.h; sourceTree = "<group>"; };
 		4C744EC9149917B90058D2D7 /* RMFMountWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountWatcher.m; sourceTree = "<group>"; };
 		4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsController.h; sourceTree = "<group>"; };
 		4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSettingsController.m; sourceTree = "<group>"; };
+		4C85E6BE16237E2B00A5CCCC /* RMFArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFArrayController.h; sourceTree = "<group>"; };
+		4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFArrayController.m; sourceTree = "<group>"; };
+		4C85E6C216237E5F00A5CCCC /* RMFArrayControllerDelegateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMFArrayControllerDelegateProtocol.h; sourceTree = "<group>"; };
+		4C85E6C31623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesArrayControllerDelegate.h; sourceTree = "<group>"; };
+		4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesArrayControllerDelegate.m; sourceTree = "<group>"; };
 		4CB61001148AA2DD00166397 /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFGeneralSettingsController.h; sourceTree = "<group>"; };
 		4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFGeneralSettingsController.m; sourceTree = "<group>"; };
 		4CB61003148AA2DD00166397 /* RMFRamdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFRamdisk.h; sourceTree = "<group>"; };
@@ -146,15 +130,6 @@
 				4C05C6DB15B4E01000495255 /* IOKit.framework in Frameworks */,
 				4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */,
 				4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4C5BDB73147EF6AD000E19B0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C5BDB79147EF6AD000E19B0 /* SenTestingKit.framework in Frameworks */,
-				4C5BDB7A147EF6AD000E19B0 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +173,8 @@
 				4C4FA61C149816060082981C /* RMFMenuController.m */,
 				4C264E5615A631E500D358B5 /* RMFMountController.h */,
 				4C264E5715A631E500D358B5 /* RMFMountController.m */,
+				4C85E6BE16237E2B00A5CCCC /* RMFArrayController.h */,
+				4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */,
 			);
 			name = Controler;
 			sourceTree = "<group>";
@@ -217,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */,
+				4C85E6C216237E5F00A5CCCC /* RMFArrayControllerDelegateProtocol.h */,
 			);
 			name = Protcols;
 			sourceTree = "<group>";
@@ -228,6 +206,8 @@
 				4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */,
 				4C34B6AB1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.h */,
 				4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */,
+				4C85E6C31623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.h */,
+				4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -254,7 +234,6 @@
 			children = (
 				4CBE8D6C148C30D100747A33 /* LaunchAtLoginController */,
 				4C5BDB60147EF6AD000E19B0 /* RAMification */,
-				4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */,
 				4C5BDB59147EF6AD000E19B0 /* Frameworks */,
 				4C5BDB57147EF6AD000E19B0 /* Products */,
 			);
@@ -264,7 +243,6 @@
 			isa = PBXGroup;
 			children = (
 				4C5BDB56147EF6AD000E19B0 /* RAMification.app */,
-				4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -276,7 +254,6 @@
 				4C05C6DA15B4E01000495255 /* IOKit.framework */,
 				4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */,
 				4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */,
-				4C5BDB78147EF6AD000E19B0 /* SenTestingKit.framework */,
 				4C5BDB5C147EF6AD000E19B0 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -320,27 +297,6 @@
 				4C5BDB68147EF6AD000E19B0 /* RAMification-Prefix.pch */,
 				4C5BDB69147EF6AD000E19B0 /* Credits.rtf */,
 				4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		4C5BDB7D147EF6AD000E19B0 /* RAMificationTests */ = {
-			isa = PBXGroup;
-			children = (
-				4C5BDB83147EF6AD000E19B0 /* RAMificationTests.h */,
-				4C5BDB84147EF6AD000E19B0 /* RAMificationTests.m */,
-				4C5BDB7E147EF6AD000E19B0 /* Supporting Files */,
-				4C704FEA15B0043600AB8463 /* FavouriteManagerTest.h */,
-				4C704FEB15B0043600AB8463 /* FavouriteManagerTest.m */,
-			);
-			path = RAMificationTests;
-			sourceTree = "<group>";
-		};
-		4C5BDB7E147EF6AD000E19B0 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				4C5BDB7F147EF6AD000E19B0 /* RAMificationTests-Info.plist */,
-				4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -396,25 +352,6 @@
 			productReference = 4C5BDB56147EF6AD000E19B0 /* RAMification.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4C5BDB76147EF6AD000E19B0 /* RAMificationTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4C5BDB8B147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMificationTests" */;
-			buildPhases = (
-				4C5BDB72147EF6AD000E19B0 /* Sources */,
-				4C5BDB73147EF6AD000E19B0 /* Frameworks */,
-				4C5BDB74147EF6AD000E19B0 /* Resources */,
-				4C5BDB75147EF6AD000E19B0 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4C5BDB7C147EF6AD000E19B0 /* PBXTargetDependency */,
-			);
-			name = RAMificationTests;
-			productName = RAMificationTests;
-			productReference = 4C5BDB77147EF6AD000E19B0 /* RAMificationTests.octest */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -437,7 +374,6 @@
 			projectRoot = "";
 			targets = (
 				4C5BDB55147EF6AD000E19B0 /* RAMification */,
-				4C5BDB76147EF6AD000E19B0 /* RAMificationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -462,31 +398,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4C5BDB74147EF6AD000E19B0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C5BDB82147EF6AD000E19B0 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4C5BDB75147EF6AD000E19B0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C5BDB52147EF6AD000E19B0 /* Sources */ = {
@@ -514,27 +426,12 @@
 				4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */,
 				4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */,
 				4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4C5BDB72147EF6AD000E19B0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C5BDB85147EF6AD000E19B0 /* RAMificationTests.m in Sources */,
-				4C704FEC15B0043600AB8463 /* FavouriteManagerTest.m in Sources */,
+				4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */,
+				4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4C5BDB7C147EF6AD000E19B0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4C5BDB55147EF6AD000E19B0 /* RAMification */;
-			targetProxy = 4C5BDB7B147EF6AD000E19B0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */ = {
@@ -559,14 +456,6 @@
 				4C5BDB70147EF6AD000E19B0 /* en */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		4C5BDB80147EF6AD000E19B0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4C5BDB81147EF6AD000E19B0 /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		4CB61009148AA3D800166397 /* Localizable.strings */ = {
@@ -649,36 +538,6 @@
 			};
 			name = Release;
 		};
-		4C5BDB8C147EF6AD000E19B0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RAMification.app/Contents/MacOS/RAMification";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
-				INFOPLIST_FILE = "RAMificationTests/RAMificationTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		4C5BDB8D147EF6AD000E19B0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RAMification.app/Contents/MacOS/RAMification";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "RAMification/RAMification-Prefix.pch";
-				INFOPLIST_FILE = "RAMificationTests/RAMificationTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -696,15 +555,6 @@
 			buildConfigurations = (
 				4C5BDB89147EF6AD000E19B0 /* Debug */,
 				4C5BDB8A147EF6AD000E19B0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4C5BDB8B147EF6AD000E19B0 /* Build configuration list for PBXNativeTarget "RAMificationTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4C5BDB8C147EF6AD000E19B0 /* Debug */,
-				4C5BDB8D147EF6AD000E19B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
