@@ -75,5 +75,4 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
  */
 - (void) initializeFavourites;
 
-
 @end

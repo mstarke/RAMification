@@ -19,8 +19,6 @@
 #import "NSString+RMFMenuTools.h"
 
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
-NSString *const RMFFavouritesManagerFavouritesKeyPath = @"favourites";
-NSString *const RMFRamDiskLabel = @"label";
 NSString *const RMFRamDiskIsDirty = @"isDirty";
 const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
@@ -77,7 +75,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [self createMenu];
     [self createStatusItem];
     RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-    [favouritesManager addObserver:self forKeyPath:RMFFavouritesManagerFavouritesKeyPath options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
+    [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKey options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidMountRamdiskNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidUnmountRamdiskNotification object:nil];
@@ -229,7 +227,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         action:@selector(handleFavouriteClicked:)
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
-    [favorite addObserver:self forKeyPath:RMFRamDiskLabel options:0 context:item];
+    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:item];
     [favorite addObserver:self forKeyPath:RMFRamDiskIsDirty options:0 context:item];
     [item setTarget:self];
     [_favoritesMenu insertItem:item atIndex:index];
@@ -258,7 +256,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   NSValue *itemId = [[_menuItemsToFavouritesMap allKeysForObject:favouriteId] lastObject];
   if(itemId != nil) {
     // remove all key-value-observer from the removed ramdisk
-    [favourite removeObserver:self forKeyPath:RMFRamDiskLabel];
+    [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
     [favourite removeObserver:self forKeyPath:RMFRamDiskIsDirty];
     NSMenuItem *item = [itemId nonretainedObjectValue];
     [_favoritesMenu removeItem:item];
@@ -343,7 +341,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 # pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-  if( [keyPath isEqualToString:RMFRamDiskLabel] || [keyPath isEqualToString:RMFRamDiskIsDirty] ) {
+  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] || [keyPath isEqualToString:RMFRamDiskIsDirty] ) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
       NSMenuItem *item = context;
@@ -351,7 +349,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
       return;
     }
   }
-  if( [keyPath isEqualToString:RMFFavouritesManagerFavouritesKeyPath] ) {
+  if( [keyPath isEqualToString:kRMFFavouritesManagerFavouritesKey] ) {
     NSUInteger changeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
     switch (changeKind) {
       case NSKeyValueChangeInsertion: {

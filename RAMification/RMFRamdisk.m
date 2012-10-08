@@ -24,8 +24,6 @@ static NSDictionary *volumeIconImageNames;
 @interface RMFRamdisk ()
 @property (readwrite) BOOL isDirty;
 @property (retain) NSDate *lastBackupDate;
-
-
 @end
 
 @implementation RMFRamdisk

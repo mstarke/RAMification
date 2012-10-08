@@ -76,6 +76,7 @@
   _favouritesTableView.delegate = self.tableDelegate;
   
   [_detailBackupPopUp setMenu:[self backupModePopupMenu]];
+  
   [_detailSizeTextField setFormatter:[RMFSizeFormatter formatter]];
  
   // Setup bindings for the detail view

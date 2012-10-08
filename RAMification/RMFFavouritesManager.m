@@ -22,14 +22,25 @@ NSString *const kRMFFavouritesManagerFavouritesKey = @"favourites";
 
 @property (retain) NSMutableArray *favourites;
 
-// Adds the given ramdisk to the favourites
-// @param ramdisk favourite to add
-// @return true if the favourite was added, false otherwise
+/*
+ Adds the given ramdisk to the favourites
+ @param ramdisk favourite to add
+ @return true if the favourite was added, false otherwise
+ */
 - (BOOL) addFavourite:(RMFRamdisk*) ramdisk;
-// creates a default favourite with a unique name
-// @return the unique favourite
+/*
+ creates a default favourite with a unique name
+ @return the unique favourite
+ */
 - (RMFRamdisk*) createUniqueFavourite;
-// flushes changes to the preferences file
+/*
+ Obseverse ramdisk for changes to values stored in user defaults
+ and shedules synchornization on relevant changes
+ */
+- (void)observerRamdisk:(RMFRamdisk *)ramdisk;
+/*
+ Stores favourites to defaults
+ */
 - (void) synchronizeDefaults;
 
 @end
@@ -67,6 +78,9 @@ static RMFFavouritesManager *sharedSingleton;
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
       if(favourites != nil) {
         self.favourites = [NSMutableArray arrayWithArray:favourites];
+        for(RMFRamdisk *ramdisk in _favourites) {
+          [self observerRamdisk:ramdisk];
+        }
       }
     }
     NSLog(@"Created %@", [self class]);
@@ -94,29 +108,6 @@ static RMFFavouritesManager *sharedSingleton;
   return [favourite valueForKey:[tableColumn identifier]];
 }
 
-- (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  RMFRamdisk *favourite = [_favourites objectAtIndex:row];
-  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForSize]) {
-    favourite.size = [object integerValue];
-  }
-  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForAutomount]) {
-    favourite.isAutomount = [object boolValue];
-  }
-  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForLabel]) {
-    NSString *oldLable = [NSString stringWithString:favourite.label];
-    favourite.label = object;
-    // Test for actual label change
-    if(![oldLable isEqualToString:favourite.label]) {
-      // as the mounter to rename the volume?
-    }
-    
-  }
-  if([[tableColumn identifier] isEqualToString:kRMFRamdiskKeyForBackupMode]) {
-    favourite.backupMode = [object intValue];
-  }
-  [self synchronizeDefaults];
-}
-
 
 #pragma mark preset handling
 
@@ -141,8 +132,9 @@ static RMFFavouritesManager *sharedSingleton;
   BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
+    [self observerRamdisk:ramdisk];
     [self synchronizeDefaults];
-  } 
+  }
   return !isDuplicate;
 }
 
@@ -191,6 +183,14 @@ static RMFFavouritesManager *sharedSingleton;
   }
 }
 
+- (void)observerRamdisk:(RMFRamdisk *)ramdisk {
+  if(ramdisk != nil) {
+    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForAutomount options:NSKeyValueObservingOptionNew context:nil];
+    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode options:NSKeyValueObservingOptionNew context:nil];
+    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:NSKeyValueObservingOptionNew context:nil];
+    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForSize options:NSKeyValueObservingOptionNew context:nil];
+  }
+}
 # pragma mark KVC
 
 - (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index {
@@ -209,11 +209,21 @@ static RMFFavouritesManager *sharedSingleton;
   return [_favourites count];
 }
 
+#pragma makr KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+  if([object isKindOfClass:[RMFRamdisk class]]) {
+    [self synchronizeDefaults];
+  }
+}
+
 - (void)synchronizeDefaults {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:_favourites];
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:kRMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+
 
 @end

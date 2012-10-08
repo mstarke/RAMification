@@ -45,7 +45,7 @@ typedef enum RMFRamdiskVolumeIconType {
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;
-@property (nonatomic, readonly, getter = volumeIcon) NSImage *volumeIcon;
+@property (nonatomic, readonly) NSImage *volumeIcon;
 @property (retain, readonly) NSDate *lastBackupDate;
 @property (assign) BOOL isAutomount;
 @property (readonly) BOOL isDirty;
