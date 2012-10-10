@@ -8,58 +8,49 @@
 
 #import "RMFSizeFormatter.h"
 
-static NSDictionary *suffixNameDict;
-static NSDictionary *suffixExponentDict;
-
+static NSDictionary *RMFSuffixNames;
+static NSDictionary *RMFSuffixExponents;
 
 NSString *const kRMFSizeFormatterValueKey = @"RMFSizeFormatterValueKey";
 NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey"; 
 
-@interface RMFSizeFormatter ()
+// We use non-SI suffixes so power of 2 multiplyer
+typedef enum RMFSizeSuffixType {
+  RMFSizeSuffixNone, // Byte
+  RMFSizeSuffixKilo, // Kilobyte
+  RMFSizeSuffixMega, // Megabyte
+  RMFSizeSuffixGiga, // Gigabyte
+  RMFSizeSuffixCount // Count value, do not use!
+} RMFSizeSuffix;
+
+@interface RMFSizeFormatter (private)
+
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number;
 + (NSString *)stringForSizeRepresentation:(NSDictionary *)dict;
 + (NSDictionary *)dictForSuffix:(RMFSizeSuffix)suffix andValue:(double)value;
++ (NSString *)nameForSuffix:(RMFSizeSuffix)suffix;
++ (NSNumber *)exponentForSuffix:(RMFSizeSuffix)suffix;
++ (RMFSizeSuffix)suffixForString:(NSString *)string;
 @end
 
 
 @implementation RMFSizeFormatter
 
-+ (NSDictionary *)suffixExponents {
-  if(suffixExponentDict == nil) {
-    NSArray *keys = [NSArray arrayWithObjects:[NSNumber numberWithInt:RMFSizeSuffixNone]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixKilo]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixMega]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixGiga], nil];
-    NSArray *objects = [NSArray arrayWithObjects:[NSNumber numberWithInt:0]
-                     ,[NSNumber numberWithInt:1]
-                     ,[NSNumber numberWithInt:2]
-                     ,[NSNumber numberWithInt:3], nil];
-    
-    suffixExponentDict = [[NSDictionary alloc] initWithObjects:objects forKeys:keys];
-  }
-  return suffixExponentDict;
-}
-
-+ (NSDictionary *)suffixNames {
-  if(suffixNameDict == nil) {
-    NSArray *objects = [NSArray arrayWithObjects:@"byte", @"Kb", @"Mb", @"Gb", nil];
-    NSArray *keys = [NSArray arrayWithObjects:[NSNumber numberWithInt:RMFSizeSuffixNone]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixKilo]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixMega]
-                     ,[NSNumber numberWithInt:RMFSizeSuffixGiga], nil];
-    
-    suffixNameDict = [[NSDictionary alloc] initWithObjects:objects forKeys:keys];
-  }
-  return suffixNameDict;
++ (void)initialize {
+  // Initalize basic lookup structures
+  RMFSuffixExponents = @{ @(RMFSizeSuffixNone): @0, @(RMFSizeSuffixKilo): @1, @(RMFSizeSuffixMega): @2, @(RMFSizeSuffixGiga): @3 };
+  [RMFSuffixExponents retain];
+  RMFSuffixNames = @{ @(RMFSizeSuffixNone): @"byte", @(RMFSizeSuffixKilo): @"Kb", @(RMFSizeSuffixMega): @"Mb", @(RMFSizeSuffixGiga): @"Gb" };
+  [RMFSuffixNames retain];
 }
 
 + (NSString *)nameForSuffix:(RMFSizeSuffix)suffix {
-  return [[RMFSizeFormatter suffixNames] objectForKey:[NSNumber numberWithInt:suffix ]];
+  return [RMFSuffixNames objectForKey:[NSNumber numberWithInt:suffix ]];
   
 }
 
 + (NSNumber *)exponentForSuffix:(RMFSizeSuffix)suffix {
-  return [[RMFSizeFormatter suffixExponents] objectForKey:[NSNumber numberWithInt:suffix ]];
+  return [RMFSuffixExponents objectForKey:[NSNumber numberWithInt:suffix ]];
 }
 
 + (NSDictionary *)dictForSuffix:(RMFSizeSuffix)suffix andValue:(double)value {
@@ -99,9 +90,9 @@ NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
     return result == NSOrderedSame;
   };
   
-  NSSet *matchingSuffixes = [[RMFSizeFormatter suffixNames] keysOfEntriesPassingTest:filterBlock];
+  NSSet *matchingSuffixes = [RMFSuffixNames keysOfEntriesPassingTest:filterBlock];
   if([matchingSuffixes count] > 1){
-    NSLog(@"RMFSizeFormatter: Found multiple candidates: %@ for suffix:%@.", matchingSuffixes, string);
+    NSLog(@"%@: Found multiple candidates: %@ for suffix:%@.", self, matchingSuffixes, string);
   }
   return [[matchingSuffixes anyObject] intValue];
 }
@@ -134,7 +125,6 @@ NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
     NSDictionary *dict = [RMFSizeFormatter sizeRepresentationForNumber:obj];
     return [RMFSizeFormatter stringForSizeRepresentation:dict];
   }
-  NSLog(@"%@ Class %@", obj, [obj class]);
   return nil;
 }
 

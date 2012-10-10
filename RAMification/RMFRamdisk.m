@@ -18,6 +18,10 @@ NSString *const kRMFRamdiskKeyForSize = @"size";
 NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
 NSString *const kRMFRamdiskKeyForVolumeIconType = @"volumeIconType";
 NSString *const kRMFRamdiskKeyForVolumeIcon = @"volumeIcon";
+NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
+
+// private constants
+NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
 
 static NSDictionary *volumeIconImageNames;
 
@@ -79,6 +83,7 @@ static NSDictionary *volumeIconImageNames;
     _backupMode = RMFNoBackup;
     _lastBackupDate = [NSDate distantPast];
     _volumeIconType = RMFDefaultVolumeIcon;
+    _finderLabelIndex = 0;
   }
   return self;
 }
@@ -103,6 +108,7 @@ static NSDictionary *volumeIconImageNames;
     _size = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForSize];
     _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
     _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
+    _finderLabelIndex = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForFinderLabelIndex];
   }
   return self;
 }
@@ -115,6 +121,7 @@ static NSDictionary *volumeIconImageNames;
     [aCoder encodeObject:self.label forKey:kRMFRamdiskKeyForLabel];
     [aCoder encodeInteger:self.backupMode forKey:kRMFRamdiskKeyForBackupMode];
     [aCoder encodeInteger:self.volumeIconType forKey:kRMFRamdiskKeyForVolumeIconType];
+    [aCoder encodeInteger:self.finderLabelIndex forKey:kRMFRamdiskKeyForFinderLabelIndex];
   }
 }
 
@@ -122,8 +129,8 @@ static NSDictionary *volumeIconImageNames;
   BOOL isEqual = NO;
   if([object isMemberOfClass:[RMFRamdisk class]]) {
     RMFRamdisk* other = (RMFRamdisk*)object;
-    isEqual = [self.label isEqualToString:other.label];
-    isEqual &= (self.size == other.size);
+    isEqual = [_label isEqualToString:other.label];
+    isEqual &= (_size == other.size);
   }
   return isEqual;
 }
@@ -140,6 +147,15 @@ static NSDictionary *volumeIconImageNames;
 - (NSImage *)volumeIcon {
   NSString *imageName = [volumeIconImageNames objectForKey:@(self.volumeIconType)];
   return [NSImage imageNamed:imageName];
+}
+
+- (void)disableSpotlightIndexing {
+
+}
+
+- (void)updateLabel {
+  NSURL *url = [NSURL fileURLWithPath:self.volumePath isDirectory:YES];
+  [url setResourceValue:@(_finderLabelIndex) forKey:NSURLLabelNumberKey error:nil];
 }
 
 @end

@@ -15,6 +15,7 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForSize;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForBackupMode;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIcon;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIconType;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -38,13 +39,14 @@ typedef enum RMFRamdiskVolumeIconType {
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
 
-@property (retain) NSString* label;
+@property (retain) NSString *label;
 @property (assign) NSUInteger size;
 @property (retain) NSString *volumePath;
 @property (retain) NSString *bsdDevice;
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;
+@property (assign) NSUInteger finderLabelIndex;
 @property (nonatomic, readonly) NSImage *volumeIcon;
 @property (retain, readonly) NSDate *lastBackupDate;
 @property (assign) BOOL isAutomount;
@@ -61,6 +63,8 @@ typedef enum RMFRamdiskVolumeIconType {
 - (void)finishedBackup;
 // is the RAM disk mounted?
 - (BOOL)isMounted;
+- (void)disableSpotlightIndexing;
+- (void)updateLabel;
 
 
 @end

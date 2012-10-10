@@ -69,6 +69,7 @@ NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
     return; // No known favourite was mounted, ignore
   }
   ramdisk.volumePath = volumePath;
+  [ramdisk updateLabel];
   
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];

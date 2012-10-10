@@ -14,12 +14,20 @@
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 
+static NSArray *_excludedPathsInSync;
+
 @interface RMFSyncRamDiskOperation ()
+
 @property (retain) RMFRamdisk *ramdisk;
 @property (assign) RMFSyncMode syncMode;
+
 @end
 
 @implementation RMFSyncRamDiskOperation
+
++ (void)initialize {
+  _excludedPathsInSync = @[ @".Trashes" ];
+}
 
 - (id)init {
   self = [self initWithRamdisk:nil mode:RMFSyncModeNone];
@@ -86,7 +94,7 @@
       return;
     }
   }
-  NSString *sourcePath = [self.ramdisk.label stringAsVolumePath];
+  NSString *sourcePath = self.ramdisk.volumePath;
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;

@@ -92,16 +92,19 @@
   [_sizeTextField setFormatter:[RMFSizeFormatter formatter]];
  
   // Setup bindings for the detail view
-  NSString *labelKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForLabel];
-  NSString *automountKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForAutomount];
-  NSString *sizeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForSize];
-  NSString *backupModeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForBackupMode];
-  NSString *volumeIconKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForVolumeIcon];
+  NSString *selection = @"selection.%@";
+  NSString *labelKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForLabel];
+  NSString *automountKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForAutomount];
+  NSString *sizeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForSize];
+  NSString *backupModeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForBackupMode];
+  NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForVolumeIcon];
+  NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
+  [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
   
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
 

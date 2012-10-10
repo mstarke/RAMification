@@ -58,7 +58,7 @@
   // create the task and run it
   NSTask *createBlockDevice = [[NSTask alloc] init];
   [createBlockDevice setLaunchPath:@"/usr/bin/hdiutil"];
-  [createBlockDevice setArguments:[NSArray arrayWithObjects:@"attach", @"-nomount", ramdisksize, nil]];
+  [createBlockDevice setArguments:@[@"attach", @"-nomount", ramdisksize]];
   [createBlockDevice setStandardOutput:output];
   [createBlockDevice launch];
   
@@ -74,7 +74,7 @@
   // diskutil erasevolume HFS+ <NAME> <DEVICE>
   NSTask *formatDisk = [[NSTask alloc] init];
   [formatDisk setLaunchPath:@"/usr/sbin/diskutil"];
-  [formatDisk setArguments:[NSArray arrayWithObjects:@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName, nil]];
+  [formatDisk setArguments:@[@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName]];
   [formatDisk launch];
   [formatDisk release];
  

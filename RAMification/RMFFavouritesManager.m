@@ -189,6 +189,7 @@ static RMFFavouritesManager *sharedSingleton;
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode options:NSKeyValueObservingOptionNew context:nil];
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:NSKeyValueObservingOptionNew context:nil];
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForSize options:NSKeyValueObservingOptionNew context:nil];
+    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:NSKeyValueObservingOptionNew context:nil];
   }
 }
 # pragma mark KVC

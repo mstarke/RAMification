@@ -83,18 +83,24 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 #pragma mark unmount handling
 - (BOOL)canUnmount:(RMFRamdisk *)ramdisk {
   
+  NSLog(@"%@: Trying to unmount %@", self, ramdisk);
   BOOL (^isEqualBlock)(id, NSDictionary *);
   isEqualBlock = ^BOOL(id operation,NSDictionary *bindings){
     return [((RMFSyncRamDiskOperation *)operation).ramdisk isEqual:ramdisk];
   };
   
   if(ramdisk.backupMode == RMFNoBackup) {
+    NSLog(@"%@: No Backups needed for %@. Good to go!", self, ramdisk);
     return YES; // Disk with no backusp can always be unmounted
+  }
+  if(ramdisk.backupMode == RMFBackupOnEject) {
+    return NO;
   }
   NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
   BOOL hasNoPendingBackups = ([backups count] == 0);
   // ramdisk has no backups in the loop so we check for the oldest backup
   if(hasNoPendingBackups) {
+    NSLog(@"%@: No Backups pending for %@. Good to go!", self, ramdisk);
     // The time interval for the last backup should take into account
     // the backup interval since we might overtake ourselves in backups?
     
@@ -170,6 +176,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   if(ramdisk.backupMode != RMFNoBackup) {
     NSLog(@"%@: Ramdisk %@ mounted. Restoring content!", self, ramdisk.label);
     [self restoreRamdisk:ramdisk];
+    [self registerCallbackForRamdisk:ramdisk];
   }
 }
 
