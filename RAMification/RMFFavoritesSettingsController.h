@@ -19,9 +19,10 @@
 @property (assign) IBOutlet NSImageView *volumeIconImageView;
 @property (assign) IBOutlet NSTableColumn *favouriteColumn;
 @property (assign) IBOutlet NSTableView *favouritesTableView;
-@property (assign) IBOutlet NSTextField *detailLabelTextField;
-@property (assign) IBOutlet NSTextField *detailSizeTextField;
-@property (assign) IBOutlet NSPopUpButton *detailBackupPopUp;
+@property (assign) IBOutlet NSTextField *labelTextField;
+@property (assign) IBOutlet NSTextField *sizeTextField;
+@property (assign) IBOutlet NSPopUpButton *backupPopUpButton;
+@property (assign) IBOutlet NSPopUpButton *labelPopupButton;
 @property (assign) IBOutlet NSButton *detailIsAutoMount;
 @property (assign) IBOutlet NSButton *addRamdiskButton;
 @property (assign) IBOutlet NSButton *removeRamdiskButton;

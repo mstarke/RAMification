@@ -24,7 +24,9 @@
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
-- (NSMenu *)backupModePopupMenu;
+- (NSMenu *)backupModeMenu;
+- (NSMenu *)labelMenu;
+- (NSImage *)labelImageWithColor:(NSColor *)color;
 
 @end
 
@@ -84,9 +86,10 @@
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
   _favouritesTableView.delegate = self.tableDelegate;
   
-  [_detailBackupPopUp setMenu:[self backupModePopupMenu]];
+  [_backupPopUpButton setMenu:[self backupModeMenu]];
+  [_labelPopupButton setMenu:[self labelMenu]];
   
-  [_detailSizeTextField setFormatter:[RMFSizeFormatter formatter]];
+  [_sizeTextField setFormatter:[RMFSizeFormatter formatter]];
  
   // Setup bindings for the detail view
   NSString *labelKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForLabel];
@@ -94,10 +97,10 @@
   NSString *sizeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForSize];
   NSString *backupModeKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForBackupMode];
   NSString *volumeIconKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForVolumeIcon];
-  [_detailLabelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
+  [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
-  [_detailSizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
-  [_detailBackupPopUp bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
+  [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
+  [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
   
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
@@ -106,7 +109,7 @@
   [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
 }
 
-- (NSMenu *)backupModePopupMenu {
+- (NSMenu *)backupModeMenu {
   NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   for(NSUInteger eMode = 0; eMode < RMFBackupModeCount; eMode++) {
     switch (eMode) {
@@ -122,6 +125,22 @@
     }
   }
   return [backupMenu autorelease];
+}
+
+- (NSMenu *)labelMenu {
+  NSMenu *labelMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+  NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+  NSArray *labelColors = [workspace fileLabelColors];
+  for(NSString *label in [workspace fileLabels]) {
+    NSUInteger index = [[workspace fileLabels] indexOfObject:label];
+    NSColor *labelColor = [labelColors objectAtIndex:index];
+    NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:NULL keyEquivalent:@""];
+    [item setImage:[self labelImageWithColor:labelColor]];
+    [labelMenu addItem:item];
+    [item release];
+    
+  }
+  return [labelMenu autorelease];
 }
 
 
@@ -153,5 +172,36 @@
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];
   [_favouritesTableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columIndexSet];
 }
+
+- (NSImage *)labelImageWithColor:(NSColor *)color {
+  NSColor *borderColor = [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:1];
+  NSRect offscreenRect = NSMakeRect(0.0, 0.0, 12, 12.0);
+  NSBitmapImageRep* offscreenRep = nil;
+  
+  offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
+                                                         pixelsWide:offscreenRect.size.width
+                                                         pixelsHigh:offscreenRect.size.height
+                                                      bitsPerSample:8
+                                                    samplesPerPixel:4
+                                                           hasAlpha:YES
+                                                           isPlanar:NO
+                                                     colorSpaceName:NSCalibratedRGBColorSpace
+                                                       bitmapFormat:0
+                                                        bytesPerRow:(4 * offscreenRect.size.width)
+                                                       bitsPerPixel:32];
+  
+  [NSGraphicsContext saveGraphicsState];
+  [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep]];
+  [color setFill];
+  NSRectFill(offscreenRect);
+  [borderColor setFill];
+  NSFrameRect(offscreenRect);
+  [NSGraphicsContext restoreGraphicsState];
+  NSImage *image = [[NSImage alloc] initWithSize:offscreenRect.size];
+  [image addRepresentation:offscreenRep];
+  [offscreenRep release];
+  return [image autorelease];
+}
+
 
 @end
