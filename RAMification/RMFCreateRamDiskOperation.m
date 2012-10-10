@@ -53,7 +53,7 @@
   // hdiutil attach -nomount ram://MB*2048
   
   // create the string for the desired ramdisksize
-  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%ld", self.ramdisk.size*2];
+  NSString *ramdisksize = [NSString stringWithFormat:@"ram://%ld", self.ramdisk.size/512];
   
   // create the task and run it
   NSTask *createBlockDevice = [[NSTask alloc] init];

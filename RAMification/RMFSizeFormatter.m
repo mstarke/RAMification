@@ -123,7 +123,7 @@ NSString *const kRMFSizeFormatterSuffixKey = @"RMFSizeFormatterSuffixKey";
     NSString *suffixPart = [string substringFromIndex:[numberScanner scanLocation]];
     NSString *cleanSuffix = [suffixPart stringByReplacingOccurrencesOfString:@" " withString:@""];
     RMFSizeSuffix suffixType = [RMFSizeFormatter suffixForString:cleanSuffix];
-    *anObject = [NSNumber numberWithDouble:(value * pow( 1024.0, (double)suffixType))];
+    *anObject = [NSNumber numberWithDouble:(value * (double)pow( 1024, (NSUInteger)suffixType))];
   }
   
   return foundDouble;
