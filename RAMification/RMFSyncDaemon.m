@@ -24,16 +24,23 @@
 @property (retain) NSOperationQueue *queue;
 @property (retain) NSTimer *backupTimer;
 
-- (void) performBackup;
-- (BOOL) canUnmount:(RMFRamdisk *)ramdisk;
-- (void) unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk;
-- (void) registerCallbackForRamdisk:(RMFRamdisk *)ramdisk;
-- (void) backupRamdisk:(RMFRamdisk *)ramdisk;
-- (void) disableTimer;
-- (void) enableTimer;
-- (void) didMountFavourite:(NSNotification *)notification;
-- (void) userDefaultsDidChange:(NSNotification *)notification;
+/* callback */
+- (BOOL)canUnmount:(RMFRamdisk *)ramdisk;
+- (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk;
+- (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk;
+/* backup */
+- (void)performBackup;
+- (void)backupRamdisk:(RMFRamdisk *)ramdisk;
+- (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
+/* timer */
+- (void)disableTimer;
+- (void)enableTimer;
+/* notifications*/
+- (void)didMountFavourite:(NSNotification *)notification;
+- (void)userDefaultsDidChange:(NSNotification *)notification;
 
+// This message should be sent to the sync deamon to update the backup intervall
+- (void)backupIntervallChanged:(NSUInteger )interval;
 @end
 
 // Static callback to be used to pipe the call back to the foundation object
@@ -54,7 +61,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 @implementation RMFSyncDaemon
 
-#pragma mark lifecylce
+#pragma mark Lifecylce
 
 - (id)init {
   self = [super init];
@@ -80,7 +87,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   [super dealloc];
 }
 
-#pragma mark unmount handling
+#pragma mark Callbacks
 - (BOOL)canUnmount:(RMFRamdisk *)ramdisk {
   
   NSLog(@"%@: Trying to unmount %@", self, ramdisk);
@@ -93,19 +100,23 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     NSLog(@"%@: No Backups needed for %@. Good to go!", self, ramdisk);
     return YES; // Disk with no backusp can always be unmounted
   }
-  if(ramdisk.backupMode == RMFBackupOnEject) {
-    return NO;
-  }
   NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
   BOOL hasNoPendingBackups = ([backups count] == 0);
   // ramdisk has no backups in the loop so we check for the oldest backup
   if(hasNoPendingBackups) {
-    NSLog(@"%@: No Backups pending for %@. Good to go!", self, ramdisk);
-    // The time interval for the last backup should take into account
-    // the backup interval since we might overtake ourselves in backups?
-    
+    NSDate *lastBackup = ramdisk.lastBackupDate;
+    NSTimeInterval secondsSinceLastBackup = [lastBackup timeIntervalSinceNow];
+    NSLog(@"%@: Last backup was done %f Seconds ago",self, secondsSinceLastBackup);
+    if(secondsSinceLastBackup <= -30) {
+      [self backupRamdisk:ramdisk];
+      NSLog(@"%@: Backup to old. Scheduling new one. Eject denied!", self);
+      return NO;
+    }
+    NSLog(@"%@: Backup up to date. Free to eject", self);
+    return YES;
   }
-  return hasNoPendingBackups;
+  NSLog(@"%@: Backup in progress. SchedulingEject denied!", self);
+  return NO; // has bending backups, deny eject
 }
 
 - (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk {
@@ -123,8 +134,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   self.approvalSession = NULL;
 }
 
-#pragma mark backup and restoration
-
+#pragma mark Backup/Restore
 - (void)performBackup {
   
   BOOL (^isBackupBlock)(id,NSDictionary *);
@@ -163,8 +173,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   [operation release];
 }
 
-#pragma mark notification handling
-
+#pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
   RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
@@ -194,8 +203,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   
 }
 
-# pragma mark timer handling
-
 - (void)backupIntervallChanged:(NSUInteger)interval {
   NSLog(@"%@: Backup intervall changed. Adjusting to new interval %lu", self, interval);
   NSTimeInterval timeInterval = interval;
@@ -203,6 +210,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   self.backupTimer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(performBackup) userInfo:nil repeats:YES];
 }
 
+# pragma mark Timer
 - (void)disableTimer {
   if (self.backupTimer != nil) {
     [self.backupTimer invalidate];

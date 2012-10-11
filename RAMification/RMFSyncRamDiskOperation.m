@@ -26,7 +26,8 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = @[ @".Trashes" ];
+  _excludedPathsInSync = @[ @"/.Trashes", @"/.fseventsd" ];
+  [_excludedPathsInSync retain];
 }
 
 - (id)init {
@@ -98,11 +99,12 @@ static NSArray *_excludedPathsInSync;
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;
+  NSString *excludePaths = [NSString stringWithFormat:@"--exclude='%@'", [_excludedPathsInSync componentsJoinedByString:@" "] ];
   if( self.syncMode == RMFSyncModeBackup) {
-    arguments = [NSArray arrayWithObjects:@"-anv", @"--delete", sourcePath, backupPath, nil];
+    arguments = [NSArray arrayWithObjects:@"-anv", @"--delete", excludePaths, sourcePath, backupPath, nil];
   }
   else {
-    arguments = [NSArray arrayWithObjects:@"-anv", backupPath, sourcePath, nil];
+    arguments = [NSArray arrayWithObjects:@"-anv", excludePaths, backupPath, sourcePath, nil];
   }
   /* Setup the rsycn task and run it */
   NSTask *rsync = [[NSTask alloc] init];
@@ -111,8 +113,12 @@ static NSArray *_excludedPathsInSync;
   [rsync launch];
   [rsync waitUntilExit];
   self.ramdisk.activity = RMFRamdiskIdle;
+  if(self.syncMode == RMFSyncModeBackup) {
+    [self.ramdisk finishedBackup];
+  }
   NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
   [rsync release];
+  
   [pool drain];
 }
 

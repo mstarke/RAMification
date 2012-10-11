@@ -16,8 +16,4 @@
  */
 @interface RMFSyncDaemon : NSObject
 
-// Restores the ramdisk to it's backed up content
-- (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
-// This message should be sent to the sync deamon to update the backup intervall
-- (void)backupIntervallChanged:(NSUInteger )interval;
 @end
