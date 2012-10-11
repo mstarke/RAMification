@@ -38,7 +38,7 @@ If you feel like adding things or commenting on the development directions feel 
 ## License
 
 RAMification RAMdisk Utility
-Copyright (C) 2012 [HicknHack Software GmbH](http://www.hicknhack-software.com) michael.starke@hicknhack-software.com
+Copyright &copy; 2012 [HicknHack Software GmbH](http://www.hicknhack-software.com) michael.starke@hicknhack-software.com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
