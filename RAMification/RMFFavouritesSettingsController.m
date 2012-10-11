@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 HicknHack Software GmbH. All rights reserved.
 //
 
-#import "RMFFavoritesSettingsController.h"
+#import "RMFFavouritesSettingsController.h"
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
@@ -15,7 +15,7 @@
 #import "RMFArrayController.h"
 #import "RMFFavouritesArrayControllerDelegate.h"
 
-@interface RMFFavoritesSettingsController () {
+@interface RMFFavouritesSettingsController () {
   RMFArrayController *_favouritesController;
   RMFFavouritesArrayControllerDelegate *_favouritesControllerDelegate;
 }
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation RMFFavoritesSettingsController
+@implementation RMFFavouritesSettingsController
 
 + (NSString *) identifier {
   return @"PresetSettings";
@@ -41,17 +41,17 @@
 }
 
 + (NSToolbarItem *) toolbarItem {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavoritesSettingsController identifier]]; 
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]]; 
   NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
   [item setImage:toolbarImage];
-  [item setLabel:[RMFFavoritesSettingsController label]];
+  [item setLabel:[RMFFavouritesSettingsController label]];
   [item setAction:@selector(showSettings:)];
   return [item autorelease];
 }
 
 #pragma mark init/dealloc
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:@"FavoritesPane" bundle:[NSBundle mainBundle]];
+  self = [super initWithNibName:@"FavouritesPane" bundle:[NSBundle mainBundle]];
   if (self) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFDidRenameRamdiskNotification object:nil];
     NSLog(@"Created %@", [self class]);
@@ -109,7 +109,10 @@
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
 
   NSBundle *bundle = [NSBundle mainBundle];
-  [self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
+  //[self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
+  NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:@"/Volumes/Hometown"];
+  [icon setSize:NSMakeSize(256.0, 256.0)];
+  [self.volumeIconImageView setImage:icon];
 }
 
 - (NSMenu *)backupModeMenu {
@@ -134,11 +137,19 @@
   NSMenu *labelMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
   NSArray *labelColors = [workspace fileLabelColors];
+  
   for(NSString *label in [workspace fileLabels]) {
     NSUInteger index = [[workspace fileLabels] indexOfObject:label];
     NSColor *labelColor = [labelColors objectAtIndex:index];
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:NULL keyEquivalent:@""];
-    [item setImage:[self labelImageWithColor:labelColor]];
+    
+    if(index != 0) {
+      [item setImage:[self labelImageWithColor:labelColor]];
+    }
+    else {
+      [item setImage:[NSImage imageNamed:NSImageNameStopProgressTemplate]];
+    }
+    
     [labelMenu addItem:item];
     [item release];
     
@@ -177,32 +188,43 @@
 }
 
 - (NSImage *)labelImageWithColor:(NSColor *)color {
-  NSColor *borderColor = [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:1];
-  NSRect offscreenRect = NSMakeRect(0.0, 0.0, 12, 12.0);
+  NSRect imageRect = NSMakeRect(0.0, 0.0, 16, 16.0);
+  NSRect labelRect = NSMakeRect(0.5, 0.5, imageRect.size.width - 4.0, imageRect.size.width - 4.0);
+  NSRect highlightRect = NSMakeRect(labelRect.origin.x + 1.0, labelRect.origin.y + 1.0, labelRect.size.height - 2.0, labelRect.size.width - 2.0);
   NSBitmapImageRep* offscreenRep = nil;
   
   offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
-                                                         pixelsWide:offscreenRect.size.width
-                                                         pixelsHigh:offscreenRect.size.height
+                                                         pixelsWide:imageRect.size.width
+                                                         pixelsHigh:imageRect.size.height
                                                       bitsPerSample:8
                                                     samplesPerPixel:4
                                                            hasAlpha:YES
                                                            isPlanar:NO
                                                      colorSpaceName:NSCalibratedRGBColorSpace
                                                        bitmapFormat:0
-                                                        bytesPerRow:(4 * offscreenRect.size.width)
+                                                        bytesPerRow:(4 * imageRect.size.width)
                                                        bitsPerPixel:32];
   
   [NSGraphicsContext saveGraphicsState];
   [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep]];
+  
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:3.0 yRadius:3.0];
+  NSBezierPath *hightlightPath = [NSBezierPath bezierPathWithRoundedRect:highlightRect xRadius:2.0 yRadius:2.0];
+  
   [color setFill];
-  NSRectFill(offscreenRect);
-  [borderColor setFill];
-  NSFrameRect(offscreenRect);
+  [[color shadowWithLevel:0.5] setStroke];
+  
+  [path fill];
+  [path stroke];
+  [[color highlightWithLevel:0.5] setStroke];
+  [hightlightPath stroke];
+  
   [NSGraphicsContext restoreGraphicsState];
-  NSImage *image = [[NSImage alloc] initWithSize:offscreenRect.size];
+  NSImage *image = [[NSImage alloc] initWithSize:imageRect.size];
   [image addRepresentation:offscreenRep];
+  
   [offscreenRep release];
+  
   return [image autorelease];
 }
 

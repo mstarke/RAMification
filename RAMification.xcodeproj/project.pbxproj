@@ -13,7 +13,7 @@
 		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
 		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27BF9015F92323008F723D /* RMFBufferDeamon.m */; };
-		4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */; };
+		4C2A4AE71486DDDF009F3AB0 /* RMFFavouritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */; };
 		4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
@@ -37,7 +37,7 @@
 		4CBE8D71148C30D100747A33 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6F148C30D100747A33 /* README.md */; };
 		4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */; };
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
-		4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavoritesPane.xib */; };
+		4CC52F7D14819BB60006C278 /* FavouritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavouritesPane.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
 		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
 		4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */; };
@@ -58,8 +58,8 @@
 		4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
 		4C27BF8F15F92323008F723D /* RMFBufferDeamon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFBufferDeamon.h; sourceTree = "<group>"; };
 		4C27BF9015F92323008F723D /* RMFBufferDeamon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFBufferDeamon.m; sourceTree = "<group>"; };
-		4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavoritesSettingsController.h; sourceTree = "<group>"; };
-		4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavoritesSettingsController.m; sourceTree = "<group>"; };
+		4C2A4AE41486DDDE009F3AB0 /* RMFFavouritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesSettingsController.h; sourceTree = "<group>"; };
+		4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesSettingsController.m; sourceTree = "<group>"; };
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsControllerProtocol.h; sourceTree = "<group>"; };
 		4C2EA37615A8EDF600F0D2EA /* RMFSyncRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSyncRamDiskOperation.h; sourceTree = "<group>"; };
 		4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncRamDiskOperation.m; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 		4CC50DF01482F90D0093004E /* RMFCreateRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFCreateRamDiskOperation.h; sourceTree = "<group>"; };
 		4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFCreateRamDiskOperation.m; sourceTree = "<group>"; };
 		4CC52F7914819A360006C278 /* GeneralPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralPane.xib; sourceTree = "<group>"; };
-		4CC52F7C14819BB60006C278 /* FavoritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavoritesPane.xib; sourceTree = "<group>"; };
+		4CC52F7C14819BB60006C278 /* FavouritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavouritesPane.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
 		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 		4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouriteCellView.h; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 				4C5BDB6F147EF6AD000E19B0 /* MainMenu.xib */,
 				4CC52F7E1481A1400006C278 /* SettingsWindow.xib */,
 				4CC52F7914819A360006C278 /* GeneralPane.xib */,
-				4CC52F7C14819BB60006C278 /* FavoritesPane.xib */,
+				4CC52F7C14819BB60006C278 /* FavouritesPane.xib */,
 				4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */,
 				4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */,
 			);
@@ -166,8 +166,8 @@
 				4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */,
 				4C82CEC1148053BB009E61C8 /* RMFSettingsController.h */,
 				4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */,
-				4C2A4AE41486DDDE009F3AB0 /* RMFFavoritesSettingsController.h */,
-				4C2A4AE51486DDDE009F3AB0 /* RMFFavoritesSettingsController.m */,
+				4C2A4AE41486DDDE009F3AB0 /* RMFFavouritesSettingsController.h */,
+				4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */,
 				4C4FA61B149816060082981C /* RMFMenuController.h */,
 				4C4FA61C149816060082981C /* RMFMenuController.m */,
 				4C264E5615A631E500D358B5 /* RMFMountController.h */,
@@ -385,7 +385,7 @@
 				4C5BDB6B147EF6AD000E19B0 /* Credits.rtf in Resources */,
 				4C5BDB71147EF6AD000E19B0 /* MainMenu.xib in Resources */,
 				4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */,
-				4CC52F7D14819BB60006C278 /* FavoritesPane.xib in Resources */,
+				4CC52F7D14819BB60006C278 /* FavouritesPane.xib in Resources */,
 				4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */,
 				4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */,
 				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
@@ -407,7 +407,7 @@
 				4C5BDB6E147EF6AD000E19B0 /* RMFAppDelegate.m in Sources */,
 				4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */,
 				4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */,
-				4C2A4AE71486DDDF009F3AB0 /* RMFFavoritesSettingsController.m in Sources */,
+				4C2A4AE71486DDDF009F3AB0 /* RMFFavouritesSettingsController.m in Sources */,
 				4C34B6AD1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m in Sources */,
 				4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */,
 				4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */,

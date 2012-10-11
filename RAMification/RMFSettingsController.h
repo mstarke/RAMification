@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RMFGeneralSettingsController.h"
-#import "RMFFavoritesSettingsController.h"
+#import "RMFFavouritesSettingsController.h"
 
 @interface RMFSettingsController : NSObject <NSToolbarDelegate>
 

@@ -146,7 +146,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   
   itemTitle = [NSString stringByAddingDots:NSLocalizedString(@"MENU_MANAGE_FAVOURITES", @"Menu Manage Favourites")];
   item = [[self addItemToMenu:_favoritesMenu title:itemTitle target:self action:@selector(showSettingsTab:) enabled:YES keyEquivalent:@""] retain];
-  [item setRepresentedObject:[RMFFavoritesSettingsController identifier]];
+  [item setRepresentedObject:[RMFFavouritesSettingsController identifier]];
   [item release];
   
   itemTitle = NSLocalizedString(@"COMMON_PLURAL_FAVOURITE", @"Favourites");

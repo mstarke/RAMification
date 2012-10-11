@@ -11,7 +11,7 @@
 #import "RMFFavouritesTableViewDelegate.h"
 
 
-@interface RMFFavoritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
+@interface RMFFavouritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
   NSDictionary *columIdentifier;
 }
 

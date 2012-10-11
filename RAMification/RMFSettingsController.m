@@ -20,7 +20,7 @@ static RMFSettingsController *sharedSingleton;
 @interface RMFSettingsController ()
 
 @property (retain) RMFGeneralSettingsController *generalSettingsController;
-@property (retain) RMFFavoritesSettingsController *favouriteSettingsController;
+@property (retain) RMFFavouritesSettingsController *favouriteSettingsController;
 @property (retain) NSToolbar* toolbar;
 @property (retain) NSDictionary *paneController;
 @property (assign) NSUInteger hibernateMode;
@@ -53,10 +53,10 @@ static RMFSettingsController *sharedSingleton;
     [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
     // Initalize the controllers
     _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
-    _favouriteSettingsController = [[RMFFavoritesSettingsController alloc] initWithNibName:nil bundle:nil];
+    _favouriteSettingsController = [[RMFFavouritesSettingsController alloc] initWithNibName:nil bundle:nil];
     
     // Setup the controllermap
-    self.paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavoritesSettingsController identifier] : _favouriteSettingsController };
+    self.paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavouritesSettingsController identifier] : _favouriteSettingsController };
     
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = NO;

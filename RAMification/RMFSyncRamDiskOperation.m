@@ -50,7 +50,6 @@ static NSArray *_excludedPathsInSync;
     NSLog(@"Synchronization got canceled!");
     return;
   }
-  
   if(self.ramdisk == nil || self.syncMode == RMFSyncModeNone || self.ramdisk.isMounted == NO ) {
     NSLog(@"Synchronization was aborted due to wrong status of ramdisk!");
     return;

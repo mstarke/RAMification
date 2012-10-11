@@ -106,7 +106,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   if(hasNoPendingBackups) {
     NSDate *lastBackup = ramdisk.lastBackupDate;
     NSTimeInterval secondsSinceLastBackup = [lastBackup timeIntervalSinceNow];
-    NSLog(@"%@: Last backup was done %f Seconds ago",self, secondsSinceLastBackup);
+    NSLog(@"%@: Last backup was done %f Seconds ago",self, -secondsSinceLastBackup);
     if(secondsSinceLastBackup <= -30) {
       [self backupRamdisk:ramdisk];
       NSLog(@"%@: Backup to old. Scheduling new one. Eject denied!", self);
