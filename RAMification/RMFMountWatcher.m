@@ -69,6 +69,7 @@ NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
     return; // No known favourite was mounted, ignore
   }
   ramdisk.volumePath = volumePath;
+  ramdisk.isMounted = YES;
   [ramdisk updateLabel];
   
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
@@ -92,6 +93,7 @@ NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   }
  
   ramdisk.bsdDevice = nil;
+  ramdisk.isMounted = NO;
   
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidUnmountRamdiskNotification object:self userInfo:userInfo];

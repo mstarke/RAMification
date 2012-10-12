@@ -11,6 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFMountWatcher.h"
+#import "RMFMountController.h"
 #import "RMFSizeFormatter.h"
 #import "RMFArrayController.h"
 #import "RMFFavouritesArrayControllerDelegate.h"
@@ -26,7 +27,10 @@
 - (void)didRenameFavourite:(NSNotification *)notification;
 - (NSMenu *)backupModeMenu;
 - (NSMenu *)labelMenu;
+- (NSMenu *)actionMenu;
 - (NSImage *)labelImageWithColor:(NSColor *)color;
+- (void)toggleMount:(id)sender;
+- (void)toggleDefault:(id)sender;
 
 @end
 
@@ -41,7 +45,7 @@
 }
 
 + (NSToolbarItem *) toolbarItem {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]]; 
+  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]];
   NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
   [item setImage:toolbarImage];
   [item setLabel:[RMFFavouritesSettingsController label]];
@@ -82,15 +86,17 @@
   
   [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerFavouritesKey options:nil];
   [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
- 
+  
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
   _favouritesTableView.delegate = self.tableDelegate;
   
   [_backupPopUpButton setMenu:[self backupModeMenu]];
   [_labelPopupButton setMenu:[self labelMenu]];
+  [_actionPopupButton setMenu:[self actionMenu]];
+  [_actionPopupButton selectItemAtIndex:0];
   
   [_sizeTextField setFormatter:[RMFSizeFormatter formatter]];
- 
+  
   // Setup bindings for the detail view
   NSString *selection = @"selection.%@";
   NSString *labelKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForLabel];
@@ -99,22 +105,19 @@
   NSString *backupModeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForBackupMode];
   NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForVolumeIcon];
   NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
+  
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
   [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
-  
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
-
-  NSBundle *bundle = [NSBundle mainBundle];
-  //[self.volumeIconImageView setImage:[bundle imageForResource:@"Removable"]];
-  NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:@"/Volumes/Hometown"];
-  [icon setSize:NSMakeSize(256.0, 256.0)];
-  [self.volumeIconImageView setImage:icon];
+  
+  [self.volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
 }
 
+#pragma mark Menus
 - (NSMenu *)backupModeMenu {
   NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   for(NSUInteger eMode = 0; eMode < RMFBackupModeCount; eMode++) {
@@ -157,6 +160,46 @@
   return [labelMenu autorelease];
 }
 
+- (NSMenu *)actionMenu {
+  NSMenu *actionMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+  
+  NSMenuItem *actionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] init];
+  [actionItem setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
+  [actionMenu addItem:actionItem];
+  [actionItem release];
+  
+  NSMenuItem *mountItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_MOUNT", @"Mount Ramdisk")
+                                                                               action:@selector(toggleMount:)
+                                                                        keyEquivalent:@""];
+  NSMenuItem *ejectItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_EJECT", @"Eject")
+                                                                               action:@selector(toggleMount:)
+                                                                        keyEquivalent:@""];
+  NSMenuItem *toggleDefaultItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_DEFAULT", @"Default Ramdisk")
+                                                                                       action:@selector(toggleDefault:)
+                                                                                keyEquivalent:@""];
+  // bind enable/disable to the mount state of a ramdisk
+  NSDictionary *bindingOptions = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
+  NSString *selectionIsMountedKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsMounted];
+  NSString *selectionIsDefaultKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsDefault];
+  [mountItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:bindingOptions];
+  [ejectItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:nil];
+  [toggleDefaultItem bind:NSValueBinding toObject:_favouritesController withKeyPath:selectionIsDefaultKeyPath options:nil];
+  
+  [mountItem setTarget:self];
+  [ejectItem setTarget:self];
+  
+  [actionMenu addItem:mountItem];
+  [actionMenu addItem:ejectItem];
+  [actionMenu addItem:[NSMenuItem separatorItem]];
+  [actionMenu addItem:toggleDefaultItem];
+  
+  [toggleDefaultItem release];
+  [mountItem release];
+  [ejectItem release];
+  
+  return [actionMenu autorelease];
+}
+
 
 # pragma mark actions
 - (void)addPreset:(id)sender {
@@ -176,6 +219,26 @@
   [favouriteManager deleteFavourite:selectedFavourite];
   //[_favouritesTableView reloadData];
 }
+
+- (void)toggleMount:(id)sender {
+  if(NO == [sender isMemberOfClass:[NSMenuItem class]]) {
+    return; // wrong sender
+  }
+  RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
+  if(nil != selectedRamdisk) {
+    [[RMFMountController sharedController] toggleMounted:selectedRamdisk];
+  }
+}
+
+- (void)toggleDefault:(id)sender {
+  if(NO == [sender isMemberOfClass:[NSMenuItem class]]) {
+    return; // wrong sender
+  }
+  RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
+  RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
+  favouritesManager.defaultRamdisk = selectedRamdisk;
+}
+
 
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {

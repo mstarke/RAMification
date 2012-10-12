@@ -8,9 +8,10 @@
 
 #import "RMFSettingsKeys.h"
 
-NSString * const kRMFSettingsKeyLabel                = @"Label";
-NSString * const kRMFSettingsKeySize                 = @"Size";
-NSString * const kRMFSettingsKeyBackupPath           = @"BackupPath";
-NSString * const kRMFSettingsKeyBackupInterval       = @"BackupInterval";
-NSString * const kRMFSettingsKeyFavourites           = @"Favourites";
-NSString * const kRMFSettingsKeyDisableUnifiedBuffer = @"EnableBuffer";
+NSString *const kRMFSettingsKeyLabel                = @"Label";
+NSString *const kRMFSettingsKeySize                 = @"Size";
+NSString *const kRMFSettingsKeyBackupPath           = @"BackupPath";
+NSString *const kRMFSettingsKeyBackupInterval       = @"BackupInterval";
+NSString *const kRMFSettingsKeyFavourites           = @"Favourites";
+NSString *const kRMFSettingsKeyDisableUnifiedBuffer = @"EnableBuffer";
+NSString *const kRMFSettingsKeyDefaultRamdiskIndex  = @"DefaultRamdiskIndex";

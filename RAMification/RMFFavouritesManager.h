@@ -22,6 +22,8 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
  List of all known favourites
  */
 @property (readonly, retain) NSMutableArray *favourites;
+@property (nonatomic, assign) RMFRamdisk *defaultRamdisk;
+
 
 /*
  Returns the global favourites manager

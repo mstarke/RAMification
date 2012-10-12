@@ -13,12 +13,7 @@
 #import "RMFSizeFormatter.h"
 #import "RMFSettingsController.h"
 
-const NSUInteger MinimumBackupInterval = 15;      // 15s
-const NSUInteger MaxiumumBackupInterval = 86400;  // 24h
-const NSUInteger BackupdIntervalStepSize = 15;    // 15s
-const NSUInteger MinumumRamdiskSize = 1024;       // 1Mb
-const NSUInteger MaxiumumRamdiskSize = 33554432;  // 32Gb
-const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
+const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 
 @interface RMFGeneralSettingsController ()
 
@@ -67,7 +62,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 - (void)didLoadView {
   // Setup correct names
-  NSString *template = NSLocalizedString(@"GENERAL_SETTINNGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
+  NSString *template = NSLocalizedString(@"GENERAL_SETTINGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
   RMFAppDelegate *delegate = [NSApp delegate];
   [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
   
@@ -99,7 +94,11 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
   
   // Generate Popup Menu
   NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-  NSArray *actionArray = @[ @"every 30 seconds", @"every minute", @"every 30 minutes", @"every hour" ];
+  NSString *backupEachHalfMinute = NSLocalizedString(@"GENERAL_SETTINGS_BACKUP_EVERY_30_SECONDS", @"Backup every 30 seconds");
+  NSString *backupEachMinute = NSLocalizedString(@"GENERAL_SETTINGS_BACKUP_EVERY_MINUTE", @"Backup every minute");
+  NSString *backupEachHalfHour = NSLocalizedString(@"GENERAL_SETTINGS_BACKUP_EVERY_30_MINUTES", @"Backup every 30 minutes");
+  NSString *backupEachHour = NSLocalizedString(@"GENERAL_SETTINGS_BACKUP_EVERY_HOUR", @"Backup every hour");
+  NSArray *actionArray = @[ backupEachHalfMinute, backupEachMinute, backupEachHalfHour, backupEachHour ];
   NSArray *backupIntervals = @[ @30, @60, @1800, @3600 ];
   for(NSString *label in actionArray) {
     NSMenuItem *menuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:nil keyEquivalent:@""];
@@ -122,7 +121,7 @@ const NSUInteger RamdiskSizeStepSize = 1024;      // 1Mb
 
 - (NSString *)memoryInfoText {
   unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
-  NSString *warningTemplate = NSLocalizedString(@"GENERAL_SETTINNGS_MAXIUMUM_SIZE", @"Label for the maxiumum size for a ramdisk. Insert 1 object placeholder" );
+  NSString *warningTemplate = NSLocalizedString(@"GENERAL_SETTINGS_MAXIUMUM_SIZE", @"Label for the maxiumum size for a ramdisk. Insert 1 object placeholder" );
   // Get the system memory and calculate the Gb theoretical maxium RAM disk size
   // The disk is 2 times the storage as it's ram bufferd.
   // 1024 * 1024 * 1024 * 2 = 2147483648

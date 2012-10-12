@@ -16,6 +16,8 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForBackupMode;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIcon;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIconType;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsMounted;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsDefault;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -49,20 +51,17 @@ typedef enum RMFRamdiskVolumeIconType {
 @property (assign) NSUInteger finderLabelIndex;
 @property (nonatomic, readonly) NSImage *volumeIcon;
 @property (retain, readonly) NSDate *lastBackupDate;
+@property (assign) BOOL isMounted;
 @property (assign) BOOL isAutomount;
-@property (readonly) BOOL isDirty;
+@property (assign) BOOL isDefault;
 
-+ (RMFRamdisk *)volumePresetWithData:(NSData *)data;
-+ (RMFRamdisk *)volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount;
-+ (RMFRamdisk *)volumePreset;
-+ (NSString *)defaultLabel;
-+ (NSUInteger)defaultSize;
++ (RMFRamdisk *)ramdiskWithData:(NSData *)data;
++ (RMFRamdisk *)ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount;
++ (RMFRamdisk *)defaultRamdisk;
 
-- (id)initWithLabel:(NSString*)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount;
+- (id)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount;
 // Call this function to indicate that this ramdisk was just backed up
 - (void)finishedBackup;
-// is the RAM disk mounted?
-- (BOOL)isMounted;
 - (void)disableSpotlightIndexing;
 - (void)updateLabel;
 

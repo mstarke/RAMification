@@ -19,7 +19,6 @@
 #import "NSString+RMFMenuTools.h"
 
 NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
-NSString *const RMFRamDiskIsDirty = @"isDirty";
 const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
@@ -228,7 +227,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
     [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:item];
-    [favorite addObserver:self forKeyPath:RMFRamDiskIsDirty options:0 context:item];
     [item setTarget:self];
     [_favoritesMenu insertItem:item atIndex:index];
     [_menuItemsToFavouritesMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
@@ -257,7 +255,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   if(itemId != nil) {
     // remove all key-value-observer from the removed ramdisk
     [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
-    [favourite removeObserver:self forKeyPath:RMFRamDiskIsDirty];
     NSMenuItem *item = [itemId nonretainedObjectValue];
     [_favoritesMenu removeItem:item];
     [_menuItemsToFavouritesMap removeObjectForKey:itemId];
@@ -341,7 +338,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 # pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] || [keyPath isEqualToString:RMFRamDiskIsDirty] ) {
+  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] ) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
       NSMenuItem *item = context;

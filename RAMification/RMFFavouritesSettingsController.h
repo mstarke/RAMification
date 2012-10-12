@@ -23,9 +23,11 @@
 @property (assign) IBOutlet NSTextField *sizeTextField;
 @property (assign) IBOutlet NSPopUpButton *backupPopUpButton;
 @property (assign) IBOutlet NSPopUpButton *labelPopupButton;
+@property (assign) IBOutlet NSPopUpButton *actionPopupButton;
 @property (assign) IBOutlet NSButton *detailIsAutoMount;
 @property (assign) IBOutlet NSButton *addRamdiskButton;
 @property (assign) IBOutlet NSButton *removeRamdiskButton;
+
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;

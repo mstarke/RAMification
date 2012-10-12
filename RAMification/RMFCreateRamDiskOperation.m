@@ -39,10 +39,6 @@
     NSLog(@"We got canceled!");
     return;
   }
-  if([self.ramdisk.label isUsedAsVolumeName]) {
-    NSLog(@"The Volume is already present!");
-    return;
-  }
   
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   // wrap the creation method in a block to call it asynchrounous.

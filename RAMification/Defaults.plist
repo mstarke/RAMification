@@ -2,13 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Label</key>
-	<string>RAMdisk</string>
-	<key>Size</key>
-	<integer>4096</integer>
-	<key>BackupPath</key>
-	<string>/RamdiskBackup</string>
+	<key>DefaultRamdiskIndex</key>
+	<integer>0</integer>
 	<key>BackupInterval</key>
-	<integer>600</integer>
+	<integer>30</integer>
 </dict>
 </plist>

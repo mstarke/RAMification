@@ -19,14 +19,17 @@ NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
 NSString *const kRMFRamdiskKeyForVolumeIconType = @"volumeIconType";
 NSString *const kRMFRamdiskKeyForVolumeIcon = @"volumeIcon";
 NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
+NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
+NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
 
 // private constants
 NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
+NSString *const RMFRamdiskDefaultLabel = @"RamDisk";
+NSUInteger const kRMFRamdiskDefaultSize = 512*1024*1024; // 512 Mb
 
 static NSDictionary *volumeIconImageNames;
 
 @interface RMFRamdisk ()
-@property (readwrite) BOOL isDirty;
 @property (retain) NSDate *lastBackupDate;
 @end
 
@@ -39,46 +42,35 @@ static NSDictionary *volumeIconImageNames;
 
 #pragma mark convinent object creation
 
-+ (RMFRamdisk *) volumePresetWithLable:(NSString *)aLabel andSize:(NSUInteger)aSize shouldAutoMount:(BOOL)mount {
-  return [[[RMFRamdisk alloc] initWithLabel:aLabel andSize:aSize shouldMount:mount] autorelease];
++ (RMFRamdisk *) ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount {
+  return [[[RMFRamdisk alloc] initWithLabel:aLabel size:aSize automount:mount] autorelease];
 }
 
-+ (RMFRamdisk *) volumePreset {
++ (RMFRamdisk *) defaultRamdisk {
   return [[[RMFRamdisk alloc] init] autorelease];
 }
 
-+ (RMFRamdisk *)volumePresetWithData:(NSData *)data {
++ (RMFRamdisk *)ramdiskWithData:(NSData *)data {
   return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
-
-#pragma mark defaults
-
-+ (NSString *)defaultLabel {
-  return [[NSUserDefaults standardUserDefaults] stringForKey:kRMFSettingsKeyLabel];
-}
-
-+ (NSUInteger)defaultSize {
-  return [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeySize];
-}
-
 
 #pragma mark object lifecycle
 
 - (id)init {
-  return [self initWithLabel:[RMFRamdisk defaultLabel] andSize:[RMFRamdisk defaultSize] shouldMount:NO];
+  return [self initWithLabel:RMFRamdiskDefaultLabel size:kRMFRamdiskDefaultSize automount:NO];
 }
 
-- (id)initWithLabel:(NSString *)aLable andSize:(NSUInteger)aSize shouldMount:(BOOL)mount {
+- (id)initWithLabel:(NSString *)aLable size:(NSUInteger)aSize automount:(BOOL)automount {
   self = [super init];
   if (self)   {
     self.size = aSize;
     if(aLable != nil) {
-      _label = [aLable retain];
+      self.label = aLable;
     }
     else {
-      _label = [[RMFRamdisk defaultLabel] retain];
+      self.label = RMFRamdiskDefaultLabel;
     }
-    _isAutomount = mount;
+    _isAutomount = automount;
     _activity = RMFRamdiskIdle;
     _backupMode = RMFNoBackup;
     _lastBackupDate = [NSDate distantPast];
@@ -133,11 +125,6 @@ static NSDictionary *volumeIconImageNames;
     isEqual &= (_size == other.size);
   }
   return isEqual;
-}
-
-- (BOOL)isMounted {
-  // Mounted when we got a bds device and a volume path
-  return (_bsdDevice != nil && _volumePath != nil);
 }
 
 - (void)finishedBackup {

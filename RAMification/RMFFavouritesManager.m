@@ -21,6 +21,7 @@ NSString *const kRMFFavouritesManagerFavouritesKey = @"favourites";
 @interface RMFFavouritesManager ()
 
 @property (retain) NSMutableArray *favourites;
+@property (nonatomic, assign) NSInteger defaultRamdiskIndex;
 
 /*
  Adds the given ramdisk to the favourites
@@ -77,12 +78,21 @@ static RMFFavouritesManager *sharedSingleton;
     if(data != nil) {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
       if(favourites != nil) {
-        self.favourites = [NSMutableArray arrayWithArray:favourites];
-        for(RMFRamdisk *ramdisk in _favourites) {
-          [self observerRamdisk:ramdisk];
-        }
+        [_favourites addObjectsFromArray:favourites];
       }
     }
+    // We use the favourites as defualts so we need at least one!
+    if(0 == [_favourites count]) {
+      RMFRamdisk *defaultRamdisk = [RMFRamdisk defaultRamdisk];
+      [defaultRamdisk setIsDefault:YES];
+      [_favourites addObject:defaultRamdisk];
+    }
+    // Clear default flag as we strictly set it ourselfs
+    for(RMFRamdisk *ramdisk in _favourites) {
+      ramdisk.isDefault = NO;
+    }
+    NSString *valuePath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDefaultRamdiskIndex];
+    [self bind:@"defaultRamdiskIndex" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:valuePath options:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
@@ -115,7 +125,7 @@ static RMFFavouritesManager *sharedSingleton;
   NSString *testpath = @"/Users/michael/Desktop/Test";
   NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
   NSLog(@"Unique Volume name: %@", unique);
-  return [RMFRamdisk volumePreset];
+  return [RMFRamdisk defaultRamdisk];
 }
 
 -(RMFRamdisk *)addNewFavourite {
@@ -192,8 +202,25 @@ static RMFFavouritesManager *sharedSingleton;
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:NSKeyValueObservingOptionNew context:nil];
   }
 }
-# pragma mark KVC
 
+- (void)setDefaultRamdiskIndex:(NSInteger)defaultRamdiskIndex {
+  if(_defaultRamdiskIndex != defaultRamdiskIndex) {
+    RMFRamdisk *oldDefault = [self.favourites objectAtIndex:_defaultRamdiskIndex];
+    RMFRamdisk *newDefault = [self.favourites objectAtIndex:defaultRamdiskIndex];
+    if(oldDefault != nil && newDefault != nil) {
+      newDefault.isDefault = YES;
+      oldDefault.isDefault = NO;
+      _defaultRamdiskIndex = defaultRamdiskIndex;
+    }
+  }
+}
+
+- (void)setDefaultRamdisk:(RMFRamdisk *)defaultRamdisk {
+  self.defaultRamdiskIndex = [_favourites indexOfObject:defaultRamdisk];
+}
+
+
+# pragma mark KVC
 - (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index {
   [_favourites removeObjectAtIndex:index];
 }
@@ -210,8 +237,7 @@ static RMFFavouritesManager *sharedSingleton;
   return [_favourites count];
 }
 
-#pragma makr KVO
-
+#pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
   if([object isKindOfClass:[RMFRamdisk class]]) {
     [self synchronizeDefaults];
