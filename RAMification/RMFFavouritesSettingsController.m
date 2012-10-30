@@ -30,7 +30,7 @@
 - (NSMenu *)actionMenu;
 - (NSImage *)labelImageWithColor:(NSColor *)color;
 - (void)toggleMount:(id)sender;
-- (void)toggleDefault:(id)sender;
+- (void)makeDefaultRamdisk:(id)sender;
 
 @end
 
@@ -174,26 +174,27 @@
   NSMenuItem *ejectItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_EJECT", @"Eject")
                                                                                action:@selector(toggleMount:)
                                                                         keyEquivalent:@""];
-  NSMenuItem *toggleDefaultItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_DEFAULT", @"Default Ramdisk")
-                                                                                       action:@selector(toggleDefault:)
+  NSMenuItem *markAsDefaultItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"FAVOURITE_ACTION_MAKE_DEFAULT", @"Set Favourite as default Ramdisk")
+                                                                                       action:@selector(makeDefaultRamdisk:)
                                                                                 keyEquivalent:@""];
   // bind enable/disable to the mount state of a ramdisk
-  NSDictionary *bindingOptions = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
+  NSDictionary *negateBindingOption = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
   NSString *selectionIsMountedKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsMounted];
   NSString *selectionIsDefaultKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsDefault];
-  [mountItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:bindingOptions];
+  [mountItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:negateBindingOption];
   [ejectItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:nil];
-  [toggleDefaultItem bind:NSValueBinding toObject:_favouritesController withKeyPath:selectionIsDefaultKeyPath options:nil];
+  [markAsDefaultItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsDefaultKeyPath options:negateBindingOption];
   
   [mountItem setTarget:self];
   [ejectItem setTarget:self];
+  [markAsDefaultItem setTarget:self];
   
   [actionMenu addItem:mountItem];
   [actionMenu addItem:ejectItem];
   [actionMenu addItem:[NSMenuItem separatorItem]];
-  [actionMenu addItem:toggleDefaultItem];
+  [actionMenu addItem:markAsDefaultItem];
   
-  [toggleDefaultItem release];
+  [markAsDefaultItem release];
   [mountItem release];
   [ejectItem release];
   
@@ -230,13 +231,13 @@
   }
 }
 
-- (void)toggleDefault:(id)sender {
+- (void)makeDefaultRamdisk:(id)sender {
   if(NO == [sender isMemberOfClass:[NSMenuItem class]]) {
     return; // wrong sender
   }
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
-  favouritesManager.defaultRamdisk = selectedRamdisk;
+  [favouritesManager setDefaultRamdisk:selectedRamdisk];
 }
 
 

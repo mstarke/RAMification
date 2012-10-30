@@ -42,6 +42,7 @@
   [cellView.lableTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
   [cellView.infoTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForSize options:nil];
   [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsMounted options:nil];
+  [cellView bind:@"isDefault" toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsDefault options:nil];
    
   return cellView;
 }

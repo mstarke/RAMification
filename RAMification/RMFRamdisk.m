@@ -76,6 +76,7 @@ static NSDictionary *volumeIconImageNames;
     _lastBackupDate = [NSDate distantPast];
     _volumeIconType = RMFDefaultVolumeIcon;
     _finderLabelIndex = 0;
+    _isDefault = NO;
   }
   return self;
 }
@@ -97,6 +98,7 @@ static NSDictionary *volumeIconImageNames;
     self = [[RMFRamdisk alloc] init];
     _label = [[aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel] retain];
     _isAutomount = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForAutomount];
+    _isDefault = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForIsDefault];
     _size = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForSize];
     _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
     _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
@@ -108,12 +110,13 @@ static NSDictionary *volumeIconImageNames;
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
     //[super encodeWithCoder:aCoder];
-    [aCoder encodeBool:self.isAutomount forKey:kRMFRamdiskKeyForAutomount];
-    [aCoder encodeInteger:self.size forKey:kRMFRamdiskKeyForSize];
-    [aCoder encodeObject:self.label forKey:kRMFRamdiskKeyForLabel];
-    [aCoder encodeInteger:self.backupMode forKey:kRMFRamdiskKeyForBackupMode];
-    [aCoder encodeInteger:self.volumeIconType forKey:kRMFRamdiskKeyForVolumeIconType];
-    [aCoder encodeInteger:self.finderLabelIndex forKey:kRMFRamdiskKeyForFinderLabelIndex];
+    [aCoder encodeBool:_isAutomount forKey:kRMFRamdiskKeyForAutomount];
+    [aCoder encodeBool:_isDefault forKey:kRMFRamdiskKeyForIsDefault];
+    [aCoder encodeInteger:_size forKey:kRMFRamdiskKeyForSize];
+    [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
+    [aCoder encodeInteger:_backupMode forKey:kRMFRamdiskKeyForBackupMode];
+    [aCoder encodeInteger:_volumeIconType forKey:kRMFRamdiskKeyForVolumeIconType];
+    [aCoder encodeInteger:_finderLabelIndex forKey:kRMFRamdiskKeyForFinderLabelIndex];
   }
 }
 

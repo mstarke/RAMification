@@ -22,7 +22,6 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
  List of all known favourites
  */
 @property (readonly, retain) NSMutableArray *favourites;
-@property (nonatomic, assign) RMFRamdisk *defaultRamdisk;
 
 
 /*
@@ -65,16 +64,19 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
  Delete the given favourite
  @param ramdisk favourite to delete
  */
-- (void) deleteFavourite:(RMFRamdisk *)ramdisk;
+- (void)deleteFavourite:(RMFRamdisk *)ramdisk;
 
 /*
  update favourites
  */
-- (void) updateFavourites;
+- (void)updateFavourites;
 
 /*
  initalize Favourites
  */
-- (void) initializeFavourites;
+- (void)initializeFavourites;
+
+- (void)setDefaultRamdisk:(RMFRamdisk *)ramdisk;
+- (RMFRamdisk *)defaultRamdisk;
 
 @end

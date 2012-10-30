@@ -13,5 +13,6 @@
 @property (assign) IBOutlet NSImageView *imageView;
 @property (assign) IBOutlet NSTextField *lableTextField;
 @property (assign) IBOutlet NSTextField *infoTextField;
+@property (nonatomic, assign) NSNumber *isDefault;
 
 @end
