@@ -8,11 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+APPKIT_EXTERN NSString *const kRMFFavouriteCellViewKeyForIsDefault;
+
 @interface RMFFavouriteCellView : NSTableCellView
 
 @property (assign) IBOutlet NSImageView *imageView;
 @property (assign) IBOutlet NSTextField *lableTextField;
 @property (assign) IBOutlet NSTextField *infoTextField;
-@property (nonatomic, assign) NSNumber *isDefault;
+@property (nonatomic, retain) NSNumber *isDefault;
 
 @end

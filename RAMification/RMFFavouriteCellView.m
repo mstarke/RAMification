@@ -8,31 +8,35 @@
 
 #import "RMFFavouriteCellView.h"
 
+NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
+
 @implementation RMFFavouriteCellView
 
-
-- (NSNumber *)isDefault {
-  NSFont *labelFont = [_lableTextField font];
-  NSFontManager *fontManager = [NSFontManager sharedFontManager];
-  NSFontTraitMask traitMask = [fontManager traitsOfFont:labelFont];
-  BOOL isDefault = ((traitMask & NSFontItalicTrait) != 0);
-  
-  return [NSNumber numberWithBool:isDefault];
-}
-
 - (void)setIsDefault:(NSNumber *)isDefault {
-  BOOL newDefault = [isDefault boolValue];
-  if([self.isDefault boolValue] == newDefault) {
+  [self willChangeValueForKey:kRMFFavouriteCellViewKeyForIsDefault];
+  
+  
+  if( _isDefault == nil ) {
+    _isDefault = [[NSNumber alloc] initWithBool:NO];
+  }
+  
+  if([self.isDefault boolValue] == [isDefault boolValue]) {
     return; // no changes
+  }
+  else {
+    [_isDefault autorelease];
+    _isDefault = [isDefault retain];
   }
   
   NSFont *labelFont = [_lableTextField font];
   NSFontManager *fontManager = [NSFontManager sharedFontManager];
   
-  NSFontTraitMask traitMask = newDefault ? NSFontItalicTrait : NSUnitalicFontMask;
+  NSFontTraitMask traitMask = [isDefault boolValue] ? NSBoldFontMask : NSUnboldFontMask;
   
   labelFont = [fontManager convertFont:labelFont toHaveTrait:traitMask];
   [_lableTextField setFont:labelFont];
+  
+  [self didChangeValueForKey:kRMFFavouriteCellViewKeyForIsDefault];
 }
 
 @end
