@@ -18,6 +18,7 @@
   FSEventStreamRef _eventStream;
 }
 @property (retain) NSMutableSet *watchedDisks;
+@property (assign) BOOL isObservingNotifications;
 @property (retain) NSDate *lastUpdate;
 @property (assign) FSEventStreamEventId lastEventId;
 @property (nonatomic, setter = setBufferEnabled:) BOOL bufferEnabled;
@@ -54,12 +55,20 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     _watchedDisks = [[NSMutableSet alloc] init];
     _eventStream = NULL;
     _lastUpdate = [[NSDate alloc] init];
+    _isObservingNotifications = NO;
     NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
     NSString *keyPath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
     [self bind:@"bufferEnabled" toObject:defaultsController withKeyPath:keyPath options:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
+}
+
+-(void)dealloc {
+  if(YES == _isObservingNotifications ) {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+  }
+  [super dealloc];
 }
 
 - (void)setBufferEnabled:(BOOL)bufferEnabled {
@@ -80,15 +89,19 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       [self setShouldBuffer:enable forRamdisk:ramdisk];
     }
     // Register for notifications
-    [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
-    [defaultCenter addObserver:self selector:@selector(didUnmountRamdisk:) name:RMFDidUnmountRamdiskNotification object:nil];
-    [defaultCenter addObserver:self selector:@selector(didRenameRamdisk:) name:RMFDidRenameRamdiskNotification object:nil];
+    if( NO == _isObservingNotifications) {
+      [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
+      [defaultCenter addObserver:self selector:@selector(didUnmountRamdisk:) name:RMFDidUnmountRamdiskNotification object:nil];
+      [defaultCenter addObserver:self selector:@selector(didRenameRamdisk:) name:RMFDidRenameRamdiskNotification object:nil];
+      self.isObservingNotifications = YES;
+    }
   }
   else {
     // Unregister the notifications
-    [defaultCenter removeObserver:self forKeyPath:RMFDidMountRamdiskNotification];
-    [defaultCenter removeObserver:self forKeyPath:RMFDidUnmountRamdiskNotification];
-    [defaultCenter removeObserver:self forKeyPath:RMFDidRenameRamdiskNotification];
+    if( YES == _isObservingNotifications) {
+      [defaultCenter removeObserver:self];
+      self.isObservingNotifications = NO;
+    }
 
     [self clearWatchedPaths];
     for(RMFRamdisk *ramdisk in mountedRamdisks) {

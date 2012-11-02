@@ -24,6 +24,7 @@ NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
 
 // private constants
 NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
+NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
 NSString *const RMFRamdiskDefaultLabel = @"RamDisk";
 NSUInteger const kRMFRamdiskDefaultSize = 512*1024*1024; // 512 Mb
 
@@ -34,6 +35,7 @@ static NSDictionary *volumeIconImageNames;
 @end
 
 @implementation RMFRamdisk
+
 
 + (void)initialize {
   volumeIconImageNames = @{ @(RMFDefaultVolumeIcon): @"Removable"};
@@ -52,6 +54,11 @@ static NSDictionary *volumeIconImageNames;
 
 + (RMFRamdisk *)ramdiskWithData:(NSData *)data {
   return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
++ (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL {
+  NSString *idFilePath = [[volumeURL path] stringByAppendingPathComponent:kRMFRamdiskIdentifierFile];
+  return [[NSFileManager defaultManager] fileExistsAtPath:idFilePath];
 }
 
 #pragma mark object lifecycle
@@ -139,8 +146,16 @@ static NSDictionary *volumeIconImageNames;
   return [NSImage imageNamed:imageName];
 }
 
-- (void)disableSpotlightIndexing {
-
+- (void)prepareContent {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  if(_volumePath == nil) {
+    NSLog(@"%@: Warning - no Volume Path set. Could not create Spotlight Index prohibition and ramdisk volume marker!", self);
+    return; // No path to work with
+  }
+  NSString *doNotIndexFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskNeverIndexFileName];
+  NSString *markAsRamdiskFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskIdentifierFile];
+  [fileManager createFileAtPath:markAsRamdiskFile contents:nil attributes:nil];
+  [fileManager createFileAtPath:doNotIndexFile contents:nil attributes:nil];
 }
 
 - (void)updateLabel {

@@ -74,7 +74,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [self createMenu];
     [self createStatusItem];
     RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-    [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKey options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
+    [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerKeyForFavourites options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
+    [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk options:0 context:nil];
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidMountRamdiskNotification object:nil];
     [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidUnmountRamdiskNotification object:nil];
@@ -85,6 +86,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 - (void)dealloc {
+  
+  // remove from observers
+  [[RMFFavouritesManager sharedManager] removeObserver:self forKeyPath:kRMFFavouritesManagerKeyForFavourites];
+  [[RMFFavouritesManager sharedManager] removeObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  
   self.noFavouritesMenuItem = nil;
   self.hibernateWarningMenuItem = nil;
   self.menuItemsToFavouritesMap = nil;
@@ -93,6 +100,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   self.statusItem = nil;
   self.queue = nil;
   self.menuItemsToFavouritesMap = nil;
+  
   [super dealloc];
 }
 
@@ -346,7 +354,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
       return;
     }
   }
-  if( [keyPath isEqualToString:kRMFFavouritesManagerFavouritesKey] ) {
+  if( [keyPath isEqualToString:kRMFFavouritesManagerKeyForFavourites] ) {
     NSUInteger changeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
     switch (changeKind) {
       case NSKeyValueChangeInsertion: {

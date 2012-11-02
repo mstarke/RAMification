@@ -15,7 +15,9 @@
 #import "NSString+RMFVolumeTools.h"
 #import "RMFFavouritesTableViewDelegate.h"
 
-NSString *const kRMFFavouritesManagerFavouritesKey = @"favourites";
+NSString *const kRMFFavouritesManagerKeyForFavourites = @"favourites";
+NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultRamdisk";
+
 
 // private interface
 @interface RMFFavouritesManager ()
@@ -47,6 +49,10 @@ NSString *const kRMFFavouritesManagerFavouritesKey = @"favourites";
  Make sure the defautl Ramdisk is unique
  */
 - (void)validateDefaultRamdisk;
+/*
+ Looks for any possible Favourte that is already mounted
+ */
+- (void)validateMountState;
 
 @end
 
@@ -92,12 +98,21 @@ static RMFFavouritesManager *sharedSingleton;
       [_favourites addObject:defaultRamdisk];
     }
     [self validateDefaultRamdisk];
+    [self validateMountState];
     NSLog(@"Created %@", [self class]);
   }
   return self;
 }
 
 - (void)dealloc {
+  for(RMFRamdisk *ramdisk in _favourites) {
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForAutomount];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForSize];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
+  }
   self.favourites = nil;
   [super dealloc];
 }
@@ -179,16 +194,31 @@ static RMFFavouritesManager *sharedSingleton;
   return nil;
 }
 
-- (void)updateFavourites {
-  // update favourites
-}
-
-- (void)initializeFavourites {
+- (void)automountFavourites {
   for(RMFRamdisk *ramdisk in _favourites) {
     [self observerRamdisk:ramdisk];
     if(ramdisk.isAutomount) {
       RMFMountController *mountController = [RMFMountController sharedController];
       [mountController mount:ramdisk];
+    }
+  }
+}
+
+- (void)validateMountState {
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSArray *mountedVolumeUrls = [fileManager mountedVolumeURLsIncludingResourceValuesForKeys:@[ NSURLVolumeNameKey, NSURLVolumeTotalCapacityKey, NSURLVolumeIsRemovableKey ] options:0];
+  for( NSURL *volumeURL in mountedVolumeUrls) {
+    BOOL hasValue = YES;
+    NSString *name;
+    NSNumber *capacity;
+    NSNumber *isRemovable;
+    hasValue &= [volumeURL getResourceValue:&name forKey:NSURLVolumeNameKey error:nil];
+    hasValue &= [volumeURL getResourceValue:&capacity forKey:NSURLVolumeTotalCapacityKey error:nil];
+    hasValue &= [volumeURL getResourceValue:&isRemovable forKey:NSURLVolumeIsRemovableKey error:nil];
+    if(hasValue) {
+      if( [RMFRamdisk volumeIsRamdiskAtURL:volumeURL] ) {
+        NSLog(@"Found already mounted Favourite: %@", name);
+      }
     }
   }
 }
@@ -229,6 +259,7 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 - (void)setDefaultRamdisk:(RMFRamdisk *)defaultRamdisk {
+  [self willChangeValueForKey:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
   NSUInteger newIndex = [_favourites indexOfObject:defaultRamdisk];
   if(NSNotFound == newIndex) {
     return; // the new ramdisk is not valid
@@ -243,6 +274,7 @@ static RMFFavouritesManager *sharedSingleton;
   
   defaultRamdisk.isDefault = YES;
   self.defaultRamdiskIndex = newIndex;
+  [self didChangeValueForKey:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
 }
 
 - (void)validateDefaultRamdisk {

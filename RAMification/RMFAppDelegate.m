@@ -51,7 +51,7 @@
   _syncDaemon = [[RMFSyncDaemon alloc] init];
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
   
-  [[RMFFavouritesManager sharedManager] initializeFavourites];
+  [[RMFFavouritesManager sharedManager] automountFavourites];
 }
 
 - (NSString *)executabelName {

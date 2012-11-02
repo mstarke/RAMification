@@ -27,6 +27,7 @@
 @property (assign) IBOutlet NSButton *detailIsAutoMount;
 @property (assign) IBOutlet NSButton *addRamdiskButton;
 @property (assign) IBOutlet NSButton *removeRamdiskButton;
+@property (assign) IBOutlet NSImageView *sizeWarningImageView;
 
 
 - (IBAction)addPreset:(id)sender;

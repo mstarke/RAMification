@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
+APPKIT_EXTERN NSString *const kRMFFavouritesManagerKeyForFavourites;
+APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk;
 
 @class RMFRamdisk;
 
@@ -67,14 +68,9 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKey;
 - (void)deleteFavourite:(RMFRamdisk *)ramdisk;
 
 /*
- update favourites
- */
-- (void)updateFavourites;
-
-/*
  initalize Favourites
  */
-- (void)initializeFavourites;
+- (void)automountFavourites;
 
 - (void)setDefaultRamdisk:(RMFRamdisk *)ramdisk;
 - (RMFRamdisk *)defaultRamdisk;

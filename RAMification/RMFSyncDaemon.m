@@ -79,11 +79,13 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)dealloc {
-  // unregister and cleanup
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  // unregister for mount/unmount callbacks
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   CFRelease(_approvalSession);
   self.approvalSession = NULL;
   self.queue = nil;
+  
   [super dealloc];
 }
 

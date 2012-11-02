@@ -14,11 +14,11 @@
 
 #import <DiskArbitration/DiskArbitration.h>
 
-NSString * const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
-NSString * const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
-NSString * const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
-NSString * const kRMFRamdiskKey = @"RMFRamdiskKey";
-NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
+NSString *const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
+NSString *const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
+NSString *const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
+NSString *const kRMFRamdiskKey = @"RMFRamdiskKey";
+NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 @interface RMFMountWatcher ()
 
@@ -42,6 +42,14 @@ NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
     NSLog(@"Created %@", [self class]);
   }
   return self;
+}
+
+- (void)dealloc {
+  NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+  NSNotificationCenter *center = [workspace notificationCenter];
+  [center removeObserver:self];
+  
+  [super dealloc];
 }
 
 - (void)didMountVolume:(NSNotification *)notification {
@@ -71,6 +79,7 @@ NSString * const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   ramdisk.volumePath = volumePath;
   ramdisk.isMounted = YES;
   [ramdisk updateLabel];
+  [ramdisk prepareContent];
   
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];

@@ -27,7 +27,8 @@
 - (void)didRenameFavourite:(NSNotification *)notification;
 - (NSMenu *)backupModeMenu;
 - (NSMenu *)labelMenu;
-- (NSMenu *)actionMenu;
+- (NSMenu *)actionContextMenu;
+- (NSMenu *)actionPopupMenu;
 - (NSImage *)labelImageWithColor:(NSColor *)color;
 - (void)toggleMount:(id)sender;
 - (void)makeDefaultRamdisk:(id)sender;
@@ -84,15 +85,16 @@
   _favouritesControllerDelegate = [[RMFFavouritesArrayControllerDelegate alloc] init];
   _favouritesController.delegate = _favouritesControllerDelegate;
   
-  [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerFavouritesKey options:nil];
+  [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerKeyForFavourites options:nil];
   [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
   
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
   _favouritesTableView.delegate = self.tableDelegate;
+  [_favouritesTableView setMenu:[self actionContextMenu]];
   
   [_backupPopUpButton setMenu:[self backupModeMenu]];
   [_labelPopupButton setMenu:[self labelMenu]];
-  [_actionPopupButton setMenu:[self actionMenu]];
+  [_actionPopupButton setMenu:[self actionPopupMenu]];
   [_actionPopupButton selectItemAtIndex:0];
   
   [_sizeTextField setFormatter:[RMFSizeFormatter formatter]];
@@ -114,7 +116,8 @@
   [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
   
-  [self.volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
+  [_volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
+  [_sizeWarningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
 }
 
 #pragma mark Menus
@@ -160,13 +163,20 @@
   return [labelMenu autorelease];
 }
 
-- (NSMenu *)actionMenu {
-  NSMenu *actionMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+- (NSMenu *)actionPopupMenu {
+  
+  NSMenu *popupMenu = [self actionContextMenu];
   
   NSMenuItem *actionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] init];
   [actionItem setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
-  [actionMenu addItem:actionItem];
+  [popupMenu insertItem:actionItem atIndex:0];
   [actionItem release];
+  
+  return popupMenu;
+}
+
+- (NSMenu *)actionContextMenu {
+  NSMenu *actionMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   
   NSMenuItem *mountItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:NSLocalizedString(@"COMMON_MOUNT", @"Mount Ramdisk")
                                                                                action:@selector(toggleMount:)
