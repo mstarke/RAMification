@@ -45,6 +45,7 @@ typedef enum RMFRamdiskVolumeIconType {
 @property (assign) NSUInteger size;
 @property (retain) NSString *volumePath;
 @property (retain) NSString *bsdDevice;
+//@property (retain) NSUUID *uuid;
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;

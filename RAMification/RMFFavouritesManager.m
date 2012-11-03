@@ -217,7 +217,7 @@ static RMFFavouritesManager *sharedSingleton;
     hasValue &= [volumeURL getResourceValue:&isRemovable forKey:NSURLVolumeIsRemovableKey error:nil];
     if(hasValue) {
       if( [RMFRamdisk volumeIsRamdiskAtURL:volumeURL] ) {
-        NSLog(@"Found already mounted Favourite: %@", name);
+        NSLog(@"Found already possible mounted favourite: %@. Trying to match up!", name);
       }
     }
   }
