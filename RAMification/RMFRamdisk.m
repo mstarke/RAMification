@@ -21,6 +21,7 @@ NSString *const kRMFRamdiskKeyForVolumeIcon = @"volumeIcon";
 NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
 NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
 NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
+NSString *const kRMFRamdiskKeyForUUID = @"uuid";
 
 // private constants
 NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
@@ -32,6 +33,8 @@ static NSDictionary *volumeIconImageNames;
 
 @interface RMFRamdisk ()
 @property (retain) NSDate *lastBackupDate;
+@property (retain) NSString *uuid;
+- (NSString *)_generateUUID;
 @end
 
 @implementation RMFRamdisk
@@ -61,6 +64,22 @@ static NSDictionary *volumeIconImageNames;
   return [[NSFileManager defaultManager] fileExistsAtPath:idFilePath];
 }
 
++ (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {
+  
+  assert(success != 0);
+  
+  NSError *readError = nil;
+  NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
+  NSString *uuid = [NSString stringWithContentsOfURL:idFileURL encoding:NSUTF8StringEncoding error:&readError];
+  
+  if(readError != nil) {
+    NSLog(@"Warning. Unable to Read UUID at URL:%@. %@", volumeURL, [readError localizedDescription]);
+    *success = NO;
+  }
+  *success = YES;
+  return uuid;
+}
+
 #pragma mark object lifecycle
 
 - (id)init {
@@ -84,13 +103,15 @@ static NSDictionary *volumeIconImageNames;
     _volumeIconType = RMFDefaultVolumeIcon;
     _finderLabelIndex = 0;
     _isDefault = NO;
+    self.uuid = [self _generateUUID];
   }
   return self;
 }
 
 - (NSString *)description {
-  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ BDSDevice:%@ DevicePath:%@ Mounted:%i Automount:%i Backup:%i"
+  NSString *description = [NSString stringWithFormat:@"Ramdisk:%@ UUID:%@ BDSDevice:%@ DevicePath:%@ Mounted:%i Automount:%i Backup:%i"
                            , _label
+                           , _uuid
                            , _bsdDevice
                            , _volumePath
                            , [self isMounted]
@@ -103,24 +124,37 @@ static NSDictionary *volumeIconImageNames;
 - (id)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [[RMFRamdisk alloc] init];
-    _label = [[aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel] retain];
+    // retain the objects
+    self.label = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel];
+    self.uuid = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForUUID];
+    // assing alementary types
     _isAutomount = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForAutomount];
     _isDefault = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForIsDefault];
     _size = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForSize];
     _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
     _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
     _finderLabelIndex = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForFinderLabelIndex];
+    
+    // UUID is missing. Generate one! 
+    if(nil == _uuid) {
+      self.uuid = [self _generateUUID];
+    }    
   }
   return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
+
     //[super encodeWithCoder:aCoder];
+    // encode objects
+    [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
+    [aCoder encodeObject:_uuid forKey:kRMFRamdiskKeyForUUID];
+    
+    // encode integral types
     [aCoder encodeBool:_isAutomount forKey:kRMFRamdiskKeyForAutomount];
     [aCoder encodeBool:_isDefault forKey:kRMFRamdiskKeyForIsDefault];
     [aCoder encodeInteger:_size forKey:kRMFRamdiskKeyForSize];
-    [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
     [aCoder encodeInteger:_backupMode forKey:kRMFRamdiskKeyForBackupMode];
     [aCoder encodeInteger:_volumeIconType forKey:kRMFRamdiskKeyForVolumeIconType];
     [aCoder encodeInteger:_finderLabelIndex forKey:kRMFRamdiskKeyForFinderLabelIndex];
@@ -154,13 +188,31 @@ static NSDictionary *volumeIconImageNames;
   }
   NSString *doNotIndexFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskNeverIndexFileName];
   NSString *markAsRamdiskFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskIdentifierFile];
-  [fileManager createFileAtPath:markAsRamdiskFile contents:nil attributes:nil];
-  [fileManager createFileAtPath:doNotIndexFile contents:nil attributes:nil];
+  NSData *uuidData = [_uuid dataUsingEncoding:NSUTF8StringEncoding];
+  if(NO == [fileManager fileExistsAtPath:doNotIndexFile]) {
+    [fileManager createFileAtPath:markAsRamdiskFile contents:uuidData attributes:nil];
+  }
+  if(NO ==[fileManager fileExistsAtPath:markAsRamdiskFile]) {
+    [fileManager createFileAtPath:doNotIndexFile contents:nil attributes:nil];
+  }
 }
 
-- (void)updateLabel {
+- (void)updateFinderLabel {
   NSURL *url = [NSURL fileURLWithPath:self.volumePath isDirectory:YES];
   [url setResourceValue:@(_finderLabelIndex) forKey:NSURLLabelNumberKey error:nil];
+}
+
+- (NSString *)_generateUUID {
+  CFUUIDRef uuidRef = CFUUIDCreate(CFAllocatorGetDefault());
+  CFStringRef uuidStringRef = CFUUIDCreateString(CFAllocatorGetDefault(), uuidRef);
+  
+  NSString *uuid = [NSString stringWithString:(NSString *)uuidStringRef];
+  
+  // clean up
+  CFRelease(uuidStringRef);
+  CFRelease(uuidRef);
+  
+  return uuid;
 }
 
 @end

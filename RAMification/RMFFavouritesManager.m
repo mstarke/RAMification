@@ -11,6 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
 #import "RMFMountController.h"
+#import "RMFMountWatcher.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 #import "RMFFavouritesTableViewDelegate.h"
@@ -24,35 +25,28 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 @property (retain) NSMutableArray *favourites;
 @property (nonatomic, assign) NSInteger defaultRamdiskIndex;
+@property (retain) NSMutableDictionary *uuidToFavourites;
 
 /*
  Adds the given ramdisk to the favourites
  @param ramdisk favourite to add
  @return true if the favourite was added, false otherwise
  */
-- (BOOL)addFavourite:(RMFRamdisk*) ramdisk;
+- (BOOL)_addFavourite:(RMFRamdisk*) ramdisk;
 /*
  creates a default favourite with a unique name
  @return the unique favourite
  */
-- (RMFRamdisk *)createUniqueFavourite;
+- (RMFRamdisk *)_createUniqueFavourite;
 /*
  Obseverse ramdisk for changes to values stored in user defaults
  and shedules synchornization on relevant changes
  */
-- (void)observerRamdisk:(RMFRamdisk *)ramdisk;
-/*
- Stores favourites to defaults
- */
-- (void)synchronizeDefaults;
-/*
- Make sure the defautl Ramdisk is unique
- */
-- (void)validateDefaultRamdisk;
-/*
- Looks for any possible Favourte that is already mounted
- */
-- (void)validateMountState;
+- (void)_observerRamdisk:(RMFRamdisk *)ramdisk;
+
+- (void)_createUUIDDictionary;
+- (void)_synchronizeDefaults;
+- (void)_validateDefaultRamdisk;
 
 @end
 
@@ -97,8 +91,9 @@ static RMFFavouritesManager *sharedSingleton;
       RMFRamdisk *defaultRamdisk = [RMFRamdisk defaultRamdisk];
       [_favourites addObject:defaultRamdisk];
     }
-    [self validateDefaultRamdisk];
-    [self validateMountState];
+    [self _createUUIDDictionary];
+    [self _validateDefaultRamdisk];
+    NSLog(@"%@", _favourites);
     NSLog(@"Created %@", [self class]);
   }
   return self;
@@ -135,7 +130,7 @@ static RMFFavouritesManager *sharedSingleton;
 
 #pragma mark preset handling
 
-- (RMFRamdisk *)createUniqueFavourite {
+- (RMFRamdisk *)_createUniqueFavourite {
   NSString *testpath = @"/Users/michael/Desktop/Test";
   NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
   NSLog(@"Unique Volume name: %@", unique);
@@ -143,8 +138,8 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 -(RMFRamdisk *)addNewFavourite {
-  RMFRamdisk* ramdisk = [self createUniqueFavourite];
-  [self addFavourite:ramdisk];
+  RMFRamdisk* ramdisk = [self _createUniqueFavourite];
+  [self _addFavourite:ramdisk];
   return ramdisk;
 }
 
@@ -152,12 +147,13 @@ static RMFFavouritesManager *sharedSingleton;
   return [_favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
 }
 
-- (BOOL)addFavourite:(RMFRamdisk *)ramdisk {
+- (BOOL)_addFavourite:(RMFRamdisk *)ramdisk {
   BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
-    [self observerRamdisk:ramdisk];
-    [self synchronizeDefaults];
+    [_uuidToFavourites setObject:ramdisk forKey:ramdisk.uuid];
+    [self _observerRamdisk:ramdisk];
+    [self _synchronizeDefaults];
   }
   return !isDuplicate;
 }
@@ -165,7 +161,8 @@ static RMFFavouritesManager *sharedSingleton;
 - (void)deleteFavourite:(RMFRamdisk *)ramdisk {
   NSUInteger index = [_favourites indexOfObject:ramdisk];
   [self removeObjectFromFavouritesAtIndex:index];
-  [self synchronizeDefaults];
+  [_uuidToFavourites removeObjectForKey:ramdisk.uuid];
+  [self _synchronizeDefaults];
 }
 
 - (RMFRamdisk *)findFavouriteByName:(NSString*)name {
@@ -194,9 +191,13 @@ static RMFFavouritesManager *sharedSingleton;
   return nil;
 }
 
+- (RMFRamdisk *)findFavouriteByUUID:(NSString *)uuid {
+  return [_uuidToFavourites objectForKey:uuid];
+}
+
 - (void)automountFavourites {
   for(RMFRamdisk *ramdisk in _favourites) {
-    [self observerRamdisk:ramdisk];
+    [self _observerRamdisk:ramdisk];
     if(ramdisk.isAutomount) {
       RMFMountController *mountController = [RMFMountController sharedController];
       [mountController mount:ramdisk];
@@ -204,26 +205,20 @@ static RMFFavouritesManager *sharedSingleton;
   }
 }
 
-- (void)validateMountState {
-  NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSArray *mountedVolumeUrls = [fileManager mountedVolumeURLsIncludingResourceValuesForKeys:@[ NSURLVolumeNameKey, NSURLVolumeTotalCapacityKey, NSURLVolumeIsRemovableKey ] options:0];
-  for( NSURL *volumeURL in mountedVolumeUrls) {
-    BOOL hasValue = YES;
-    NSString *name;
-    NSNumber *capacity;
-    NSNumber *isRemovable;
-    hasValue &= [volumeURL getResourceValue:&name forKey:NSURLVolumeNameKey error:nil];
-    hasValue &= [volumeURL getResourceValue:&capacity forKey:NSURLVolumeTotalCapacityKey error:nil];
-    hasValue &= [volumeURL getResourceValue:&isRemovable forKey:NSURLVolumeIsRemovableKey error:nil];
-    if(hasValue) {
-      if( [RMFRamdisk volumeIsRamdiskAtURL:volumeURL] ) {
-        NSLog(@"Found already possible mounted favourite: %@. Trying to match up!", name);
-      }
-    }
+
+- (void)_createUUIDDictionary {
+  if(nil == _favourites) {
+    _uuidToFavourites = [[NSMutableDictionary alloc] init];
+  }
+  else {
+    self.uuidToFavourites = [NSMutableDictionary dictionaryWithCapacity:[_favourites count]];
+  }
+  for(RMFRamdisk *ramdisk in _favourites) {
+    [_uuidToFavourites setObject:ramdisk forKey:ramdisk.uuid];
   }
 }
 
-- (void)observerRamdisk:(RMFRamdisk *)ramdisk {
+- (void)_observerRamdisk:(RMFRamdisk *)ramdisk {
   if(ramdisk != nil) {
     // We register just for changes but do not care what changes happen
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForAutomount options:0 context:nil];
@@ -277,7 +272,7 @@ static RMFFavouritesManager *sharedSingleton;
   [self didChangeValueForKey:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
 }
 
-- (void)validateDefaultRamdisk {
+- (void)_validateDefaultRamdisk {
   
   assert([_favourites count] > 0);
   
@@ -318,11 +313,11 @@ static RMFFavouritesManager *sharedSingleton;
 #pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
   if([object isKindOfClass:[RMFRamdisk class]]) {
-    [self synchronizeDefaults];
+    [self _synchronizeDefaults];
   }
 }
 
-- (void)synchronizeDefaults {
+- (void)_synchronizeDefaults {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:_favourites];
   
   [[NSUserDefaults standardUserDefaults] setObject:data forKey:kRMFSettingsKeyFavourites];

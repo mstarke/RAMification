@@ -51,6 +51,7 @@
   _syncDaemon = [[RMFSyncDaemon alloc] init];
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
   
+  [_mountWatcher searchForMountedFavourites];
   [[RMFFavouritesManager sharedManager] automountFavourites];
 }
 

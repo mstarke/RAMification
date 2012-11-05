@@ -19,4 +19,7 @@ APPKIT_EXTERN NSString * const kRMFOldRamdiskLabelKey;
 
 @interface RMFMountWatcher : NSObject
 
++ (NSString *)bsdDeviceForVolumeAtURL:(NSURL *)volumeURL;
+- (void)searchForMountedFavourites;
+
 @end

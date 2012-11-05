@@ -45,7 +45,7 @@ typedef enum RMFRamdiskVolumeIconType {
 @property (assign) NSUInteger size;
 @property (retain) NSString *volumePath;
 @property (retain) NSString *bsdDevice;
-//@property (retain) NSUUID *uuid;
+@property (retain, readonly) NSString *uuid;
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;
@@ -60,11 +60,12 @@ typedef enum RMFRamdiskVolumeIconType {
 + (RMFRamdisk *)ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount;
 + (RMFRamdisk *)defaultRamdisk;
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL;
++ (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success;
 
 - (id)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount;
 // Call this function to indicate that this ramdisk was just backed up
 - (void)finishedBackup;
 - (void)prepareContent;
-- (void)updateLabel;
+- (void)updateFinderLabel;
 
 @end
