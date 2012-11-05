@@ -15,7 +15,7 @@
 NSString *const kHiberNateModeKey = @"Hibernate Mode";
 NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerManagement/CurrentSettings";
 
-static RMFSettingsController *sharedSingleton;
+static RMFSettingsController *_sharedSingleton;
 
 @interface RMFSettingsController ()
 
@@ -37,12 +37,12 @@ static RMFSettingsController *sharedSingleton;
   static BOOL initialized = NO;
   if(!initialized) {
     initialized = YES;
-    sharedSingleton = [[RMFSettingsController alloc] init];
+    _sharedSingleton = [[RMFSettingsController alloc] init];
   }
 }
 
 + (RMFSettingsController *)sharedController {
-  return sharedSingleton;
+  return _sharedSingleton;
 }
 
 # pragma mark object lifecycle

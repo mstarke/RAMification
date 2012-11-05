@@ -27,31 +27,16 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 @property (nonatomic, assign) NSInteger defaultRamdiskIndex;
 @property (retain) NSMutableDictionary *uuidToFavourites;
 
-/*
- Adds the given ramdisk to the favourites
- @param ramdisk favourite to add
- @return true if the favourite was added, false otherwise
- */
 - (BOOL)_addFavourite:(RMFRamdisk*) ramdisk;
-/*
- creates a default favourite with a unique name
- @return the unique favourite
- */
 - (RMFRamdisk *)_createUniqueFavourite;
-/*
- Obseverse ramdisk for changes to values stored in user defaults
- and shedules synchornization on relevant changes
- */
 - (void)_observerRamdisk:(RMFRamdisk *)ramdisk;
-
 - (void)_createUUIDDictionary;
 - (void)_synchronizeDefaults;
 - (void)_validateDefaultRamdisk;
 
 @end
 
-
-static RMFFavouritesManager *sharedSingleton;
+static RMFFavouritesManager *_sharedSingleton;
 
 // actual implementation
 @implementation RMFFavouritesManager
@@ -62,12 +47,12 @@ static RMFFavouritesManager *sharedSingleton;
   static BOOL initialized = NO;
   if(!initialized) {
     initialized = YES;
-    sharedSingleton = [[RMFFavouritesManager alloc] init];
+    _sharedSingleton = [[RMFFavouritesManager alloc] init];
   }
 }
 
 + (RMFFavouritesManager *)sharedManager {
-  return sharedSingleton;
+  return _sharedSingleton;
 }
 
 #pragma mark object lifecycle
@@ -130,13 +115,6 @@ static RMFFavouritesManager *sharedSingleton;
 
 #pragma mark preset handling
 
-- (RMFRamdisk *)_createUniqueFavourite {
-  NSString *testpath = @"/Users/michael/Desktop/Test";
-  NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
-  NSLog(@"Unique Volume name: %@", unique);
-  return [RMFRamdisk defaultRamdisk];
-}
-
 -(RMFRamdisk *)addNewFavourite {
   RMFRamdisk* ramdisk = [self _createUniqueFavourite];
   [self _addFavourite:ramdisk];
@@ -145,6 +123,13 @@ static RMFFavouritesManager *sharedSingleton;
 
 - (NSArray *)mountedFavourites {
   return [_favourites filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.isMounted == YES"]];
+}
+
+- (RMFRamdisk *)_createUniqueFavourite {
+  NSString *testpath = @"/Users/michael/Desktop/Test";
+  NSString *unique = [NSString uniqueVolumeName:@"hallo" inFolder:testpath];
+  NSLog(@"Unique Volume name: %@", unique);
+  return [RMFRamdisk defaultRamdisk];
 }
 
 - (BOOL)_addFavourite:(RMFRamdisk *)ramdisk {
@@ -173,14 +158,20 @@ static RMFFavouritesManager *sharedSingleton;
   }
   return nil;}
 
-- (RMFRamdisk *)findFavouriteWithVolumePath:(NSString *)path {
+- (RMFRamdisk *)findFavouriteWithVolumeURL:(NSURL *)url {
+  if( [url isFileReferenceURL] ) {
+    NSLog(@"%@: Error while searching for favourite by URL. Given URL %@ is nor fileRefrence URL", [self class], url);
+    return nil;
+  }
+  
   for(RMFRamdisk *ramdisk in _favourites) {
-    if([ramdisk.volumePath isEqualToString:path]) {
+    if([url isEqual:ramdisk.volumeURL]) {
       return ramdisk;
     }
   }
   return nil;
 }
+
 
 - (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device {
   for(RMFRamdisk *ramdisk in _favourites){
@@ -248,7 +239,7 @@ static RMFFavouritesManager *sharedSingleton;
     ramdisk = [_favourites objectAtIndex:_defaultRamdiskIndex];
   }
   @catch (NSException *exception) {
-    NSLog(@"Warning. No default ramdisk found");
+    NSLog(@"Warning. No default Ramdisk found");
   }
   return ramdisk;
 }
@@ -294,7 +285,7 @@ static RMFFavouritesManager *sharedSingleton;
 }
 
 # pragma mark KVC
-- (void) removeObjectFromFavouritesAtIndex:(NSUInteger)index {
+- (void)removeObjectFromFavouritesAtIndex:(NSUInteger)index {
   [_favourites removeObjectAtIndex:index];
 }
 

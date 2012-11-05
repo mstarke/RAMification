@@ -113,7 +113,7 @@ static NSDictionary *volumeIconImageNames;
                            , _label
                            , _uuid
                            , _bsdDevice
-                           , _volumePath
+                           , _volumeURL
                            , [self isMounted]
                            , _isAutomount
                            , _backupMode];
@@ -182,24 +182,23 @@ static NSDictionary *volumeIconImageNames;
 
 - (void)prepareContent {
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  if(_volumePath == nil) {
+  if(_volumeURL == nil) {
     NSLog(@"%@: Warning - no Volume Path set. Could not create Spotlight Index prohibition and ramdisk volume marker!", self);
     return; // No path to work with
   }
-  NSString *doNotIndexFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskNeverIndexFileName];
-  NSString *markAsRamdiskFile = [_volumePath stringByAppendingPathComponent:kRMFRamdiskIdentifierFile];
+  NSURL *doNotIndexFileURL = [_volumeURL URLByAppendingPathComponent:kRMFRamdiskNeverIndexFileName];
+  NSURL *markAsRamdiskFileURL = [_volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
   NSData *uuidData = [_uuid dataUsingEncoding:NSUTF8StringEncoding];
-  if(NO == [fileManager fileExistsAtPath:doNotIndexFile]) {
-    [fileManager createFileAtPath:markAsRamdiskFile contents:uuidData attributes:nil];
+  if(NO == [fileManager fileExistsAtPath:[doNotIndexFileURL path]]) {
+    [fileManager createFileAtPath:[markAsRamdiskFileURL path] contents:uuidData attributes:nil];
   }
-  if(NO ==[fileManager fileExistsAtPath:markAsRamdiskFile]) {
-    [fileManager createFileAtPath:doNotIndexFile contents:nil attributes:nil];
+  if(NO ==[fileManager fileExistsAtPath:[markAsRamdiskFileURL path]]) {
+    [fileManager createFileAtPath:[doNotIndexFileURL path] contents:nil attributes:nil];
   }
 }
 
 - (void)updateFinderLabel {
-  NSURL *url = [NSURL fileURLWithPath:self.volumePath isDirectory:YES];
-  [url setResourceValue:@(_finderLabelIndex) forKey:NSURLLabelNumberKey error:nil];
+  [_volumeURL setResourceValue:@(_finderLabelIndex) forKey:NSURLLabelNumberKey error:nil];
 }
 
 - (NSString *)_generateUUID {

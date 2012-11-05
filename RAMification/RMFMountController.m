@@ -14,7 +14,7 @@
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
 
-static RMFMountController *sharedSingleton;
+static RMFMountController *_sharedSingleton;
 
 @interface RMFMountController ()
 
@@ -28,12 +28,12 @@ static RMFMountController *sharedSingleton;
   static BOOL initialized = NO;
   if(!initialized) {
     initialized = YES;
-    sharedSingleton = [[RMFMountController alloc] init];
+    _sharedSingleton = [[RMFMountController alloc] init];
   }
 }
 
 + (RMFMountController *)sharedController {
-  return sharedSingleton;
+  return _sharedSingleton;
 }
 
 - (id)init {
@@ -64,7 +64,11 @@ static RMFMountController *sharedSingleton;
   if(NO == ramdisk.isMounted) {
     return; // Already unmounted
   }
-  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtPath:[ramdisk.label stringAsVolumePath]];
+  NSError *error = nil;
+  [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:ramdisk.volumeURL error:&error];
+  if(nil != error) {
+    NSLog(@"Could not unmount Ramdisk %@ mounted at %@. %@", ramdisk.label, ramdisk.volumeURL, [error localizedDescription] );
+  }
 }
 
 - (BOOL) toggleMounted:(RMFRamdisk *)ramdisk {

@@ -50,11 +50,11 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
 - (RMFRamdisk *)findFavouriteByName:(NSString *)name;
 
 /*
- Find a favourite with the given device path
- @param path the Device path to look for
- @return matching favourite, nil if nothing was found
+ Find a favourite with the given volume URL
+ @param url the Device url to look for
+ @return first matching favourite, nil if nothing was found
  */
-- (RMFRamdisk *)findFavouriteWithVolumePath:(NSString *)path;
+- (RMFRamdisk *)findFavouriteWithVolumeURL:(NSURL *)url;
 
 /*
  Looks for the Favourite with the given bsd device name

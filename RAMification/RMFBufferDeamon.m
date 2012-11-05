@@ -176,14 +176,14 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 - (void)didMountRamdisk:(NSNotification *)notification {
   RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self addWatchedPath:ramdisk.volumePath];
+    [self addWatchedPath:[ramdisk.volumeURL path]];
   }
 }
 
 - (void)didUnmountRamdisk:(NSNotification *)notification {
   RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self removeWatchedPath:ramdisk.volumePath];
+    [self removeWatchedPath:[ramdisk.volumeURL path]];
   }
 }
 
@@ -192,14 +192,14 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
     [self removeWatchedPath:[oldLabel stringAsVolumePath]];
-    [self addWatchedPath:ramdisk.volumePath];
+    [self addWatchedPath:[ramdisk.volumeURL path]];
   }
 }
 
 #pragma mark Buffer handling
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
   
-  NSString *path = ramdisk.volumePath;
+  NSString *path = [ramdisk.volumeURL path];
   if( shouldBuffer ) {
     [self addWatchedPath:path];
   }
@@ -208,7 +208,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSString *volumePath = ramdisk.volumePath;
+  NSString *volumePath = [ramdisk.volumeURL path];
   NSDirectoryEnumerator *dirEnumerator = [fileManager enumeratorAtPath:volumePath];
   NSString *file;
   while( file = [dirEnumerator nextObject] ) {

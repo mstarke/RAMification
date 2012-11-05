@@ -119,10 +119,9 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 - (void)_didUnmountVolume:(NSNotification *)notification {
   NSURL *deviceUrl = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
-  NSString *devicePath = [deviceUrl path];
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithVolumePath:devicePath];
-  NSLog(@"%@: Device %@ unmounted", self, devicePath);
+  RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithVolumeURL:deviceUrl];
+  NSLog(@"%@: Device %@ unmounted", self, deviceUrl);
   if( ramdisk == nil ) {
     NSLog(@"%@: No Ramdisk, ignoring", self);
     return; // No known favourite was unmounted, ignore
@@ -142,25 +141,25 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 - (void)_didRenameVolume:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  NSURL *newPath = [userInfo objectForKey:NSWorkspaceVolumeURLKey];
+  NSURL *newURL = [userInfo objectForKey:NSWorkspaceVolumeURLKey];
   NSString *newName =[userInfo objectForKey:NSWorkspaceVolumeLocalizedNameKey];
-  NSURL *oldPath = [userInfo objectForKey:NSWorkspaceVolumeOldURLKey];
+  NSURL *oldURL = [userInfo objectForKey:NSWorkspaceVolumeOldURLKey];
   NSString *oldName = [userInfo objectForKey:NSWorkspaceVolumeOldLocalizedNameKey];
   
   NSLog(@"%@: Volume %@ got renamed to %@", self, oldName, newName);
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   
-  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumePath:[oldPath path]];
+  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumeURL:oldURL];
   if(renamedDisk != nil) {
     NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFOldRamdiskLabelKey : oldName };
     renamedDisk.label = newName;
-    renamedDisk.volumePath = [newPath path];
+    renamedDisk.volumeURL = newURL;
     [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
   }
 }
 
 - (void)_prepareMountedRamdisk:(RMFRamdisk *)ramdisk volumeURL:(NSURL *)volumeURL wasMountedAtStartup:(BOOL)wasMounted {
-  ramdisk.volumePath = [volumeURL path];
+  ramdisk.volumeURL = volumeURL;
   ramdisk.isMounted = YES;
   [ramdisk updateFinderLabel];
   [ramdisk prepareContent];

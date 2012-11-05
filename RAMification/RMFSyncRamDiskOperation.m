@@ -94,7 +94,7 @@ static NSArray *_excludedPathsInSync;
       return;
     }
   }
-  NSString *sourcePath = self.ramdisk.volumePath;
+  NSString *sourcePath = [self.ramdisk.volumeURL path];
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;
