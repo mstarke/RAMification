@@ -186,7 +186,7 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 - (void)_presentChangedRamdisks:(NSArray *)ramdisks {
   // show dialog with changed ramdisks
   _changedFavouritesController =  [[RMFChangedMountedFavouritesController alloc] init];
-  _changedFavouritesController.changedFavourites = ramdisks;
+  [_changedFavouritesController setChangedFavourites:ramdisks];
   [_changedFavouritesController showWindow:[_changedFavouritesController window]];
 }
 

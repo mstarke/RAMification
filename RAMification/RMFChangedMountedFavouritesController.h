@@ -10,6 +10,6 @@
 
 @interface RMFChangedMountedFavouritesController : NSWindowController <NSTableViewDelegate>
 
-@property (retain) NSArray *changedFavourites;
+- (void)setChangedFavourites:(NSArray *)favourites;
 
 @end

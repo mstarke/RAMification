@@ -12,13 +12,30 @@
 #import "RMFFavouritesManager.h"
 #import "RMFChangedMountedFavouriteCellView.h"
 
-static NSString *const kRMFChangedMountedFavouritesControllerKeyForChagendeFavourites = @"changedFavourites";
+typedef enum RMFChangedFavouriteUpdateActionType {
+  RMFChangedFavouriteUpdateFavourite,
+  RMFChangedFavouriteRevertVolume,
+  RMFChangedFavouriteIgnoreAction
+} RMFChangedFavouriteUpdateAction;
+
+static NSString *const kRMFChangedMountedFavouritesControllerKeyForChagendeFavourites = @"changedFavouritesWrapper";
+static NSString *const kRMFChangedFavouriteRamdiskKey = @"kRMFChangedFavouriteRamdiskKey";
+static NSString *const kRMFChangedFavouriteUpdateActionKey = @"kRMFChangedFavouriteUpdateAction";
+
+static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
+  NSDictionary *dict = @{ kRMFChangedFavouriteRamdiskKey: ramdiks, kRMFChangedFavouriteUpdateActionKey: @(RMFChangedFavouriteIgnoreAction) };
+  NSMutableDictionary *mutableDict = [[NSMutableDictionary alloc] init];
+  [mutableDict addEntriesFromDictionary:dict];
+  return [mutableDict autorelease];
+}
 
 @interface RMFChangedMountedFavouritesController ()
 
 @property (assign) IBOutlet NSTableView *favouritesTableView;
 @property (assign) IBOutlet NSTableColumn *favouritesColumn;
 @property (assign) IBOutlet NSImageView *warningImageView;
+
+@property (retain) NSMutableArray *changedFavouritesWrapper;
 @property (retain) NSArrayController *favouritesController;
 
 - (IBAction)cancel:(id)sender;
@@ -30,6 +47,18 @@ static NSString *const kRMFChangedMountedFavouritesControllerKeyForChagendeFavou
 
 - (id)init {
   return [self initWithWindowNibName:@"ChangedMountedFavourites"];
+}
+
+- (void)setChangedFavourites:(NSArray *)favourites {
+  if(nil == _changedFavouritesWrapper ) {
+    _changedFavouritesWrapper = [[NSMutableArray alloc] init];
+  }
+  else {
+    [_changedFavouritesWrapper removeAllObjects];
+  }
+  for(RMFRamdisk *ramdisk in favourites) {
+    [_changedFavouritesWrapper insertObject:RMFCreateFavouritesEntry(ramdisk) atIndex:[_changedFavouritesWrapper count]];
+  }
 }
 
 - (void)windowDidLoad {
@@ -47,11 +76,13 @@ static NSString *const kRMFChangedMountedFavouritesControllerKeyForChagendeFavou
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFChangedMountedFavouriteCellView *cellView = [tableView makeViewWithIdentifier:@"ChangedFavouriteView" owner:self];
-  RMFRamdisk *ramdisk = [[[RMFFavouritesManager sharedManager] favourites] objectAtIndex:row];
+  NSMutableDictionary *rowDict = [self.changedFavouritesWrapper objectAtIndex:row];
+  RMFRamdisk *ramdisk = [rowDict objectForKey:kRMFChangedFavouriteRamdiskKey];
   // Bind the Cell view to automatically update on changes
+  
   [cellView.textField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
   [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsMounted options:nil];
-  
+  [cellView.actionSelectionControl bind:NSSelectedIndexBinding toObject:rowDict withKeyPath:kRMFChangedFavouriteUpdateActionKey options:0];
   return cellView;
 }
 

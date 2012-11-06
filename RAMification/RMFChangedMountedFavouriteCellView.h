@@ -10,6 +10,6 @@
 
 @interface RMFChangedMountedFavouriteCellView : NSTableCellView
 
-@property (assign) IBOutlet NSButton *selectCheckBox;
+@property (assign) IBOutlet NSSegmentedControl *actionSelectionControl;
 
 @end
