@@ -10,6 +10,7 @@
 		4C05C6DB15B4E01000495255 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DA15B4E01000495255 /* IOKit.framework */; };
 		4C05C6DE15B4E64E00495255 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */; };
 		4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1BC6FF1609212000A7720C /* NSString+RMFMenuTools.m */; };
+		4C1C452B16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1C452A16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m */; };
 		4C264E5815A631E500D358B5 /* RMFMountController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C264E5715A631E500D358B5 /* RMFMountController.m */; };
 		4C264E5D15A6496D00D358B5 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */; };
 		4C27BF9115F92323008F723D /* RMFBufferDeamon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C27BF9015F92323008F723D /* RMFBufferDeamon.m */; };
@@ -55,6 +56,8 @@
 		4C05C6DD15B4E64E00495255 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C1BC6FE1609212000A7720C /* NSString+RMFMenuTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFMenuTools.h"; sourceTree = "<group>"; };
 		4C1BC6FF1609212000A7720C /* NSString+RMFMenuTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RMFMenuTools.m"; sourceTree = "<group>"; };
+		4C1C452916495FD4001A454C /* RMFChangedMountedFavouriteCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFChangedMountedFavouriteCellView.h; sourceTree = "<group>"; };
+		4C1C452A16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFChangedMountedFavouriteCellView.m; sourceTree = "<group>"; };
 		4C264E5615A631E500D358B5 /* RMFMountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMountController.h; sourceTree = "<group>"; };
 		4C264E5715A631E500D358B5 /* RMFMountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMountController.m; sourceTree = "<group>"; };
 		4C264E5C15A6496D00D358B5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
@@ -161,6 +164,8 @@
 				4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */,
 				4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */,
 				4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */,
+				4C1C452916495FD4001A454C /* RMFChangedMountedFavouriteCellView.h */,
+				4C1C452A16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -436,6 +441,7 @@
 				4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */,
 				4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */,
 				4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */,
+				4C1C452B16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
