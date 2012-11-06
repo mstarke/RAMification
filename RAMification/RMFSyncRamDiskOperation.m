@@ -56,6 +56,7 @@ static NSArray *_excludedPathsInSync;
   }
   switch (self.syncMode) {
     case RMFSyncModeBackup:
+    case RMFSyncModeBackupAndEject:
       self.ramdisk.activity = RMFRamdiskBackup;
       break;
     case RMFSyncModeRestore:
@@ -99,12 +100,20 @@ static NSArray *_excludedPathsInSync;
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;
   NSString *excludePaths = [NSString stringWithFormat:@"--exclude='%@'", [_excludedPathsInSync componentsJoinedByString:@" "] ];
-  if( self.syncMode == RMFSyncModeBackup) {
-    arguments = [NSArray arrayWithObjects:@"-anv", @"--delete", excludePaths, sourcePath, backupPath, nil];
+  
+  switch(_syncMode) {
+    case RMFSyncModeBackup:
+    case RMFSyncModeBackupAndEject:
+       arguments = [NSArray arrayWithObjects:@"-anv", @"--delete", excludePaths, sourcePath, backupPath, nil];
+      break;
+    case RMFSyncModeRestore:
+      arguments = [NSArray arrayWithObjects:@"-anv", excludePaths, backupPath, sourcePath, nil];
+      break;
+    case RMFSyncModeNone:
+    default:
+      break;
   }
-  else {
-    arguments = [NSArray arrayWithObjects:@"-anv", excludePaths, backupPath, sourcePath, nil];
-  }
+  
   /* Setup the rsycn task and run it */
   NSTask *rsync = [[NSTask alloc] init];
   [rsync setLaunchPath:@"/usr/bin/rsync"];
@@ -118,6 +127,14 @@ static NSArray *_excludedPathsInSync;
   NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
   [rsync release];
   
+  // Eject the volume after the operation
+  if(self.syncMode == RMFSyncModeBackupAndEject ) {
+    NSError *unmountError = nil;
+    [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:self.ramdisk.volumeURL error:&unmountError];
+    if(nil != unmountError) {
+      NSLog(@"%@: Could not auto eject Volume: %@: %@", [self class], self.ramdisk.volumeURL, [unmountError localizedDescription]);
+    }
+  }
   [pool drain];
 }
 

@@ -30,7 +30,7 @@
 - (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk;
 /* backup */
 - (void)performBackup;
-- (void)backupRamdisk:(RMFRamdisk *)ramdisk;
+- (void)backupRamdisk:(RMFRamdisk *)ramdisk ejectVolume:(BOOL)shouldEject;
 - (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
 /* timer */
 - (void)disableTimer;
@@ -110,7 +110,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     NSTimeInterval secondsSinceLastBackup = [lastBackup timeIntervalSinceNow];
     NSLog(@"%@: Last backup was done %f Seconds ago",self, -secondsSinceLastBackup);
     if(secondsSinceLastBackup <= -30) {
-      [self backupRamdisk:ramdisk];
+      [self backupRamdisk:ramdisk ejectVolume:YES];
       NSLog(@"%@: Backup to old. Scheduling new one. Eject denied!", self);
       return NO;
     }
@@ -153,15 +153,16 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
 
   for(RMFRamdisk *ramdisk in backupDisks) {
-    [self backupRamdisk:ramdisk];
+    [self backupRamdisk:ramdisk ejectVolume:NO];
   }
 }
 
-- (void)backupRamdisk:(RMFRamdisk *)ramdisk {
+- (void)backupRamdisk:(RMFRamdisk *)ramdisk ejectVolume:(BOOL)shouldEject{
   if (ramdisk.backupMode == RMFNoBackup || ramdisk.activity == RMFRamdiskBackup) {
     return; // no backups enabeld or at leas one backup in processs
   }
-  RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeBackup];
+  RMFRamdiskBackupMode backupMode = shouldEject ? RMFSyncModeBackupAndEject : RMFSyncModeBackup;
+  RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:backupMode];
   [self.queue addOperation:operation];
   [operation release];
 }

@@ -17,7 +17,7 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
  Manager to handle all favourites. It's used to create, remove, mount and unmount ramdisks
  It gives a interface to search for favourites based on different criteria
  */
-@interface RMFFavouritesManager : NSObject <NSTableViewDataSource>
+@interface RMFFavouritesManager : NSObject
 
 /*
  List of all known favourites

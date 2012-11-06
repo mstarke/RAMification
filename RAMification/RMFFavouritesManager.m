@@ -97,22 +97,6 @@ static RMFFavouritesManager *_sharedSingleton;
   [super dealloc];
 }
 
-#pragma mark NSTabelDataSource protocoll
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-  return [_favourites count];
-}
-
-- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-  RMFRamdisk *favourite = [_favourites objectAtIndex:row];
-  // We need to wrap the identifier in a Number with bool to get the checkbox right
-  if([tableColumn.identifier isEqualToString:kRMFRamdiskKeyForAutomount]) {
-    return [NSNumber numberWithBool:favourite.isAutomount];
-  }
-  return [favourite valueForKey:[tableColumn identifier]];
-}
-
-
 #pragma mark preset handling
 
 -(RMFRamdisk *)addNewFavourite {

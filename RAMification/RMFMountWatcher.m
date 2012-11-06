@@ -11,6 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFRamdisk.h"
+#import "RMFChangedMountedFavouritesController.h"
 
 #import <DiskArbitration/DiskArbitration.h>
 
@@ -22,10 +23,13 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
 @interface RMFMountWatcher ()
 
+@property (retain) RMFChangedMountedFavouritesController *changedFavouritesController;
+
 - (void)_didMountVolume:(NSNotification *)notification;
 - (void)_didUnmountVolume:(NSNotification *)notification;
 - (void)_didRenameVolume:(NSNotification *)notification;
 - (void)_prepareMountedRamdisk:(RMFRamdisk *)ramdisk volumeURL:(NSURL *)volumeURL wasMountedAtStartup:(BOOL)wasMounted;
+- (void)_presentChangedRamdisks:(NSArray *)ramdisks;
 
 @end
 
@@ -71,6 +75,7 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 - (void)searchForMountedFavourites {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSArray *mountedVolumeUrls = [fileManager mountedVolumeURLsIncludingResourceValuesForKeys:@[ NSURLVolumeNameKey, NSURLVolumeTotalCapacityKey, NSURLVolumeIsRemovableKey ] options:0];
+  NSMutableArray *ramdiskWithChangedLabel = [NSMutableArray arrayWithCapacity:[mountedVolumeUrls count]];
   for( NSURL *volumeURL in mountedVolumeUrls) {
     BOOL hasValue = YES;
     NSString *name;
@@ -93,10 +98,17 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
       if(foundUUID) {
         RMFRamdisk *ramdisk = [[RMFFavouritesManager sharedManager] findFavouriteByUUID:uuid];
         if(nil != ramdisk) {
+          NSString *mountedLabel = [volumeURL lastPathComponent];
+          if( ramdisk.label != mountedLabel ) {
+            [ramdiskWithChangedLabel addObject:ramdisk];
+          }
           [self _prepareMountedRamdisk:ramdisk volumeURL:volumeURL wasMountedAtStartup:YES];
         }
       }
     }
+  }
+  if([ramdiskWithChangedLabel count] != 0) {
+    [self _presentChangedRamdisks:ramdiskWithChangedLabel];
   }
 }
 
@@ -169,6 +181,13 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
+}
+
+- (void)_presentChangedRamdisks:(NSArray *)ramdisks {
+  // show dialog with changed ramdisks
+  _changedFavouritesController =  [[RMFChangedMountedFavouritesController alloc] init];
+  _changedFavouritesController.changedFavourites = ramdisks;
+  [_changedFavouritesController showWindow:[_changedFavouritesController window]];
 }
 
 @end

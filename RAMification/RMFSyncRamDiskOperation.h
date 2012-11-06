@@ -15,6 +15,7 @@ typedef enum RMFSyncModeType {
   RMFSyncModeNone, // Synchronize nothing
   RMFSyncModeRestore, // Just restore the ramdisk from disk
   RMFSyncModeBackup, // Just backup the ramdisk to disk
+  RMFSyncModeBackupAndEject, // Backup and Eject afterwards
 } RMFSyncMode;
 
 /* Wraps an rsync taks to synchronize a ramdisk */

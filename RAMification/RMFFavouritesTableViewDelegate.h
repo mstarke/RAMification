@@ -10,7 +10,4 @@
 
 @interface RMFFavouritesTableViewDelegate : NSObject <NSTableViewDelegate>
 
-// Creates the popup menu that is dispalyed in the backup mode selection
-- (NSMenu *)allocBackupModePopupMenu;
-
 @end
