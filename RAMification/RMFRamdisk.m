@@ -76,7 +76,9 @@ static NSDictionary *volumeIconImageNames;
     NSLog(@"Warning. Unable to Read UUID at URL:%@. %@", volumeURL, [readError localizedDescription]);
     *success = NO;
   }
-  *success = YES;
+  else {
+    *success = YES;
+  }
   return uuid;
 }
 

@@ -23,6 +23,7 @@
 @property (assign) DAApprovalSessionRef approvalSession;
 @property (retain) NSOperationQueue *queue;
 @property (retain) NSTimer *backupTimer;
+@property (retain) NSMutableSet *registerdRamdisks;
 
 /* callback */
 - (BOOL)canUnmount:(RMFRamdisk *)ramdisk;
@@ -37,6 +38,7 @@
 - (void)enableTimer;
 /* notifications*/
 - (void)didMountFavourite:(NSNotification *)notification;
+- (void)didUnmountFavourite:(NSNotification *)notification;
 - (void)userDefaultsDidChange:(NSNotification *)notification;
 
 // This message should be sent to the sync deamon to update the backup intervall
@@ -48,15 +50,22 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  NSString *bsdName = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
-  RMFRamdisk *ramdisk = [favouriteManager findFavouriteWithBsdDevice:bsdName];
-  BOOL isReady = [syncDamon canUnmount:ramdisk];
-  if (isReady) {
-    return NULL;
+  NSDictionary *diskInfoDict = (NSDictionary *)DADiskCopyDescription(disk);
+  NSURL *deviceURL = [diskInfoDict objectForKey:(NSString *)kDADiskDescriptionVolumePathKey];
+  
+  BOOL didReadUUID = NO;
+  NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:deviceURL success:&didReadUUID];
+  [diskInfoDict release];
+  
+  if(didReadUUID) {
+    RMFRamdisk *ramdisk = [favouriteManager findFavouriteByUUID:uuid];
+    if(nil != ramdisk) {
+      if(NO == [syncDamon canUnmount:ramdisk]) {
+        return DADissenterCreate(CFAllocatorGetDefault(), kDAReturnBusy,	CFSTR("Device is still in Use"));
+      }
+    }
   }
-  else {
-    return DADissenterCreate(CFAllocatorGetDefault(), kDAReturnBusy,	CFSTR("Device is still in Use")); 
-  }
+  return NULL;
 }
 
 @implementation RMFSyncDaemon
@@ -66,11 +75,19 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (id)init {
   self = [super init];
   if (self) {
+    /*
+     Setup interal datastructures
+     */
     _queue = [[NSOperationQueue alloc] init];
-    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    _registerdRamdisks = [[NSMutableSet alloc] init];
     
+    /*
+     Register for notifications
+     */
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
     [defaultCenter addObserver:self selector:@selector(didMountFavourite:) name:RMFDidMountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didUnmountFavourite:) name:RMFDidUnmountRamdiskNotification object:nil];
     
     [self enableTimer];
     NSLog(@"Created %@", self);
@@ -123,17 +140,28 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk {
   // register for callbacks
-  _approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
-  DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-  // create description dictionory to just match the volumes names that are equal to the ramdisks label
-  // NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
-  DARegisterDiskUnmountApprovalCallback(self.approvalSession, nil, createUnmountReply, self);
+  if([self.registerdRamdisks containsObject:ramdisk]) {
+    return; // we are already registered
+  }
+  // we use a brute fore callback, so just callback if we really need to
+  if(0 == [self.registerdRamdisks count]) {
+    _approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
+    DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+    // create description dictionory to just match the volumes names that are equal to the ramdisks label
+    // NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
+    DARegisterDiskUnmountApprovalCallback(self.approvalSession, nil, createUnmountReply, self);
+  }
+  [self.registerdRamdisks addObject:ramdisk];
 }
 
 - (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk {
-  DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-  CFRelease(_approvalSession);
-  self.approvalSession = NULL;
+  
+  [self.registerdRamdisks removeObject:ramdisk];
+  if(0 == [_registerdRamdisks count]) {
+    DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
+    CFRelease(_approvalSession);
+    self.approvalSession = NULL;
+  }
 }
 
 #pragma mark Backup/Restore
@@ -141,17 +169,17 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   
   BOOL (^isBackupBlock)(id,NSDictionary *);
   isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
-    return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically; 
+    return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically;
   };
   
-  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];  
+  RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   
   NSArray *mountedDisk = [favouriteManager mountedFavourites];
   NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]];
- 
+  
   NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
   NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
-
+  
   for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk ejectVolume:NO];
   }
@@ -192,9 +220,24 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   }
 }
 
+- (void)didUnmountFavourite:(NSNotification *)notification {
+  NSDictionary *userInfo = [notification userInfo];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  
+  if(nil == ramdisk) {
+    return; // ramdisk missing.
+  }
+  [self unregisterCallbackForRamdisk:ramdisk];
+}
+
 - (void)userDefaultsDidChange:(NSNotification *)notification {
   NSLog(@"%@: Defaults did change", self);
   NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
+  
+  NSArray *mountedFavourites = [[RMFFavouritesManager sharedManager] mountedFavourites];
+  for(RMFRamdisk *ramdisk in mountedFavourites) {
+    
+  }
   
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid

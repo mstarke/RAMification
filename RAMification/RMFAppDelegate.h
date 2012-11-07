@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface RMFAppDelegate : NSObject <NSApplicationDelegate>
+@interface RMFAppDelegate : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate>
 
 - (NSString *)executabelName;
 

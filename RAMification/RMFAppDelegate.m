@@ -43,6 +43,7 @@
 #pragma mark NSApplicationDelegate protocoll
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  [NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
   /*
    Initialize all Controllers and Daemons that work independently
    */
@@ -50,13 +51,21 @@
   _mountWatcher = [[RMFMountWatcher alloc] init];
   _syncDaemon = [[RMFSyncDaemon alloc] init];
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
-  
+  /*
+   Look for mounted ramdisks and mount any automount favourites
+   */
   [_mountWatcher searchForMountedFavourites];
   [[RMFFavouritesManager sharedManager] automountFavourites];
 }
 
 - (NSString *)executabelName {
   return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+}
+
+#pragma mark NSUserNotificationCenterDelegate protocoll
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+  // We force all notifications to be displayed
+  return YES;
 }
 
 @end

@@ -178,6 +178,17 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
 
   // test for volume lable missmatch?
   
+  // Post notification to notification center only if we did mount the ramdisk ourselfs
+  if(NO == wasMounted) {
+    NSUserNotificationCenter *notificationCenter = [NSUserNotificationCenter defaultUserNotificationCenter];
+    NSUserNotification *userNotification = [[[NSUserNotification alloc] init] autorelease];
+    userNotification.title = NSLocalizedString(@"NOTIFICATION_RAMDISK_CREATED", @"Ramdisk was created successfully");
+    userNotification.subtitle = ramdisk.label;
+    userNotification.deliveryDate = [NSDate date];
+    
+    [notificationCenter scheduleNotification:userNotification];
+  }
+  
   NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
