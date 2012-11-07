@@ -107,8 +107,11 @@
   NSString *backupModeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForBackupMode];
   NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForVolumeIcon];
   NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
+  NSString *isMountedKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsMounted];
+  
   
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
+  [_labelTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
