@@ -235,6 +235,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
     [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:item];
+    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:item];
+    if(favorite.isDefault) {
+//      NSImage *isDefaultImage = [[NSBundle mainBundle] imageForResource:@"VolumeTemplate"];
+//      [isDefaultImage setSize:NSMakeSize(16, 16)];
+//      [item setImage:isDefaultImage];
+    }
     [item setTarget:self];
     [_favoritesMenu insertItem:item atIndex:index];
     [_menuItemsToFavouritesMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
@@ -248,6 +254,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   if( [[_favoritesMenu itemArray] containsObject:item] ) {
     [item setTitle:ramDisk.label];
     ramDisk.isMounted ? [item setState:NSOnState] : [item setState:NSOffState];
+    //ramDisk.isDefault ? [item setImage:nil] : [item setImage:nil];
   }
 }
 
@@ -346,7 +353,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 # pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] ) {
+  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] || [keyPath isEqualToString:kRMFRamdiskKeyForIsDefault]) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
       NSMenuItem *item = context;

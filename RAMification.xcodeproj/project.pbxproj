@@ -19,6 +19,7 @@
 		4C34B6AD1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */; };
 		4C39C0E816492C9700B2D936 /* ChangedMountedFavourites.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */; };
 		4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */; };
+		4C3F4F1F164AE61E0071508B /* FavouriteTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F4F1E164AE61E0071508B /* FavouriteTemplate.pdf */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
 		4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */; };
 		4C505D72164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */; };
@@ -76,6 +77,7 @@
 		4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangedMountedFavourites.xib; sourceTree = "<group>"; };
 		4C39C0ED16492E7700B2D936 /* RMFChangedMountedFavouritesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFChangedMountedFavouritesController.h; sourceTree = "<group>"; };
 		4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFChangedMountedFavouritesController.m; sourceTree = "<group>"; };
+		4C3F4F1E164AE61E0071508B /* FavouriteTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = FavouriteTemplate.pdf; path = Images/FavouriteTemplate.pdf; sourceTree = "<group>"; };
 		4C4FA61B149816060082981C /* RMFMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMenuController.h; sourceTree = "<group>"; };
 		4C4FA61C149816060082981C /* RMFMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMenuController.m; sourceTree = "<group>"; };
 		4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFVolumeTools.h"; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 		4CB1D0D0160CCF8700F0073A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C3F4F1E164AE61E0071508B /* FavouriteTemplate.pdf */,
 				4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */,
 				4C505D70164AB3DB008DB224 /* UpdateVolumeTemplate.pdf */,
 				4C505D71164AB3DB008DB224 /* VolumeTemplate.pdf */,
@@ -419,6 +422,7 @@
 				4C505D72164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf in Resources */,
 				4C505D73164AB3DB008DB224 /* UpdateVolumeTemplate.pdf in Resources */,
 				4C505D74164AB3DB008DB224 /* VolumeTemplate.pdf in Resources */,
+				4C3F4F1F164AE61E0071508B /* FavouriteTemplate.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
