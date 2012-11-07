@@ -99,7 +99,7 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
         RMFRamdisk *ramdisk = [[RMFFavouritesManager sharedManager] findFavouriteByUUID:uuid];
         if(nil != ramdisk) {
           NSString *mountedLabel = [volumeURL lastPathComponent];
-          if( ramdisk.label != mountedLabel ) {
+          if(NO == [ramdisk.label isEqualToString:mountedLabel]) {
             [ramdiskWithChangedLabel addObject:ramdisk];
           }
           [self _prepareMountedRamdisk:ramdisk volumeURL:volumeURL wasMountedAtStartup:YES];

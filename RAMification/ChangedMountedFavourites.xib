@@ -232,6 +232,7 @@
 							<string key="NSFrame">{{236, 13}, {85, 32}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="534874252">
@@ -343,7 +344,7 @@ dGggbmFtZXMpIA</string>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="713699775"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {2560, 1418}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -476,7 +477,7 @@ dGggbmFtZXMpIA</string>
 												<double key="NSSegmentItemWidth">32</double>
 												<object class="NSCustomResource" key="NSSegmentItemImage">
 													<string key="NSClassName">NSImage</string>
-													<string key="NSResourceName">favourite</string>
+													<string key="NSResourceName">UpdateFavouriteTemplate</string>
 												</object>
 												<int key="NSSegmentItemImageScaling">0</int>
 											</object>
@@ -484,10 +485,9 @@ dGggbmFtZXMpIA</string>
 												<double key="NSSegmentItemWidth">32</double>
 												<object class="NSCustomResource" key="NSSegmentItemImage">
 													<string key="NSClassName">NSImage</string>
-													<string key="NSResourceName">MenuItemIconTemplate</string>
+													<string key="NSResourceName">UpdateVolumeTemplate</string>
 												</object>
 												<int key="NSSegmentItemTag">1</int>
-												<bool key="NSSegmentItemSelected">YES</bool>
 												<int key="NSSegmentItemImageScaling">0</int>
 											</object>
 											<object class="NSSegmentItem">
@@ -496,10 +496,11 @@ dGggbmFtZXMpIA</string>
 													<string key="NSClassName">NSImage</string>
 													<string key="NSResourceName">NSStopProgressTemplate</string>
 												</object>
+												<bool key="NSSegmentItemSelected">YES</bool>
 												<int key="NSSegmentItemImageScaling">0</int>
 											</object>
 										</array>
-										<int key="NSSelectedSegment">1</int>
+										<int key="NSSelectedSegment">2</int>
 										<int key="NSSegmentStyle">4</int>
 									</object>
 									<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -1257,7 +1258,7 @@ dGggbmFtZXMpIA</string>
 				</array>
 				<boolean value="NO" key="296.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="296.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<integer value="0" key="297.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey"/>
+				<integer value="2" key="297.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey"/>
 				<string key="297.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="298.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="299.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1394,11 +1395,11 @@ dGggbmFtZXMpIA</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="MenuItemIconTemplate">{128, 128}</string>
 			<string key="NSInfo">{32, 32}</string>
 			<string key="NSStopProgressTemplate">{11, 11}</string>
 			<string key="Removable">{512, 512}</string>
-			<string key="favourite">{128, 128}</string>
+			<string key="UpdateFavouriteTemplate">{128, 128}</string>
+			<string key="UpdateVolumeTemplate">{128, 128}</string>
 		</dictionary>
 		<bool key="IBDocument.UseAutolayout">YES</bool>
 	</data>

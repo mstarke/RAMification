@@ -21,6 +21,9 @@
 		4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */; };
 		4C4FA61D149816060082981C /* RMFMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4FA61C149816060082981C /* RMFMenuController.m */; };
 		4C50399A149566CA00089F86 /* NSString+RMFVolumeTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */; };
+		4C505D72164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */; };
+		4C505D73164AB3DB008DB224 /* UpdateVolumeTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C505D70164AB3DB008DB224 /* UpdateVolumeTemplate.pdf */; };
+		4C505D74164AB3DB008DB224 /* VolumeTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C505D71164AB3DB008DB224 /* VolumeTemplate.pdf */; };
 		4C5BDB5B147EF6AD000E19B0 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */; };
 		4C5BDB65147EF6AD000E19B0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BDB63147EF6AD000E19B0 /* InfoPlist.strings */; };
 		4C5BDB67147EF6AD000E19B0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5BDB66147EF6AD000E19B0 /* main.m */; };
@@ -77,6 +80,9 @@
 		4C4FA61C149816060082981C /* RMFMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMenuController.m; sourceTree = "<group>"; };
 		4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFVolumeTools.h"; sourceTree = "<group>"; };
 		4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RMFVolumeTools.m"; sourceTree = "<group>"; };
+		4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = UpdateFavouriteTemplate.pdf; path = Images/UpdateFavouriteTemplate.pdf; sourceTree = "<group>"; };
+		4C505D70164AB3DB008DB224 /* UpdateVolumeTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = UpdateVolumeTemplate.pdf; path = Images/UpdateVolumeTemplate.pdf; sourceTree = "<group>"; };
+		4C505D71164AB3DB008DB224 /* VolumeTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = VolumeTemplate.pdf; path = Images/VolumeTemplate.pdf; sourceTree = "<group>"; };
 		4C5BDB56147EF6AD000E19B0 /* RAMification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAMification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5BDB5A147EF6AD000E19B0 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4C5BDB5D147EF6AD000E19B0 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -315,6 +321,9 @@
 		4CB1D0D0160CCF8700F0073A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */,
+				4C505D70164AB3DB008DB224 /* UpdateVolumeTemplate.pdf */,
+				4C505D71164AB3DB008DB224 /* VolumeTemplate.pdf */,
 				4C701A3A161FBDA800547F17 /* Removable.icns */,
 				4C73968C1614BDB100912443 /* favourite.tiff */,
 				4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */,
@@ -407,6 +416,9 @@
 				4C73968D1614BDB100912443 /* favourite.tiff in Resources */,
 				4C701A3B161FBDA800547F17 /* Removable.icns in Resources */,
 				4C39C0E816492C9700B2D936 /* ChangedMountedFavourites.xib in Resources */,
+				4C505D72164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf in Resources */,
+				4C505D73164AB3DB008DB224 /* UpdateVolumeTemplate.pdf in Resources */,
+				4C505D74164AB3DB008DB224 /* VolumeTemplate.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
