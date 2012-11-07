@@ -91,6 +91,25 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 }
 
 - (IBAction)update:(id)sender {
+  
+  for(NSDictionary *wrapperDict in self.changedFavouritesWrapper) {
+    RMFChangedFavouriteUpdateAction action = (RMFChangedFavouriteUpdateAction)[[wrapperDict objectForKey:kRMFChangedFavouriteUpdateActionKey] integerValue];
+    RMFRamdisk *ramdisk = [wrapperDict objectForKey:kRMFChangedFavouriteRamdiskKey];
+    
+    switch(action) {
+      case RMFChangedFavouriteRevertVolume: {
+        [ramdisk.volumeURL setResourceValue:ramdisk.label forKey:NSURLNameKey error:nil];
+        break;
+      }
+      case RMFChangedFavouriteUpdateFavourite:
+        ramdisk.label = [ramdisk.volumeURL lastPathComponent];
+        break;
+      case RMFChangedFavouriteIgnoreAction:
+      default:
+        break;
+    }
+  }
+  
   [self.window close];
 }
 @end
