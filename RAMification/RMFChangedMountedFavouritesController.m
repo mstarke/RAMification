@@ -12,12 +12,6 @@
 #import "RMFFavouritesManager.h"
 #import "RMFChangedMountedFavouriteCellView.h"
 
-typedef enum RMFChangedFavouriteUpdateActionType {
-  RMFChangedFavouriteUpdateFavourite,
-  RMFChangedFavouriteRevertVolume,
-  RMFChangedFavouriteIgnoreAction
-} RMFChangedFavouriteUpdateAction;
-
 static NSString *const kRMFChangedMountedFavouritesControllerKeyForChagendeFavourites = @"changedFavouritesWrapper";
 static NSString *const kRMFChangedFavouriteRamdiskKey = @"kRMFChangedFavouriteRamdiskKey";
 static NSString *const kRMFChangedFavouriteUpdateActionKey = @"kRMFChangedFavouriteUpdateAction";
@@ -63,9 +57,10 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 
 - (void)windowDidLoad {
   [super windowDidLoad];
-  // GUI fixup
+  // GUI setup
   [self.window setTitle:NSLocalizedString(@"WINDOW_FAVOURITE_NAME_CHANGED_TITLE", @"Title for the Window displaying changed mounted favourites after launch")];
   [_warningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
+  
   
   [_favouritesTableView setDelegate:self];
   // Table view population

@@ -175,7 +175,7 @@ static RMFFavouritesManager *_sharedSingleton;
     [self _observerRamdisk:ramdisk];
     if(ramdisk.isAutomount) {
       RMFMountController *mountController = [RMFMountController sharedController];
-      [mountController mount:ramdisk];
+      [mountController mount:ramdisk autoskipCriticalSize:YES];
     }
   }
 }

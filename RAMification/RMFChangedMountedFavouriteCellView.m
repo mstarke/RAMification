@@ -8,6 +8,30 @@
 
 #import "RMFChangedMountedFavouriteCellView.h"
 
+#import "RMFChangedMountedFavouritesController.h"
+
 @implementation RMFChangedMountedFavouriteCellView
+
+- (void)awakeFromNib {
+  [_actionSelectionControl setSegmentCount:RMFChangedFavouriteActionCount];
+  
+  NSDictionary *images = @{
+  @(RMFChangedFavouriteIgnoreAction) : [NSImage imageNamed:NSImageNameStopProgressTemplate],
+  @(RMFChangedFavouriteRevertVolume) : [[NSBundle mainBundle] imageForResource:@"UpdateVolumeTemplate"],
+  @(RMFChangedFavouriteUpdateFavourite): [[NSBundle mainBundle] imageForResource:@"UpdateFavouriteTemplate"]
+  };
+
+  NSDictionary *toolTips = @{
+  @(RMFChangedFavouriteIgnoreAction) : NSLocalizedString(@"FAVOURITE_NAME_CHANGED_ACTION_IGNORE", @"Ignore name changes"),
+  @(RMFChangedFavouriteRevertVolume) : NSLocalizedString(@"FAVOURITE_NAME_CHANGED_ACTION_UPDATE_FAVOURITE", @"Update the favourite"),
+  @(RMFChangedFavouriteUpdateFavourite) : NSLocalizedString(@"FAVOURITE_NAME_CHANGED_ACTION_UPDATE_VOLUME", @"Update the volume")
+  };
+
+  for(NSNumber *key in [images allKeys]) {
+    NSUInteger segmentIndex = [key integerValue];
+    [[_actionSelectionControl cell] setToolTip:[toolTips objectForKey:key] forSegment:segmentIndex];
+    [_actionSelectionControl setImage:[images objectForKey:key] forSegment:segmentIndex];
+  }
+}
 
 @end

@@ -36,6 +36,11 @@ static RMFMountController *_sharedSingleton;
   return _sharedSingleton;
 }
 
++ (BOOL)isMemoryAvailableForRamdisk:(RMFRamdisk *)ramdisk {
+  unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
+  return (ramdisk.size <= systemMemory);
+}
+
 - (id)init {
   self = [super init];
   if (self) {
@@ -50,17 +55,39 @@ static RMFMountController *_sharedSingleton;
   [super dealloc];
 }
 
-- (void) mount:(RMFRamdisk *)ramdisk {
+- (void)mount:(RMFRamdisk *)ramdisk autoskipCriticalSize:(BOOL)autoskip {
   if(ramdisk.isMounted) {
     return; // already mounted
   }
+  if(NO == [RMFMountController isMemoryAvailableForRamdisk:ramdisk]) {
+    if(autoskip) {
+      return; // no user feedback so we got the save way and skipp
+    }
+    
+    NSString *infoTextTemplate = NSLocalizedString(@"ALERT_RAMDISK_SIZE_WARNING_INFO_TEXT", @"Additinal info to dispaly on trying to mount too large RAM disk %1 System size %2 RAM disk size");
+    NSString *availableRam = [NSByteCountFormatter stringFromByteCount:[[NSProcessInfo processInfo] physicalMemory] countStyle:NSByteCountFormatterCountStyleBinary];
+    NSString *ramdisksize = [NSByteCountFormatter stringFromByteCount:ramdisk.size countStyle:NSByteCountFormatterCountStyleBinary];
+    NSString *infoText = [NSString stringWithFormat:infoTextTemplate, availableRam, ramdisksize];
+    
+    NSAlert *sizeAlert = [[NSAlert alloc] init];
+    //[sizeAlert setAlertStyle:NSCriticalAlertStyle];
+    [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_NOMOUNT", @"Do not mount RAM disk with low memory")];
+    [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_MOUNT", @"Mount RAM disk dispite low memory")];
+    [sizeAlert setMessageText:NSLocalizedString(@"ALERT_RAMDISK_SIZE_WARNING_TITLE", @"Titel to dispaly on trying to mount too large RAM disk")];
+    [sizeAlert setInformativeText:infoText];
+    
+    if( [sizeAlert runModal] == NSAlertFirstButtonReturn ) {
+      return; // user canceld operation
+    }
+  }
+  
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:ramdisk];
   [self.queue cancelAllOperations];
   [self.queue addOperation:mountOperation];
   [mountOperation release];
 }
 
-- (void) unmount:(RMFRamdisk *)ramdisk {
+- (void)unmount:(RMFRamdisk *)ramdisk {
   if(NO == ramdisk.isMounted) {
     return; // Already unmounted
   }
@@ -71,14 +98,14 @@ static RMFMountController *_sharedSingleton;
   }
 }
 
-- (BOOL) toggleMounted:(RMFRamdisk *)ramdisk {
+- (BOOL)toggleMounted:(RMFRamdisk *)ramdisk {
   
   if (ramdisk.isMounted) {
     [self unmount:ramdisk];
     return YES; // we did mount the ramdisk
   }
   else {
-    [self mount:ramdisk];
+    [self mount:ramdisk autoskipCriticalSize:NO];
     return NO; // we did unmount the ramdisk
   }
 }

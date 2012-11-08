@@ -14,9 +14,11 @@
 @interface RMFMountController : NSObject
 
 + (RMFMountController *)sharedController;
++ (BOOL)isMemoryAvailableForRamdisk:(RMFRamdisk *)ramdisk;
+
 
 - (BOOL)toggleMounted:(RMFRamdisk *)ramdisk;
-- (void)mount:(RMFRamdisk *)ramdisk;
+- (void)mount:(RMFRamdisk *)ramdisk autoskipCriticalSize:(BOOL)autoskip;
 - (void)unmount:(RMFRamdisk *)ramdisk;
 - (void)renameVolume:(RMFRamdisk *)ramdisk mountedAs:(NSString *)currentName;
 
