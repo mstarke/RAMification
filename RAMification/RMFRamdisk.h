@@ -18,6 +18,7 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIconType;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsMounted;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsDefault;
+APPKIT_EXTERN NSString *const kRMFRamdiskIdentifierFile;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready

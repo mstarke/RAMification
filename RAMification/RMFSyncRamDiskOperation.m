@@ -26,7 +26,7 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = [@[ @"/.Trashes", @"/.fseventsd" ] retain];
+  _excludedPathsInSync = [@[ @".Trashes", @".fseventsd", kRMFRamdiskIdentifierFile ] retain];
 }
 
 - (id)init {
@@ -94,7 +94,8 @@ static NSArray *_excludedPathsInSync;
       return;
     }
   }
-  NSString *sourcePath = [self.ramdisk.volumeURL path];
+  NSString *ramdiskDirVolumePath = [[self.ramdisk.volumeURL path] stringByAppendingString:@"/"];
+  NSString *ramdiskBackupPath = [backupPath stringByAppendingString:@"/"];
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
   NSArray *arguments= nil;
@@ -103,10 +104,10 @@ static NSArray *_excludedPathsInSync;
   switch(_syncMode) {
     case RMFSyncModeBackup:
     case RMFSyncModeBackupAndEject:
-       arguments = [NSArray arrayWithObjects:@"-anv", @"--delete", excludePaths, sourcePath, backupPath, nil];
+       arguments = @[@"-anv", @"--delete", excludePaths, ramdiskDirVolumePath, ramdiskBackupPath];
       break;
     case RMFSyncModeRestore:
-      arguments = [NSArray arrayWithObjects:@"-anv", excludePaths, backupPath, sourcePath, nil];
+      arguments = @[@"-anv", excludePaths, ramdiskBackupPath, ramdiskDirVolumePath];
       break;
     case RMFSyncModeNone:
     default:

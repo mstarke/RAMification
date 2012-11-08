@@ -22,10 +22,10 @@ NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
 NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
 NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
 NSString *const kRMFRamdiskKeyForUUID = @"uuid";
+NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
 
 // private constants
 NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
-NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
 NSString *const RMFRamdiskDefaultLabel = @"RamDisk";
 NSUInteger const kRMFRamdiskDefaultSize = 512*1024*1024; // 512 Mb
 
