@@ -58,11 +58,13 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
 
 /*
  Looks for the Favourite with the given bsd device name
+ @param device the bsd device to look for
  */
 - (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device;
 
 /*
  Find Ramdisk by using UUID
+ @param uuid uuid to look for
  */
 - (RMFRamdisk *)findFavouriteByUUID:(NSString *)uuid;
 

@@ -70,15 +70,16 @@ static RMFMountController *_sharedSingleton;
     NSString *infoText = [NSString stringWithFormat:infoTextTemplate, availableRam, ramdisksize];
     
     NSAlert *sizeAlert = [[NSAlert alloc] init];
-    //[sizeAlert setAlertStyle:NSCriticalAlertStyle];
     [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_NOMOUNT", @"Do not mount RAM disk with low memory")];
     [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_MOUNT", @"Mount RAM disk dispite low memory")];
     [sizeAlert setMessageText:NSLocalizedString(@"ALERT_RAMDISK_SIZE_WARNING_TITLE", @"Titel to dispaly on trying to mount too large RAM disk")];
     [sizeAlert setInformativeText:infoText];
     
     if( [sizeAlert runModal] == NSAlertFirstButtonReturn ) {
+      [sizeAlert release];
       return; // user canceld operation
     }
+    [sizeAlert release];
   }
   
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:ramdisk];

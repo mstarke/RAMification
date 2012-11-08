@@ -117,7 +117,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   
   if(ramdisk.backupMode == RMFNoBackup) {
     NSLog(@"%@: No Backups needed for %@. Good to go!", self, ramdisk);
-    return YES; // Disk with no backusp can always be unmounted
+    return YES; // Disk with no backups can always be unmounted
   }
   NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
   BOOL hasNoPendingBackups = ([backups count] == 0);
@@ -126,7 +126,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     NSDate *lastBackup = ramdisk.lastBackupDate;
     NSTimeInterval secondsSinceLastBackup = [lastBackup timeIntervalSinceNow];
     NSLog(@"%@: Last backup was done %f Seconds ago",self, -secondsSinceLastBackup);
-    if(secondsSinceLastBackup <= -30) {
+    if(secondsSinceLastBackup <= -30 ) {
       [self backupRamdisk:ramdisk ejectVolume:YES];
       NSLog(@"%@: Backup to old. Scheduling new one. Eject denied!", self);
       return NO;
@@ -135,7 +135,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     return YES;
   }
   NSLog(@"%@: Backup in progress. SchedulingEject denied!", self);
-  return NO; // has bending backups, deny eject
+  return NO; // has pending backups, deny eject
 }
 
 - (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk {
@@ -166,16 +166,10 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 #pragma mark Backup/Restore
 - (void)performBackup {
-  
-  BOOL (^isBackupBlock)(id,NSDictionary *);
-  isBackupBlock = ^BOOL(id ramdisk, NSDictionary *bindings){
-    return ((RMFRamdisk *)ramdisk).backupMode == RMFBackupPeriodically;
-  };
-  
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   
   NSArray *mountedDisk = [favouriteManager mountedFavourites];
-  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isBackupBlock]];
+  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.%@ == %d", kRMFRamdiskKeyForBackupMode, RMFBackupPeriodically]];
   
   NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
   NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
@@ -208,14 +202,17 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
   RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  BOOL mountedOnStartup = [[userInfo objectForKey:kRMFRamdiskAlreadyMountedOnStartupKey] boolValue];
   
   if(ramdisk == nil) {
     return; // ingoring, no RAM disk present
   }
   
   if(ramdisk.backupMode != RMFNoBackup) {
-    NSLog(@"%@: Ramdisk %@ mounted. Restoring content!", self, ramdisk.label);
-    [self restoreRamdisk:ramdisk];
+    if(NO == mountedOnStartup) {
+      NSLog(@"%@: Ramdisk %@ mounted. Restoring content!", self, ramdisk.label);
+      [self restoreRamdisk:ramdisk];
+    }
     [self registerCallbackForRamdisk:ramdisk];
   }
 }
@@ -233,12 +230,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)userDefaultsDidChange:(NSNotification *)notification {
   NSLog(@"%@: Defaults did change", self);
   NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
-  
-  NSArray *mountedFavourites = [[RMFFavouritesManager sharedManager] mountedFavourites];
-  for(RMFRamdisk *ramdisk in mountedFavourites) {
-    
-  }
-  
+   
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid
     if([self.backupTimer timeInterval] != newInterval) {

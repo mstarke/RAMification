@@ -26,8 +26,7 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = @[ @"/.Trashes", @"/.fseventsd" ];
-  [_excludedPathsInSync retain];
+  _excludedPathsInSync = [@[ @"/.Trashes", @"/.fseventsd" ] retain];
 }
 
 - (id)init {
@@ -72,7 +71,7 @@ static NSArray *_excludedPathsInSync;
   // We create the backup folder on restore and on sync
   // It might be better to just create the folder if we actually need it - that it on backup not on restore
   NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-  NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/%@",self.ramdisk.label];
+  NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/Backups/%@",self.ramdisk.uuid];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSError *error = nil;
   NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
@@ -121,7 +120,7 @@ static NSArray *_excludedPathsInSync;
   [rsync launch];
   [rsync waitUntilExit];
   self.ramdisk.activity = RMFRamdiskIdle;
-  if(self.syncMode == RMFSyncModeBackup) {
+  if(self.syncMode == RMFSyncModeBackup || self.syncMode == RMFSyncModeBackupAndEject ) {
     [self.ramdisk finishedBackup];
   }
   NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);

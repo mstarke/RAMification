@@ -20,6 +20,7 @@ NSString *const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotific
 NSString *const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
 NSString *const kRMFRamdiskKey = @"RMFRamdiskKey";
 NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
+NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMountedOnStartupKey";
 
 @interface RMFMountWatcher ()
 
@@ -189,7 +190,7 @@ NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
     [notificationCenter scheduleNotification:userNotification];
   }
   
-  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
+  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk, kRMFRamdiskAlreadyMountedOnStartupKey : @(wasMounted) };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
 }
