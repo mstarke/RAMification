@@ -110,8 +110,4 @@ static RMFMountController *_sharedSingleton;
   }
 }
 
-- (void)renameVolume:(RMFRamdisk *)ramdisk mountedAs:(NSString *)currentName {
-  
-}
-
 @end
