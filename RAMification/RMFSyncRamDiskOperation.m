@@ -26,7 +26,7 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = [@[ @".Trashes", @".fseventsd", kRMFRamdiskIdentifierFile ] retain];
+  _excludedPathsInSync = [@[ @".Trashes", @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
 }
 
 - (id)init {
@@ -98,26 +98,34 @@ static NSArray *_excludedPathsInSync;
   NSString *ramdiskBackupPath = [backupPath stringByAppendingString:@"/"];
   // in restore mode, we sync from backup to ramdisk
   // in backup mode, we sync from ramdisk to backup
-  NSArray *arguments= nil;
-  NSString *excludePaths = [NSString stringWithFormat:@"--exclude='%@'", [_excludedPathsInSync componentsJoinedByString:@" "] ];
   
+  NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
+  [arguments addObject:@"-av"];
   switch(_syncMode) {
     case RMFSyncModeBackup:
     case RMFSyncModeBackupAndEject:
-       arguments = @[@"-anv", @"--delete", excludePaths, ramdiskDirVolumePath, ramdiskBackupPath];
+      [arguments addObject:@"--delete"];
+      for(NSString *exclude in _excludedPathsInSync) {
+        NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
+        [arguments addObject:excludeOption];
+      }
+      [arguments addObjectsFromArray:@[ ramdiskDirVolumePath, ramdiskBackupPath]];
       break;
     case RMFSyncModeRestore:
-      arguments = @[@"-anv", excludePaths, ramdiskBackupPath, ramdiskDirVolumePath];
+      for(NSString *exclude in _excludedPathsInSync) {
+        NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
+        [arguments addObject:excludeOption];
+      }
+      [arguments addObjectsFromArray:@[ramdiskBackupPath, ramdiskDirVolumePath]];
       break;
     case RMFSyncModeNone:
     default:
       break;
   }
-  
   /* Setup the rsycn task and run it */
   NSTask *rsync = [[NSTask alloc] init];
   [rsync setLaunchPath:@"/usr/bin/rsync"];
-  [rsync setArguments:arguments];
+  [rsync setArguments:arguments ];
   [rsync launch];
   [rsync waitUntilExit];
   self.ramdisk.activity = RMFRamdiskIdle;
