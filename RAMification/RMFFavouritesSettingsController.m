@@ -15,6 +15,7 @@
 #import "RMFSizeFormatter.h"
 #import "RMFArrayController.h"
 #import "RMFFavouritesArrayControllerDelegate.h"
+#import "RMFSettingsController.h"
 
 @interface RMFFavouritesSettingsController () {
   RMFArrayController *_favouritesController;
@@ -30,8 +31,10 @@
 - (NSMenu *)actionContextMenu;
 - (NSMenu *)actionPopupMenu;
 - (NSImage *)labelImageWithColor:(NSColor *)color;
+
 - (void)toggleMount:(id)sender;
 - (void)makeDefaultRamdisk:(id)sender;
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 
 @end
 
@@ -251,6 +254,28 @@
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
   [favouritesManager setDefaultRamdisk:selectedRamdisk];
+}
+
+- (IBAction)selectVolumeIcon:(id)sender {
+  if(self.iconSelectionWindow == nil) {
+    NSArray *topLevelObjects;
+    [[NSBundle mainBundle] loadNibNamed:@"VolumeIconSelection"owner:self topLevelObjects:&topLevelObjects];
+  }  
+  NSWindow *window = [RMFSettingsController sharedController].settingsWindow;
+  [[NSApplication sharedApplication] beginSheet:self.iconSelectionWindow modalForWindow:window modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+  NSLog(@"Return Code: %ld", returnCode);
+  [sheet orderOut:sheet];
+}
+
+- (IBAction)cancelIconSelection:(id)sender {
+  [[NSApplication sharedApplication] endSheet:self.iconSelectionWindow returnCode:NSRunAbortedResponse];
+}
+
+- (IBAction)finishedIconSelection:(id)sender {
+  [[NSApplication sharedApplication] endSheet:self.iconSelectionWindow returnCode:NSRunContinuesResponse];
 }
 
 

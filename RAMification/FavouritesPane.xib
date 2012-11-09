@@ -536,7 +536,7 @@
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSPopUpButtonCell" key="NSCell" id="265820603">
 							<int key="NSCellFlags">-2079326144</int>
-							<int key="NSCellFlags2">134218752</int>
+							<int key="NSCellFlags2">1024</int>
 							<reference key="NSSupport" ref="716501648"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="1048128288"/>
@@ -937,6 +937,14 @@
 					<int key="connectionID">380</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectVolumeIcon:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="499463468"/>
+					</object>
+					<int key="connectionID">381</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">imageView</string>
 						<object class="NSTableCellView" key="source" id="923037732">
@@ -953,12 +961,11 @@
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="723701779">
 										<int key="NSCellFlags">67108928</int>
-										<int key="NSCellFlags2">272631808</int>
-										<string key="NSContents">LabelOfRamdisk</string>
+										<int key="NSCellFlags2">205522944</int>
+										<string key="NSContents">Label</string>
 										<reference key="NSSupport" ref="716501648"/>
 										<string key="NSCellIdentifier">_NS:1535</string>
 										<reference key="NSControlView" ref="376899836"/>
-										<bool key="NSDrawsBackground">YES</bool>
 										<reference key="NSBackgroundColor" ref="891692363"/>
 										<reference key="NSTextColor" ref="622633147"/>
 									</object>
@@ -1079,10 +1086,10 @@
 						<int key="objectID">1</int>
 						<reference key="object" ref="1005"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="885135693"/>
 							<reference ref="692946362"/>
 							<reference ref="903516477"/>
 							<reference ref="615527290"/>
+							<reference ref="885135693"/>
 							<reference ref="1048128288"/>
 						</array>
 						<reference key="parent" ref="0"/>
@@ -1529,6 +1536,7 @@
 				<string key="247.CustomClassName">RMFFavouriteCellView</string>
 				<string key="247.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="247.userInterfaceItemIdentifier">FavouriteCell</string>
+				<string key="251.CustomClassName">RMFLabelTextField</string>
 				<string key="251.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="252.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="253.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1559,7 +1567,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">380</int>
+			<int key="maxID">381</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1569,7 +1577,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="imageView">NSImageView</string>
 						<string key="infoTextField">NSTextField</string>
-						<string key="lableTextField">NSTextField</string>
+						<string key="lableTextField">RMFLabelTextField</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="imageView">
@@ -1582,7 +1590,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="lableTextField">
 							<string key="name">lableTextField</string>
-							<string key="candidateClassName">NSTextField</string>
+							<string key="candidateClassName">RMFLabelTextField</string>
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1595,15 +1603,30 @@
 					<string key="superclassName">NSViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="addPreset:">id</string>
+						<string key="cancelIconSelection:">id</string>
 						<string key="deletePreset:">id</string>
+						<string key="finishedIconSelection:">id</string>
+						<string key="selectVolumeIcon:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
 						<object class="IBActionInfo" key="addPreset:">
 							<string key="name">addPreset:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="cancelIconSelection:">
+							<string key="name">cancelIconSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="deletePreset:">
 							<string key="name">deletePreset:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="finishedIconSelection:">
+							<string key="name">finishedIconSelection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="selectVolumeIcon:">
+							<string key="name">selectVolumeIcon:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
@@ -1614,6 +1637,7 @@
 						<string key="detailIsAutoMount">NSButton</string>
 						<string key="favouriteColumn">NSTableColumn</string>
 						<string key="favouritesTableView">NSTableView</string>
+						<string key="iconSelectionWindow">NSWindow</string>
 						<string key="labelPopupButton">NSPopUpButton</string>
 						<string key="labelTextField">NSTextField</string>
 						<string key="removeRamdiskButton">NSButton</string>
@@ -1646,6 +1670,10 @@
 							<string key="name">favouritesTableView</string>
 							<string key="candidateClassName">NSTableView</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="iconSelectionWindow">
+							<string key="name">iconSelectionWindow</string>
+							<string key="candidateClassName">NSWindow</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="labelPopupButton">
 							<string key="name">labelPopupButton</string>
 							<string key="candidateClassName">NSPopUpButton</string>
@@ -1674,6 +1702,14 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/RMFFavouritesSettingsController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">RMFLabelTextField</string>
+					<string key="superclassName">NSTextField</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/RMFLabelTextField.h</string>
 					</object>
 				</object>
 			</array>

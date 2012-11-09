@@ -11,6 +11,7 @@
 #import "RMFFavouritesManager.h"
 #import "RMFRamdisk.h"
 #import "RMFFavouriteCellView.h"
+#import "RMFLabelTextField.h"
 
 @implementation RMFFavouritesTableViewDelegate
 
@@ -24,6 +25,7 @@
   RMFRamdisk *ramdisk = [[[RMFFavouritesManager sharedManager] favourites] objectAtIndex:row];
   // Bind the Cell view to automatically update on changes
   [cellView.lableTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
+  [cellView.lableTextField bind:kRMFLabelTextFieldFinderLabelIndexKey toObject:ramdisk withKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:nil];
   [cellView.infoTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForSize options:nil];
   [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsMounted options:nil];
   [cellView bind:kRMFFavouriteCellViewKeyForIsDefault toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsDefault options:nil];

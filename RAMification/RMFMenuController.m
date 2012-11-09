@@ -120,7 +120,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [_favoritesMenu addItem:[NSMenuItem separatorItem]];
 }
 
-- (void) createMenu
+- (void)createMenu
 {
   _menu = [[NSMenu alloc] initWithTitle:@"menu"];
   NSMenuItem *item;
@@ -183,7 +183,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   return [item autorelease];
 }
 
-- (void) createStatusItem {
+- (void)createStatusItem {
   NSStatusBar *bar = [NSStatusBar systemStatusBar];
   self.statusItem = [bar statusItemWithLength:NSVariableStatusItemLength];
   NSImage *menuIconImage = [NSImage imageNamed:RMFMenuIconTemplateImage];
@@ -258,13 +258,13 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   }
 }
 
-- (void) removeFavouriteMenuItems:(NSArray *)favourites {
+- (void)removeFavouriteMenuItems:(NSArray *)favourites {
   for(RMFRamdisk *disk in favourites) {
     [self removeFavouriteMenuItem:disk];
   }
 }
 
-- (BOOL) removeFavouriteMenuItem:(RMFRamdisk *)favourite {
+- (BOOL)removeFavouriteMenuItem:(RMFRamdisk *)favourite {
   NSValue *favouriteId = [NSValue valueWithNonretainedObject:favourite];
   NSValue *itemId = [[_menuItemsToFavouritesMap allKeysForObject:favouriteId] lastObject];
   if(itemId != nil) {
@@ -283,12 +283,12 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 }
 
 # pragma mark actions
-- (void) quitApplication {
+- (void)quitApplication {
   //Unmount ramdisk?
   [[NSApplication sharedApplication] terminate:nil];
 }
 
-- (void) showSettingsTab:(id)sender {
+- (void)showSettingsTab:(id)sender {
   RMFSettingsController *settingsController = [RMFSettingsController sharedController];
   [settingsController showSettings:[sender representedObject]];
 }

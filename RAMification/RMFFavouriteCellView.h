@@ -8,12 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class RMFLabelTextField;
+
 APPKIT_EXTERN NSString *const kRMFFavouriteCellViewKeyForIsDefault;
 
 @interface RMFFavouriteCellView : NSTableCellView
 
 @property (assign) IBOutlet NSImageView *imageView;
-@property (assign) IBOutlet NSTextField *lableTextField;
+@property (assign) IBOutlet RMFLabelTextField *lableTextField;
 @property (assign) IBOutlet NSTextField *infoTextField;
 @property (nonatomic, retain) NSNumber *isDefault;
 

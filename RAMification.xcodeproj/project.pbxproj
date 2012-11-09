@@ -17,6 +17,7 @@
 		4C2A4AE71486DDDF009F3AB0 /* RMFFavouritesSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */; };
 		4C2EA37815A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */; };
 		4C34B6AD1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */; };
+		4C361F16164D52C600E30954 /* RMFLabelTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C361F15164D52C600E30954 /* RMFLabelTextField.m */; };
 		4C39C0E816492C9700B2D936 /* ChangedMountedFavourites.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */; };
 		4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */; };
 		4C3F4F1F164AE61E0071508B /* FavouriteTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F4F1E164AE61E0071508B /* FavouriteTemplate.pdf */; };
@@ -37,6 +38,7 @@
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
 		4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */; };
 		4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */; };
+		4C93C235164D5A6100104398 /* VolumeIconSelection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C93C234164D5A6100104398 /* VolumeIconSelection.xib */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
 		4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFRamdisk.m */; };
 		4CB6100B148AA3D800166397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB61009148AA3D800166397 /* Localizable.strings */; };
@@ -74,6 +76,8 @@
 		4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncRamDiskOperation.m; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesTableViewDelegate.h; sourceTree = "<group>"; };
 		4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesTableViewDelegate.m; sourceTree = "<group>"; };
+		4C361F14164D52C600E30954 /* RMFLabelTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFLabelTextField.h; sourceTree = "<group>"; };
+		4C361F15164D52C600E30954 /* RMFLabelTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFLabelTextField.m; sourceTree = "<group>"; };
 		4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangedMountedFavourites.xib; sourceTree = "<group>"; };
 		4C39C0ED16492E7700B2D936 /* RMFChangedMountedFavouritesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFChangedMountedFavouritesController.h; sourceTree = "<group>"; };
 		4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFChangedMountedFavouritesController.m; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 		4C85E6C216237E5F00A5CCCC /* RMFArrayControllerDelegateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMFArrayControllerDelegateProtocol.h; sourceTree = "<group>"; };
 		4C85E6C31623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesArrayControllerDelegate.h; sourceTree = "<group>"; };
 		4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesArrayControllerDelegate.m; sourceTree = "<group>"; };
+		4C93C234164D5A6100104398 /* VolumeIconSelection.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeIconSelection.xib; sourceTree = "<group>"; };
 		4CB61001148AA2DD00166397 /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFGeneralSettingsController.h; sourceTree = "<group>"; };
 		4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFGeneralSettingsController.m; sourceTree = "<group>"; };
 		4CB61003148AA2DD00166397 /* RMFRamdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFRamdisk.h; sourceTree = "<group>"; };
@@ -170,10 +175,13 @@
 				4CC52F7914819A360006C278 /* GeneralPane.xib */,
 				4CC52F7C14819BB60006C278 /* FavouritesPane.xib */,
 				4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */,
+				4C93C234164D5A6100104398 /* VolumeIconSelection.xib */,
 				4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */,
 				4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */,
 				4C1C452916495FD4001A454C /* RMFChangedMountedFavouriteCellView.h */,
 				4C1C452A16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m */,
+				4C361F14164D52C600E30954 /* RMFLabelTextField.h */,
+				4C361F15164D52C600E30954 /* RMFLabelTextField.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -423,6 +431,7 @@
 				4C505D73164AB3DB008DB224 /* UpdateVolumeTemplate.pdf in Resources */,
 				4C505D74164AB3DB008DB224 /* VolumeTemplate.pdf in Resources */,
 				4C3F4F1F164AE61E0071508B /* FavouriteTemplate.pdf in Resources */,
+				4C93C235164D5A6100104398 /* VolumeIconSelection.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +467,7 @@
 				4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */,
 				4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */,
 				4C1C452B16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m in Sources */,
+				4C361F16164D52C600E30954 /* RMFLabelTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

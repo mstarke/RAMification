@@ -28,9 +28,13 @@
 @property (assign) IBOutlet NSButton *addRamdiskButton;
 @property (assign) IBOutlet NSButton *removeRamdiskButton;
 @property (assign) IBOutlet NSImageView *sizeWarningImageView;
+@property (retain) IBOutlet NSWindow *iconSelectionWindow;
 
 
 - (IBAction)addPreset:(id)sender;
 - (IBAction)deletePreset :(id)sender;
+- (IBAction)selectVolumeIcon:(id)sender;
+- (IBAction)cancelIconSelection:(id)sender;
+- (IBAction)finishedIconSelection:(id)sender;
 
 @end

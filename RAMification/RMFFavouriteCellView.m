@@ -8,6 +8,8 @@
 
 #import "RMFFavouriteCellView.h"
 
+#import "RMFLabelTextField.h"
+
 NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
 
 @implementation RMFFavouriteCellView
