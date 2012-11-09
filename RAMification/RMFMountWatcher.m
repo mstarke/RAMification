@@ -19,7 +19,8 @@ NSString *const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotificatio
 NSString *const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
 NSString *const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
 NSString *const kRMFRamdiskKey = @"RMFRamdiskKey";
-NSString *const kRMFOldRamdiskLabelKey = @"RMFOldRamdiskLabelKey";
+NSString *const kRMFRamdiskLabelBeforeRenameKey = @"RMFOldRamdiskLabelKey";
+NSString *const kRMFRamdiskVolumeURLBeforeRenameKey = @"kRMFOldRamdiskVolumeURLKey";
 NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMountedOnStartupKey";
 
 @interface RMFMountWatcher ()
@@ -164,7 +165,7 @@ NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMount
   
   RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumeURL:oldURL];
   if(renamedDisk != nil) {
-    NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFOldRamdiskLabelKey : oldName };
+    NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
     renamedDisk.label = newName;
     renamedDisk.volumeURL = newURL;
     [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];

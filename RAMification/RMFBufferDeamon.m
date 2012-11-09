@@ -17,22 +17,22 @@
 @interface RMFBufferDeamon () {
   FSEventStreamRef _eventStream;
 }
-@property (retain) NSMutableSet *watchedDisks;
+@property (retain) NSMutableSet *watchedURLs;
 @property (assign) BOOL isObservingNotifications;
 @property (retain) NSDate *lastUpdate;
 @property (assign) FSEventStreamEventId lastEventId;
 @property (nonatomic, setter = setBufferEnabled:) BOOL bufferEnabled;
 
-- (void)update:(const FSEventStreamEventFlags[])flags;
+- (void)eventsAtPath:(NSArray *)paths flags:(const FSEventStreamEventFlags[])flags;
 - (void)enable:(BOOL)enable;
 - (void)didUnmountRamdisk:(NSNotification *)notification;
 - (void)didMountRamdisk:(NSNotification *)notification;
 - (void)didRenameRamdisk:(NSNotification *)notification;
 - (void)updateCallback;
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
-- (void)addWatchedPath:(NSString *)path;
-- (void)clearWatchedPaths;
-- (void)removeWatchedPath:(NSString *)path;
+- (void)addWatchedURL:(NSURL *)url;
+- (void)clearWatchedURLs;
+- (void)removeWatchedURL:(NSURL *)url;
 - (void)shouldBuffer:(BOOL)disable file:(NSString*)file;
 @end
 
@@ -44,7 +44,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
                                     , const FSEventStreamEventFlags eventFlags[]
                                     , const FSEventStreamEventId eventIds[]) {
   RMFBufferDeamon *bufferDaemon = (RMFBufferDeamon *)userData;
-  [bufferDaemon update:eventFlags];
+  [bufferDaemon eventsAtPath:(NSArray *)eventPaths flags:eventFlags];
 }
 
 @implementation RMFBufferDeamon
@@ -52,7 +52,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 - (id)init {
   self = [super init];
   if (self) {
-    _watchedDisks = [[NSMutableSet alloc] init];
+    _watchedURLs = [[NSMutableSet alloc] init];
     _eventStream = NULL;
     _lastUpdate = [[NSDate alloc] init];
     _isObservingNotifications = NO;
@@ -103,7 +103,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       self.isObservingNotifications = NO;
     }
 
-    [self clearWatchedPaths];
+    [self clearWatchedURLs];
     for(RMFRamdisk *ramdisk in mountedRamdisks) {
       // enable buffer for all files on ramdisk ... potentially dangerous?
     }
@@ -111,7 +111,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 
 # pragma mark callback handling
-- (void)update:(const FSEventStreamEventFlags[])flags {
+- (void)eventsAtPath:(NSArray *)paths flags:(const FSEventStreamEventFlags [])flags {
   /*
    We receive events for paths that we watch
    
@@ -121,18 +121,19 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
    
    Ignore Mount, Removal (nothing to do there)
    */
-  NSUInteger flagCount = sizeof(*flags) / sizeof(FSEventStreamEventFlags);
-  for(NSUInteger index = 0; index < flagCount; index++) {
-    FSEventStreamEventFlags aFlag = flags[index];
-    switch (aFlag) {
-      case kFSEventStreamEventFlagRootChanged:
-        // TODO
-        break;
-      case kFSEventStreamEventFlagUnmount:
-        // TODO
-        break;
-      default:
-        break;
+  for(NSString *path in paths) {
+    NSUInteger index = [paths indexOfObject:path];
+    FSEventStreamEventFlags flag = flags[index];
+    NSLog(@"FS Event for %@ flag: %d", path, flag);
+    if(flag & kFSEventStreamEventFlagItemCreated) {
+      NSLog(@"Created");
+      // need to find out WHAT was created!
+    }
+    if(flag & kFSEventStreamEventFlagItemXattrMod) {
+      NSLog(@"X-Attributes Modified");
+    }
+    if(flag & kFSEventStreamEventFlagItemRenamed) {
+      NSLog(@"Renamed");
     }
   }
 }
@@ -142,7 +143,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   // Unshedule the Eventstream callback but remmber the last eventID
   if( _eventStream != NULL ) {
     FSEventStreamStop(_eventStream);
-    FSEventStreamUnscheduleFromRunLoop(_eventStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
+    FSEventStreamInvalidate(_eventStream);
     self.lastEventId = FSEventStreamGetLatestEventId(_eventStream);
     FSEventStreamRelease(_eventStream);
     _eventStream = NULL;
@@ -152,18 +153,24 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   
   // We got no paths to watch, leave
-  if([self.watchedDisks count] == 0) {
+  if([self.watchedURLs count] == 0) {
     return; // nothing to watch
   }
   
   // We got some paths to watch so generate a new callback
   FSEventStreamContext context = {0, (void *)self, NULL, NULL, NULL};
-  const NSTimeInterval latency = 2.0;
-  const FSEventStreamCreateFlags flags = (kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagWatchRoot | kFSEventStreamCreateFlagUseCFTypes);
+  const NSTimeInterval latency = 1.0;
+  // Watch for File events (Create, Modify, Remove,) and use CF Storage types on callback
+  const FSEventStreamCreateFlags flags = (kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes);
+  
+  NSMutableSet *paths = [[[NSMutableSet alloc] initWithCapacity:[_watchedURLs count]] autorelease];
+  for(NSURL *url in _watchedURLs) {
+    [paths addObject:[url path]];
+  }
   _eventStream = FSEventStreamCreate(NULL,
                                      &fileSystemEventCallback,
                                      &context,
-                                     (CFArrayRef)[self.watchedDisks allObjects],
+                                     (CFArrayRef)[paths allObjects],
                                      _lastEventId,
                                      (CFTimeInterval)latency,
                                      flags);
@@ -176,35 +183,36 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 - (void)didMountRamdisk:(NSNotification *)notification {
   RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self addWatchedPath:[ramdisk.volumeURL path]];
+    [self addWatchedURL:ramdisk.volumeURL];
   }
 }
 
 - (void)didUnmountRamdisk:(NSNotification *)notification {
   RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
   if(ramdisk != nil) {
-    [self removeWatchedPath:[ramdisk.volumeURL path]];
+    [self removeWatchedURL:ramdisk.volumeURL];
   }
 }
 
 - (void)didRenameRamdisk:(NSNotification *)notification {
-  NSString *oldLabel = [[[notification userInfo] objectForKey:kRMFOldRamdiskLabelKey] stringAsVolumePath];
-  RMFRamdisk *ramdisk = [[notification userInfo] objectForKey:kRMFRamdiskKey];
+  NSDictionary *userInfo = [notification userInfo];
+  NSURL *oldURL = [userInfo objectForKey:kRMFRamdiskVolumeURLBeforeRenameKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  
   if(ramdisk != nil) {
-    [self removeWatchedPath:[oldLabel stringAsVolumePath]];
-    [self addWatchedPath:[ramdisk.volumeURL path]];
+    [self removeWatchedURL:oldURL];
+    [self addWatchedURL:ramdisk.volumeURL];
   }
 }
 
 #pragma mark Buffer handling
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
   
-  NSString *path = [ramdisk.volumeURL path];
   if( shouldBuffer ) {
-    [self addWatchedPath:path];
+    [self addWatchedURL:ramdisk.volumeURL];
   }
   else {
-    [self removeWatchedPath:path];
+    [self removeWatchedURL:ramdisk.volumeURL];
   }
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -218,30 +226,35 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 
 #pragma mark path updates
 
-- (void)addWatchedPath:(NSString *)path {
+- (void)addWatchedURL:(NSURL *)url {
   // Add the volume path to the watched paths
-  BOOL isDirectory = NO;
-  BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory];
-  if( ! fileExists || ! isDirectory ) {
-    return; // ramdisk path is not valid
+  NSError *error = nil;
+  NSDictionary *resourceValues = [url resourceValuesForKeys:@[NSURLIsVolumeKey, ] error:&error];
+  if(error != nil) {
+    NSLog(@"%@: An Error occured while trying to wath URL %@ for changes. %@", [self class], url, [error localizedDescription]);
+    return; // error while reading
   }
-  
+  BOOL isVolume = [[resourceValues objectForKey:NSURLIsVolumeKey] boolValue];
+  if(NO == isVolume) {
+    NSLog(@"%@: URL %@ does not point to a Volume. Ignoring", [self class], url);
+    return; // URL does not point to a Volume
+  }
   // Insert path into watched paths
-  if(![self.watchedDisks containsObject:path]) {
+  if([self.watchedURLs containsObject:url]) {
     return; // path is already in watchlist
   }
-  [self.watchedDisks addObject:path];
+  [self.watchedURLs addObject:url];
   [self updateCallback];
 }
 
-- (void)clearWatchedPaths {
-  [self.watchedDisks removeAllObjects];
+- (void)clearWatchedURLs {
+  [self.watchedURLs removeAllObjects];
   [self updateCallback];
 }
 
-- (void)removeWatchedPath:(NSString *)path {
-  if([self.watchedDisks containsObject:path]) {
-    [self.watchedDisks removeObject:path];
+- (void)removeWatchedURL:(NSURL *)url {
+  if([self.watchedURLs containsObject:url]) {
+    [self.watchedURLs removeObject:url];
     [self updateCallback];
   }
 }
@@ -251,21 +264,20 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   if(NO == [fileManager fileExistsAtPath:file]) {
     return; // No valid file found
   }
-  
-  // Convert String to C useable char array
-  //char filename[1024];
-  
+  NSString *actionString = (shouldBuffer ? @"enable" : @"disable");
   const int fileDesciptor= open([file UTF8String], O_RDONLY);
   if(fileDesciptor >= 0) {
-    if(shouldBuffer)
-      fcntl(fileDesciptor, F_GLOBAL_NOCACHE, 0); // Turn UBC on
+    if(shouldBuffer){
+      //fcntl(fileDesciptor, F_GLOBAL_NOCACHE, 0); // Turn UBC on
+      
+    }
     else {
-      fcntl(fileDesciptor, F_GLOBAL_NOCACHE, 1); // Turn UBC off
+      //fcntl(fileDesciptor, F_GLOBAL_NOCACHE, 1); // Turn UBC off
     }
     close(fileDesciptor);
+    NSLog(@"%@: Did %@ cache for file %@ !", self, actionString, file );
   }
   else {
-    NSString *actionString = (shouldBuffer ? @"enable" : @"disable");
     NSLog(@"%@: Could not %@ cache for file %@ becaus the File could not be found!", self, actionString, file );
   }
 }

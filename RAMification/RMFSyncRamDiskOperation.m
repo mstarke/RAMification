@@ -100,7 +100,7 @@ static NSArray *_excludedPathsInSync;
   // in backup mode, we sync from ramdisk to backup
   
   NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
-  [arguments addObject:@"-av"];
+  [arguments addObject:@"-anv"];
   switch(_syncMode) {
     case RMFSyncModeBackup:
     case RMFSyncModeBackupAndEject:

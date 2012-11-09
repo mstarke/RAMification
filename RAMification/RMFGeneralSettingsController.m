@@ -17,9 +17,17 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 
 @interface RMFGeneralSettingsController ()
 
+
+@property (assign) IBOutlet NSButton *startAtLoginCheckButton;
+@property (assign) IBOutlet NSButton *backupTrashcanCheckbox;
+@property (assign) IBOutlet NSPopUpButton *backupIntervalPopUp;
+@property (assign) IBOutlet NSTextField *hibernateWarning;
+@property (assign) IBOutlet NSButton *bufferDisabledCheckBox;
+@property (assign) IBOutlet NSButton *unmountOnQuitCheckbox;
+
+
 - (void)didLoadView;
 - (void)selectionChanged:(id)sender;
-- (NSString *)memoryInfoText;
 
 @end
 
@@ -66,28 +74,14 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   RMFAppDelegate *delegate = [NSApp delegate];
   [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
   
-  [self.sizeInfo setStringValue:[self memoryInfoText]];
-  [self.sizeInfo sizeToFit];
-  
-  // attach the number formatter to the size label
-  [self.sizeInput setFormatter:[RMFSizeFormatter formatter]];
-  
-  // Set up the bindings for the Interface
-  // label
-  NSString * keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyLabel];
-  [self.labelInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  
-  // size
-  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeySize];
-  [self.sizeInput bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  
-  [self.sizeStepper setMinValue:0];
-  [self.sizeStepper setMaxValue:10];
-  [self.sizeStepper setIncrement:1];
-  //[self.sizeStepper bind:@"value" toObject:self withKeyPath:@"sizeBridgeValue" options:nil];
-  keypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
-  [self.isBufferDisabled bind:@"value" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keypath options:nil];
-  
+  // Bindings
+  NSString *disableBufferKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
+  NSString *unmountOnQuitKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyUnmountOnQuit];
+  NSString *backupTrashcanKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyBackupTrashcan];
+  NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
+  [self.bufferDisabledCheckBox bind:NSValueBinding toObject:defaultsController withKeyPath:disableBufferKeypath options:nil];
+  [self.unmountOnQuitCheckbox bind:NSValueBinding toObject:defaultsController withKeyPath:unmountOnQuitKeypath options:nil];
+  [self.backupTrashcanCheckbox bind:NSValueBinding toObject:defaultsController withKeyPath:backupTrashcanKeypath options:nil];
   
   BOOL shouldHide = (0 != [[RMFSettingsController sharedController] hibernateMode]);
   [self.hibernateWarning setHidden:shouldHide];
@@ -117,15 +111,6 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   [self.backupIntervalPopUp setMenu:backupMenu];
   [self.backupIntervalPopUp selectItemAtIndex:currentIndex];
   [backupMenu release];
-}
-
-- (NSString *)memoryInfoText {
-  unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
-  NSString *warningTemplate = NSLocalizedString(@"GENERAL_SETTINGS_MAXIUMUM_SIZE", @"Label for the maxiumum size for a ramdisk. Insert 1 object placeholder" );
-  // Get the system memory and calculate the Gb theoretical maxium RAM disk size
-  // The disk is 2 times the storage as it's ram bufferd.
-  // 1024 * 1024 * 1024 * 2 = 2147483648
-  return [NSString stringWithFormat:warningTemplate, ( systemMemory / ( 2147483648 ) ) ];
 }
 
 - (void)selectionChanged:(id)sender {
