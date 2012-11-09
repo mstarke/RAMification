@@ -26,7 +26,7 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = [@[ @".Trashes", @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
+  _excludedPathsInSync = [@[ @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
 }
 
 - (id)init {
@@ -101,6 +101,10 @@ static NSArray *_excludedPathsInSync;
   
   NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
   [arguments addObject:@"-anv"];
+  
+  if([[[NSUserDefaults standardUserDefaults] objectForKey:kRMFSettingsKeyBackupTrashcan] boolValue]) {
+    [arguments addObject:@".Trashes"];
+  }
   switch(_syncMode) {
     case RMFSyncModeBackup:
     case RMFSyncModeBackupAndEject:

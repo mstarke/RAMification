@@ -16,3 +16,4 @@ APPKIT_EXTERN NSString *const kRMFSettingsKeyBackupTrashcan;
 APPKIT_EXTERN NSString *const kRMFSettingsKeyFavourites;
 APPKIT_EXTERN NSString *const kRMFSettingsKeyDisableUnifiedBuffer;
 APPKIT_EXTERN NSString *const kRMFSettingsKeyUnmountOnQuit;
+APPKIT_EXTERN NSString *const kRMFSettingsKeyDisableSpotlight;

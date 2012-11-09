@@ -24,6 +24,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 @property (assign) IBOutlet NSTextField *hibernateWarning;
 @property (assign) IBOutlet NSButton *bufferDisabledCheckBox;
 @property (assign) IBOutlet NSButton *unmountOnQuitCheckbox;
+@property (assign) IBOutlet NSButton *disableSpotlightCheckBox;
 
 
 - (void)didLoadView;
@@ -78,10 +79,14 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   NSString *disableBufferKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
   NSString *unmountOnQuitKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyUnmountOnQuit];
   NSString *backupTrashcanKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyBackupTrashcan];
+  NSString *disableSpotlightKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableSpotlight];
+  
   NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
+  
   [self.bufferDisabledCheckBox bind:NSValueBinding toObject:defaultsController withKeyPath:disableBufferKeypath options:nil];
   [self.unmountOnQuitCheckbox bind:NSValueBinding toObject:defaultsController withKeyPath:unmountOnQuitKeypath options:nil];
   [self.backupTrashcanCheckbox bind:NSValueBinding toObject:defaultsController withKeyPath:backupTrashcanKeypath options:nil];
+  [self.disableSpotlightCheckBox bind:NSValueBinding toObject:defaultsController withKeyPath:disableSpotlightKeypath options:nil];
   
   BOOL shouldHide = (0 != [[RMFSettingsController sharedController] hibernateMode]);
   [self.hibernateWarning setHidden:shouldHide];

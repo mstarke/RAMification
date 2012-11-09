@@ -16,3 +16,4 @@ NSString *const kRMFSettingsKeyBackupTrashcan       = @"BackupTrashcan";
 NSString *const kRMFSettingsKeyFavourites           = @"Favourites";
 NSString *const kRMFSettingsKeyDisableUnifiedBuffer = @"EnableBuffer";
 NSString *const kRMFSettingsKeyUnmountOnQuit        = @"UnmountOnQuit";
+NSString *const kRMFSettingsKeyDisableSpotlight     = @"DisableSpotlight";
