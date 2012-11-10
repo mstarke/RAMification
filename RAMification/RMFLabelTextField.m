@@ -11,24 +11,36 @@
 NSString *const kRMFLabelTextFieldFinderLabelIndexKey = @"finderLabelIndex";
 NSUInteger static const kRMFLabelTextFieldCornderRadius = 6.0;
 
+static NSRect RMFRectWithLabel(const NSRect rect) {
+  const CGFloat fShift = 0.5 * kRMFLabelTextFieldCornderRadius;
+  return NSMakeRect(rect.origin.x - fShift
+                    , rect.origin.y - fShift
+                    , rect.size.width + fShift
+                    , rect.size.height + fShift);
+}
+static NSRect RMFRectWithoutLabel(const NSRect rect) {
+  const CGFloat fShift = 0.5 * kRMFLabelTextFieldCornderRadius;
+  return NSMakeRect(rect.origin.x + fShift
+                            , rect.origin.y + fShift
+                            , rect.size.width - fShift
+                            , rect.size.height - fShift);
+}
 @implementation RMFLabelTextField
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  NSRect adjustedRect = NSMakeRect(dirtyRect.origin.x + .5, dirtyRect.origin.y + .5, dirtyRect.size.width - 1, dirtyRect.size.height - 1);
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:adjustedRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
-  NSColor *lableColor = [self finderLabelColor];
-  NSRect myFrame = [self frame];
-  if(NO == [lableColor isEqual:[NSColor clearColor]]) {
+  const NSRect myFrame = [self frame];
+  if(_finderLabelIndex != 0) {
+    const NSRect adjustedRect = NSMakeRect(dirtyRect.origin.x + .5, dirtyRect.origin.y + .5, dirtyRect.size.width - 1, dirtyRect.size.height - 1);
+    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:adjustedRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
+    
+    NSColor *lableColor = [self finderLabelColor];
     NSGradient *fillGradient = [[NSGradient alloc] initWithStartingColor:[lableColor highlightWithLevel:0.5] endingColor:lableColor];
     [fillGradient drawInBezierPath:path angle:90.0];
     [fillGradient release];
     [[lableColor shadowWithLevel:0.2] setStroke];
     [path stroke];
-    [self setFrame:NSMakeRect(myFrame.origin.x + kRMFLabelTextFieldCornderRadius
-                              , myFrame.origin.y
-                              , myFrame.size.width - kRMFLabelTextFieldCornderRadius
-                              , myFrame.size.height)];
+    [self setFrame:RMFRectWithoutLabel(self.frame)];
     [self setNeedsDisplay:YES];
   }
   [super drawRect:dirtyRect];
@@ -56,10 +68,17 @@ NSUInteger static const kRMFLabelTextFieldCornderRadius = 6.0;
     return; // no changes necessary
   }
   [self willChangeValueForKey:kRMFLabelTextFieldFinderLabelIndexKey];
+  // shift frame left if are using labels now
+  if(_finderLabelIndex == 0) {
+    [self setFrame:RMFRectWithLabel(self.frame)];
+  }
+  // shift back if label was removed
+  else if(finderLabelIndex == 0) {
+    [self setFrame:RMFRectWithoutLabel(self.frame)];
+  }
   _finderLabelIndex = finderLabelIndex;
   [self setNeedsDisplay:YES];
   [self didChangeValueForKey:kRMFLabelTextFieldFinderLabelIndexKey];
-
 }
 
 @end
