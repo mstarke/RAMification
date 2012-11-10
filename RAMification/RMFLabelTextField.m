@@ -67,7 +67,6 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
   if(_finderLabelIndex == finderLabelIndex) {
     return; // no changes necessary
   }
-  [self willChangeValueForKey:kRMFLabelTextFieldFinderLabelIndexKey];
   // shift frame left if are using labels now
   if(_finderLabelIndex == 0) {
     [self setFrame:RMFRectWithLabel(self.frame)];
@@ -78,7 +77,6 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
   }
   _finderLabelIndex = finderLabelIndex;
   [self setNeedsDisplay:YES];
-  [self didChangeValueForKey:kRMFLabelTextFieldFinderLabelIndexKey];
 }
 
 @end

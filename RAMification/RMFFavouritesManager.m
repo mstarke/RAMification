@@ -229,7 +229,6 @@ static RMFFavouritesManager *_sharedSingleton;
 }
 
 - (void)setDefaultRamdisk:(RMFRamdisk *)defaultRamdisk {
-  [self willChangeValueForKey:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
   NSUInteger newIndex = [_favourites indexOfObject:defaultRamdisk];
   if(NSNotFound == newIndex) {
     return; // the new ramdisk is not valid
@@ -244,7 +243,6 @@ static RMFFavouritesManager *_sharedSingleton;
   
   defaultRamdisk.isDefault = YES;
   self.defaultRamdiskIndex = newIndex;
-  [self didChangeValueForKey:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
 }
 
 - (void)_validateDefaultRamdisk {
@@ -255,7 +253,7 @@ static RMFFavouritesManager *_sharedSingleton;
   for(RMFRamdisk *ramdisk in _favourites) {
     if( ramdisk.isDefault && !foundFavourite) {
       foundFavourite = YES;
-      _defaultRamdiskIndex = [_favourites indexOfObject:ramdisk];
+      self.defaultRamdiskIndex = [_favourites indexOfObject:ramdisk];
     }
     else {
       ramdisk.isDefault = NO;

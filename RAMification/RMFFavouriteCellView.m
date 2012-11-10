@@ -15,8 +15,6 @@ NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
 @implementation RMFFavouriteCellView
 
 - (void)setIsDefault:(NSNumber *)isDefault {
-  [self willChangeValueForKey:kRMFFavouriteCellViewKeyForIsDefault];
-  
   
   if( _isDefault == nil ) {
     _isDefault = [[NSNumber alloc] initWithBool:NO];
@@ -37,8 +35,6 @@ NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
   
   labelFont = [fontManager convertFont:labelFont toHaveTrait:traitMask];
   [_lableTextField setFont:labelFont];
-  
-  [self didChangeValueForKey:kRMFFavouriteCellViewKeyForIsDefault];
 }
 
 @end
