@@ -15,16 +15,24 @@ NSUInteger static const kRMFLabelTextFieldCornderRadius = 6.0;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  NSRect outlineRect = NSMakeRect(dirtyRect.origin.x - 1.0, dirtyRect.origin.y - 1.0, dirtyRect.size.width + 2.0, dirtyRect.size.height + 2.0);
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:dirtyRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
-  //NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:outlineRect xRadius:kRMFLabelTextFieldCornderRadius + 1.0 yRadius:kRMFLabelTextFieldCornderRadius + 1.0];
+  NSRect adjustedRect = NSMakeRect(dirtyRect.origin.x + .5, dirtyRect.origin.y + .5, dirtyRect.size.width - 1, dirtyRect.size.height - 1);
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:adjustedRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
   NSColor *lableColor = [self finderLabelColor];
+  NSRect myFrame = [self frame];
   if(NO == [lableColor isEqual:[NSColor clearColor]]) {
-    NSGradient *fillGradient = [[NSGradient alloc] initWithStartingColor:[lableColor highlightWithLevel:0.2] endingColor:[lableColor shadowWithLevel:0.2]];
+    NSGradient *fillGradient = [[NSGradient alloc] initWithStartingColor:[lableColor highlightWithLevel:0.5] endingColor:lableColor];
     [fillGradient drawInBezierPath:path angle:90.0];
     [fillGradient release];
+    [[lableColor shadowWithLevel:0.2] setStroke];
+    [path stroke];
+    [self setFrame:NSMakeRect(myFrame.origin.x + kRMFLabelTextFieldCornderRadius
+                              , myFrame.origin.y
+                              , myFrame.size.width - kRMFLabelTextFieldCornderRadius
+                              , myFrame.size.height)];
+    [self setNeedsDisplay:YES];
   }
   [super drawRect:dirtyRect];
+  [self setFrame:myFrame];
 }
 
 - (NSColor *)finderLabelColor {
