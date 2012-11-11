@@ -117,6 +117,7 @@
   [_labelTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
+  [_sizeTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
   [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
