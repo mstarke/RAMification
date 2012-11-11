@@ -11,7 +11,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFRamdisk.h"
 #import "RMFMountController.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
 #import "RMFFavouritesTableViewDelegate.h"

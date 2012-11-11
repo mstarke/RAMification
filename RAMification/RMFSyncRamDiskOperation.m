@@ -134,7 +134,7 @@ static NSArray *_excludedPathsInSync;
   [rsync waitUntilExit];
   self.ramdisk.activity = RMFRamdiskIdle;
   if(self.syncMode == RMFSyncModeBackup || self.syncMode == RMFSyncModeBackupAndEject ) {
-    [self.ramdisk finishedBackup];
+    [self.ramdisk didFinishBackup];
   }
   NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
   [rsync release];

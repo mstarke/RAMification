@@ -14,7 +14,7 @@
 #import "RMFCreateRamDiskOperation.h"
 #import "RMFSettingsController.h"
 #import "RMFMountController.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "NSString+RMFVolumeTools.h"
 #import "NSString+RMFMenuTools.h"
 
@@ -344,7 +344,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark Notifications
 - (void)ramDiskChanged:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   if(ramdisk == nil) {
     return; // no ramdisk sent
   }

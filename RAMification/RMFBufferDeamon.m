@@ -9,8 +9,7 @@
 #import "RMFBufferDeamon.h"
 
 #import "RMFFavouritesManager.h"
-#import "RMFFileEventsWatcher.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "RMFRamdisk.h"
 #import "RMFSettingsKeys.h"
 #import "NSString+RMFVolumeTools.h"
@@ -61,7 +60,7 @@
   
   NSArray *mountedRamdisks = [[RMFFavouritesManager sharedManager] mountedFavourites];
   NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-
+  
   if(enable) {
     for(RMFRamdisk *ramdisk in mountedRamdisks) {
       [self setShouldBuffer:enable forRamdisk:ramdisk];
@@ -79,13 +78,12 @@
       [defaultCenter removeObserver:self];
       self.isObservingNotifications = NO;
     }
-
+    
     for(RMFRamdisk *ramdisk in mountedRamdisks) {
       // enable buffer for all files on ramdisk ... potentially dangerous?
     }
   }
 }
-
 
 # pragma mark Notifictaions
 - (void)didCreateFile:(NSNotification *)notification {
@@ -97,11 +95,11 @@
     return; // nothing to du;
   }
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   if(nil == ramdisk ) {
     return; // no ramdisk;
   }
-    [self setShouldBuffer:_bufferEnabled forRamdisk:ramdisk];
+  [self setShouldBuffer:_bufferEnabled forRamdisk:ramdisk];
 }
 
 #pragma mark Buffer handling

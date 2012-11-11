@@ -137,17 +137,17 @@ static NSDictionary *volumeIconImageNames;
     _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
     _finderLabelIndex = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForFinderLabelIndex];
     
-    // UUID is missing. Generate one! 
+    // UUID is missing. Generate one!
     if(nil == _uuid) {
       self.uuid = [self _generateUUID];
-    }    
+    }
   }
   return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
-
+    
     //[super encodeWithCoder:aCoder];
     // encode objects
     [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
@@ -167,19 +167,28 @@ static NSDictionary *volumeIconImageNames;
   BOOL isEqual = NO;
   if([object isMemberOfClass:[RMFRamdisk class]]) {
     RMFRamdisk* other = (RMFRamdisk*)object;
-    isEqual = [_label isEqualToString:other.label];
-    isEqual &= (_size == other.size);
+    isEqual = [_uuid isEqualToString:other.uuid];
   }
   return isEqual;
 }
 
-- (void)finishedBackup {
-  self.lastBackupDate = [NSDate date];
-}
-
+#pragma mark custom setter/getter
 - (NSImage *)volumeIcon {
   NSString *imageName = [volumeIconImageNames objectForKey:@(self.volumeIconType)];
   return [NSImage imageNamed:imageName];
+}
+
+- (void)setFinderLabelIndex:(NSUInteger)finderLabelIndex {
+  if(_finderLabelIndex != finderLabelIndex) {
+    _finderLabelIndex = finderLabelIndex;
+    if(_isMounted) {
+      [self updateFinderLabel];
+    }
+  }
+}
+
+- (void)didFinishBackup {
+  self.lastBackupDate = [NSDate date];
 }
 
 - (void)prepareContent {

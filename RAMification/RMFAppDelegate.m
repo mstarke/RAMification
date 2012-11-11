@@ -9,14 +9,14 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFMenuController.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "RMFSyncDaemon.h"
 #import "RMFBufferDeamon.h"
 
 @interface RMFAppDelegate ()
 
 @property (retain) RMFMenuController *menuController;
-@property (retain) RMFMountWatcher *mountWatcher;
+@property (retain) RMFVolumeObserver *mountWatcher;
 @property (retain) RMFSyncDaemon *syncDaemon;
 @property (retain) RMFBufferDeamon *bufferDaemon;
 
@@ -48,7 +48,7 @@
    Initialize all Controllers and Daemons that work independently
    */
   _menuController = [[RMFMenuController alloc] init];
-  _mountWatcher = [[RMFMountWatcher alloc] init];
+  _mountWatcher = [[RMFVolumeObserver alloc] init];
   _syncDaemon = [[RMFSyncDaemon alloc] init];
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
   /*

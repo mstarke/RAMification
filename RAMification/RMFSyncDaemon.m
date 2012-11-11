@@ -12,7 +12,7 @@
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
 #import "RMFSyncRamDiskOperation.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "RMFSettingsKeys.h"
 
 #import <CoreFoundation/CoreFoundation.h>
@@ -201,7 +201,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 #pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   BOOL mountedOnStartup = [[userInfo objectForKey:kRMFRamdiskAlreadyMountedOnStartupKey] boolValue];
   
   if(ramdisk == nil) {
@@ -219,7 +219,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)didUnmountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   
   if(nil == ramdisk) {
     return; // ramdisk missing.

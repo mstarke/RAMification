@@ -10,7 +10,7 @@
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
-#import "RMFMountWatcher.h"
+#import "RMFVolumeObserver.h"
 #import "RMFMountController.h"
 #import "RMFSizeFormatter.h"
 #import "RMFArrayController.h"
@@ -282,7 +282,7 @@
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];
