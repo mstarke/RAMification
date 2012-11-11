@@ -282,7 +282,7 @@
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];

@@ -201,7 +201,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 #pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
   BOOL mountedOnStartup = [[userInfo objectForKey:kRMFRamdiskAlreadyMountedOnStartupKey] boolValue];
   
   if(ramdisk == nil) {
@@ -219,7 +219,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)didUnmountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
   
   if(nil == ramdisk) {
     return; // ramdisk missing.

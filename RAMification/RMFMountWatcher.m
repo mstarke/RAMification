@@ -18,7 +18,7 @@
 NSString *const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
 NSString *const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
 NSString *const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
-NSString *const kRMFRamdiskKey = @"RMFRamdiskKey";
+NSString *const kRMFMountWatcherRamdiskKey = @"RMFRamdiskKey";
 NSString *const kRMFRamdiskLabelBeforeRenameKey = @"RMFOldRamdiskLabelKey";
 NSString *const kRMFRamdiskVolumeURLBeforeRenameKey = @"kRMFOldRamdiskVolumeURLKey";
 NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMountedOnStartupKey";
@@ -148,7 +148,7 @@ NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMount
   ramdisk.bsdDevice = nil;
   ramdisk.isMounted = NO;
   
-  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
+  NSDictionary *userInfo = @{ kRMFMountWatcherRamdiskKey : ramdisk };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidUnmountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was unmounted!", self, ramdisk);
 }
@@ -165,7 +165,7 @@ NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMount
   
   RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumeURL:oldURL];
   if(renamedDisk != nil) {
-    NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
+    NSDictionary *userInfo = @{ kRMFMountWatcherRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
     renamedDisk.label = newName;
     renamedDisk.volumeURL = newURL;
     [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
@@ -191,7 +191,7 @@ NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMount
     [notificationCenter scheduleNotification:userNotification];
   }
   
-  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk, kRMFRamdiskAlreadyMountedOnStartupKey : @(wasMounted) };
+  NSDictionary *userInfo = @{ kRMFMountWatcherRamdiskKey : ramdisk, kRMFRamdiskAlreadyMountedOnStartupKey : @(wasMounted) };
   [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
 }

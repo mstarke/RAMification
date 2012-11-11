@@ -344,7 +344,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark Notifications
 - (void)ramDiskChanged:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFMountWatcherRamdiskKey];
   if(ramdisk == nil) {
     return; // no ramdisk sent
   }

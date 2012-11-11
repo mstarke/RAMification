@@ -48,6 +48,7 @@
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
 		4CC52F7D14819BB60006C278 /* FavouritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavouritesPane.xib */; };
 		4CC52F7F1481A1400006C278 /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7E1481A1400006C278 /* SettingsWindow.xib */; };
+		4CCD85C5164FCAC8003A1023 /* RMFFileEventsWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCD85C4164FCAC8003A1023 /* RMFFileEventsWatcher.m */; };
 		4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */; };
 		4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */; };
 		4CDBC8BE149D532E00CDBDEC /* RMFSyncDaemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDBC8BD149D532E00CDBDEC /* RMFSyncDaemon.m */; };
@@ -127,6 +128,8 @@
 		4CC52F7914819A360006C278 /* GeneralPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralPane.xib; sourceTree = "<group>"; };
 		4CC52F7C14819BB60006C278 /* FavouritesPane.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FavouritesPane.xib; sourceTree = "<group>"; };
 		4CC52F7E1481A1400006C278 /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
+		4CCD85C3164FCAC8003A1023 /* RMFFileEventsWatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFileEventsWatcher.h; sourceTree = "<group>"; };
+		4CCD85C4164FCAC8003A1023 /* RMFFileEventsWatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFileEventsWatcher.m; sourceTree = "<group>"; };
 		4CD4B7A61482B4C8002DC1F2 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 		4CD7D92A1620DE2700BF0746 /* RMFFavouriteCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouriteCellView.h; sourceTree = "<group>"; };
 		4CD7D92B1620DE2700BF0746 /* RMFFavouriteCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouriteCellView.m; sourceTree = "<group>"; };
@@ -253,6 +256,8 @@
 				4CDBC8C4149D6AAC00CDBDEC /* RMFSizeFormatter.m */,
 				4C27BF8F15F92323008F723D /* RMFBufferDeamon.h */,
 				4C27BF9015F92323008F723D /* RMFBufferDeamon.m */,
+				4CCD85C3164FCAC8003A1023 /* RMFFileEventsWatcher.h */,
+				4CCD85C4164FCAC8003A1023 /* RMFFileEventsWatcher.m */,
 			);
 			name = Tools;
 			sourceTree = "<group>";
@@ -468,6 +473,7 @@
 				4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */,
 				4C1C452B16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m in Sources */,
 				4C361F16164D52C600E30954 /* RMFLabelTextField.m in Sources */,
+				4CCD85C5164FCAC8003A1023 /* RMFFileEventsWatcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
