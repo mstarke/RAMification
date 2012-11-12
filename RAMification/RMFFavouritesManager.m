@@ -36,24 +36,20 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 @end
 
-static RMFFavouritesManager *_sharedSingleton;
-
 // actual implementation
 @implementation RMFFavouritesManager
 
 #pragma mark convenience functions
 
-+ (void)initialize {
-  static BOOL initialized = NO;
-  if(!initialized) {
-    initialized = YES;
-    _sharedSingleton = [[RMFFavouritesManager alloc] init];
-  }
++ (RMFFavouritesManager *)sharedManager {
+  static RMFFavouritesManager *_sharedInstance = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    _sharedInstance = [[RMFFavouritesManager alloc] init];
+  });
+  return _sharedInstance;
 }
 
-+ (RMFFavouritesManager *)sharedManager {
-  return _sharedSingleton;
-}
 
 #pragma mark object lifecycle
 
@@ -64,7 +60,7 @@ static RMFFavouritesManager *_sharedSingleton;
     NSLog(@"Trying to load presets!");
     self.defaultRamdiskIndex = NSNotFound;
     self.favourites = [NSMutableArray array];
-    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:kRMFSettingsKeyFavourites];
+    NSData *data = [[NSUserDefaults standardUserDefaults] dataForKey:RMFSettingsKeyFavourites];
     if(data != nil) {
       NSArray *favourites = [NSKeyedUnarchiver unarchiveObjectWithData:data];
       if(favourites != nil) {
@@ -293,7 +289,7 @@ static RMFFavouritesManager *_sharedSingleton;
 - (void)_synchronizeDefaults {
   NSData *data= [NSKeyedArchiver archivedDataWithRootObject:_favourites];
   
-  [[NSUserDefaults standardUserDefaults] setObject:data forKey:kRMFSettingsKeyFavourites];
+  [[NSUserDefaults standardUserDefaults] setObject:data forKey:RMFSettingsKeyFavourites];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

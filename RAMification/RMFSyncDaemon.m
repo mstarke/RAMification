@@ -86,8 +86,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
      */
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
-    [defaultCenter addObserver:self selector:@selector(didMountFavourite:) name:RMFDidMountRamdiskNotification object:nil];
-    [defaultCenter addObserver:self selector:@selector(didUnmountFavourite:) name:RMFDidUnmountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didMountFavourite:) name:RMFVolumeObserverDidMountRamdiskNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(didUnmountFavourite:) name:RMFVolumeObserverDidUnmountRamdiskNotification object:nil];
     
     [self enableTimer];
     NSLog(@"Created %@", self);
@@ -201,8 +201,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 #pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
-  BOOL mountedOnStartup = [[userInfo objectForKey:kRMFRamdiskAlreadyMountedOnStartupKey] boolValue];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
+  BOOL mountedOnStartup = [[userInfo objectForKey:RMFVolumeObserverWasAlreadyMountedOnStartupKey] boolValue];
   
   if(ramdisk == nil) {
     return; // ingoring, no RAM disk present
@@ -219,7 +219,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)didUnmountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
   
   if(nil == ramdisk) {
     return; // ramdisk missing.
@@ -229,7 +229,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)userDefaultsDidChange:(NSNotification *)notification {
   NSLog(@"%@: Defaults did change", self);
-  NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
+  NSTimeInterval newInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
    
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid
@@ -257,7 +257,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)enableTimer {
-  NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:kRMFSettingsKeyBackupInterval];
+  NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
   NSTimeInterval interval = backupInterval;
   if (self.backupTimer != nil) {
     interval = [self.backupTimer timeInterval];

@@ -16,20 +16,20 @@
 /*
  Notification identifiers
  */
-APPKIT_EXTERN NSString *const RMFDidMountRamdiskNotification;
-APPKIT_EXTERN NSString *const RMFDidUnmountRamdiskNotification;
-APPKIT_EXTERN NSString *const RMFDidRenameRamdiskNotification;
-APPKIT_EXTERN NSString *const RMFDidCreateFileOnRamdiskNotification;
-APPKIT_EXTERN NSString *const RMFDidChangeFileAttributesNotification;
+APPKIT_EXTERN NSString *const RMFVolumeObserverDidMountRamdiskNotification;
+APPKIT_EXTERN NSString *const RMFVolumeObserverDidUnmountRamdiskNotification;
+APPKIT_EXTERN NSString *const RMFVolumeObserverDidRenameRamdiskNotification;
+APPKIT_EXTERN NSString *const RMFVolumeObserverDidCreateFileOnRamdiskNotification;
+APPKIT_EXTERN NSString *const RMFVolumeObserverDidChangeFileAttributesNotification;
 
 /*
  Acceskeys for the userInfo dicitionary attached to notifications
  */
-APPKIT_EXTERN NSString *const kRMFRamdiskKey;
-APPKIT_EXTERN NSString *const kRMFRamdiskLabelBeforeRenameKey;
-APPKIT_EXTERN NSString *const kRMFRamdiskAlreadyMountedOnStartupKey;
-APPKIT_EXTERN NSString *const kRMFRamdiskVolumeURLBeforeRenameKey;
-APPKIT_EXTERN NSString *const kRMFPathOfCreatedFileOnRamdiskKey;
+APPKIT_EXTERN NSString *const RMFVolumeObserverRamdiskKey;
+APPKIT_EXTERN NSString *const RMFVolumeObserverLabelBeforeRenameKey;
+APPKIT_EXTERN NSString *const RMFVolumeObserverWasAlreadyMountedOnStartupKey;
+APPKIT_EXTERN NSString *const RMFVolumeObserverVolumeURLBeforeRenameKey;
+APPKIT_EXTERN NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey;
 
 
 @interface RMFVolumeObserver : NSObject

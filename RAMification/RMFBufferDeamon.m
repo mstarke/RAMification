@@ -34,7 +34,7 @@
   if (self) {
     _isObservingNotifications = NO;
     NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
-    NSString *keyPath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
+    NSString *keyPath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableUnifiedBuffer];
     [self bind:@"bufferEnabled" toObject:defaultsController withKeyPath:keyPath options:nil];
     NSLog(@"Created %@", [self class]);
   }
@@ -67,8 +67,8 @@
     }
     // Register for notifications
     if( NO == _isObservingNotifications) {
-      [defaultCenter addObserver:self selector:@selector(didCreateFile:) name:RMFDidCreateFileOnRamdiskNotification object:nil];
-      [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFDidMountRamdiskNotification object:nil];
+      [defaultCenter addObserver:self selector:@selector(didCreateFile:) name:RMFVolumeObserverDidCreateFileOnRamdiskNotification object:nil];
+      [defaultCenter addObserver:self selector:@selector(didMountRamdisk:) name:RMFVolumeObserverDidMountRamdiskNotification object:nil];
       self.isObservingNotifications = YES;
     }
   }
@@ -95,7 +95,7 @@
     return; // nothing to du;
   }
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
   if(nil == ramdisk ) {
     return; // no ramdisk;
   }

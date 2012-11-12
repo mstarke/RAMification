@@ -18,19 +18,19 @@
 /*
  Notifications
  */
-NSString *const RMFDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
-NSString *const RMFDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
-NSString *const RMFDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
-NSString *const RMFDidCreateFileOnRamdiskNotification = @"RMFDidCreateFileOnRamdiskNotification";
-NSString *const RMFDidChangeFileAttributesNotification = @"RMFDidChangeFileAttributesNotification";
+NSString *const RMFVolumeObserverDidMountRamdiskNotification = @"RMFDidMountRamdiskNotification";
+NSString *const RMFVolumeObserverDidUnmountRamdiskNotification = @"RMFDidUnmountRamdiskNotification";
+NSString *const RMFVolumeObserverDidRenameRamdiskNotification = @"RMFDidRenameRamdiskNotification";
+NSString *const RMFVolumeObserverDidCreateFileOnRamdiskNotification = @"RMFDidCreateFileOnRamdiskNotification";
+NSString *const RMFVolumeObserverDidChangeFileAttributesNotification = @"RMFDidChangeFileAttributesNotification";
 /*
  Keys to access the userInfo dictionary attached to notifications
  */
-NSString *const kRMFRamdiskKey = @"RMFRamdiskKey";
-NSString *const kRMFRamdiskLabelBeforeRenameKey = @"RMFOldRamdiskLabelKey";
-NSString *const kRMFRamdiskVolumeURLBeforeRenameKey = @"kRMFOldRamdiskVolumeURLKey";
-NSString *const kRMFRamdiskAlreadyMountedOnStartupKey =@"kRMFRamdiskAlreadyMountedOnStartupKey";
-NSString *const kRMFPathOfCreatedFileOnRamdiskKey = @"kRMFRamdiskPathOfCreatedFileKey";
+NSString *const RMFVolumeObserverRamdiskKey = @"RMFVolumeObserverRamdiskKey";
+NSString *const RMFVolumeObserverLabelBeforeRenameKey = @"RMFVolumeObserverLabelBeforeRenameKey";
+NSString *const RMFVolumeObserverVolumeURLBeforeRenameKey = @"RMFVolumeObserverVolumeURLBeforeRenameKey";
+NSString *const RMFVolumeObserverWasAlreadyMountedOnStartupKey =@"RMFVolumeObserverWasAlreadyMountedOnStartupKey";
+NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey = @"RMFVolumeObserverPathOfCreatedFileOnRamdiskKey";
 
 @interface RMFVolumeObserver () {
   FSEventStreamRef _eventStream;
@@ -185,8 +185,8 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   ramdisk.bsdDevice = nil;
   ramdisk.isMounted = NO;
   
-  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk };
-  [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidUnmountRamdiskNotification object:self userInfo:userInfo];
+  NSDictionary *userInfo = @{ RMFVolumeObserverRamdiskKey : ramdisk };
+  [[NSNotificationCenter defaultCenter] postNotificationName:RMFVolumeObserverDidUnmountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was unmounted!", self, ramdisk);
 }
 
@@ -205,11 +205,11 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   if( didReadUUID ) {
     RMFRamdisk *renamedDisk = [favouritesManager findFavouriteByUUID:uuid];
     if(renamedDisk != nil) {
-      NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
+      NSDictionary *userInfo = @{ RMFVolumeObserverRamdiskKey : renamedDisk, RMFVolumeObserverLabelBeforeRenameKey : oldName, RMFVolumeObserverVolumeURLBeforeRenameKey: oldURL };
       renamedDisk.label = newName;
       renamedDisk.volumeURL = newURL;
       [self _changeWatchedRamdiskURL:renamedDisk oldURL:oldURL newURL:newURL];
-      [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
+      [[NSNotificationCenter defaultCenter] postNotificationName:RMFVolumeObserverDidRenameRamdiskNotification object:self userInfo:userInfo];
     }
   }
 }
@@ -234,8 +234,8 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   
   [self _watchRamdisk:ramdisk];
   
-  NSDictionary *userInfo = @{ kRMFRamdiskKey : ramdisk, kRMFRamdiskAlreadyMountedOnStartupKey : @(wasMounted) };
-  [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidMountRamdiskNotification object:self userInfo:userInfo];
+  NSDictionary *userInfo = @{ RMFVolumeObserverRamdiskKey : ramdisk, RMFVolumeObserverWasAlreadyMountedOnStartupKey : @(wasMounted) };
+  [[NSNotificationCenter defaultCenter] postNotificationName:RMFVolumeObserverDidMountRamdiskNotification object:self userInfo:userInfo];
   NSLog(@"%@: %@ was mounted!", self, ramdisk);
 }
 
@@ -269,8 +269,8 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     NSLog(@"FS Event for %@ flag: %d", path, flag);
     if(flag & kFSEventStreamEventFlagItemCreated) {
       NSLog(@"Created");
-      NSDictionary *userInfo = @{ kRMFRamdiskKey: affectedRamdisk, kRMFPathOfCreatedFileOnRamdiskKey: path };
-      [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidCreateFileOnRamdiskNotification object:self userInfo:userInfo];
+      NSDictionary *userInfo = @{ RMFVolumeObserverRamdiskKey: affectedRamdisk, RMFVolumeObserverPathOfCreatedFileOnRamdiskKey: path };
+      [[NSNotificationCenter defaultCenter] postNotificationName:RMFVolumeObserverDidCreateFileOnRamdiskNotification object:self userInfo:userInfo];
     }
     if(flag & kFSEventStreamEventFlagItemXattrMod) {
       NSError *error = nil;

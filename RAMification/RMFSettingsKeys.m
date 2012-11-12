@@ -8,12 +8,9 @@
 
 #import "RMFSettingsKeys.h"
 
-NSString *const kRMFSettingsKeyLabel                = @"Label";
-NSString *const kRMFSettingsKeySize                 = @"Size";
-NSString *const kRMFSettingsKeyBackupPath           = @"BackupPath";
-NSString *const kRMFSettingsKeyBackupInterval       = @"BackupInterval";
-NSString *const kRMFSettingsKeyBackupTrashcan       = @"BackupTrashcan";
-NSString *const kRMFSettingsKeyFavourites           = @"Favourites";
-NSString *const kRMFSettingsKeyDisableUnifiedBuffer = @"EnableBuffer";
-NSString *const kRMFSettingsKeyUnmountOnQuit        = @"UnmountOnQuit";
-NSString *const kRMFSettingsKeyDisableSpotlight     = @"DisableSpotlight";
+NSString *const RMFSettingsKeyBackupInterval       = @"BackupInterval";
+NSString *const RMFSettingsKeyBackupTrashcan       = @"BackupTrashcan";
+NSString *const RMFSettingsKeyFavourites           = @"Favourites";
+NSString *const RMFSettingsKeyDisableUnifiedBuffer = @"EnableBuffer";
+NSString *const RMFSettingsKeyUnmountOnQuit        = @"UnmountOnQuit";
+NSString *const RMFSettingsKeyDisableSpotlight     = @"DisableSpotlight";

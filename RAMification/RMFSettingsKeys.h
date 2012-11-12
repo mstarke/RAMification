@@ -8,12 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-APPKIT_EXTERN NSString *const kRMFSettingsKeyLabel;
-APPKIT_EXTERN NSString *const kRMFSettingsKeySize;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyBackupPath;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyBackupInterval;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyBackupTrashcan;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyFavourites;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyDisableUnifiedBuffer;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyUnmountOnQuit;
-APPKIT_EXTERN NSString *const kRMFSettingsKeyDisableSpotlight;
+APPKIT_EXTERN NSString *const RMFSettingsKeyBackupInterval;
+APPKIT_EXTERN NSString *const RMFSettingsKeyBackupTrashcan;
+APPKIT_EXTERN NSString *const RMFSettingsKeyFavourites;
+APPKIT_EXTERN NSString *const RMFSettingsKeyDisableUnifiedBuffer;
+APPKIT_EXTERN NSString *const RMFSettingsKeyUnmountOnQuit;
+APPKIT_EXTERN NSString *const RMFSettingsKeyDisableSpotlight;

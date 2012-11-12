@@ -61,7 +61,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:@"FavouritesPane" bundle:[NSBundle mainBundle]];
   if (self) {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFDidRenameRamdiskNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFVolumeObserverDidRenameRamdiskNotification object:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
@@ -283,7 +283,7 @@
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];

@@ -102,7 +102,7 @@ static NSArray *_excludedPathsInSync;
   NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
   [arguments addObject:@"-anv"];
   
-  if([[[NSUserDefaults standardUserDefaults] objectForKey:kRMFSettingsKeyBackupTrashcan] boolValue]) {
+  if([[[NSUserDefaults standardUserDefaults] objectForKey:RMFSettingsKeyBackupTrashcan] boolValue]) {
     [arguments addObject:@".Trashes"];
   }
   switch(_syncMode) {

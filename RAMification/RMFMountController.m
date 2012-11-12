@@ -14,8 +14,6 @@
 #import "RMFCreateRamDiskOperation.h"
 #import "NSString+RMFVolumeTools.h"
 
-static RMFMountController *_sharedSingleton;
-
 @interface RMFMountController ()
 
 @property (retain) NSOperationQueue *queue;
@@ -24,16 +22,13 @@ static RMFMountController *_sharedSingleton;
 
 @implementation RMFMountController
 
-+ (void)initialize {
-  static BOOL initialized = NO;
-  if(!initialized) {
-    initialized = YES;
-    _sharedSingleton = [[RMFMountController alloc] init];
-  }
-}
-
 + (RMFMountController *)sharedController {
-  return _sharedSingleton;
+  static RMFMountController *_sharedInstance = nil;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    _sharedInstance = [[RMFMountController alloc] init];
+  });
+  return _sharedInstance;
 }
 
 + (BOOL)isMemoryAvailableForRamdisk:(RMFRamdisk *)ramdisk {

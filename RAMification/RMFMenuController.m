@@ -77,9 +77,9 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerKeyForFavourites options:( NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld ) context:nil];
     [favouritesManager addObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk options:0 context:nil];
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidMountRamdiskNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidUnmountRamdiskNotification object:nil];
-    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFDidRenameRamdiskNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFVolumeObserverDidMountRamdiskNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFVolumeObserverDidUnmountRamdiskNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(ramDiskChanged:) name:RMFVolumeObserverDidRenameRamdiskNotification object:nil];
     NSLog(@"Created %@", [self class]);
   }
   return self;
@@ -344,7 +344,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark Notifications
 - (void)ramDiskChanged:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:kRMFRamdiskKey];
+  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
   if(ramdisk == nil) {
     return; // no ramdisk sent
   }

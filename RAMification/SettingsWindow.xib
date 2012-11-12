@@ -53,7 +53,7 @@
 					<bool key="NSViewCanDrawConcurrently">YES</bool>
 					<string key="NSReuseIdentifierKey">_NS:224</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
+				<string key="NSScreenRect">{{0, 0}, {2560, 1418}}</string>
 				<string key="NSMinSize">{480, 292}</string>
 				<string key="NSMaxSize">{480, 292}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -117,6 +117,8 @@
 				<dictionary class="NSMutableDictionary" key="-2.IBAttributePlaceholdersKey"/>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="-3.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<boolean value="YES" key="3.IBNSWindowAutoPositionCentersHorizontal"/>
+				<boolean value="YES" key="3.IBNSWindowAutoPositionCentersVertical"/>
 				<string key="3.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="3.NSWindowTemplate.visibleAtLaunch"/>
 				<dictionary class="NSMutableDictionary" key="5.IBAttributePlaceholdersKey"/>

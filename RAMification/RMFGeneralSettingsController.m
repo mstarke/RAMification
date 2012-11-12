@@ -76,10 +76,10 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
   
   // Bindings
-  NSString *disableBufferKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableUnifiedBuffer];
-  NSString *unmountOnQuitKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyUnmountOnQuit];
-  NSString *backupTrashcanKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyBackupTrashcan];
-  NSString *disableSpotlightKeypath = [NSString stringWithFormat:@"values.%@", kRMFSettingsKeyDisableSpotlight];
+  NSString *disableBufferKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableUnifiedBuffer];
+  NSString *unmountOnQuitKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyUnmountOnQuit];
+  NSString *backupTrashcanKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyBackupTrashcan];
+  NSString *disableSpotlightKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableSpotlight];
   
   NSUserDefaultsController *defaultsController = [NSUserDefaultsController sharedUserDefaultsController];
   
@@ -107,7 +107,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
     [backupMenu addItem:menuItem];
     [menuItem release];
   }
-  NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:kRMFSettingsKeyBackupInterval] integerValue];
+  NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:RMFSettingsKeyBackupInterval] integerValue];
   NSNumber *interval = @(currentInterval);
   NSUInteger currentIndex = [backupIntervals indexOfObject:interval];
   if(NSNotFound == currentIndex) {
@@ -125,7 +125,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   NSMenuItem *menuItem = [self.backupIntervalPopUp selectedItem];
   NSNumber *number = [menuItem representedObject];
   NSLog(@"Interval changed to %@ Seconds", number);
-  [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:kRMFSettingsKeyBackupInterval];
+  [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:RMFSettingsKeyBackupInterval];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 @end
