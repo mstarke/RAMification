@@ -70,7 +70,7 @@ static NSArray *_excludedPathsInSync;
   
   // We create the backup folder on restore and on sync
   // It might be better to just create the folder if we actually need it - that it on backup not on restore
-  NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+  NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
   NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/Backups/%@",self.ramdisk.uuid];
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSError *error = nil;

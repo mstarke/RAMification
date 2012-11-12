@@ -74,7 +74,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   DASessionScheduleWithRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   // Get the disk for the path of the renamed volume
   DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (CFURLRef)volumeURL);
-  NSString *bsdDevice = [NSString stringWithUTF8String:DADiskGetBSDName(disk)];
+  NSString *bsdDevice = @(DADiskGetBSDName(disk));
   // Unschedule our session and clean up
   DASessionUnscheduleFromRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   CFRelease(disk);
@@ -150,8 +150,8 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 #pragma marks volume notifictaions
 - (void)_didMountVolume:(NSNotification *)notification {
-  NSString *volumeName = [[notification userInfo] objectForKey:NSWorkspaceVolumeLocalizedNameKey];
-  NSURL *volumeURL = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+  NSString *volumeName = [notification userInfo][NSWorkspaceVolumeLocalizedNameKey];
+  NSURL *volumeURL = [notification userInfo][NSWorkspaceVolumeURLKey];
   NSString *volumePath = [volumeURL path];
   
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
@@ -167,7 +167,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 
 - (void)_didUnmountVolume:(NSNotification *)notification {
-  NSURL *deviceUrl = [[notification userInfo] objectForKey:NSWorkspaceVolumeURLKey];
+  NSURL *deviceUrl = [notification userInfo][NSWorkspaceVolumeURLKey];
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithVolumeURL:deviceUrl];
   NSLog(@"%@: Device %@ unmounted", self, deviceUrl);
@@ -192,10 +192,10 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 
 - (void)_didRenameVolume:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  NSURL *newURL = [userInfo objectForKey:NSWorkspaceVolumeURLKey];
-  NSString *newName =[userInfo objectForKey:NSWorkspaceVolumeLocalizedNameKey];
-  NSURL *oldURL = [userInfo objectForKey:NSWorkspaceVolumeOldURLKey];
-  NSString *oldName = [userInfo objectForKey:NSWorkspaceVolumeOldLocalizedNameKey];
+  NSURL *newURL = userInfo[NSWorkspaceVolumeURLKey];
+  NSString *newName =userInfo[NSWorkspaceVolumeLocalizedNameKey];
+  NSURL *oldURL = userInfo[NSWorkspaceVolumeOldURLKey];
+  NSString *oldName = userInfo[NSWorkspaceVolumeOldLocalizedNameKey];
   
   NSLog(@"%@: Volume %@ got renamed to %@", self, oldName, newName);
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
@@ -260,7 +260,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   for(NSString *path in paths) {
     // Check what ramdisk this event corresponds to
     NSURL *volumeURL = [NSURL fileURLWithPath:path isDirectory:YES];
-    RMFRamdisk *affectedRamdisk = [_watchedRamdisks objectForKey:volumeURL];
+    RMFRamdisk *affectedRamdisk = _watchedRamdisks[volumeURL];
     if(nil == affectedRamdisk) {
       continue; // nothing to do
     }
@@ -276,7 +276,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       NSError *error = nil;
       NSDictionary *resourceValues = [volumeURL resourceValuesForKeys:@[NSURLLabelNumberKey] error:&error];
       if(nil == error) {
-        NSUInteger currentLabelIndex = [[resourceValues objectForKey:NSURLLabelNumberKey] integerValue];
+        NSUInteger currentLabelIndex = [resourceValues[NSURLLabelNumberKey] integerValue];
         NSLog(@"%@: Testing for label change on Ramdisk %@", [self class], affectedRamdisk);
         if(currentLabelIndex != affectedRamdisk.finderLabelIndex) {
           NSLog(@"%@: Label missmatch detected. Updating!", [self class]);
@@ -351,12 +351,12 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     return; // error while reading
   }
   
-  BOOL isVolume = [[resourceValues objectForKey:NSURLIsVolumeKey] boolValue];
+  BOOL isVolume = [resourceValues[NSURLIsVolumeKey] boolValue];
   if(NO == isVolume) {
     NSLog(@"%@: URL %@ does not point to a Volume. Ignoring", [self class], ramdisk.volumeURL);
     return; // URL does not point to a Volume
   }
-  [_watchedRamdisks setObject:ramdisk forKey:ramdisk.volumeURL];
+  _watchedRamdisks[ramdisk.volumeURL] = ramdisk;
   [self _updateFilesystemCallback];
 }
 
@@ -379,7 +379,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 - (void)_changeWatchedRamdiskURL:(RMFRamdisk *)ramdisk oldURL:(NSURL *)oldURL newURL:(NSURL *)newURL {
   NSLog(@"%@: Updating new Volume URL for FSEvteens for ramdisk %@", [self class], ramdisk);
   [_watchedRamdisks removeObjectForKey:oldURL];
-  [_watchedRamdisks setObject:ramdisk forKey:newURL];
+  _watchedRamdisks[newURL] = ramdisk;
   [self _updateFilesystemCallback];
 }
 

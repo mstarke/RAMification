@@ -51,7 +51,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   NSDictionary *diskInfoDict = (NSDictionary *)DADiskCopyDescription(disk);
-  NSURL *deviceURL = [diskInfoDict objectForKey:(NSString *)kDADiskDescriptionVolumePathKey];
+  NSURL *deviceURL = diskInfoDict[(NSString *)kDADiskDescriptionVolumePathKey];
   
   BOOL didReadUUID = NO;
   NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:deviceURL success:&didReadUUID];
@@ -201,8 +201,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 #pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
-  BOOL mountedOnStartup = [[userInfo objectForKey:RMFVolumeObserverWasAlreadyMountedOnStartupKey] boolValue];
+  RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
+  BOOL mountedOnStartup = [userInfo[RMFVolumeObserverWasAlreadyMountedOnStartupKey] boolValue];
   
   if(ramdisk == nil) {
     return; // ingoring, no RAM disk present
@@ -219,7 +219,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 - (void)didUnmountFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
+  RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   
   if(nil == ramdisk) {
     return; // ramdisk missing.

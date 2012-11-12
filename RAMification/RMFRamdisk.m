@@ -179,7 +179,7 @@ static NSDictionary *volumeIconImageNames;
 
 #pragma mark custom setter/getter
 - (NSImage *)volumeIcon {
-  NSString *imageName = [volumeIconImageNames objectForKey:@(self.volumeIconType)];
+  NSString *imageName = volumeIconImageNames[@(self.volumeIconType)];
   return [NSImage imageNamed:imageName];
 }
 

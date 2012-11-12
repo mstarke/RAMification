@@ -54,7 +54,7 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
   NSArray *labelColors = [[NSWorkspace sharedWorkspace] fileLabelColors];
   NSColor *color = nil;
   @try {
-    color = [labelColors objectAtIndex:_finderLabelIndex];
+    color = labelColors[_finderLabelIndex];
   }
   @catch (NSException *exception) {
     color = [NSColor clearColor];

@@ -116,7 +116,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
-    [_uuidToFavourites setObject:ramdisk forKey:ramdisk.uuid];
+    _uuidToFavourites[ramdisk.uuid] = ramdisk;
     [self _observerRamdisk:ramdisk];
     [self _synchronizeDefaults];
   }
@@ -163,7 +163,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 }
 
 - (RMFRamdisk *)findFavouriteByUUID:(NSString *)uuid {
-  return [_uuidToFavourites objectForKey:uuid];
+  return _uuidToFavourites[uuid];
 }
 
 - (void)automountFavourites {
@@ -185,7 +185,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     self.uuidToFavourites = [NSMutableDictionary dictionaryWithCapacity:[_favourites count]];
   }
   for(RMFRamdisk *ramdisk in _favourites) {
-    [_uuidToFavourites setObject:ramdisk forKey:ramdisk.uuid];
+    _uuidToFavourites[ramdisk.uuid] = ramdisk;
   }
 }
 
@@ -203,8 +203,8 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 - (void)setDefaultRamdiskIndex:(NSInteger)defaultRamdiskIndex {
   if(_defaultRamdiskIndex != defaultRamdiskIndex) {
-    RMFRamdisk *oldDefault = [self.favourites objectAtIndex:_defaultRamdiskIndex];
-    RMFRamdisk *newDefault = [self.favourites objectAtIndex:defaultRamdiskIndex];
+    RMFRamdisk *oldDefault = (self.favourites)[_defaultRamdiskIndex];
+    RMFRamdisk *newDefault = (self.favourites)[defaultRamdiskIndex];
     if(oldDefault != nil && newDefault != nil) {
       newDefault.isDefault = YES;
       oldDefault.isDefault = NO;
@@ -216,7 +216,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 - (RMFRamdisk *)defaultRamdisk {
   RMFRamdisk *ramdisk = nil;
   @try {
-    ramdisk = [_favourites objectAtIndex:_defaultRamdiskIndex];
+    ramdisk = _favourites[_defaultRamdiskIndex];
   }
   @catch (NSException *exception) {
     NSLog(@"Warning. No default Ramdisk found");
@@ -232,7 +232,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   if(newIndex == _defaultRamdiskIndex) {
     return; // no change
   }
-  RMFRamdisk *oldDefault = [_favourites objectAtIndex:_defaultRamdiskIndex];
+  RMFRamdisk *oldDefault = _favourites[_defaultRamdiskIndex];
   if(oldDefault != nil && oldDefault != defaultRamdisk) {
     oldDefault.isDefault = NO;
   }
@@ -256,7 +256,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     }
   }
   if(!foundFavourite) {
-    RMFRamdisk *ramdisk = [_favourites objectAtIndex:0];
+    RMFRamdisk *ramdisk = _favourites[0];
     ramdisk.isDefault = YES;
     self.defaultRamdiskIndex = 0;
   }
@@ -272,7 +272,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 }
 
 - (id)objectInFavouritesAtIndex:(NSUInteger)index {
-  return [_favourites objectAtIndex:index];
+  return _favourites[index];
 }
 
 - (NSUInteger)countOfFavourites {

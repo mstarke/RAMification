@@ -45,18 +45,17 @@ typedef enum RMFSizeSuffixType {
 }
 
 + (NSString *)nameForSuffix:(RMFSizeSuffix)suffix {
-  return [RMFSuffixNames objectForKey:[NSNumber numberWithInt:suffix ]];
+  return RMFSuffixNames[@((int)suffix)];
   
 }
 
 + (NSNumber *)exponentForSuffix:(RMFSizeSuffix)suffix {
-  return [RMFSuffixExponents objectForKey:[NSNumber numberWithInt:suffix ]];
+  return RMFSuffixExponents[@((int)suffix)];
 }
 
 + (NSDictionary *)dictForSuffix:(RMFSizeSuffix)suffix andValue:(double)value {
-  return [NSDictionary dictionaryWithObjectsAndKeys:
-          [NSNumber numberWithInt:suffix], kRMFSizeFormatterSuffixKey,
-          [NSNumber numberWithDouble:value], kRMFSizeFormatterValueKey, nil];
+  return @{kRMFSizeFormatterSuffixKey: @((int)suffix),
+          kRMFSizeFormatterValueKey: @(value)};
 }
 
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number {
@@ -71,13 +70,13 @@ typedef enum RMFSizeSuffixType {
 }
 
 + (NSString *)stringForSizeRepresentation:(NSDictionary *)dict {
-  RMFSizeSuffix suffix = [[dict objectForKey:kRMFSizeFormatterSuffixKey] intValue];
+  RMFSizeSuffix suffix = [dict[kRMFSizeFormatterSuffixKey] intValue];
   NSString *suffixName = [RMFSizeFormatter nameForSuffix:suffix];
-  const double preciseValue = [[dict objectForKey:kRMFSizeFormatterValueKey] doubleValue];
+  const double preciseValue = [dict[kRMFSizeFormatterValueKey] doubleValue];
   const double displayValue = (floor(preciseValue * 100) / 100);
   const double delta = preciseValue - displayValue;
   NSString *formatString = ( delta >= 0.01 ) ? @"%.0f %@" : @"%.2f %@";
-  return [NSString stringWithFormat:formatString, [[dict objectForKey:kRMFSizeFormatterValueKey] doubleValue], suffixName];
+  return [NSString stringWithFormat:formatString, [dict[kRMFSizeFormatterValueKey] doubleValue], suffixName];
 }
 
 + (RMFSizeSuffix)suffixForString:(NSString *)string {
@@ -114,7 +113,7 @@ typedef enum RMFSizeSuffixType {
     NSString *suffixPart = [string substringFromIndex:[numberScanner scanLocation]];
     NSString *cleanSuffix = [suffixPart stringByReplacingOccurrencesOfString:@" " withString:@""];
     RMFSizeSuffix suffixType = [RMFSizeFormatter suffixForString:cleanSuffix];
-    *anObject = [NSNumber numberWithDouble:(value * (double)pow( 1024, (NSUInteger)suffixType))];
+    *anObject = @(value * (double)pow( 1024, (NSUInteger)suffixType));
   }
   
   return foundDouble;

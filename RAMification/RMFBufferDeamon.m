@@ -95,7 +95,7 @@
     return; // nothing to du;
   }
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
+  RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   if(nil == ramdisk ) {
     return; // no ramdisk;
   }

@@ -153,7 +153,7 @@
   
   for(NSString *label in [workspace fileLabels]) {
     NSUInteger index = [[workspace fileLabels] indexOfObject:label];
-    NSColor *labelColor = [labelColors objectAtIndex:index];
+    NSColor *labelColor = labelColors[index];
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:NULL keyEquivalent:@""];
     
     if(index != 0) {
@@ -233,7 +233,7 @@
   if(-1 == selectedRow) {
     return;
   }
-  RMFRamdisk *selectedFavourite = [favouriteManager.favourites objectAtIndex:selectedRow];
+  RMFRamdisk *selectedFavourite = (favouriteManager.favourites)[selectedRow];
   [favouriteManager deleteFavourite:selectedFavourite];
   //[_favouritesTableView reloadData];
 }
@@ -283,7 +283,7 @@
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
+  RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];

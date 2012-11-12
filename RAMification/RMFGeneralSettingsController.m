@@ -102,7 +102,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   for(NSString *label in actionArray) {
     NSMenuItem *menuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:nil keyEquivalent:@""];
     NSUInteger index = [actionArray indexOfObject:label];
-    [menuItem setRepresentedObject:[backupIntervals objectAtIndex:index]];
+    [menuItem setRepresentedObject:backupIntervals[index]];
     [menuItem setTarget:self];
     [backupMenu addItem:menuItem];
     [menuItem release];

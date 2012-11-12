@@ -212,7 +212,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     
   }
   NSInteger index = atEnd ? [self.favoritesMenu numberOfItems] : [self.favoritesMenu numberOfItems] - RMFFavouritesMenuIndexOffset;
-  NSArray *indexArray = [NSArray arrayWithObjects:[NSNumber numberWithInteger:index], [NSNumber numberWithInt:0], nil];
+  NSArray *indexArray = @[@(index), @0];
   NSNumber *minimum = [indexArray valueForKeyPath:@"@min.intValue"];
   [self.favoritesMenu insertItem:self.noFavouritesMenuItem atIndex:[minimum integerValue]];
 }
@@ -243,7 +243,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     }
     [item setTarget:self];
     [_favoritesMenu insertItem:item atIndex:index];
-    [_menuItemsToFavouritesMap setObject:[NSValue valueWithNonretainedObject:favorite] forKey:[NSValue valueWithNonretainedObject:item]];
+    _menuItemsToFavouritesMap[[NSValue valueWithNonretainedObject:item]] = [NSValue valueWithNonretainedObject:favorite];
     [item release];
     
     return TRUE;
@@ -295,7 +295,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 - (void)handleFavouriteClicked:(id)sender {
   NSMenuItem* item = sender;
-  NSValue *presetId = [_menuItemsToFavouritesMap objectForKey:[NSValue valueWithNonretainedObject:item]];
+  NSValue *presetId = _menuItemsToFavouritesMap[[NSValue valueWithNonretainedObject:item]];
   RMFRamdisk* ramdisk = [presetId nonretainedObjectValue];
   [[RMFMountController sharedController] toggleMounted:ramdisk];
 }
@@ -344,7 +344,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 # pragma mark Notifications
 - (void)ramDiskChanged:(NSNotification *)notification {
   NSDictionary *userInfo = [notification userInfo];
-  RMFRamdisk *ramdisk = [userInfo objectForKey:RMFVolumeObserverRamdiskKey];
+  RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   if(ramdisk == nil) {
     return; // no ramdisk sent
   }
@@ -362,15 +362,15 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     }
   }
   if( [keyPath isEqualToString:kRMFFavouritesManagerKeyForFavourites] ) {
-    NSUInteger changeKind = [[change objectForKey:NSKeyValueChangeKindKey] intValue];
+    NSUInteger changeKind = [change[NSKeyValueChangeKindKey] intValue];
     switch (changeKind) {
       case NSKeyValueChangeInsertion: {
-        NSArray *insertedItems = [change objectForKey:NSKeyValueChangeNewKey];
+        NSArray *insertedItems = change[NSKeyValueChangeNewKey];
         [self addFavouriteMenuItems:insertedItems atEnd:NO];
         break;
       }
       case NSKeyValueChangeRemoval: {
-        NSArray *removedItems = [change objectForKey:NSKeyValueChangeOldKey];
+        NSArray *removedItems = change[NSKeyValueChangeOldKey];
         [self removeFavouriteMenuItems:removedItems];
         break;
       }

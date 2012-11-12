@@ -29,8 +29,8 @@
 
   for(NSNumber *key in [images allKeys]) {
     NSUInteger segmentIndex = [key integerValue];
-    [[_actionSelectionControl cell] setToolTip:[toolTips objectForKey:key] forSegment:segmentIndex];
-    [_actionSelectionControl setImage:[images objectForKey:key] forSegment:segmentIndex];
+    [[_actionSelectionControl cell] setToolTip:toolTips[key] forSegment:segmentIndex];
+    [_actionSelectionControl setImage:images[key] forSegment:segmentIndex];
   }
 }
 

@@ -94,7 +94,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   if(sender == nil) {
     settingsIdentifier = [RMFGeneralSettingsController identifier];
   }
-  id<RMFSettingsControllerProtocol> visibleSettings = [_paneController objectForKey:settingsIdentifier];
+  id<RMFSettingsControllerProtocol> visibleSettings = _paneController[settingsIdentifier];
   
   if(visibleSettings == nil) {
     visibleSettings = _generalSettingsController;
@@ -127,7 +127,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   }
   
   NSDictionary *valuesDict = liveValues;
-  self.hibernateMode = [[valuesDict objectForKey:kHiberNateModeKey] intValue];
+  self.hibernateMode = [valuesDict[kHiberNateModeKey] intValue];
   
   CFRelease(liveValues);
   CFRelease(dynamicStore);
@@ -147,7 +147,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
-  id controller = [_paneController objectForKey:itemIdentifier];
+  id controller = _paneController[itemIdentifier];
   NSToolbarItem *item = [[controller class ]toolbarItem];
   [item setAction:@selector(showSettings:)];
   [item setTarget:self];

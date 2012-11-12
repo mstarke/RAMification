@@ -71,8 +71,8 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
   RMFChangedMountedFavouriteCellView *cellView = [tableView makeViewWithIdentifier:@"ChangedFavouriteView" owner:self];
-  NSMutableDictionary *rowDict = [self.changedFavouritesWrapper objectAtIndex:row];
-  RMFRamdisk *ramdisk = [rowDict objectForKey:kRMFChangedFavouriteRamdiskKey];
+  NSMutableDictionary *rowDict = (self.changedFavouritesWrapper)[row];
+  RMFRamdisk *ramdisk = rowDict[kRMFChangedFavouriteRamdiskKey];
   // Bind the Cell view to automatically update on changes
   
   [cellView.textField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
@@ -88,8 +88,8 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 - (IBAction)update:(id)sender {
   
   for(NSDictionary *wrapperDict in self.changedFavouritesWrapper) {
-    RMFChangedFavouriteUpdateAction action = (RMFChangedFavouriteUpdateAction)[[wrapperDict objectForKey:kRMFChangedFavouriteUpdateActionKey] integerValue];
-    RMFRamdisk *ramdisk = [wrapperDict objectForKey:kRMFChangedFavouriteRamdiskKey];
+    RMFChangedFavouriteUpdateAction action = (RMFChangedFavouriteUpdateAction)[wrapperDict[kRMFChangedFavouriteUpdateActionKey] integerValue];
+    RMFRamdisk *ramdisk = wrapperDict[kRMFChangedFavouriteRamdiskKey];
     
     switch(action) {
       case RMFChangedFavouriteRevertVolume: {

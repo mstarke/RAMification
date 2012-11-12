@@ -36,15 +36,15 @@
       NSString *suffixString = [filename stringByReplacingOccurrencesOfString:[baseName stringByAppendingString:@"_"] withString:@""];
       NSInteger suffix;
       [[NSScanner scannerWithString:suffixString] scanInteger:&suffix];
-      [suffixes addObject:[NSNumber numberWithInteger:suffix]];
+      [suffixes addObject:@(suffix)];
     }
     // Sort the numbers ascending
-    NSArray *descriptor = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"integerValue" ascending:YES]];
+    NSArray *descriptor = @[[NSSortDescriptor sortDescriptorWithKey:@"integerValue" ascending:YES]];
     NSArray *sortedSuffixed = [suffixes sortedArrayUsingDescriptors:descriptor];
     // Calculate next number based on biggest found
     // We do not try to fill holes
     NSNumber *maximum = [sortedSuffixed lastObject];
-    NSNumber *nextSuffix = [NSNumber numberWithInteger:( [maximum integerValue] + 1 ) ];
+    NSNumber *nextSuffix = @( [maximum integerValue] + 1 );
     
     NSString *newName = [uniqueName stringByAppendingFormat:@"%@_", nextSuffix];
     // release retained old string as we do not need it anymore
