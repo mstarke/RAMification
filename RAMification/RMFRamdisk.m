@@ -32,20 +32,23 @@ NSUInteger const kRMFRamdiskDefaultSize = 512*1024*1024; // 512 Mb
 static NSDictionary *volumeIconImageNames;
 
 @interface RMFRamdisk ()
+
 @property (retain) NSDate *lastBackupDate;
 @property (retain) NSString *uuid;
 - (NSString *)_generateUUID;
 @end
 
+
 @implementation RMFRamdisk
 
+#pragma mark convinent object creation
 
 + (void)initialize {
-  volumeIconImageNames = @{ @(RMFDefaultVolumeIcon): @"Removable"};
-  [volumeIconImageNames retain];
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    volumeIconImageNames = [@{ @(RMFDefaultVolumeIcon): @"Removable"} retain];
+  });
 }
-
-#pragma mark convinent object creation
 
 + (RMFRamdisk *) ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount {
   return [[[RMFRamdisk alloc] initWithLabel:aLabel size:aSize automount:mount] autorelease];
@@ -96,12 +99,12 @@ static NSDictionary *volumeIconImageNames;
 - (id)initWithLabel:(NSString *)aLable size:(NSUInteger)aSize automount:(BOOL)automount {
   self = [super init];
   if (self)   {
-    self.size = aSize;
+    _size = aSize;
     if(aLable != nil) {
-      self.label = aLable;
+      _label = [aLable retain];
     }
     else {
-      self.label = RMFRamdiskDefaultLabel;
+      _label = [RMFRamdiskDefaultLabel retain];
     }
     _isAutomount = automount;
     _activity = RMFRamdiskIdle;
@@ -110,7 +113,7 @@ static NSDictionary *volumeIconImageNames;
     _volumeIconType = RMFDefaultVolumeIcon;
     _finderLabelIndex = 0;
     _isDefault = NO;
-    self.uuid = [self _generateUUID];
+    _uuid = [[self _generateUUID] retain];
   }
   return self;
 }
@@ -130,10 +133,10 @@ static NSDictionary *volumeIconImageNames;
 #pragma mark NSCoder
 - (id)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
-    self = [[RMFRamdisk alloc] init];
+    self = [super init];
     // retain the objects
-    self.label = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel];
-    self.uuid = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForUUID];
+    _label = [[aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel] retain];
+    _uuid = [[aDecoder decodeObjectForKey:kRMFRamdiskKeyForUUID] retain];
     // assing alementary types
     _isAutomount = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForAutomount];
     _isDefault = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForIsDefault];
@@ -144,7 +147,7 @@ static NSDictionary *volumeIconImageNames;
     
     // UUID is missing. Generate one!
     if(nil == _uuid) {
-      self.uuid = [self _generateUUID];
+      _uuid = [[self _generateUUID] retain];
     }
   }
   return self;
@@ -152,8 +155,6 @@ static NSDictionary *volumeIconImageNames;
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
-    
-    //[super encodeWithCoder:aCoder];
     // encode objects
     [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
     [aCoder encodeObject:_uuid forKey:kRMFRamdiskKeyForUUID];

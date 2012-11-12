@@ -95,7 +95,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 #pragma mark preset handling
 
--(RMFRamdisk *)addNewFavourite {
+- (RMFRamdisk *)addNewFavourite {
   RMFRamdisk* ramdisk = [self _createUniqueFavourite];
   [self _addFavourite:ramdisk];
   return ramdisk;
@@ -113,6 +113,9 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 }
 
 - (BOOL)_addFavourite:(RMFRamdisk *)ramdisk {
+  if(nil == ramdisk) {
+    return NO; // nil cannot be added
+  }
   BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
     [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
@@ -124,6 +127,12 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 }
 
 - (void)deleteFavourite:(RMFRamdisk *)ramdisk {
+  if(nil == ramdisk) {
+    return; // no ramdisk to work with
+  }
+  if(ramdisk.isMounted) {
+    [[RMFMountController sharedController] unmount:ramdisk];
+  }
   NSUInteger index = [_favourites indexOfObject:ramdisk];
   [self removeObjectFromFavouritesAtIndex:index];
   [_uuidToFavourites removeObjectForKey:ramdisk.uuid];
@@ -143,7 +152,6 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     NSLog(@"%@: Error while searching for favourite by URL. Given URL %@ is nor fileRefrence URL", [self class], url);
     return nil;
   }
-  
   for(RMFRamdisk *ramdisk in _favourites) {
     if([url isEqual:ramdisk.volumeURL]) {
       return ramdisk;
@@ -151,7 +159,6 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   }
   return nil;
 }
-
 
 - (RMFRamdisk *)findFavouriteWithBsdDevice:(NSString *)device {
   for(RMFRamdisk *ramdisk in _favourites){
@@ -175,7 +182,6 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     }
   }
 }
-
 
 - (void)_createUUIDDictionary {
   if(nil == _favourites) {

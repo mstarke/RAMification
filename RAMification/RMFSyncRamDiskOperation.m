@@ -26,7 +26,10 @@ static NSArray *_excludedPathsInSync;
 @implementation RMFSyncRamDiskOperation
 
 + (void)initialize {
-  _excludedPathsInSync = [@[ @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    _excludedPathsInSync = [@[ @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
+  });
 }
 
 - (id)init {
@@ -129,7 +132,8 @@ static NSArray *_excludedPathsInSync;
   /* Setup the rsycn task and run it */
   NSTask *rsync = [[NSTask alloc] init];
   [rsync setLaunchPath:@"/usr/bin/rsync"];
-  [rsync setArguments:arguments ];
+  [rsync setArguments:arguments];
+  [arguments release];
   [rsync launch];
   [rsync waitUntilExit];
   self.ramdisk.activity = RMFRamdiskIdle;
