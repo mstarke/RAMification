@@ -60,8 +60,13 @@ static NSDictionary *volumeIconImageNames;
 }
 
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL {
-  NSString *idFilePath = [[volumeURL path] stringByAppendingPathComponent:kRMFRamdiskIdentifierFile];
-  return [[NSFileManager defaultManager] fileExistsAtPath:idFilePath];
+  NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
+  NSError *error = nil;
+  BOOL isReachable = [idFileURL checkResourceIsReachableAndReturnError:&error];
+  if(nil != error) {
+    NSLog(@"%@: Volume at URL %@ is not Ramdisk. %@", [self class], volumeURL, [error localizedDescription]);
+  }
+  return isReachable;
 }
 
 + (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {

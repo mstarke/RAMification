@@ -200,13 +200,17 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   NSLog(@"%@: Volume %@ got renamed to %@", self, oldName, newName);
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   
-  RMFRamdisk *renamedDisk = [favouritesManager findFavouriteWithVolumeURL:oldURL];
-  if(renamedDisk != nil) {
-    NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
-    renamedDisk.label = newName;
-    renamedDisk.volumeURL = newURL;
-    [self _changeWatchedRamdiskURL:renamedDisk oldURL:oldURL newURL:newURL];
-    [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
+  BOOL didReadUUID = NO;
+  NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:newURL success:&didReadUUID];
+  if( didReadUUID ) {
+    RMFRamdisk *renamedDisk = [favouritesManager findFavouriteByUUID:uuid];
+    if(renamedDisk != nil) {
+      NSDictionary *userInfo = @{ kRMFRamdiskKey : renamedDisk, kRMFRamdiskLabelBeforeRenameKey : oldName, kRMFRamdiskVolumeURLBeforeRenameKey: oldURL };
+      renamedDisk.label = newName;
+      renamedDisk.volumeURL = newURL;
+      [self _changeWatchedRamdiskURL:renamedDisk oldURL:oldURL newURL:newURL];
+      [[NSNotificationCenter defaultCenter] postNotificationName:RMFDidRenameRamdiskNotification object:self userInfo:userInfo];
+    }
   }
 }
 
