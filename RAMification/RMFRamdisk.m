@@ -169,6 +169,12 @@ static NSDictionary *volumeIconImageNames;
   }
 }
 
+- (void)dealloc
+{
+  NSLog(@"%@: Deallocated %@", [self class], self);
+  [super dealloc];
+}
+
 - (BOOL)isEqual:(id)object {
   BOOL isEqual = NO;
   if([object isMemberOfClass:[RMFRamdisk class]]) {

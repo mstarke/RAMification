@@ -30,6 +30,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 - (BOOL)_addFavourite:(RMFRamdisk*) ramdisk;
 - (RMFRamdisk *)_createUniqueFavourite;
 - (void)_observerRamdisk:(RMFRamdisk *)ramdisk;
+- (void)_unobserverRamdisk:(RMFRamdisk *)ramdisk;
 - (void)_createUUIDDictionary;
 - (void)_synchronizeDefaults;
 - (void)_validateDefaultRamdisk;
@@ -82,12 +83,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 - (void)dealloc {
   for(RMFRamdisk *ramdisk in _favourites) {
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForAutomount];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForSize];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
+    [self _unobserverRamdisk:ramdisk];
   }
   self.favourites = nil;
   [super dealloc];
@@ -133,6 +129,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   if(ramdisk.isMounted) {
     [[RMFMountController sharedController] unmount:ramdisk];
   }
+  [self _unobserverRamdisk:ramdisk];
   NSUInteger index = [_favourites indexOfObject:ramdisk];
   [self removeObjectFromFavouritesAtIndex:index];
   [_uuidToFavourites removeObjectForKey:ramdisk.uuid];
@@ -204,6 +201,17 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForSize options:0 context:nil];
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:0 context:nil];
     [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:nil];
+  }
+}
+
+- (void)_unobserverRamdisk:(RMFRamdisk *)ramdisk {
+  if(nil != ramdisk) {
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForAutomount];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForSize];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex];
+    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
   }
 }
 

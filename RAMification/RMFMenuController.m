@@ -270,6 +270,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   if(itemId != nil) {
     // remove all key-value-observer from the removed ramdisk
     [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
+    [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
     NSMenuItem *item = [itemId nonretainedObjectValue];
     [_favoritesMenu removeItem:item];
     [_menuItemsToFavouritesMap removeObjectForKey:itemId];
