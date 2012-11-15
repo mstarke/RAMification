@@ -53,7 +53,7 @@
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
   /*
    Look for mounted ramdisks and mount any automount favourites
-   */
+   */  
   [_mountWatcher searchForMountedFavourites];
   [[RMFFavouritesManager sharedManager] automountFavourites];
 }

@@ -50,6 +50,7 @@ NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey = @"RMFVolumeObse
 - (void)_changeWatchedRamdiskURL:(RMFRamdisk *)ramdisk oldURL:(NSURL *)oldURL newURL:(NSURL *)newURL;
 - (void)_unwatchRamdisk:(RMFRamdisk *)ramdisk;
 - (void)_unwatchAllRamdisks;
+- (void)_updateFilesystemCallback;
 
 @end
 

@@ -74,26 +74,30 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 #pragma mark actions
 - (void)showSettings:(id)sender {
   /*
+   Prevent any changes if the icon selection is visible
+   */
+  if([_favouriteSettingsController.iconSelectionWindow isVisible]) {
+    return;
+  }
+  /*
    the call can originate from a NSMenuItem or a NSToolbarItem
    the NSMenuItem just sends a identifier string as sender
    the NSToolbarItem delivers itself as the sender
    */
+  
   NSString* settingsIdentifier = nil;
-  //We get a NSToolbarItem
   if([sender isMemberOfClass:[NSToolbarItem class]]) {
     settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
   }
-  // or the otherwise, we collect the string.
   else {
     if ([sender isKindOfClass:[NSString class]]) {
       settingsIdentifier = sender;
     }
+    else {
+      settingsIdentifier = [RMFGeneralSettingsController identifier];
+    }
   }
   
-  // if something went wrong, we go for the default identitifer (first tab)
-  if(sender == nil) {
-    settingsIdentifier = [RMFGeneralSettingsController identifier];
-  }
   id<RMFSettingsControllerProtocol> visibleSettings = _paneController[settingsIdentifier];
   
   if(visibleSettings == nil) {
