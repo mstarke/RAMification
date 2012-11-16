@@ -260,22 +260,35 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
    */
   for(NSString *path in paths) {
     // Check what ramdisk this event corresponds to
-    NSURL *volumeURL = [NSURL fileURLWithPath:path isDirectory:YES];
-    RMFRamdisk *affectedRamdisk = _watchedRamdisks[volumeURL];
-    if(nil == affectedRamdisk) {
-      continue; // nothing to do
-    }
     NSUInteger index = [paths indexOfObject:path];
     FSEventStreamEventFlags flag = flags[index];
     NSLog(@"FS Event for %@ flag: %d", path, flag);
+    
+    RMFRamdisk *affectedRamdisk = nil;
+    BOOL didMatchPath = NO;
+    for(NSURL *url in _watchedRamdisks ) {
+      if([path hasPrefix:[url path]]) {
+        affectedRamdisk = _watchedRamdisks[url];
+        didMatchPath = YES;
+        continue;
+      }
+    }
+    if(NO == didMatchPath) {
+      return; // we did not find a path
+    }
     if(flag & kFSEventStreamEventFlagItemCreated) {
       NSLog(@"Created");
       NSDictionary *userInfo = @{ RMFVolumeObserverRamdiskKey: affectedRamdisk, RMFVolumeObserverPathOfCreatedFileOnRamdiskKey: path };
       [[NSNotificationCenter defaultCenter] postNotificationName:RMFVolumeObserverDidCreateFileOnRamdiskNotification object:self userInfo:userInfo];
     }
-    if(flag & kFSEventStreamEventFlagItemXattrMod) {
+    /*
+     Modification is only necessary if it happens on the volume,
+     everything else we do not care about
+     */
+    const BOOL didModifyFileVolume = (flag & kFSEventStreamEventFlagItemXattrMod) && [[affectedRamdisk.volumeURL path] isEqualToString:path];
+    if(didModifyFileVolume) {
       NSError *error = nil;
-      NSDictionary *resourceValues = [volumeURL resourceValuesForKeys:@[NSURLLabelNumberKey] error:&error];
+      NSDictionary *resourceValues = [affectedRamdisk.volumeURL resourceValuesForKeys:@[NSURLLabelNumberKey] error:&error];
       if(nil == error) {
         NSUInteger currentLabelIndex = [resourceValues[NSURLLabelNumberKey] integerValue];
         NSLog(@"%@: Testing for label change on Ramdisk %@", [self class], affectedRamdisk);
