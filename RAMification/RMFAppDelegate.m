@@ -7,11 +7,14 @@
 //
 
 #import "RMFAppDelegate.h"
+
+#import "RMFSettingsKeys.h"
 #import "RMFFavouritesManager.h"
 #import "RMFMenuController.h"
 #import "RMFVolumeObserver.h"
 #import "RMFSyncDaemon.h"
 #import "RMFBufferDeamon.h"
+
 
 @interface RMFAppDelegate ()
 
@@ -19,6 +22,7 @@
 @property (retain) RMFVolumeObserver *mountWatcher;
 @property (retain) RMFSyncDaemon *syncDaemon;
 @property (retain) RMFBufferDeamon *bufferDaemon;
+@property (nonatomic, assign) BOOL canTerminateSuddenly;
 
 @end
 
@@ -40,10 +44,26 @@
   // remove the toolbardelegate from the 
 }
 
-#pragma mark NSApplicationDelegate protocoll
+#pragma mark setter/getter
+- (void)setCanTerminateSuddenly:(BOOL)canTerminateSuddenly {
+  if(_canTerminateSuddenly != canTerminateSuddenly) {
+    _canTerminateSuddenly = canTerminateSuddenly;
+    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+    _canTerminateSuddenly ?  [processInfo enableSuddenTermination] : [processInfo disableSuddenTermination];
+    NSString *statusString = _canTerminateSuddenly ? @"Enabled" : @"Disabled";
+    NSLog(@"%@ sudden termination", statusString );
+  }
+}
 
+#pragma mark NSApplicationDelegate protocoll
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   [NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
+  /*
+   Esablish defaults binding to ensure correct sudden termination behaviour
+   */
+  NSString *keyPath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyUnmountOnQuit];
+  NSDictionary *bindingOptions = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
+  [self bind:@"canTerminateSuddenly" toObject:[NSUserDefaultsController sharedUserDefaultsController] withKeyPath:keyPath options:bindingOptions];
   /*
    Initialize all Controllers and Daemons that work independently
    */

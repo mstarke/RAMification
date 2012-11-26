@@ -258,6 +258,7 @@
 }
 
 - (IBAction)selectVolumeIcon:(id)sender {
+  
   if(self.iconSelectionWindow == nil) {
     NSArray *topLevelObjects;
     [[NSBundle mainBundle] loadNibNamed:@"VolumeIconSelection"owner:self topLevelObjects:&topLevelObjects];
