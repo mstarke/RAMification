@@ -54,6 +54,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ## Credits
-This Tool makes use of the following software
-[LaunchAtLoginController](https://github.com/Mozketo/LaunchAtLoginController#readme) by Ben Clark-Robinson licensed under the MIT License
+This Tool makes use of the following software:
+
+[LaunchAtLoginController](https://github.com/Mozketo/LaunchAtLoginController#readme) by Ben Clark-Robinson licensed under the MIT License  
 [VDKQueue](https://github.com/bdkjones/VDKQueue) &copy; 2012 Bryan D K Jones based on [UKKQueue](http://zathras.de/sourcecode.htm#UKKQueue) &copy; 2003 Uli Kusterer
