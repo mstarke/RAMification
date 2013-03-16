@@ -29,9 +29,10 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  const NSRect myFrame = [self frame];
+  const NSRect originalFrame = [self frame];
+  const NSRect drawRect = [self bounds];
   if(_finderLabelIndex != 0) {
-    const NSRect adjustedRect = NSMakeRect(dirtyRect.origin.x + .5, dirtyRect.origin.y + .5, dirtyRect.size.width - 1, dirtyRect.size.height - 1);
+    const NSRect adjustedRect = NSMakeRect(drawRect.origin.x + .5, drawRect.origin.y + .5, drawRect.size.width - 1, drawRect.size.height - 1);
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:adjustedRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
     
     NSColor *lableColor = [self finderLabelColor];
@@ -44,7 +45,7 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
     [self setNeedsDisplay:YES];
   }
   [super drawRect:dirtyRect];
-  [self setFrame:myFrame];
+  [self setFrame:originalFrame];
 }
 
 - (NSColor *)finderLabelColor {

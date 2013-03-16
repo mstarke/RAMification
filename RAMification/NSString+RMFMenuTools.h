@@ -11,7 +11,7 @@
 @interface NSString (RMFMenuTools)
 
 /*
- Returns aString with appendedn dots
+ Returns aString with appended dots
  */
 + (NSString *)stringByAddingDots:(NSString *)aString;
 

@@ -85,7 +85,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   for(RMFRamdisk *ramdisk in _favourites) {
     [self _unobserverRamdisk:ramdisk];
   }
-  self.favourites = nil;
+  [_favourites release];
   [super dealloc];
 }
 

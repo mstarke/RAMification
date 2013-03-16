@@ -14,14 +14,11 @@
 #import "RMFMountController.h"
 #import "RMFSizeFormatter.h"
 #import "RMFArrayController.h"
-#import "RMFFavouritesArrayControllerDelegate.h"
 #import "RMFSettingsController.h"
 
 @interface RMFFavouritesSettingsController () {
   RMFArrayController *_favouritesController;
-  RMFFavouritesArrayControllerDelegate *_favouritesControllerDelegate;
 }
-
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
 
 - (void)didLoadView;
@@ -69,8 +66,7 @@
 
 - (void)dealloc {
   [_favouritesController release];
-  [_favouritesControllerDelegate release];
-  self.tableDelegate = nil;
+  [_tableDelegate release];
   [super dealloc];
 }
 
@@ -85,8 +81,6 @@
   
   // Array controller for the table view selection
   _favouritesController = [[RMFArrayController alloc] init];
-  _favouritesControllerDelegate = [[RMFFavouritesArrayControllerDelegate alloc] init];
-  _favouritesController.delegate = _favouritesControllerDelegate;
   
   [_favouritesController bind:NSContentArrayBinding toObject:[RMFFavouritesManager sharedManager] withKeyPath:kRMFFavouritesManagerKeyForFavourites options:nil];
   [_favouriteColumn bind:NSValueBinding toObject:_favouritesController withKeyPath:NSContentArrayBinding options:nil];
@@ -111,17 +105,18 @@
   NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForVolumeIcon];
   NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
   NSString *isMountedKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsMounted];
+  NSString *isDefaultFavourite = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsDefault];
   
-  
+  NSDictionary *negateBooleanOption = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
-  [_labelTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
+  [_labelTextField bind:NSEnabledBinding toObject:_favouritesController withKeyPath:isMountedKeyPath options:negateBooleanOption];
   [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
-  [_sizeTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:@{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName }];
+  [_sizeTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:negateBooleanOption];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
   [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
-  [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:@"canRemove" options:nil];
+  [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:isDefaultFavourite options:negateBooleanOption];
   
   [_volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
   [_sizeWarningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
@@ -292,44 +287,24 @@
 }
 
 - (NSImage *)labelImageWithColor:(NSColor *)color {
-  NSRect imageRect = NSMakeRect(0.0, 0.0, 16, 16.0);
-  NSRect labelRect = NSMakeRect(0.5, 0.5, imageRect.size.width - 4.0, imageRect.size.width - 4.0);
-  NSRect highlightRect = NSMakeRect(labelRect.origin.x + 1.0, labelRect.origin.y + 1.0, labelRect.size.height - 2.0, labelRect.size.width - 2.0);
-  NSBitmapImageRep* offscreenRep = nil;
-  
-  offscreenRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
-                                                         pixelsWide:imageRect.size.width
-                                                         pixelsHigh:imageRect.size.height
-                                                      bitsPerSample:8
-                                                    samplesPerPixel:4
-                                                           hasAlpha:YES
-                                                           isPlanar:NO
-                                                     colorSpaceName:NSCalibratedRGBColorSpace
-                                                       bitmapFormat:0
-                                                        bytesPerRow:(4 * imageRect.size.width)
-                                                       bitsPerPixel:32];
-  
-  [NSGraphicsContext saveGraphicsState];
-  [NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:offscreenRep]];
-  
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:3.0 yRadius:3.0];
-  NSBezierPath *hightlightPath = [NSBezierPath bezierPathWithRoundedRect:highlightRect xRadius:2.0 yRadius:2.0];
-  
-  [color setFill];
-  [[color shadowWithLevel:0.5] setStroke];
-  
-  [path fill];
-  [path stroke];
-  [[color highlightWithLevel:0.5] setStroke];
-  [hightlightPath stroke];
-  
-  [NSGraphicsContext restoreGraphicsState];
-  NSImage *image = [[NSImage alloc] initWithSize:imageRect.size];
-  [image addRepresentation:offscreenRep];
-  
-  [offscreenRep release];
-  
-  return [image autorelease];
+  return [NSImage imageWithSize:NSMakeSize(16, 16) flipped:NO drawingHandler:^BOOL(NSRect destRect){
+    NSRect labelRect = NSMakeRect(0.5, 0.5, destRect.size.width - 4.0, destRect.size.width - 4.0);
+    NSRect highlightRect = NSMakeRect(labelRect.origin.x + 1.0, labelRect.origin.y + 1.0, labelRect.size.height - 2.0, labelRect.size.width - 2.0);
+    
+    NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:labelRect xRadius:3.0 yRadius:3.0];
+    NSBezierPath *hightlightPath = [NSBezierPath bezierPathWithRoundedRect:highlightRect xRadius:2.0 yRadius:2.0];
+    
+    [color setFill];
+    [[color shadowWithLevel:0.5] setStroke];
+    
+    [path fill];
+    [path stroke];
+    [[color highlightWithLevel:0.5] setStroke];
+    [hightlightPath stroke];
+    
+    return YES;
+
+  }];
 }
 
 

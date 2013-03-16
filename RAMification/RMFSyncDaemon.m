@@ -183,7 +183,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   if (ramdisk.backupMode == RMFNoBackup || ramdisk.activity == RMFRamdiskBackup) {
     return; // no backups enabeld or at leas one backup in processs
   }
-  RMFRamdiskBackupMode backupMode = shouldEject ? RMFSyncModeBackupAndEject : RMFSyncModeBackup;
+  RMFSyncMode backupMode = shouldEject ? RMFSyncModeBackupAndEject : RMFSyncModeBackup;
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:backupMode];
   [self.queue addOperation:operation];
   [operation release];

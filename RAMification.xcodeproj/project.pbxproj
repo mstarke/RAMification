@@ -37,15 +37,12 @@
 		4C744ECA149917B90058D2D7 /* RMFVolumeObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C744EC9149917B90058D2D7 /* RMFVolumeObserver.m */; };
 		4C82CEC3148053BB009E61C8 /* RMFSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C82CEC2148053BB009E61C8 /* RMFSettingsController.m */; };
 		4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */; };
-		4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */; };
 		4C93C235164D5A6100104398 /* VolumeIconSelection.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C93C234164D5A6100104398 /* VolumeIconSelection.xib */; };
-		4C9918D216698C7300321B5A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C9918CF16698C7300321B5A /* README.md */; };
 		4C9918D316698C7300321B5A /* VDKQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9918D116698C7300321B5A /* VDKQueue.m */; };
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
 		4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFRamdisk.m */; };
 		4CB6100B148AA3D800166397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB61009148AA3D800166397 /* Localizable.strings */; };
 		4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */; };
-		4CBE8D71148C30D100747A33 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6F148C30D100747A33 /* README.md */; };
 		4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */; };
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
 		4CC52F7D14819BB60006C278 /* FavouritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavouritesPane.xib */; };
@@ -113,8 +110,6 @@
 		4C85E6BE16237E2B00A5CCCC /* RMFArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFArrayController.h; sourceTree = "<group>"; };
 		4C85E6BF16237E2B00A5CCCC /* RMFArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFArrayController.m; sourceTree = "<group>"; };
 		4C85E6C216237E5F00A5CCCC /* RMFArrayControllerDelegateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMFArrayControllerDelegateProtocol.h; sourceTree = "<group>"; };
-		4C85E6C31623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesArrayControllerDelegate.h; sourceTree = "<group>"; };
-		4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesArrayControllerDelegate.m; sourceTree = "<group>"; };
 		4C93C234164D5A6100104398 /* VolumeIconSelection.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeIconSelection.xib; sourceTree = "<group>"; };
 		4C9918CF16698C7300321B5A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		4C9918D016698C7300321B5A /* VDKQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VDKQueue.h; sourceTree = "<group>"; };
@@ -239,8 +234,6 @@
 				4C5BDB6D147EF6AD000E19B0 /* RMFAppDelegate.m */,
 				4C34B6AB1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.h */,
 				4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */,
-				4C85E6C31623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.h */,
-				4C85E6C41623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -413,7 +406,7 @@
 		4C5BDB4D147EF6AD000E19B0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "HicknHack Software GmbH";
 			};
 			buildConfigurationList = 4C5BDB50147EF6AD000E19B0 /* Build configuration list for PBXProject "RAMification" */;
@@ -447,7 +440,6 @@
 				4CD4B7A71482B4C8002DC1F2 /* Defaults.plist in Resources */,
 				4CEDE68B14830269002A5A95 /* MenuItemIconTemplate.pdf in Resources */,
 				4CB6100B148AA3D800166397 /* Localizable.strings in Resources */,
-				4CBE8D71148C30D100747A33 /* README.md in Resources */,
 				4C73968D1614BDB100912443 /* favourite.tiff in Resources */,
 				4C701A3B161FBDA800547F17 /* Removable.icns in Resources */,
 				4C39C0E816492C9700B2D936 /* ChangedMountedFavourites.xib in Resources */,
@@ -456,7 +448,6 @@
 				4C505D74164AB3DB008DB224 /* VolumeTemplate.pdf in Resources */,
 				4C3F4F1F164AE61E0071508B /* FavouriteTemplate.pdf in Resources */,
 				4C93C235164D5A6100104398 /* VolumeIconSelection.xib in Resources */,
-				4C9918D216698C7300321B5A /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,7 +480,6 @@
 				4C1BC7001609212000A7720C /* NSString+RMFMenuTools.m in Sources */,
 				4CD7D92C1620DE2700BF0746 /* RMFFavouriteCellView.m in Sources */,
 				4C85E6C016237E2B00A5CCCC /* RMFArrayController.m in Sources */,
-				4C85E6C51623827100A5CCCC /* RMFFavouritesArrayControllerDelegate.m in Sources */,
 				4C39C0EF16492E7700B2D936 /* RMFChangedMountedFavouritesController.m in Sources */,
 				4C1C452B16495FD4001A454C /* RMFChangedMountedFavouriteCellView.m in Sources */,
 				4C361F16164D52C600E30954 /* RMFLabelTextField.m in Sources */,
@@ -539,7 +529,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLY_RULES_IN_COPY_FILES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -550,14 +545,16 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 			};
 			name = Debug;
 		};
@@ -565,18 +562,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLY_RULES_IN_COPY_FILES = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 			};
 			name = Release;
 		};
