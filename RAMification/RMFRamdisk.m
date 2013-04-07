@@ -23,6 +23,7 @@ NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
 NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
 NSString *const kRMFRamdiskKeyForUUID = @"uuid";
 NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
+NSString *const kRMFRamdiskVolumeIconFileName = @"VolumeIcon.icns";
 
 // private constants
 NSString *const kRMFRamdiskNeverIndexFileName = @".metadata_never_index";
@@ -63,6 +64,9 @@ static NSDictionary *volumeIconImageNames;
 }
 
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL {
+  if(![volumeURL isFileURL]) {
+    return NO; // No valid file URL
+  }
   NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
   NSError *error = nil;
   BOOL isReachable = [idFileURL checkResourceIsReachableAndReturnError:&error];
@@ -74,7 +78,15 @@ static NSDictionary *volumeIconImageNames;
 
 + (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {
   
-  assert(success != 0);
+  if(success != 0) {
+    NSException *invalidArgumentException = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Success pointer cannot be NULL" userInfo:nil];
+    @throw invalidArgumentException;
+  }
+  
+  if(![volumeURL isFileURL]) {
+    success = NO;
+    return nil; // No valid file URL
+  }
   
   NSError *readError = nil;
   NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
@@ -88,6 +100,14 @@ static NSDictionary *volumeIconImageNames;
     *success = YES;
   }
   return uuid;
+}
+
++ (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL {
+  if(![volumeURL isFileURL]) {
+    return NO; // No valid volume URL given
+  }
+  NSURL *volumeIconURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskVolumeIconFileName];
+  return [volumeIconURL checkResourceIsReachableAndReturnError:nil];
 }
 
 #pragma mark object lifecycle

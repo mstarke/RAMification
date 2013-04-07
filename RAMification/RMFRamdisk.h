@@ -19,6 +19,7 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsMounted;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsDefault;
 APPKIT_EXTERN NSString *const kRMFRamdiskIdentifierFile;
+APPKIT_EXTERN NSString *const kRMFRamdiskVolumeIconFileName;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -35,6 +36,7 @@ typedef enum RMFRamdiskBackupModeType {
 
 typedef enum RMFRamdiskVolumeIconType {
   RMFDefaultVolumeIcon,
+  RMFCustomVolumeIcon,
   RMFVolumeIconCount // Counter not to be assigned!
 } RMFRamdiskVolumeIcon;
 
@@ -62,6 +64,7 @@ typedef enum RMFRamdiskVolumeIconType {
 + (RMFRamdisk *)defaultRamdisk;
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL;
 + (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success;
++ (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL;
 
 - (id)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount;
 // Call this function to indicate that this ramdisk was just backed up
