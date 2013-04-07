@@ -98,7 +98,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
     }
   }
   
-  id<RMFSettingsControllerProtocol> visibleSettings = _paneController[settingsIdentifier];
+  id<RMFSettingsTabController> visibleSettings = _paneController[settingsIdentifier];
   
   if(visibleSettings == nil) {
     visibleSettings = _generalSettingsController;

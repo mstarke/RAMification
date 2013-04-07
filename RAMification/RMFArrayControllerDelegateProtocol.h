@@ -12,7 +12,7 @@
 /*
  Protocoll to conform to when being used as a RMFArrayController Delegate
  */
-@protocol RMFArrayControllerDelegateProtocol <NSObject>
+@protocol RMFArrayControllerDelegate <NSObject>
 
 @optional
 - (BOOL)canRemoveWithArrayController:(RMFArrayController *)arrayController;

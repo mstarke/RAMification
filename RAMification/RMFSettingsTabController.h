@@ -11,7 +11,7 @@
 /*
  Protocoll for Settings controller that can be added in the Settings window
  */
-@protocol RMFSettingsControllerProtocol <NSObject>
+@protocol RMFSettingsTabController <NSObject>
 
 @required
 // Unique identifier for the settings controller

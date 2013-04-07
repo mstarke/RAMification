@@ -7,6 +7,7 @@
 //
 
 #import "RMFFavouritesSettingsController.h"
+#import "RMFScriptEditorController.h"
 #import "RMFRamdisk.h"
 #import "RMFAppDelegate.h"
 #import "RMFFavouritesManager.h"
@@ -20,6 +21,7 @@
   RMFArrayController *_favouritesController;
 }
 @property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
+@property (retain) RMFScriptEditorController *scriptController;
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
@@ -32,6 +34,8 @@
 - (void)toggleMount:(id)sender;
 - (void)makeDefaultRamdisk:(id)sender;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+
+- (RMFRamdisk *)_selectedRamdisk;
 
 @end
 
@@ -67,6 +71,7 @@
 - (void)dealloc {
   [_favouritesController release];
   [_tableDelegate release];
+  [_scriptController release];
   [super dealloc];
 }
 
@@ -106,17 +111,20 @@
   NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
   NSString *isMountedKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsMounted];
   NSString *isDefaultFavourite = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsDefault];
+  NSString *hasMountScript = [NSString stringWithFormat:selection, kRMFRamdiskKeyForHasMountScript];
   
   NSDictionary *negateBooleanOption = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
   [_labelTextField bind:NSEnabledBinding toObject:_favouritesController withKeyPath:isMountedKeyPath options:negateBooleanOption];
-  [_detailIsAutoMount bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
+  [_isAutoMountCheckButton bind:NSValueBinding toObject:_favouritesController withKeyPath:automountKeyPath options:nil];
   [_sizeTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:sizeKeyPath options:nil];
   [_sizeTextField bind:NSEnabledBinding  toObject:_favouritesController withKeyPath:isMountedKeyPath options:negateBooleanOption];
   [_backupPopUpButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:backupModeKeyPath options:nil];
   [_volumeIconImageView bind:NSValueBinding toObject:_favouritesController withKeyPath:volumeIconKeyPath options:nil];
   [_labelPopupButton bind:NSSelectedIndexBinding toObject:_favouritesController withKeyPath:finderLabelIndexKeyPath options:nil];
   [_removeRamdiskButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:isDefaultFavourite options:negateBooleanOption];
+  [_useMountScriptCheckButton bind:NSValueBinding toObject:_favouritesController withKeyPath:hasMountScript options:nil];
+  [_editScriptButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:hasMountScript options:nil];
   
   [_volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
   [_sizeWarningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
@@ -275,6 +283,20 @@
   [[NSApplication sharedApplication] endSheet:self.iconSelectionWindow returnCode:NSRunContinuesResponse];
 }
 
+- (IBAction)showScriptEditor:(id)sender {
+  if(!self.scriptController) {
+    _scriptController = [[RMFScriptEditorController alloc] init];
+  }
+  [self.scriptController showScriptForRamdisk:[self _selectedRamdisk]];
+}
+
+- (IBAction)toggleUseMountScript:(id)sender {
+  NSInteger state = [self.useMountScriptCheckButton state];
+  [self.editScriptButton setEnabled:(state == NSOnState)];
+  if(state == NSOffState) {
+    [self _selectedRamdisk].mountScript = nil;
+  }
+}
 
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
@@ -307,5 +329,10 @@
   }];
 }
 
+#pragma mark Helper
+
+- (RMFRamdisk *)_selectedRamdisk {
+  return [[RMFFavouritesManager sharedManager] favourites][[_favouritesController selectionIndex]];
+}
 
 @end

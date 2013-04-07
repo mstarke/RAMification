@@ -19,7 +19,13 @@ APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsMounted;
 APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsDefault;
 APPKIT_EXTERN NSString *const kRMFRamdiskIdentifierFile;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForMountScript;
+APPKIT_EXTERN NSString *const kRMFRamdiskKeyForHasMountScript;
+
+// Usefull constants
 APPKIT_EXTERN NSString *const kRMFRamdiskVolumeIconFileName;
+
+@class RMFRamdiskScript;
 
 typedef enum RMFRamdiskAcitivyMode {
   RMFRamdiskIdle, // Ramdisk is ready
@@ -54,10 +60,12 @@ typedef enum RMFRamdiskVolumeIconType {
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;
 @property (nonatomic, assign) NSUInteger finderLabelIndex;
 @property (nonatomic, readonly) NSImage *volumeIcon;
+@property (retain) RMFRamdiskScript *mountScript;
 @property (retain, readonly) NSDate *lastBackupDate;
 @property (assign) BOOL isMounted;
 @property (assign) BOOL isAutomount;
 @property (assign) BOOL isDefault;
+@property (assign, readonly, nonatomic) BOOL hasMountScript;
 
 + (RMFRamdisk *)ramdiskWithData:(NSData *)data;
 + (RMFRamdisk *)ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount;

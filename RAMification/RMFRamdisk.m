@@ -22,6 +22,11 @@ NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
 NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
 NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
 NSString *const kRMFRamdiskKeyForUUID = @"uuid";
+NSString *const kRMFRamdiskKeyForMountScript = @"mountScript";
+NSString *const kRMFRamdiskKeyForHasMountScript = @"hasMountScript";
+
+
+// Filenames
 NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
 NSString *const kRMFRamdiskVolumeIconFileName = @"VolumeIcon.icns";
 
@@ -36,6 +41,7 @@ static NSDictionary *volumeIconImageNames;
 
 @property (retain) NSDate *lastBackupDate;
 @property (retain) NSString *uuid;
+@property (assign, nonatomic) BOOL hasMountScript;
 - (NSString *)_generateUUID;
 @end
 
@@ -78,7 +84,7 @@ static NSDictionary *volumeIconImageNames;
 
 + (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {
   
-  if(success != 0) {
+  if(success == 0) {
     NSException *invalidArgumentException = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Success pointer cannot be NULL" userInfo:nil];
     @throw invalidArgumentException;
   }
@@ -164,6 +170,7 @@ static NSDictionary *volumeIconImageNames;
     _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
     _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
     _finderLabelIndex = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForFinderLabelIndex];
+    _mountScript = [[aDecoder decodeObjectForKey:kRMFRamdiskKeyForMountScript] retain];
     
     // UUID is missing. Generate one!
     if(nil == _uuid) {
@@ -178,6 +185,7 @@ static NSDictionary *volumeIconImageNames;
     // encode objects
     [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
     [aCoder encodeObject:_uuid forKey:kRMFRamdiskKeyForUUID];
+    [aCoder encodeObject:_mountScript forKey:kRMFRamdiskKeyForMountScript];
     
     // encode integral types
     [aCoder encodeBool:_isAutomount forKey:kRMFRamdiskKeyForAutomount];
@@ -205,6 +213,15 @@ static NSDictionary *volumeIconImageNames;
 }
 
 #pragma mark custom setter/getter
+- (BOOL)hasMountScript {
+  return (self.mountScript != nil);
+}
+
+- (void)setHasMountScript:(BOOL)hasMountScript {
+  return; // Do nothing as this property is Read only.
+}
+
+
 - (NSImage *)volumeIcon {
   NSString *imageName = volumeIconImageNames[@(self.volumeIconType)];
   return [NSImage imageNamed:imageName];

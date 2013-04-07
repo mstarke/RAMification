@@ -7,11 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "RMFSettingsControllerProtocol.h"
+#import "RMFSettingsTabController.h"
 #import "RMFFavouritesTableViewDelegate.h"
 
 
-@interface RMFFavouritesSettingsController : NSViewController <RMFSettingsControllerProtocol> {
+@interface RMFFavouritesSettingsController : NSViewController <RMFSettingsTabController> {
   NSDictionary *columIdentifier;
 }
 
@@ -24,11 +24,13 @@
 @property (assign) IBOutlet NSPopUpButton *backupPopUpButton;
 @property (assign) IBOutlet NSPopUpButton *labelPopupButton;
 @property (assign) IBOutlet NSPopUpButton *actionPopupButton;
-@property (assign) IBOutlet NSButton *detailIsAutoMount;
+@property (assign) IBOutlet NSButton *isAutoMountCheckButton;
 @property (assign) IBOutlet NSButton *addRamdiskButton;
 @property (assign) IBOutlet NSButton *removeRamdiskButton;
 @property (assign) IBOutlet NSImageView *sizeWarningImageView;
 @property (retain) IBOutlet NSWindow *iconSelectionWindow;
+@property (assign) IBOutlet NSButton *editScriptButton;
+@property (assign) IBOutlet NSButton *useMountScriptCheckButton;
 
 
 - (IBAction)addPreset:(id)sender;
@@ -36,5 +38,7 @@
 - (IBAction)selectVolumeIcon:(id)sender;
 - (IBAction)cancelIconSelection:(id)sender;
 - (IBAction)finishedIconSelection:(id)sender;
+- (IBAction)showScriptEditor:(id)sender;
+- (IBAction)toggleUseMountScript:(id)sender;
 
 @end

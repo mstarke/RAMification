@@ -7,8 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "RMFSettingsControllerProtocol.h"
+#import "RMFSettingsTabController.h"
 
-@interface RMFGeneralSettingsController : NSViewController <RMFSettingsControllerProtocol>
+@interface RMFGeneralSettingsController : NSViewController <RMFSettingsTabController>
 
 @end
