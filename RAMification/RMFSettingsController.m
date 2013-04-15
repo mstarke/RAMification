@@ -118,7 +118,8 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   [_settingsWindow setContentView:settingsView];
   [_settingsWindow setTitle:[[visibleSettings class ]label]];
   [_settingsWindow setIsVisible:YES];
-  [_settingsWindow makeKeyAndOrderFront:self];
+  [_settingsWindow makeKeyAndOrderFront:nil];
+  [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
 #pragma mark system env retrieval
