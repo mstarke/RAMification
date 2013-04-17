@@ -22,7 +22,7 @@ Not all Features are implemented yet.
 * manage favourites (volume name, size, backup mode, automount on launch)
 * automount favourites
 * autosync favourites (backup on unmount, restore on mount, etc. )
-* autoresize favourites
+* autoresize favourites (currently unsupported)
 * autorename favourites based on file system activity
 * block unmounting of favourites without (configured) backups
 * customize icons for each ramdisk
