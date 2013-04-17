@@ -27,6 +27,14 @@ Not all Features are implemented yet.
 * block unmounting of favourites without (configured) backups
 * customize icons for each ramdisk
 
+## Screenshots
+
+![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Menuitem.png)
+![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Preferences%20-%20Favourites.png)
+![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Preferences%20-%20General.png)
+![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Autodetection.png)
+
+
 ## Disclaimer
 
 The tool is in heavy development and may very well not work at all or break things on your machine. Use at your own risk.
