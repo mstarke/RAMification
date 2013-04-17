@@ -29,10 +29,10 @@ Not all Features are implemented yet.
 
 ## Screenshots
 
+
 ![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Menuitem.png)
+
 ![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Preferences%20-%20Favourites.png)
-![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Preferences%20-%20General.png)
-![image](https://raw.github.com/mstarke/RAMification/master/Assets/Screenshots/Autodetection.png)
 
 
 ## Disclaimer
