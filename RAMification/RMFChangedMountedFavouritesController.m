@@ -32,9 +32,6 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 @property (retain) NSMutableArray *changedFavouritesWrapper;
 @property (retain) NSArrayController *favouritesController;
 
-- (IBAction)cancel:(id)sender;
-- (IBAction)update:(id)sender;
-
 @end
 
 @implementation RMFChangedMountedFavouritesController

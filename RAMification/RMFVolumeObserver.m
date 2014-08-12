@@ -40,19 +40,9 @@ NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey = @"RMFVolumeObse
 @property (retain) NSMutableDictionary *watchedRamdiskURLs;
 @property (assign) FSEventStreamEventId lastEventId;
 
-- (void)_didMountVolume:(NSNotification *)notification;
-- (void)_didUnmountVolume:(NSNotification *)notification;
-- (void)_didRenameVolume:(NSNotification *)notification;
-- (void)_setupMountedRamdisk:(RMFRamdisk *)ramdisk volumeURL:(NSURL *)volumeURL wasMountedAtStartup:(BOOL)wasMounted;
-- (void)_showChangedRamdisksWindow:(NSArray *)ramdisks;
-- (void)_eventsAtPath:(NSArray *)paths flags:(const FSEventStreamEventFlags[])flags;
-- (void)_watchRamdisk:(RMFRamdisk *)ramdisk;
-- (void)_changeWatchedRamdiskURL:(RMFRamdisk *)ramdisk oldURL:(NSURL *)oldURL newURL:(NSURL *)newURL;
-- (void)_unwatchRamdisk:(RMFRamdisk *)ramdisk;
-- (void)_unwatchAllRamdisks;
-- (void)_updateFilesystemCallback;
-
 @end
+
+@implementation RMFVolumeObserver
 
 /*
  FSEvent callback bridign to RMFFileEventsWatcher
@@ -66,8 +56,6 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   RMFVolumeObserver *volumeObserver = (RMFVolumeObserver *)userData;
   [volumeObserver _eventsAtPath:(NSArray *)eventPaths flags:eventFlags];
 }
-
-@implementation RMFVolumeObserver
 
 + (NSString *)bsdDeviceForVolumeAtURL:(NSURL *)volumeURL {
   // Create DA session and schedule it with run loop

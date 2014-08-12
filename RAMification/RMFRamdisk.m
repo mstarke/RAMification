@@ -42,7 +42,6 @@ static NSDictionary *volumeIconImageNames;
 @property (retain) NSDate *lastBackupDate;
 @property (retain) NSString *uuid;
 @property (assign, nonatomic) BOOL hasMountScript;
-- (NSString *)_generateUUID;
 @end
 
 

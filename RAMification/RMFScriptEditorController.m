@@ -20,11 +20,8 @@
 
 @implementation RMFScriptEditorController
 
-- (id)init {
-  self = [super initWithWindowNibName:@"ScriptEditor"];
-  if (self) {
-  }
-  return self;
+- (NSString *)windowNibName {
+  return @"ScriptEditor";
 }
 
 - (void)windowDidLoad {

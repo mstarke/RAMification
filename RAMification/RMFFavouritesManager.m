@@ -27,14 +27,6 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 @property (nonatomic, assign) NSInteger defaultRamdiskIndex;
 @property (retain) NSMutableDictionary *uuidToFavourites;
 
-- (BOOL)_addFavourite:(RMFRamdisk*) ramdisk;
-- (RMFRamdisk *)_createUniqueFavourite;
-- (void)_observerRamdisk:(RMFRamdisk *)ramdisk;
-- (void)_unobserverRamdisk:(RMFRamdisk *)ramdisk;
-- (void)_createUUIDDictionary;
-- (void)_synchronizeDefaults;
-- (void)_validateDefaultRamdisk;
-
 @end
 
 // actual implementation

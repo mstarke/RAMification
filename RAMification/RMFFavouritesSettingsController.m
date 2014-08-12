@@ -59,11 +59,14 @@
 }
 
 #pragma mark init/dealloc
+- (NSString *)nibName {
+  return @"FavouritesPane";
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:@"FavouritesPane" bundle:[NSBundle mainBundle]];
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFVolumeObserverDidRenameRamdiskNotification object:nil];
-    NSLog(@"Created %@", [self class]);
   }
   return self;
 }

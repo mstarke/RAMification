@@ -45,10 +45,11 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   self = [super init];
   if (self) {
     // load the window and create all the necessary gui elements
-    [NSBundle loadNibNamed:@"SettingsWindow" owner:self];
+    NSArray *topLevelObject = nil;
+    [[NSBundle bundleForClass:[self class]] loadNibNamed:@"SettingsWindow" owner:self topLevelObjects:&topLevelObject];
     // Initalize the controllers
-    _generalSettingsController = [[RMFGeneralSettingsController alloc] initWithNibName:nil bundle:nil];
-    _favouriteSettingsController = [[RMFFavouritesSettingsController alloc] initWithNibName:nil bundle:nil];
+    _generalSettingsController = [[RMFGeneralSettingsController alloc] init];
+    _favouriteSettingsController = [[RMFFavouritesSettingsController alloc] init];
     
     // Setup the controllermap
     self.paneController = @{ [RMFGeneralSettingsController identifier] : _generalSettingsController, [RMFFavouritesSettingsController identifier] : _favouriteSettingsController };

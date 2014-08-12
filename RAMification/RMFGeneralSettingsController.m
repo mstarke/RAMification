@@ -54,13 +54,10 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 
 #pragma mark object lifecylce
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  self = [super initWithNibName:@"GeneralPane" bundle:[NSBundle mainBundle]];
-  if (self) {
-    NSLog(@"Created %@", [self class]);
-  }
-  return self;
+- (NSString *)nibName {
+  return @"GeneralPane";
 }
+
 #pragma mark getter/setter
 
 #pragma mark viewLoad overrides

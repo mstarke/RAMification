@@ -19,12 +19,6 @@
 @property (assign) BOOL isObservingNotifications;
 @property (nonatomic, setter = setBufferEnabled:) BOOL bufferEnabled;
 
-- (void)enable:(BOOL)enable;
-- (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk;
-- (void)shouldBuffer:(BOOL)disable file:(NSString*)file;
-/* Notifications */
-- (void)didCreateFile:(NSNotification *)notification;
-- (void)didMountRamdisk:(NSNotification *)notification;
 @end
 
 @implementation RMFBufferDeamon
