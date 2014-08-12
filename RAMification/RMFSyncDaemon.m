@@ -25,25 +25,9 @@
 @property (retain) NSTimer *backupTimer;
 @property (retain) NSMutableSet *registerdRamdisks;
 
-/* callback */
-- (BOOL)canUnmount:(RMFRamdisk *)ramdisk;
-- (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk;
-- (void)registerCallbackForRamdisk:(RMFRamdisk *)ramdisk;
-/* backup */
-- (void)performBackup;
-- (void)backupRamdisk:(RMFRamdisk *)ramdisk ejectVolume:(BOOL)shouldEject;
-- (void)restoreRamdisk:(RMFRamdisk *)ramdisk;
-/* timer */
-- (void)disableTimer;
-- (void)enableTimer;
-/* notifications*/
-- (void)didMountFavourite:(NSNotification *)notification;
-- (void)didUnmountFavourite:(NSNotification *)notification;
-- (void)userDefaultsDidChange:(NSNotification *)notification;
-
-// This message should be sent to the sync deamon to update the backup intervall
-- (void)backupIntervallChanged:(NSUInteger )interval;
 @end
+
+@implementation RMFSyncDaemon
 
 // Static callback to be used to pipe the call back to the foundation object
 static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
@@ -67,8 +51,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   }
   return NULL;
 }
-
-@implementation RMFSyncDaemon
 
 #pragma mark Lifecylce
 
