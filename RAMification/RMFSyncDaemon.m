@@ -20,7 +20,7 @@
 
 @interface RMFSyncDaemon ()
 
-@property (assign) DAApprovalSessionRef approvalSession;
+@property (nonatomic, strong) __attribute__((NSObject)) DAApprovalSessionRef approvalSession;
 @property (strong) NSOperationQueue *queue;
 @property (strong) NSTimer *backupTimer;
 @property (strong) NSMutableSet *registerdRamdisks;
@@ -80,7 +80,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   // unregister for mount/unmount callbacks
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-  CFRelease(_approvalSession);
   self.approvalSession = NULL;
   
 }
@@ -124,7 +123,9 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   }
   // we use a brute fore callback, so just callback if we really need to
   if(0 == [self.registerdRamdisks count]) {
-    _approvalSession = DAApprovalSessionCreate(CFAllocatorGetDefault());
+    DAApprovalSessionRef session = DAApprovalSessionCreate(CFAllocatorGetDefault());
+    self.approvalSession = session;
+    CFRelease(session);
     DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
     // create description dictionory to just match the volumes names that are equal to the ramdisks label
     // NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
@@ -136,9 +137,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk {
   
   [self.registerdRamdisks removeObject:ramdisk];
-  if(0 == [_registerdRamdisks count]) {
+  if(0 == [_registerdRamdisks count] && NULL != self.approvalSession) {
     DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
-    CFRelease(_approvalSession);
     self.approvalSession = NULL;
   }
 }
