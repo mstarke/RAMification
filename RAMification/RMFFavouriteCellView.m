@@ -14,24 +14,40 @@ NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
 
 @implementation RMFFavouriteCellView
 
-- (void)setIsDefault:(NSNumber *)isDefault {
-  
-  if( _isDefault == nil ) {
-    _isDefault = [[NSNumber alloc] initWithBool:NO];
+- (instancetype)initWithFrame:(NSRect)frameRect {
+  self = [super initWithFrame:frameRect];
+  if(self) {
+    _isDefault = NO;
   }
+  return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+  self = [super initWithCoder:aDecoder];
+  if(self) {
+    _isDefault = [aDecoder decodeBoolForKey:NSStringFromSelector(@selector(isDefault))];
+  }
+  return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+  [super encodeWithCoder:aCoder];
+  [aCoder encodeBool:self.isDefault forKey:NSStringFromSelector(@selector(isDefault))];
+}
+
+- (void)setIsDefault:(BOOL)isDefault {
   
-  if([self.isDefault boolValue] == [isDefault boolValue]) {
+  if(self.isDefault == isDefault) {
     return; // no changes
   }
   else {
-    [_isDefault autorelease];
-    _isDefault = [isDefault retain];
+    _isDefault = isDefault;
   }
   
   NSFont *labelFont = [_lableTextField font];
   NSFontManager *fontManager = [NSFontManager sharedFontManager];
   
-  NSFontTraitMask traitMask = [isDefault boolValue] ? NSBoldFontMask : NSUnboldFontMask;
+  NSFontTraitMask traitMask = self.isDefault ? NSBoldFontMask : NSUnboldFontMask;
   
   labelFont = [fontManager convertFont:labelFont toHaveTrait:traitMask];
   [_lableTextField setFont:labelFont];

@@ -20,8 +20,8 @@
 @interface RMFFavouritesSettingsController () {
   RMFArrayController *_favouritesController;
 }
-@property (retain) RMFFavouritesTableViewDelegate *tableDelegate;
-@property (retain) RMFScriptEditorController *scriptController;
+@property (strong) RMFFavouritesTableViewDelegate *tableDelegate;
+@property (strong) RMFScriptEditorController *scriptController;
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
@@ -55,7 +55,7 @@
   [item setImage:toolbarImage];
   [item setLabel:[RMFFavouritesSettingsController label]];
   [item setAction:@selector(showSettings:)];
-  return [item autorelease];
+  return item;
 }
 
 #pragma mark init/dealloc
@@ -71,12 +71,6 @@
   return self;
 }
 
-- (void)dealloc {
-  [_favouritesController release];
-  [_tableDelegate release];
-  [_scriptController release];
-  [super dealloc];
-}
 
 #pragma mark view loading
 // override to wait if a view was loaded
@@ -149,7 +143,7 @@
         break;
     }
   }
-  return [backupMenu autorelease];
+  return backupMenu;
 }
 
 - (NSMenu *)labelMenu {
@@ -170,10 +164,9 @@
     }
     
     [labelMenu addItem:item];
-    [item release];
     
   }
-  return [labelMenu autorelease];
+  return labelMenu;
 }
 
 - (NSMenu *)actionPopupMenu {
@@ -183,7 +176,6 @@
   NSMenuItem *actionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] init];
   [actionItem setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
   [popupMenu insertItem:actionItem atIndex:0];
-  [actionItem release];
   
   return popupMenu;
 }
@@ -217,11 +209,8 @@
   [actionMenu addItem:[NSMenuItem separatorItem]];
   [actionMenu addItem:markAsDefaultItem];
   
-  [markAsDefaultItem release];
-  [mountItem release];
-  [ejectItem release];
   
-  return [actionMenu autorelease];
+  return actionMenu;
 }
 
 

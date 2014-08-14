@@ -17,12 +17,12 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 
 @interface RMFSettingsController ()
 
-@property (retain) RMFGeneralSettingsController *generalSettingsController;
-@property (retain) RMFFavouritesSettingsController *favouriteSettingsController;
-@property (retain) NSToolbar* toolbar;
-@property (retain) NSDictionary *paneController;
+@property (strong) RMFGeneralSettingsController *generalSettingsController;
+@property (strong) RMFFavouritesSettingsController *favouriteSettingsController;
+@property (strong) NSToolbar* toolbar;
+@property (strong) NSDictionary *paneController;
 @property (assign) NSUInteger hibernateMode;
-@property (retain) NSView *emptyView;
+@property (strong) NSView *emptyView;
 
 - (void) readHibernateMode;
 
@@ -64,13 +64,6 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   return self;
 }
 
-- (void)dealloc {
-  self.toolbar = nil;
-  self.paneController = nil;
-  self.generalSettingsController = nil;
-  self.favouriteSettingsController = nil;
-  [super dealloc];
-}
 
 #pragma mark actions
 - (void)showSettings:(id)sender {
@@ -127,12 +120,12 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 - (void) readHibernateMode {
   SCDynamicStoreRef dynamicStore = SCDynamicStoreCreate(NULL, CFSTR("ramification"), NULL, NULL);
   // read current settings from SCDynamicStore key
-  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, (CFStringRef)kIOKitPowerManagementCurrentSettingsPath);
+  CFPropertyListRef liveValues = SCDynamicStoreCopyValue(dynamicStore, (__bridge CFStringRef)kIOKitPowerManagementCurrentSettingsPath);
   if(!liveValues) {
     return; // The values return is NULL
   }
   
-  NSDictionary *valuesDict = liveValues;
+  NSDictionary *valuesDict = (__bridge NSDictionary *)(liveValues);
   self.hibernateMode = [valuesDict[kHiberNateModeKey] intValue];
   
   CFRelease(liveValues);

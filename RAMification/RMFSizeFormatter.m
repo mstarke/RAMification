@@ -39,9 +39,7 @@ typedef enum RMFSizeSuffixType {
 + (void)initialize {
   // Initalize basic lookup structures
   RMFSuffixExponents = @{ @(RMFSizeSuffixNone): @0, @(RMFSizeSuffixKilo): @1, @(RMFSizeSuffixMega): @2, @(RMFSizeSuffixGiga): @3 };
-  [RMFSuffixExponents retain];
   RMFSuffixNames = @{ @(RMFSizeSuffixNone): @"byte", @(RMFSizeSuffixKilo): @"Kb", @(RMFSizeSuffixMega): @"Mb", @(RMFSizeSuffixGiga): @"Gb" };
-  [RMFSuffixNames retain];
 }
 
 + (NSString *)nameForSuffix:(RMFSizeSuffix)suffix {
@@ -99,7 +97,7 @@ typedef enum RMFSizeSuffixType {
 #pragma mark convenicen lifecycle
 
 + (id)formatter {
-  return [[[RMFSizeFormatter alloc] init] autorelease];
+  return [[RMFSizeFormatter alloc] init];
 }
 
 #pragma mark NSFormatter overrides

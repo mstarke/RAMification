@@ -12,9 +12,9 @@
 
 @interface RMFScriptEditorController ()
 
-@property (assign) IBOutlet NSTextView *scriptTextView;
-@property (assign) IBOutlet NSPopUpButton *languagePopupButton;
-@property (assign) RMFRamdisk *ramdisk;
+@property (unsafe_unretained) IBOutlet NSTextView *scriptTextView;
+@property (weak) IBOutlet NSPopUpButton *languagePopupButton;
+@property (weak) RMFRamdisk *ramdisk;
 
 @end
 
@@ -38,10 +38,8 @@
     [item setTitle:languages[languageNumber]];
     [item setTag:language];
     [languageMenu addItem:item];
-    [item release];
   }
   [self.languagePopupButton setMenu:languageMenu];
-  [languageMenu release];
 
   /*
    Setup textview
@@ -78,7 +76,6 @@
     if(!self.ramdisk.mountScript) {
       RMFRamdiskScript *script = [[RMFRamdiskScript alloc] initWithScript:scriptContent language:language];
       self.ramdisk.mountScript = script;
-      [script release];
     }
     else {
       self.ramdisk.mountScript.language = language;

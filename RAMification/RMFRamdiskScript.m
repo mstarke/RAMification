@@ -32,7 +32,7 @@ NSString *const kRMFRamdiskScriptKeyForScript = @"script";
   self = [super init];
   if(self){
     _language = language;
-    _script = [script retain];
+    _script = script;
   }
   return self;
 }

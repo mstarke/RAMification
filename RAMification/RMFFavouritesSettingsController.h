@@ -15,22 +15,22 @@
   NSDictionary *columIdentifier;
 }
 
-@property (retain, readonly) RMFFavouritesTableViewDelegate *tableDelegate;
-@property (assign) IBOutlet NSImageView *volumeIconImageView;
-@property (assign) IBOutlet NSTableColumn *favouriteColumn;
-@property (assign) IBOutlet NSTableView *favouritesTableView;
-@property (assign) IBOutlet NSTextField *labelTextField;
-@property (assign) IBOutlet NSTextField *sizeTextField;
-@property (assign) IBOutlet NSPopUpButton *backupPopUpButton;
-@property (assign) IBOutlet NSPopUpButton *labelPopupButton;
-@property (assign) IBOutlet NSPopUpButton *actionPopupButton;
-@property (assign) IBOutlet NSButton *isAutoMountCheckButton;
-@property (assign) IBOutlet NSButton *addRamdiskButton;
-@property (assign) IBOutlet NSButton *removeRamdiskButton;
-@property (assign) IBOutlet NSImageView *sizeWarningImageView;
-@property (retain) IBOutlet NSWindow *iconSelectionWindow;
-@property (assign) IBOutlet NSButton *editScriptButton;
-@property (assign) IBOutlet NSButton *useMountScriptCheckButton;
+@property (strong, readonly) RMFFavouritesTableViewDelegate *tableDelegate;
+@property (weak) IBOutlet NSImageView *volumeIconImageView;
+@property (weak) IBOutlet NSTableColumn *favouriteColumn;
+@property (weak) IBOutlet NSTableView *favouritesTableView;
+@property (weak) IBOutlet NSTextField *labelTextField;
+@property (weak) IBOutlet NSTextField *sizeTextField;
+@property (weak) IBOutlet NSPopUpButton *backupPopUpButton;
+@property (weak) IBOutlet NSPopUpButton *labelPopupButton;
+@property (weak) IBOutlet NSPopUpButton *actionPopupButton;
+@property (weak) IBOutlet NSButton *isAutoMountCheckButton;
+@property (weak) IBOutlet NSButton *addRamdiskButton;
+@property (weak) IBOutlet NSButton *removeRamdiskButton;
+@property (weak) IBOutlet NSImageView *sizeWarningImageView;
+@property (strong) IBOutlet NSWindow *iconSelectionWindow;
+@property (weak) IBOutlet NSButton *editScriptButton;
+@property (weak) IBOutlet NSButton *useMountScriptCheckButton;
 
 
 - (IBAction)addPreset:(id)sender;

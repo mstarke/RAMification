@@ -20,17 +20,17 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
   NSDictionary *dict = @{ kRMFChangedFavouriteRamdiskKey: ramdiks, kRMFChangedFavouriteUpdateActionKey: @(RMFChangedFavouriteIgnoreAction) };
   NSMutableDictionary *mutableDict = [[NSMutableDictionary alloc] init];
   [mutableDict addEntriesFromDictionary:dict];
-  return [mutableDict autorelease];
+  return mutableDict;
 }
 
 @interface RMFChangedMountedFavouritesController ()
 
-@property (assign) IBOutlet NSTableView *favouritesTableView;
-@property (assign) IBOutlet NSTableColumn *favouritesColumn;
-@property (assign) IBOutlet NSImageView *warningImageView;
+@property (weak) IBOutlet NSTableView *favouritesTableView;
+@property (weak) IBOutlet NSTableColumn *favouritesColumn;
+@property (weak) IBOutlet NSImageView *warningImageView;
 
-@property (retain) NSMutableArray *changedFavouritesWrapper;
-@property (retain) NSArrayController *favouritesController;
+@property (strong) NSMutableArray *changedFavouritesWrapper;
+@property (strong) NSArrayController *favouritesController;
 
 @end
 

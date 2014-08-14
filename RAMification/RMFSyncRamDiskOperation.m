@@ -18,7 +18,7 @@ static NSArray *_excludedPathsInSync;
 
 @interface RMFSyncRamDiskOperation ()
 
-@property (retain) RMFRamdisk *ramdisk;
+@property (strong) RMFRamdisk *ramdisk;
 @property (assign) RMFSyncMode syncMode;
 
 @end
@@ -28,7 +28,7 @@ static NSArray *_excludedPathsInSync;
 + (void)initialize {
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    _excludedPathsInSync = [@[ @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ] retain];
+    _excludedPathsInSync = @[ @".fseventsd", @".DS_Store", kRMFRamdiskIdentifierFile ];
   });
 }
 
@@ -69,89 +69,87 @@ static NSArray *_excludedPathsInSync;
       break;
   }
   /* Create an autorelease pool and build the correct rsync operation */
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
   
   // We create the backup folder on restore and on sync
   // It might be better to just create the folder if we actually need it - that it on backup not on restore
-  NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
-  NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/Backups/%@",self.ramdisk.uuid];
-  NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSError *error = nil;
-  NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
-  if(error != nil) {
-    NSLog(@"Error occured while trying to locate the Application Support direcotry for the User. %@", error);
-    self.ramdisk.activity = RMFRamdiskIdle;
-    return;
-  }
- 
-  NSURL *ramificationSupportURL = [applicationSupportURL URLByAppendingPathComponent:backupSubfolder isDirectory:YES];
-  NSString *backupPath = [ramificationSupportURL path];
-  BOOL isDirectory = FALSE;
-  BOOL isPresent= [fileManager fileExistsAtPath:backupPath isDirectory:&isDirectory];
-  // The Path is not there
-  if(NO == (isPresent && isDirectory)) {
+    NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
+    NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/Backups/%@",self.ramdisk.uuid];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
-    [fileManager createDirectoryAtPath:backupPath withIntermediateDirectories:YES attributes:nil error:&error];
-    if(nil != error) {
-      NSLog( @"Stopping %@ because of error %@", self, error );
+    NSURL *applicationSupportURL = [fileManager URLForDirectory:NSApplicationSupportDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:YES error:&error];
+    if(error != nil) {
+      NSLog(@"Error occured while trying to locate the Application Support direcotry for the User. %@", error);
+      self.ramdisk.activity = RMFRamdiskIdle;
       return;
     }
-  }
-  NSString *ramdiskDirVolumePath = [[self.ramdisk.volumeURL path] stringByAppendingString:@"/"];
-  NSString *ramdiskBackupPath = [backupPath stringByAppendingString:@"/"];
-  // in restore mode, we sync from backup to ramdisk
-  // in backup mode, we sync from ramdisk to backup
-  
-  NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
-  [arguments addObject:@"-anv"];
-  
-  if([[[NSUserDefaults standardUserDefaults] objectForKey:RMFSettingsKeyBackupTrashcan] boolValue]) {
-    [arguments addObject:@".Trashes"];
-  }
-  switch(_syncMode) {
-    case RMFSyncModeBackup:
-    case RMFSyncModeBackupAndEject:
-      [arguments addObject:@"--delete"];
-      for(NSString *exclude in _excludedPathsInSync) {
-        NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
-        [arguments addObject:excludeOption];
+ 
+    NSURL *ramificationSupportURL = [applicationSupportURL URLByAppendingPathComponent:backupSubfolder isDirectory:YES];
+    NSString *backupPath = [ramificationSupportURL path];
+    BOOL isDirectory = FALSE;
+    BOOL isPresent= [fileManager fileExistsAtPath:backupPath isDirectory:&isDirectory];
+    // The Path is not there
+    if(NO == (isPresent && isDirectory)) {
+      NSError *error = nil;
+      [fileManager createDirectoryAtPath:backupPath withIntermediateDirectories:YES attributes:nil error:&error];
+      if(nil != error) {
+        NSLog( @"Stopping %@ because of error %@", self, error );
+        return;
       }
-      [arguments addObjectsFromArray:@[ ramdiskDirVolumePath, ramdiskBackupPath]];
-      break;
-    case RMFSyncModeRestore:
-      for(NSString *exclude in _excludedPathsInSync) {
-        NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
-        [arguments addObject:excludeOption];
+    }
+    NSString *ramdiskDirVolumePath = [[self.ramdisk.volumeURL path] stringByAppendingString:@"/"];
+    NSString *ramdiskBackupPath = [backupPath stringByAppendingString:@"/"];
+    // in restore mode, we sync from backup to ramdisk
+    // in backup mode, we sync from ramdisk to backup
+    
+    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
+    [arguments addObject:@"-anv"];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:RMFSettingsKeyBackupTrashcan] boolValue]) {
+      [arguments addObject:@".Trashes"];
+    }
+    switch(_syncMode) {
+      case RMFSyncModeBackup:
+      case RMFSyncModeBackupAndEject:
+        [arguments addObject:@"--delete"];
+        for(NSString *exclude in _excludedPathsInSync) {
+          NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
+          [arguments addObject:excludeOption];
+        }
+        [arguments addObjectsFromArray:@[ ramdiskDirVolumePath, ramdiskBackupPath]];
+        break;
+      case RMFSyncModeRestore:
+        for(NSString *exclude in _excludedPathsInSync) {
+          NSString *excludeOption = [NSString stringWithFormat:@"--exclude=%@", exclude];
+          [arguments addObject:excludeOption];
+        }
+        [arguments addObjectsFromArray:@[ramdiskBackupPath, ramdiskDirVolumePath]];
+        break;
+      case RMFSyncModeNone:
+      default:
+        break;
+    }
+    /* Setup the rsycn task and run it */
+    NSTask *rsync = [[NSTask alloc] init];
+    [rsync setLaunchPath:@"/usr/bin/rsync"];
+    [rsync setArguments:arguments];
+    [rsync launch];
+    [rsync waitUntilExit];
+    self.ramdisk.activity = RMFRamdiskIdle;
+    if(self.syncMode == RMFSyncModeBackup || self.syncMode == RMFSyncModeBackupAndEject ) {
+      [self.ramdisk didFinishBackup];
+    }
+    NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
+    
+    // Eject the volume after the operation
+    if(self.syncMode == RMFSyncModeBackupAndEject ) {
+      NSError *unmountError = nil;
+      [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:self.ramdisk.volumeURL error:&unmountError];
+      if(nil != unmountError) {
+        NSLog(@"%@: Could not auto eject Volume: %@: %@", [self class], self.ramdisk.volumeURL, [unmountError localizedDescription]);
       }
-      [arguments addObjectsFromArray:@[ramdiskBackupPath, ramdiskDirVolumePath]];
-      break;
-    case RMFSyncModeNone:
-    default:
-      break;
-  }
-  /* Setup the rsycn task and run it */
-  NSTask *rsync = [[NSTask alloc] init];
-  [rsync setLaunchPath:@"/usr/bin/rsync"];
-  [rsync setArguments:arguments];
-  [arguments release];
-  [rsync launch];
-  [rsync waitUntilExit];
-  self.ramdisk.activity = RMFRamdiskIdle;
-  if(self.syncMode == RMFSyncModeBackup || self.syncMode == RMFSyncModeBackupAndEject ) {
-    [self.ramdisk didFinishBackup];
-  }
-  NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
-  [rsync release];
-  
-  // Eject the volume after the operation
-  if(self.syncMode == RMFSyncModeBackupAndEject ) {
-    NSError *unmountError = nil;
-    [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:self.ramdisk.volumeURL error:&unmountError];
-    if(nil != unmountError) {
-      NSLog(@"%@: Could not auto eject Volume: %@: %@", [self class], self.ramdisk.volumeURL, [unmountError localizedDescription]);
     }
   }
-  [pool drain];
 }
 
 @end

@@ -29,7 +29,7 @@ typedef enum {
  */
 + (NSDictionary *)availableLanguages;
 
-@property (retain) NSString *script;
+@property (strong) NSString *script;
 @property (assign) RMFScriptLanguage language;
 
 /*

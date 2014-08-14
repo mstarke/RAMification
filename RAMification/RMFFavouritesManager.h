@@ -22,7 +22,7 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
 /*
  List of all known favourites
  */
-@property (readonly, retain) NSMutableArray *favourites;
+@property (readonly, strong) NSMutableArray *favourites;
 
 
 /*

@@ -34,6 +34,7 @@ APPKIT_EXTERN NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey;
 
 @interface RMFVolumeObserver : NSObject
 
++ (instancetype)sharedInstance;
 + (NSString *)bsdDeviceForVolumeAtURL:(NSURL *)volumeURL;
 - (void)searchForMountedFavourites;
 

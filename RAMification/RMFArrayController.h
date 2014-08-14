@@ -17,6 +17,6 @@
  */
 @interface RMFArrayController : NSArrayController
 
-@property (assign) id<RMFArrayControllerDelegate> delegate;
+@property (unsafe_unretained) id<RMFArrayControllerDelegate> delegate;
 
 @end

@@ -22,13 +22,13 @@ NSString *const RMFMenuIconTemplateImage = @"MenuItemIconTemplate";
 const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 @interface RMFMenuController ()
-@property (retain) NSMenuItem *noFavouritesMenuItem;
-@property (retain) NSMenuItem *hibernateWarningMenuItem;
-@property (retain) NSMenu *menu;
-@property (retain) NSMenu *favoritesMenu;
-@property (retain) NSStatusItem *statusItem;
-@property (retain) NSOperationQueue *queue;
-@property (retain) NSMutableDictionary *menuItemsToFavouritesMap;
+@property (strong) NSMenuItem *noFavouritesMenuItem;
+@property (strong) NSMenuItem *hibernateWarningMenuItem;
+@property (strong) NSMenu *menu;
+@property (strong) NSMenu *favoritesMenu;
+@property (strong) NSStatusItem *statusItem;
+@property (strong) NSOperationQueue *queue;
+@property (strong) NSMutableDictionary *menuItemsToFavouritesMap;
 
 @end
 
@@ -61,16 +61,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [[RMFFavouritesManager sharedManager] removeObserver:self forKeyPath:kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk];
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   
-  self.noFavouritesMenuItem = nil;
-  self.hibernateWarningMenuItem = nil;
-  self.menuItemsToFavouritesMap = nil;
-  self.menu = nil;
-  self.favoritesMenu = nil;
-  self.statusItem = nil;
-  self.queue = nil;
-  self.menuItemsToFavouritesMap = nil;
   
-  [super dealloc];
 }
 
 # pragma mark create/update menu
@@ -103,9 +94,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   
   // Preferences
   itemTitle = [NSString stringByAddingDots:NSLocalizedString(@"MENU_ITEM_PREFERENCES", @"Menu Item - Preferences")];
-  item = [[self _addItemToMenu:_menu title:itemTitle target:self action:@selector(showSettingsTab:) enabled:YES keyEquivalent:@""] retain];
+  item = [self _addItemToMenu:_menu title:itemTitle target:self action:@selector(showSettingsTab:) enabled:YES keyEquivalent:@""];
   [item setRepresentedObject:[RMFGeneralSettingsController identifier]];
-  [item release];
   
   [_menu addItem:[NSMenuItem separatorItem]];
   
@@ -121,23 +111,20 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [self _createFavouritesMenu];
   
   itemTitle = [NSString stringByAddingDots:NSLocalizedString(@"MENU_MANAGE_FAVOURITES", @"Menu Manage Favourites")];
-  item = [[self _addItemToMenu:_favoritesMenu title:itemTitle target:self action:@selector(showSettingsTab:) enabled:YES keyEquivalent:@""] retain];
+  item = [self _addItemToMenu:_favoritesMenu title:itemTitle target:self action:@selector(showSettingsTab:) enabled:YES keyEquivalent:@""];
   [item setRepresentedObject:[RMFFavouritesSettingsController identifier]];
-  [item release];
   
   itemTitle = NSLocalizedString(@"COMMON_PLURAL_FAVOURITE", @"Favourites");
-  item = [[self _addItemToMenu:_menu title:itemTitle target:self action:nil enabled:YES keyEquivalent:@""] retain];
+  item = [self _addItemToMenu:_menu title:itemTitle target:self action:nil enabled:YES keyEquivalent:@""];
   [item setSubmenu:self.favoritesMenu];
-  [item release];
   
   // Separation
   [_menu addItem:[NSMenuItem separatorItem]];
   
   // Quit
   itemTitle = NSLocalizedString(@"COMMON_QUIT", @"Quit");
-  item = [[self _addItemToMenu:_menu title:itemTitle target:self action:@selector(quitApplication) enabled:YES keyEquivalent:@""] retain];
+  item = [self _addItemToMenu:_menu title:itemTitle target:self action:@selector(quitApplication) enabled:YES keyEquivalent:@""];
   [item setKeyEquivalentModifierMask:NSCommandKeyMask];
-  [item release];
   
   RMFSettingsController *settingsController = [RMFSettingsController sharedController];
   BOOL shouldDisplayWarning = ( [settingsController hibernateMode] != 0);
@@ -149,7 +136,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   [item setEnabled:isEnabled];
   [item setTarget:aTarget];
   [aMenu addItem:item];
-  return [item autorelease];
+  return item;
 }
 
 - (void)_createStatusItem {
@@ -203,8 +190,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         action:@selector(_handleFavouriteClicked:)
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
-    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:item];
-    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:item];
+    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:(__bridge void *)(item)];
+    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:(__bridge void *)(item)];
     if(favorite.isDefault) {
 //      NSImage *isDefaultImage = [[NSBundle mainBundle] imageForResource:@"VolumeTemplate"];
 //      [isDefaultImage setSize:NSMakeSize(16, 16)];
@@ -213,7 +200,6 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
     [item setTarget:self];
     [_favoritesMenu insertItem:item atIndex:index];
     _menuItemsToFavouritesMap[[NSValue valueWithNonretainedObject:item]] = [NSValue valueWithNonretainedObject:favorite];
-    [item release];
     
     return TRUE;
   }
@@ -326,7 +312,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] || [keyPath isEqualToString:kRMFRamdiskKeyForIsDefault]) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
-      NSMenuItem *item = context;
+      NSMenuItem *item = (__bridge NSMenuItem *)(context);
       [self _updateMenuItem:item ramDisk:ramDisk];
       return;
     }

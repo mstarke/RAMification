@@ -18,13 +18,13 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 @interface RMFGeneralSettingsController ()
 
 
-@property (assign) IBOutlet NSButton *startAtLoginCheckButton;
-@property (assign) IBOutlet NSButton *backupTrashcanCheckbox;
-@property (assign) IBOutlet NSPopUpButton *backupIntervalPopUp;
-@property (assign) IBOutlet NSTextField *hibernateWarning;
-@property (assign) IBOutlet NSButton *bufferDisabledCheckBox;
-@property (assign) IBOutlet NSButton *unmountOnQuitCheckbox;
-@property (assign) IBOutlet NSButton *disableSpotlightCheckBox;
+@property (weak) IBOutlet NSButton *startAtLoginCheckButton;
+@property (weak) IBOutlet NSButton *backupTrashcanCheckbox;
+@property (weak) IBOutlet NSPopUpButton *backupIntervalPopUp;
+@property (weak) IBOutlet NSTextField *hibernateWarning;
+@property (weak) IBOutlet NSButton *bufferDisabledCheckBox;
+@property (weak) IBOutlet NSButton *unmountOnQuitCheckbox;
+@property (weak) IBOutlet NSButton *disableSpotlightCheckBox;
 
 
 - (void)didLoadView;
@@ -49,7 +49,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
   [item setAction:@selector(showSettings:)];
   [item setLabel:[RMFGeneralSettingsController label]];
-  return [item autorelease];
+  return item;
 }
 
 #pragma mark object lifecylce
@@ -102,7 +102,6 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
     [menuItem setRepresentedObject:backupIntervals[index]];
     [menuItem setTarget:self];
     [backupMenu addItem:menuItem];
-    [menuItem release];
   }
   NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:RMFSettingsKeyBackupInterval] integerValue];
   NSNumber *interval = @(currentInterval);
@@ -112,7 +111,6 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   }
   [self.backupIntervalPopUp setMenu:backupMenu];
   [self.backupIntervalPopUp selectItemAtIndex:currentIndex];
-  [backupMenu release];
 }
 
 - (void)selectionChanged:(id)sender {

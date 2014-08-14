@@ -39,7 +39,6 @@
   if(YES == _isObservingNotifications ) {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
   }
-  [super dealloc];
 }
 
 - (void)setBufferEnabled:(BOOL)bufferEnabled {

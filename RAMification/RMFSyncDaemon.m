@@ -21,9 +21,9 @@
 @interface RMFSyncDaemon ()
 
 @property (assign) DAApprovalSessionRef approvalSession;
-@property (retain) NSOperationQueue *queue;
-@property (retain) NSTimer *backupTimer;
-@property (retain) NSMutableSet *registerdRamdisks;
+@property (strong) NSOperationQueue *queue;
+@property (strong) NSTimer *backupTimer;
+@property (strong) NSMutableSet *registerdRamdisks;
 
 @end
 
@@ -32,14 +32,13 @@
 // Static callback to be used to pipe the call back to the foundation object
 static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 {
-  RMFSyncDaemon *syncDamon = (RMFSyncDaemon *)context;
+  RMFSyncDaemon *syncDamon = (__bridge RMFSyncDaemon *)context;
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  NSDictionary *diskInfoDict = (NSDictionary *)DADiskCopyDescription(disk);
+  NSDictionary *diskInfoDict = (NSDictionary *)CFBridgingRelease(DADiskCopyDescription(disk));
   NSURL *deviceURL = diskInfoDict[(NSString *)kDADiskDescriptionVolumePathKey];
   
   BOOL didReadUUID = NO;
   NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:deviceURL success:&didReadUUID];
-  [diskInfoDict release];
   
   if(didReadUUID) {
     RMFRamdisk *ramdisk = [favouriteManager findFavouriteByUUID:uuid];
@@ -83,9 +82,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
   CFRelease(_approvalSession);
   self.approvalSession = NULL;
-  self.queue = nil;
   
-  [super dealloc];
 }
 
 #pragma mark Callbacks
@@ -131,7 +128,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     DAApprovalSessionScheduleWithRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
     // create description dictionory to just match the volumes names that are equal to the ramdisks label
     // NSDictionary *description = [NSDictionary dictionaryWithObjectsAndKeys:ramdisk.label, (NSString *)kDADiskDescriptionVolumeNameKey, nil];
-    DARegisterDiskUnmountApprovalCallback(self.approvalSession, nil, createUnmountReply, self);
+    DARegisterDiskUnmountApprovalCallback(self.approvalSession, nil, createUnmountReply, (__bridge void *)(self));
   }
   [self.registerdRamdisks addObject:ramdisk];
 }
@@ -168,7 +165,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   RMFSyncMode backupMode = shouldEject ? RMFSyncModeBackupAndEject : RMFSyncModeBackup;
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:backupMode];
   [self.queue addOperation:operation];
-  [operation release];
 }
 
 - (void)restoreRamdisk:(RMFRamdisk *)ramdisk {
@@ -177,7 +173,6 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   }
   RMFSyncRamDiskOperation *operation = [[RMFSyncRamDiskOperation alloc] initWithRamdisk:ramdisk mode:RMFSyncModeRestore];
   [self.queue addOperation:operation];
-  [operation release];
 }
 
 #pragma mark Notifications

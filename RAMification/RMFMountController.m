@@ -16,7 +16,7 @@
 
 @interface RMFMountController ()
 
-@property (retain) NSOperationQueue *queue;
+@property (strong) NSOperationQueue *queue;
 
 @end
 
@@ -45,10 +45,6 @@
   return self;
 }
 
-- (void)dealloc {
-  self.queue = nil;
-  [super dealloc];
-}
 
 - (void)mount:(RMFRamdisk *)ramdisk autoskipCriticalSize:(BOOL)autoskip {
   if(ramdisk.isMounted) {
@@ -71,16 +67,13 @@
     [sizeAlert setInformativeText:infoText];
     
     if( [sizeAlert runModal] == NSAlertFirstButtonReturn ) {
-      [sizeAlert release];
       return; // user canceld operation
     }
-    [sizeAlert release];
   }
   
   RMFCreateRamDiskOperation *mountOperation = [[RMFCreateRamDiskOperation alloc] initWithRamdisk:ramdisk];
   [self.queue cancelAllOperations];
   [self.queue addOperation:mountOperation];
-  [mountOperation release];
 }
 
 - (void)unmount:(RMFRamdisk *)ramdisk {

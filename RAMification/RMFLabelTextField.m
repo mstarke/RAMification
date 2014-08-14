@@ -38,7 +38,6 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
     NSColor *lableColor = [self finderLabelColor];
     NSGradient *fillGradient = [[NSGradient alloc] initWithStartingColor:[lableColor highlightWithLevel:0.5] endingColor:lableColor];
     [fillGradient drawInBezierPath:path angle:90.0];
-    [fillGradient release];
     [[lableColor shadowWithLevel:0.2] setStroke];
     [path stroke];
     [self setFrame:RMFRectWithoutLabel(self.frame)];

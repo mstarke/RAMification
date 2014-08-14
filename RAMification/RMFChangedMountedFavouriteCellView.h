@@ -10,6 +10,6 @@
 
 @interface RMFChangedMountedFavouriteCellView : NSTableCellView
 
-@property (assign) IBOutlet NSSegmentedControl *actionSelectionControl;
+@property (weak) IBOutlet NSSegmentedControl *actionSelectionControl;
 
 @end

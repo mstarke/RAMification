@@ -36,8 +36,8 @@ NSString *const RMFVolumeObserverPathOfCreatedFileOnRamdiskKey = @"RMFVolumeObse
   FSEventStreamRef _eventStream;
 }
 
-@property (retain) RMFChangedMountedFavouritesController *changedFavouritesController;
-@property (retain) NSMutableDictionary *watchedRamdiskURLs;
+@property (strong) RMFChangedMountedFavouritesController *changedFavouritesController;
+@property (strong) NSMutableDictionary *watchedRamdiskURLs;
 @property (assign) FSEventStreamEventId lastEventId;
 
 @end
@@ -53,8 +53,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
                                     , void *eventPaths
                                     , const FSEventStreamEventFlags eventFlags[]
                                     , const FSEventStreamEventId eventIds[]) {
-  RMFVolumeObserver *volumeObserver = (RMFVolumeObserver *)userData;
-  [volumeObserver _eventsAtPath:(NSArray *)eventPaths flags:eventFlags];
+  [[RMFVolumeObserver sharedInstance] _eventsAtPath:(__bridge NSArray *)eventPaths flags:eventFlags];
 }
 
 + (NSString *)bsdDeviceForVolumeAtURL:(NSURL *)volumeURL {
@@ -62,7 +61,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   DASessionRef session = DASessionCreate(kCFAllocatorDefault);
   DASessionScheduleWithRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   // Get the disk for the path of the renamed volume
-  DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (CFURLRef)volumeURL);
+  DADiskRef disk = DADiskCreateFromVolumePath(kCFAllocatorDefault, session, (__bridge CFURLRef)volumeURL);
   NSString *bsdDevice = @(DADiskGetBSDName(disk));
   // Unschedule our session and clean up
   DASessionUnscheduleFromRunLoop(session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
@@ -70,6 +69,15 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   CFRelease(session);
   
   return bsdDevice;
+}
+
++ (instancetype)sharedInstance {
+  static RMFVolumeObserver *instance;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    instance = [[RMFVolumeObserver alloc] init];
+  });
+  return instance;
 }
 
 - (id)init {
@@ -95,7 +103,6 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   NSNotificationCenter *center = [workspace notificationCenter];
   [center removeObserver:self];
   
-  [super dealloc];
 }
 
 - (void)searchForMountedFavourites {
@@ -213,7 +220,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   // Post usernotification to userNotificationCenter only if we did mount the ramdisk ourselfs
   if(NO == wasMounted) {
     NSUserNotificationCenter *notificationCenter = [NSUserNotificationCenter defaultUserNotificationCenter];
-    NSUserNotification *userNotification = [[[NSUserNotification alloc] init] autorelease];
+    NSUserNotification *userNotification = [[NSUserNotification alloc] init];
     userNotification.title = NSLocalizedString(@"NOTIFICATION_RAMDISK_CREATED", @"Ramdisk was created successfully");
     userNotification.subtitle = ramdisk.label;
     userNotification.deliveryDate = [NSDate date];
@@ -315,19 +322,19 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   
   // We got some paths to watch so generate a new callback
-  FSEventStreamContext context = {0, (void *)self, NULL, NULL, NULL};
+  FSEventStreamContext context = {0, NULL, NULL, NULL, NULL};
   const NSTimeInterval latency = 1.0;
   // Watch for File events (Create, Modify, Remove,) and use CF Storage types on callback
   const FSEventStreamCreateFlags flags = (kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes);
   
-  NSMutableSet *volumePaths = [[[NSMutableSet alloc] initWithCapacity:[self.watchedRamdiskURLs count]] autorelease];
+  NSMutableSet *volumePaths = [[NSMutableSet alloc] initWithCapacity:[self.watchedRamdiskURLs count]];
   for(RMFRamdisk *ramdisk in [self.watchedRamdiskURLs allValues]) {
     [volumePaths addObject:[ramdisk.volumeURL path]];
   }
   _eventStream = FSEventStreamCreate(NULL,
                                      &fileSystemEventCallback,
                                      &context,
-                                     (CFArrayRef)[volumePaths allObjects],
+                                     (__bridge CFArrayRef)[volumePaths allObjects],
                                      _lastEventId,
                                      (CFTimeInterval)latency,
                                      flags);

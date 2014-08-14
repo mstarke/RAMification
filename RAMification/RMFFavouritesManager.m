@@ -23,9 +23,9 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 // private interface
 @interface RMFFavouritesManager ()
 
-@property (retain) NSMutableArray *favourites;
+@property (strong) NSMutableArray *favourites;
 @property (nonatomic, assign) NSInteger defaultRamdiskIndex;
-@property (retain) NSMutableDictionary *uuidToFavourites;
+@property (strong) NSMutableDictionary *uuidToFavourites;
 
 @end
 
@@ -77,8 +77,6 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   for(RMFRamdisk *ramdisk in _favourites) {
     [self _unobserverRamdisk:ramdisk];
   }
-  [_favourites release];
-  [super dealloc];
 }
 
 #pragma mark preset handling

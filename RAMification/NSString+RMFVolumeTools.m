@@ -13,7 +13,7 @@
 
 + (NSString *)uniqueVolumeName:(NSString *)baseName inFolder:(NSString *)path
 {
-  NSString *uniqueName = [baseName retain];
+  NSString *uniqueName = baseName;
   NSError *anError = nil;
   NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&anError];
   //TODO: add error handling
@@ -48,12 +48,7 @@
     
     NSString *newName = [uniqueName stringByAppendingFormat:@"%@_", nextSuffix];
     // release retained old string as we do not need it anymore
-    [uniqueName release];
     uniqueName = newName;
-  }
-  else {
-    // Autorelease because we collected ownership
-    [uniqueName autorelease];
   }
   return uniqueName;
 }

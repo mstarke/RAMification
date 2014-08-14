@@ -50,18 +50,18 @@ typedef enum RMFRamdiskVolumeIconType {
 // also used for favourites management
 @interface RMFRamdisk : NSObject <NSCoding>
 
-@property (retain) NSString *label;
+@property (strong) NSString *label;
 @property (assign) NSUInteger size;
-@property (retain) NSURL *volumeURL;
-@property (retain) NSString *bsdDevice;
-@property (retain, readonly) NSString *uuid;
+@property (strong) NSURL *volumeURL;
+@property (strong) NSString *bsdDevice;
+@property (strong, readonly) NSUUID *uuid;
 @property (assign) RMFRamdiskAcitivity activity;
 @property (assign) RMFRamdiskBackupMode backupMode;
 @property (assign) RMFRamdiskVolumeIcon volumeIconType;
 @property (nonatomic, assign) NSUInteger finderLabelIndex;
-@property (nonatomic, readonly) NSImage *volumeIcon;
-@property (retain) RMFRamdiskScript *mountScript;
-@property (retain, readonly) NSDate *lastBackupDate;
+@property (weak, nonatomic, readonly) NSImage *volumeIcon;
+@property (strong) RMFRamdiskScript *mountScript;
+@property (strong, readonly) NSDate *lastBackupDate;
 @property (assign) BOOL isMounted;
 @property (assign) BOOL isAutomount;
 @property (assign) BOOL isDefault;

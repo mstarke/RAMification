@@ -13,7 +13,7 @@
 @interface RMFSettingsController : NSObject <NSToolbarDelegate>
 
 @property (readonly) NSUInteger hibernateMode;
-@property (retain) IBOutlet NSWindow *settingsWindow;
+@property (strong) IBOutlet NSWindow *settingsWindow;
 
 + (RMFSettingsController *)sharedController;
 

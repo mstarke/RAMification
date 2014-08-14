@@ -18,10 +18,9 @@
 
 @interface RMFAppDelegate ()
 
-@property (retain) RMFMenuController *menuController;
-@property (retain) RMFVolumeObserver *mountWatcher;
-@property (retain) RMFSyncDaemon *syncDaemon;
-@property (retain) RMFBufferDeamon *bufferDaemon;
+@property (strong) RMFMenuController *menuController;
+@property (strong) RMFSyncDaemon *syncDaemon;
+@property (strong) RMFBufferDeamon *bufferDaemon;
 @property (nonatomic, assign) BOOL canTerminateSuddenly;
 
 @end
@@ -39,10 +38,6 @@
   }
 }
 
-- (void)dealloc {
-  [super dealloc];
-  // remove the toolbardelegate from the 
-}
 
 #pragma mark setter/getter
 - (void)setCanTerminateSuddenly:(BOOL)canTerminateSuddenly {
@@ -68,13 +63,12 @@
    Initialize all Controllers and Daemons that work independently
    */
   _menuController = [[RMFMenuController alloc] init];
-  _mountWatcher = [[RMFVolumeObserver alloc] init];
   _syncDaemon = [[RMFSyncDaemon alloc] init];
   _bufferDaemon = [[RMFBufferDeamon alloc] init];
   /*
    Look for mounted ramdisks and mount any automount favourites
    */  
-  [_mountWatcher searchForMountedFavourites];
+  [[RMFVolumeObserver sharedInstance] searchForMountedFavourites];
   [[RMFFavouritesManager sharedManager] automountFavourites];
 }
 
