@@ -64,9 +64,9 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
 
 /*
  Find Ramdisk by using UUID
- @param uuid uuid to look for
+ @param uuid NSUUID to look for
  */
-- (RMFRamdisk *)findFavouriteByUUID:(NSString *)uuid;
+- (RMFRamdisk *)findFavouriteByUUID:(NSUUID *)uuid;
 
 /*
  Delete the given favourite

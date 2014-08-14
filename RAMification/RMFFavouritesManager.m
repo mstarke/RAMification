@@ -156,7 +156,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   return nil;
 }
 
-- (RMFRamdisk *)findFavouriteByUUID:(NSString *)uuid {
+- (RMFRamdisk *)findFavouriteByUUID:(NSUUID *)uuid {
   return _uuidToFavourites[uuid];
 }
 

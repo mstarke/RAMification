@@ -38,7 +38,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   NSURL *deviceURL = diskInfoDict[(NSString *)kDADiskDescriptionVolumePathKey];
   
   BOOL didReadUUID = NO;
-  NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:deviceURL success:&didReadUUID];
+  NSUUID *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:deviceURL success:&didReadUUID];
   
   if(didReadUUID) {
     RMFRamdisk *ramdisk = [favouriteManager findFavouriteByUUID:uuid];

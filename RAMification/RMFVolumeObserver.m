@@ -126,7 +126,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       NSLog(@"Found already possible mounted favourite: %@. Trying to match up!", name);
       // find uuid by reading file
       BOOL foundUUID = NO;
-      NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:volumeURL success:&foundUUID];
+      NSUUID *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:volumeURL success:&foundUUID];
       
       if(foundUUID) {
         RMFRamdisk *ramdisk = [[RMFFavouritesManager sharedManager] findFavouriteByUUID:uuid];
@@ -197,7 +197,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   
   BOOL didReadUUID = NO;
-  NSString *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:newURL success:&didReadUUID];
+  NSUUID *uuid = [RMFRamdisk uuidOfRamdiskAtAURL:newURL success:&didReadUUID];
   if( didReadUUID ) {
     RMFRamdisk *renamedDisk = [favouritesManager findFavouriteByUUID:uuid];
     if(renamedDisk != nil) {

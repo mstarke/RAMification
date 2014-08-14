@@ -71,7 +71,7 @@ typedef enum RMFRamdiskVolumeIconType {
 + (RMFRamdisk *)ramdiskWithLabel:(NSString *)aLabel size:(NSUInteger)aSize automount:(BOOL)mount;
 + (RMFRamdisk *)defaultRamdisk;
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL;
-+ (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success;
++ (NSUUID *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success;
 + (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL;
 
 - (id)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount;

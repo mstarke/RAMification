@@ -81,7 +81,7 @@ static NSDictionary *volumeIconImageNames;
   return isReachable;
 }
 
-+ (NSString *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {
++ (NSUUID *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success {
   
   if(success == 0) {
     NSException *invalidArgumentException = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Success pointer cannot be NULL" userInfo:nil];
@@ -95,8 +95,7 @@ static NSDictionary *volumeIconImageNames;
   
   NSError *readError = nil;
   NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
-  NSString *uuid = [NSString stringWithContentsOfURL:idFileURL encoding:NSUTF8StringEncoding error:&readError];
-  
+  NSData *uuidData = [NSData dataWithContentsOfURL:idFileURL options:0 error:&readError];
   if(readError != nil) {
     NSLog(@"Warning. Unable to Read UUID at URL:%@. %@", volumeURL, [readError localizedDescription]);
     *success = NO;
@@ -104,7 +103,9 @@ static NSDictionary *volumeIconImageNames;
   else {
     *success = YES;
   }
-  return uuid;
+  uuid_t uuidBytes;
+  [uuidData getBytes:uuidBytes length:MIN([uuidData length], sizeof(uuidBytes))];
+  return [[NSUUID alloc] initWithUUIDBytes:uuidBytes];
 }
 
 + (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL {
