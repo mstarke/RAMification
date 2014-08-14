@@ -41,7 +41,7 @@
 		4CB61005148AA2DE00166397 /* RMFGeneralSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */; };
 		4CB61006148AA2DE00166397 /* RMFRamdisk.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB61004148AA2DE00166397 /* RMFRamdisk.m */; };
 		4CB6100B148AA3D800166397 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB61009148AA3D800166397 /* Localizable.strings */; };
-		4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */; };
+		4CBE8D70148C30D100747A33 /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		4CC50DF21482F90D0093004E /* RMFCreateRamDiskOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC50DF11482F90D0093004E /* RMFCreateRamDiskOperation.m */; };
 		4CC52F7A14819A360006C278 /* GeneralPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7914819A360006C278 /* GeneralPane.xib */; };
 		4CC52F7D14819BB60006C278 /* FavouritesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CC52F7C14819BB60006C278 /* FavouritesPane.xib */; };
