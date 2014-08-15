@@ -190,8 +190,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
                         action:@selector(_handleFavouriteClicked:)
                         keyEquivalent:@""];
     // Add ourselves as observer for label changes on the favourite
-    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:(__bridge void *)(item)];
-    [favorite addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:(__bridge void *)(item)];
+    [favorite addObserver:self forKeyPath:NSStringFromSelector(@selector(label)) options:0 context:(__bridge void *)(item)];
+    [favorite addObserver:self forKeyPath:NSStringFromSelector(@selector(isDefault)) options:0 context:(__bridge void *)(item)];
     if(favorite.isDefault) {
 //      NSImage *isDefaultImage = [[NSBundle mainBundle] imageForResource:@"VolumeTemplate"];
 //      [isDefaultImage setSize:NSMakeSize(16, 16)];
@@ -224,8 +224,8 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
   NSValue *itemId = [[_menuItemsToFavouritesMap allKeysForObject:favouriteId] lastObject];
   if(itemId != nil) {
     // remove all key-value-observer from the removed ramdisk
-    [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
-    [favourite removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
+    [favourite removeObserver:self forKeyPath:NSStringFromSelector(@selector(label))];
+    [favourite removeObserver:self forKeyPath:NSStringFromSelector(@selector(isDefault))];
     NSMenuItem *item = [itemId nonretainedObjectValue];
     [_favoritesMenu removeItem:item];
     [_menuItemsToFavouritesMap removeObjectForKey:itemId];
@@ -309,7 +309,7 @@ const NSUInteger RMFFavouritesMenuIndexOffset = 2;
 
 # pragma mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-  if( [keyPath isEqualToString:kRMFRamdiskKeyForLabel] || [keyPath isEqualToString:kRMFRamdiskKeyForIsDefault]) {
+  if( [keyPath isEqualToString:NSStringFromSelector(@selector(label))] || [keyPath isEqualToString:NSStringFromSelector(@selector(isDefault))]) {
     if( [object isMemberOfClass:[RMFRamdisk class]] ) {
       RMFRamdisk *ramDisk = (RMFRamdisk *)object;
       NSMenuItem *item = (__bridge NSMenuItem *)(context);

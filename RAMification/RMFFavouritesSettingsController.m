@@ -50,11 +50,15 @@
 }
 
 + (NSToolbarItem *) toolbarItem {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]];
-  NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
-  [item setImage:toolbarImage];
-  [item setLabel:[RMFFavouritesSettingsController label]];
-  [item setAction:@selector(showSettings:)];
+  static NSToolbarItem *item;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]];
+    NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
+    [item setImage:toolbarImage];
+    [item setLabel:[RMFFavouritesSettingsController label]];
+    [item setAction:@selector(showSettings:)];
+  });
   return item;
 }
 
@@ -100,15 +104,15 @@
   
   // Setup bindings for the detail view
   NSString *selection = @"selection.%@";
-  NSString *labelKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForLabel];
-  NSString *automountKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForAutomount];
-  NSString *sizeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForSize];
-  NSString *backupModeKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForBackupMode];
-  NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForVolumeIcon];
-  NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForFinderLabelIndex];
-  NSString *isMountedKeyPath = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsMounted];
-  NSString *isDefaultFavourite = [NSString stringWithFormat:selection, kRMFRamdiskKeyForIsDefault];
-  NSString *hasMountScript = [NSString stringWithFormat:selection, kRMFRamdiskKeyForHasMountScript];
+  NSString *labelKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(label))];
+  NSString *automountKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(isAutomount))];
+  NSString *sizeKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(size))];
+  NSString *backupModeKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(backupMode))];
+  NSString *volumeIconKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(volumeIcon))];
+  NSString *finderLabelIndexKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(finderLabelIndex))];
+  NSString *isMountedKeyPath = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(isMounted))];
+  NSString *isDefaultFavourite = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(isDefault))];
+  NSString *hasMountScript = [NSString stringWithFormat:selection, NSStringFromSelector(@selector(hasMountScript))];
   
   NSDictionary *negateBooleanOption = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
   [_labelTextField bind:NSValueBinding toObject:_favouritesController withKeyPath:labelKeyPath options:nil];
@@ -194,8 +198,8 @@
                                                                                 keyEquivalent:@""];
   // bind enable/disable to the mount state of a ramdisk
   NSDictionary *negateBindingOption = @{ NSValueTransformerNameBindingOption: NSNegateBooleanTransformerName };
-  NSString *selectionIsMountedKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsMounted];
-  NSString *selectionIsDefaultKeyPath = [NSString stringWithFormat:@"selection.%@", kRMFRamdiskKeyForIsDefault];
+  NSString *selectionIsMountedKeyPath = [NSString stringWithFormat:@"selection.%@", NSStringFromSelector(@selector(isMounted))];
+  NSString *selectionIsDefaultKeyPath = [NSString stringWithFormat:@"selection.%@", NSStringFromSelector(@selector(isDefault))];
   [mountItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:negateBindingOption];
   [ejectItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:nil];
   [markAsDefaultItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsDefaultKeyPath options:negateBindingOption];

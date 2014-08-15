@@ -57,7 +57,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = NO;
     self.toolbar.delegate = self;
-    self.settingsWindow.toolbar = _toolbar;
+    [self.settingsWindow setToolbar:_toolbar];
     _emptyView = [[NSView alloc] init];
     NSLog(@"Created %@", [self class]);
   }
@@ -145,7 +145,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   return [_paneController allKeys];
 }
 
-- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
   id controller = _paneController[itemIdentifier];
   NSToolbarItem *item = [[controller class ]toolbarItem];
   [item setAction:@selector(showSettings:)];

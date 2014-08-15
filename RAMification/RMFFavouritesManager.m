@@ -185,23 +185,23 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 - (void)_observerRamdisk:(RMFRamdisk *)ramdisk {
   if(ramdisk != nil) {
     // We register just for changes but do not care what changes happen
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForAutomount options:0 context:nil];
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode options:0 context:nil];
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForLabel options:0 context:nil];
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForSize options:0 context:nil];
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:0 context:nil];
-    [ramdisk addObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(isAutomount)) options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(backupMode)) options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(label)) options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(size)) options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(finderLabelIndex)) options:0 context:nil];
+    [ramdisk addObserver:self forKeyPath:NSStringFromSelector(@selector(isDefault)) options:0 context:nil];
   }
 }
 
 - (void)_unobserverRamdisk:(RMFRamdisk *)ramdisk {
   if(nil != ramdisk) {
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForAutomount];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForBackupMode];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForLabel];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForSize];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForFinderLabelIndex];
-    [ramdisk removeObserver:self forKeyPath:kRMFRamdiskKeyForIsDefault];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(isAutomount))];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(backupMode))];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(label))];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(size))];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(finderLabelIndex))];
+    [ramdisk removeObserver:self forKeyPath:NSStringFromSelector(@selector(isDefault))];
   }
 }
 

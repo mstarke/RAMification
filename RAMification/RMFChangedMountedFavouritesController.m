@@ -72,8 +72,8 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
   RMFRamdisk *ramdisk = rowDict[kRMFChangedFavouriteRamdiskKey];
   // Bind the Cell view to automatically update on changes
   
-  [cellView.textField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
-  [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsMounted options:nil];
+  [cellView.textField bind:NSValueBinding toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(label)) options:nil];
+  [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(isMounted)) options:nil];
   [cellView.actionSelectionControl bind:NSSelectedIndexBinding toObject:rowDict withKeyPath:kRMFChangedFavouriteUpdateActionKey options:0];
   return cellView;
 }

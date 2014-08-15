@@ -24,11 +24,11 @@
   RMFFavouriteCellView *cellView = [tableView makeViewWithIdentifier:@"FavouriteCell" owner:self];
   RMFRamdisk *ramdisk = [[RMFFavouritesManager sharedManager] favourites][row];
   // Bind the Cell view to automatically update on changes
-  [cellView.lableTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForLabel options:nil];
-  [cellView.lableTextField bind:kRMFLabelTextFieldFinderLabelIndexKey toObject:ramdisk withKeyPath:kRMFRamdiskKeyForFinderLabelIndex options:nil];
-  [cellView.infoTextField bind:NSValueBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForSize options:nil];
-  [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsMounted options:nil];
-  [cellView bind:kRMFFavouriteCellViewKeyForIsDefault toObject:ramdisk withKeyPath:kRMFRamdiskKeyForIsDefault options:nil];
+  [cellView.lableTextField bind:NSValueBinding toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(label)) options:nil];
+  [cellView.lableTextField bind:kRMFLabelTextFieldFinderLabelIndexKey toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(finderLabelIndex)) options:nil];
+  [cellView.infoTextField bind:NSValueBinding toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(size)) options:nil];
+  [cellView.imageView bind:NSEnabledBinding toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(isMounted)) options:nil];
+  [cellView bind:kRMFFavouriteCellViewKeyForIsDefault toObject:ramdisk withKeyPath:NSStringFromSelector(@selector(isDefault)) options:nil];
    
   return cellView;
 }

@@ -45,10 +45,14 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 }
 
 + (NSToolbarItem *) toolbarItem {
-  NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsController identifier]];
-  [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
-  [item setAction:@selector(showSettings:)];
-  [item setLabel:[RMFGeneralSettingsController label]];
+  static NSToolbarItem* item;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsController identifier]];
+    [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
+    [item setAction:@selector(showSettings:)];
+    [item setLabel:[RMFGeneralSettingsController label]];
+  });
   return item;
 }
 

@@ -11,23 +11,8 @@
 #import "RMFSettingsKeys.h"
 #import "RMFSyncDaemon.h"
 
-// NSCodingKeys or for KVC accesssors
-NSString *const kRMFRamdiskKeyForLabel = @"label";
-NSString *const kRMFRamdiskKeyForAutomount = @"automount";
-NSString *const kRMFRamdiskKeyForSize = @"size";
-NSString *const kRMFRamdiskKeyForBackupMode = @"backupMode";
-NSString *const kRMFRamdiskKeyForVolumeIconType = @"volumeIconType";
-NSString *const kRMFRamdiskKeyForVolumeIcon = @"volumeIcon";
-NSString *const kRMFRamdiskKeyForFinderLabelIndex = @"finderLabelIndex";
-NSString *const kRMFRamdiskKeyForIsMounted = @"isMounted";
-NSString *const kRMFRamdiskKeyForIsDefault = @"isDefault";
-NSString *const kRMFRamdiskKeyForUUID = @"uuid";
-NSString *const kRMFRamdiskKeyForMountScript = @"mountScript";
-NSString *const kRMFRamdiskKeyForHasMountScript = @"hasMountScript";
-
-
 // Filenames
-NSString *const kRMFRamdiskIdentifierFile = @".volume_is_ramdisk";
+NSString *const kRMFRamdiskIdentifierFile = @".com.hicknhack.RAMification.volume_is_ramdisk";
 NSString *const kRMFRamdiskVolumeIconFileName = @"VolumeIcon.icns";
 
 // private constants
@@ -161,8 +146,8 @@ static NSDictionary *volumeIconImageNames;
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [super init];
     // retain the objects
-    _label = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForLabel];
-    id uuid = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForUUID];
+    _label = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(label))];
+    id uuid = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(uuid))];
     if([uuid isKindOfClass:[NSString class]]) {
       _uuid = [[NSUUID alloc] initWithUUIDString:uuid];
     }
@@ -172,13 +157,13 @@ static NSDictionary *volumeIconImageNames;
       _uuid = [[NSUUID alloc] initWithUUIDBytes:uuidBytes];
     }
     // assing alementary types
-    _isAutomount = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForAutomount];
-    _isDefault = [aDecoder decodeBoolForKey:kRMFRamdiskKeyForIsDefault];
-    _size = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForSize];
-    _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForBackupMode];
-    _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:kRMFRamdiskKeyForVolumeIconType];
-    _finderLabelIndex = [aDecoder decodeIntegerForKey:kRMFRamdiskKeyForFinderLabelIndex];
-    _mountScript = [aDecoder decodeObjectForKey:kRMFRamdiskKeyForMountScript];
+    _isAutomount = [aDecoder decodeBoolForKey:NSStringFromSelector(@selector(isAutomount))];
+    _isDefault = [aDecoder decodeBoolForKey:NSStringFromSelector(@selector(isDefault))];
+    _size = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(size))];
+    _backupMode = (RMFRamdiskBackupMode)[aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(backupMode))];
+    _volumeIconType = (RMFRamdiskVolumeIcon)[aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(volumeIconType))];
+    _finderLabelIndex = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(finderLabelIndex))];
+    _mountScript = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(mountScript))];
     
     // UUID is missing. Generate one!
     if(nil == _uuid) {
@@ -191,17 +176,17 @@ static NSDictionary *volumeIconImageNames;
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   if([aCoder isKindOfClass:[NSKeyedArchiver class]]) {
     // encode objects
-    [aCoder encodeObject:_label forKey:kRMFRamdiskKeyForLabel];
-    [aCoder encodeObject:_uuid forKey:kRMFRamdiskKeyForUUID];
-    [aCoder encodeObject:_mountScript forKey:kRMFRamdiskKeyForMountScript];
+    [aCoder encodeObject:_label forKey:NSStringFromSelector(@selector(label))];
+    [aCoder encodeObject:_uuid forKey:NSStringFromSelector(@selector(uuid))];
+    [aCoder encodeObject:_mountScript forKey:NSStringFromSelector(@selector(mountScript))];
     
     // encode integral types
-    [aCoder encodeBool:_isAutomount forKey:kRMFRamdiskKeyForAutomount];
-    [aCoder encodeBool:_isDefault forKey:kRMFRamdiskKeyForIsDefault];
-    [aCoder encodeInteger:_size forKey:kRMFRamdiskKeyForSize];
-    [aCoder encodeInteger:_backupMode forKey:kRMFRamdiskKeyForBackupMode];
-    [aCoder encodeInteger:_volumeIconType forKey:kRMFRamdiskKeyForVolumeIconType];
-    [aCoder encodeInteger:_finderLabelIndex forKey:kRMFRamdiskKeyForFinderLabelIndex];
+    [aCoder encodeBool:_isAutomount forKey:NSStringFromSelector(@selector(isAutomount))];
+    [aCoder encodeBool:_isDefault forKey:NSStringFromSelector(@selector(isDefault))];
+    [aCoder encodeInteger:_size forKey:NSStringFromSelector(@selector(size))];
+    [aCoder encodeInteger:_backupMode forKey:NSStringFromSelector(@selector(backupMode))];
+    [aCoder encodeInteger:_volumeIconType forKey:NSStringFromSelector(@selector(volumeIconType))];
+    [aCoder encodeInteger:_finderLabelIndex forKey:NSStringFromSelector(@selector(finderLabelIndex))];
   }
 }
 

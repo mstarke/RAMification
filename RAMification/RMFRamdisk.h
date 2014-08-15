@@ -7,23 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-
-// NSKeyArchiver Keys
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForLabel;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForAutomount;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForSize;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForBackupMode;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIcon;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForVolumeIconType;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForFinderLabelIndex;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsMounted;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForIsDefault;
-APPKIT_EXTERN NSString *const kRMFRamdiskIdentifierFile;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForMountScript;
-APPKIT_EXTERN NSString *const kRMFRamdiskKeyForHasMountScript;
-
 // Usefull constants
 APPKIT_EXTERN NSString *const kRMFRamdiskVolumeIconFileName;
+APPKIT_EXTERN NSString *const kRMFRamdiskIdentifierFile;
 
 @class RMFRamdiskScript;
 

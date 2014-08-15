@@ -71,12 +71,12 @@
 		4C27BF8F15F92323008F723D /* RMFBufferDeamon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFBufferDeamon.h; sourceTree = "<group>"; };
 		4C27BF9015F92323008F723D /* RMFBufferDeamon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFBufferDeamon.m; sourceTree = "<group>"; };
 		4C2A4AE41486DDDE009F3AB0 /* RMFFavouritesSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesSettingsController.h; sourceTree = "<group>"; };
-		4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesSettingsController.m; sourceTree = "<group>"; };
+		4C2A4AE51486DDDE009F3AB0 /* RMFFavouritesSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RMFFavouritesSettingsController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C2A4AE91486DE55009F3AB0 /* RMFSettingsTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSettingsTabController.h; sourceTree = "<group>"; };
 		4C2EA37615A8EDF600F0D2EA /* RMFSyncRamDiskOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFSyncRamDiskOperation.h; sourceTree = "<group>"; };
 		4C2EA37715A8EDF600F0D2EA /* RMFSyncRamDiskOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFSyncRamDiskOperation.m; sourceTree = "<group>"; };
 		4C34B6AB1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesTableViewDelegate.h; sourceTree = "<group>"; };
-		4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesTableViewDelegate.m; sourceTree = "<group>"; };
+		4C34B6AC1486FBDD008CFB00 /* RMFFavouritesTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RMFFavouritesTableViewDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C361F14164D52C600E30954 /* RMFLabelTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFLabelTextField.h; sourceTree = "<group>"; };
 		4C361F15164D52C600E30954 /* RMFLabelTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFLabelTextField.m; sourceTree = "<group>"; };
 		4C39C0E716492C9700B2D936 /* ChangedMountedFavourites.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangedMountedFavourites.xib; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		4C39C0EE16492E7700B2D936 /* RMFChangedMountedFavouritesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFChangedMountedFavouritesController.m; sourceTree = "<group>"; };
 		4C3F4F1E164AE61E0071508B /* FavouriteTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = FavouriteTemplate.pdf; path = Images/FavouriteTemplate.pdf; sourceTree = "<group>"; };
 		4C4FA61B149816060082981C /* RMFMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFMenuController.h; sourceTree = "<group>"; };
-		4C4FA61C149816060082981C /* RMFMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFMenuController.m; sourceTree = "<group>"; };
+		4C4FA61C149816060082981C /* RMFMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RMFMenuController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4C503998149566CA00089F86 /* NSString+RMFVolumeTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+RMFVolumeTools.h"; sourceTree = "<group>"; };
 		4C503999149566CA00089F86 /* NSString+RMFVolumeTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+RMFVolumeTools.m"; sourceTree = "<group>"; };
 		4C505D6F164AB3DB008DB224 /* UpdateFavouriteTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = UpdateFavouriteTemplate.pdf; path = Images/UpdateFavouriteTemplate.pdf; sourceTree = "<group>"; };
@@ -115,8 +115,8 @@
 		4C93C234164D5A6100104398 /* VolumeIconSelection.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VolumeIconSelection.xib; sourceTree = "<group>"; };
 		4CB61001148AA2DD00166397 /* RMFGeneralSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFGeneralSettingsController.h; sourceTree = "<group>"; };
 		4CB61002148AA2DD00166397 /* RMFGeneralSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFGeneralSettingsController.m; sourceTree = "<group>"; };
-		4CB61003148AA2DD00166397 /* RMFRamdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFRamdisk.h; sourceTree = "<group>"; };
-		4CB61004148AA2DE00166397 /* RMFRamdisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFRamdisk.m; sourceTree = "<group>"; };
+		4CB61003148AA2DD00166397 /* RMFRamdisk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RMFRamdisk.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		4CB61004148AA2DE00166397 /* RMFRamdisk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RMFRamdisk.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		4CB6100A148AA3D800166397 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4CBE8D6D148C30D100747A33 /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
 		4CBE8D6E148C30D100747A33 /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 		4CDD51D517121B6B0061314B /* RMFRamdiskScript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFRamdiskScript.m; sourceTree = "<group>"; };
 		4CEDE68A14830269002A5A95 /* MenuItemIconTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = MenuItemIconTemplate.pdf; path = Images/MenuItemIconTemplate.pdf; sourceTree = "<group>"; };
 		4CF8842714926DC2000EE2D7 /* RMFFavouritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMFFavouritesManager.h; sourceTree = "<group>"; };
-		4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMFFavouritesManager.m; sourceTree = "<group>"; };
+		4CF8842814926DC2000EE2D7 /* RMFFavouritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RMFFavouritesManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -82,12 +82,12 @@ Gw
                         <constraints>
                             <constraint firstAttribute="width" constant="150" id="57"/>
                         </constraints>
-                        <popUpButtonCell key="cell" type="push" title="Shell Script" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="34">
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="34">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="35">
                                 <items>
-                                    <menuItem title="Shell Script" state="on" id="36"/>
+                                    <menuItem title="Shell Script" id="36"/>
                                     <menuItem title="Apple Script" id="37"/>
                                 </items>
                             </menu>

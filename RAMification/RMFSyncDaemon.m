@@ -148,7 +148,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
   
   NSArray *mountedDisk = [favouriteManager mountedFavourites];
-  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.%@ == %d", kRMFRamdiskKeyForBackupMode, RMFBackupPeriodically]];
+  NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.%@ == %d", NSStringFromSelector(@selector(backupMode)), RMFBackupPeriodically]];
   
   NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
   NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
