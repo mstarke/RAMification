@@ -49,9 +49,9 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFGeneralSettingsController identifier]];
-    [item setImage:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
-    [item setAction:@selector(showSettings:)];
-    [item setLabel:[RMFGeneralSettingsController label]];
+    item.image = [NSImage imageNamed:NSImageNamePreferencesGeneral];
+    item.action = @selector(showSettings:);
+    item.label = [RMFGeneralSettingsController label];
   });
   return item;
 }
@@ -73,8 +73,8 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
 - (void)didLoadView {
   // Setup correct names
   NSString *template = NSLocalizedString(@"GENERAL_SETTINGS_LAUNCH_AT_LOGIN_LABEL", @"Label for the launch at login button. Insert 1 object placeholder");
-  RMFAppDelegate *delegate = [NSApp delegate];
-  [self.startAtLoginCheckButton setTitle:[NSString stringWithFormat:template, [delegate executabelName]]];
+  RMFAppDelegate *delegate = (RMFAppDelegate *)NSApp.delegate;
+  (self.startAtLoginCheckButton).title = [NSString stringWithFormat:template, [delegate executabelName]];
   
   // Bindings
   NSString *disableBufferKeypath = [NSString stringWithFormat:@"values.%@", RMFSettingsKeyDisableUnifiedBuffer];
@@ -89,8 +89,8 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   [self.backupTrashcanCheckbox bind:NSValueBinding toObject:defaultsController withKeyPath:backupTrashcanKeypath options:nil];
   [self.disableSpotlightCheckBox bind:NSValueBinding toObject:defaultsController withKeyPath:disableSpotlightKeypath options:nil];
   
-  BOOL shouldHide = (0 != [[RMFSettingsController sharedController] hibernateMode]);
-  [self.hibernateWarning setHidden:shouldHide];
+  BOOL shouldHide = (0 != [RMFSettingsController sharedController].hibernateMode);
+  (self.hibernateWarning).hidden = shouldHide;
   
   // Generate Popup Menu
   NSMenu *backupMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
@@ -103,8 +103,8 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   for(NSString *label in actionArray) {
     NSMenuItem *menuItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:nil keyEquivalent:@""];
     NSUInteger index = [actionArray indexOfObject:label];
-    [menuItem setRepresentedObject:backupIntervals[index]];
-    [menuItem setTarget:self];
+    menuItem.representedObject = backupIntervals[index];
+    menuItem.target = self;
     [backupMenu addItem:menuItem];
   }
   NSUInteger currentInterval = [[[NSUserDefaults standardUserDefaults] valueForKey:RMFSettingsKeyBackupInterval] integerValue];
@@ -113,7 +113,7 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   if(NSNotFound == currentIndex) {
     currentIndex = 0;
   }
-  [self.backupIntervalPopUp setMenu:backupMenu];
+  (self.backupIntervalPopUp).menu = backupMenu;
   [self.backupIntervalPopUp selectItemAtIndex:currentIndex];
 }
 
@@ -121,10 +121,10 @@ const NSUInteger MinumumRamdiskSize = 512*1024;       // 1KB
   if(![sender isMemberOfClass:[NSPopUpButton class]]) {
     return; // wrong sender, ignore
   }
-  NSMenuItem *menuItem = [self.backupIntervalPopUp selectedItem];
-  NSNumber *number = [menuItem representedObject];
+  NSMenuItem *menuItem = (self.backupIntervalPopUp).selectedItem;
+  NSNumber *number = menuItem.representedObject;
   NSLog(@"Interval changed to %@ Seconds", number);
-  [[NSUserDefaults standardUserDefaults] setInteger:[number integerValue] forKey:RMFSettingsKeyBackupInterval];
+  [[NSUserDefaults standardUserDefaults] setInteger:number.integerValue forKey:RMFSettingsKeyBackupInterval];
   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 @end

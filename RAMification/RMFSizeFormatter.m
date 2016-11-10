@@ -58,7 +58,7 @@ typedef enum RMFSizeSuffixType {
 
 + (NSDictionary *)sizeRepresentationForNumber:(NSNumber *)number {
   NSUInteger suffixIndex = 0;
-  double value = [number doubleValue];
+  double value = number.doubleValue;
   // loop through suffixes and count exponents
   while((value / 1024.0) >= 1 && suffixIndex < (RMFSizeSuffixCount - 1)) {
     suffixIndex++;
@@ -88,7 +88,7 @@ typedef enum RMFSizeSuffixType {
   };
   
   NSSet *matchingSuffixes = [RMFSuffixNames keysOfEntriesPassingTest:filterBlock];
-  if([matchingSuffixes count] > 1){
+  if(matchingSuffixes.count > 1){
     NSLog(@"%@: Found multiple candidates: %@ for suffix:%@.", self, matchingSuffixes, string);
   }
   return [[matchingSuffixes anyObject] intValue];
@@ -96,7 +96,7 @@ typedef enum RMFSizeSuffixType {
 
 #pragma mark convenicen lifecycle
 
-+ (id)formatter {
++ (instancetype)formatter {
   return [[RMFSizeFormatter alloc] init];
 }
 
@@ -108,7 +108,7 @@ typedef enum RMFSizeSuffixType {
   double value;
   BOOL foundDouble = [numberScanner scanDouble:&value];
   if(foundDouble) {
-    NSString *suffixPart = [string substringFromIndex:[numberScanner scanLocation]];
+    NSString *suffixPart = [string substringFromIndex:numberScanner.scanLocation];
     NSString *cleanSuffix = [suffixPart stringByReplacingOccurrencesOfString:@" " withString:@""];
     RMFSizeSuffix suffixType = [RMFSizeFormatter suffixForString:cleanSuffix];
     *anObject = @(value * (double)pow( 1024, (NSUInteger)suffixType));

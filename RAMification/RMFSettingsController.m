@@ -41,7 +41,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 }
 
 # pragma mark object lifecycle
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     // load the window and create all the necessary gui elements
@@ -57,7 +57,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
     _toolbar = [[NSToolbar alloc] initWithIdentifier:@"SettingsToolbar"];
     self.toolbar.allowsUserCustomization = NO;
     self.toolbar.delegate = self;
-    [self.settingsWindow setToolbar:_toolbar];
+    (self.settingsWindow).toolbar = _toolbar;
     _emptyView = [[NSView alloc] init];
     NSLog(@"Created %@", [self class]);
   }
@@ -70,7 +70,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   /*
    Prevent any changes if the icon selection is visible
    */
-  if([_favouriteSettingsController.iconSelectionWindow isVisible]) {
+  if((_favouriteSettingsController.iconSelectionWindow).visible) {
     return;
   }
   /*
@@ -81,7 +81,7 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
   
   NSString* settingsIdentifier = nil;
   if([sender isMemberOfClass:[NSToolbarItem class]]) {
-    settingsIdentifier = [(NSToolbarItem*)sender itemIdentifier];
+    settingsIdentifier = ((NSToolbarItem*)sender).itemIdentifier;
   }
   else {
     if ([sender isKindOfClass:[NSString class]]) {
@@ -98,19 +98,19 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
     visibleSettings = _generalSettingsController;
   }
   // highlight the toolbar item
-  [self.toolbar setSelectedItemIdentifier:[[visibleSettings class] identifier]];
+  (self.toolbar).selectedItemIdentifier = [[visibleSettings class] identifier];
   
-  NSView *settingsView = [(NSViewController*)visibleSettings view];
+  NSView *settingsView = ((NSViewController*)visibleSettings).view;
   // remove the old content view to store it's size
-  [self.settingsWindow setContentView:_emptyView];
+  (self.settingsWindow).contentView = _emptyView;
   
-  NSRect windowRect = [_settingsWindow frameRectForContentRect:[settingsView frame]];
-  windowRect.origin.x = [_settingsWindow frame].origin.x;
-  windowRect.origin.y = [_settingsWindow frame].origin.y + [_settingsWindow frame].size.height - windowRect.size.height;
+  NSRect windowRect = [_settingsWindow frameRectForContentRect:settingsView.frame];
+  windowRect.origin.x = _settingsWindow.frame.origin.x;
+  windowRect.origin.y = _settingsWindow.frame.origin.y + _settingsWindow.frame.size.height - windowRect.size.height;
   [_settingsWindow setFrame:windowRect display:YES animate:YES];
   
-  [_settingsWindow setContentView:settingsView];
-  [_settingsWindow setTitle:[[visibleSettings class ]label]];
+  _settingsWindow.contentView = settingsView;
+  _settingsWindow.title = [[visibleSettings class ]label];
   [_settingsWindow setIsVisible:YES];
   [_settingsWindow makeKeyAndOrderFront:nil];
   [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
@@ -134,22 +134,22 @@ NSString *const kIOKitPowerManagementCurrentSettingsPath = @"State:/IOKit/PowerM
 
 #pragma mark NSToolbarDelegateProtocol
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
-  return [_paneController allKeys];
+  return _paneController.allKeys;
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-  return [_paneController allKeys];
+  return _paneController.allKeys;
 }
 
 - (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar {
-  return [_paneController allKeys];
+  return _paneController.allKeys;
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
   id controller = _paneController[itemIdentifier];
   NSToolbarItem *item = [[controller class ]toolbarItem];
-  [item setAction:@selector(showSettings:)];
-  [item setTarget:self];
+  item.action = @selector(showSettings:);
+  item.target = self;
   return item;
 }
 

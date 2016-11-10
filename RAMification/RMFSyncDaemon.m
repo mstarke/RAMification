@@ -53,7 +53,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 #pragma mark Lifecylce
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     /*
@@ -97,12 +97,12 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     NSLog(@"%@: No Backups needed for %@. Good to go!", self, ramdisk);
     return YES; // Disk with no backups can always be unmounted
   }
-  NSArray *backups = [[self.queue operations] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
-  BOOL hasNoPendingBackups = ([backups count] == 0);
+  NSArray *backups = [(self.queue).operations filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:isEqualBlock]];
+  BOOL hasNoPendingBackups = (backups.count == 0);
   // ramdisk has no backups in the loop so we check for the oldest backup
   if(hasNoPendingBackups) {
     NSDate *lastBackup = ramdisk.lastBackupDate;
-    NSTimeInterval secondsSinceLastBackup = [lastBackup timeIntervalSinceNow];
+    NSTimeInterval secondsSinceLastBackup = lastBackup.timeIntervalSinceNow;
     NSLog(@"%@: Last backup was done %f Seconds ago",self, -secondsSinceLastBackup);
     if(secondsSinceLastBackup <= -30 ) {
       [self backupRamdisk:ramdisk ejectVolume:YES];
@@ -122,7 +122,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
     return; // we are already registered
   }
   // we use a brute fore callback, so just callback if we really need to
-  if(0 == [self.registerdRamdisks count]) {
+  if(0 == (self.registerdRamdisks).count) {
     DAApprovalSessionRef session = DAApprovalSessionCreate(CFAllocatorGetDefault());
     self.approvalSession = session;
     CFRelease(session);
@@ -137,7 +137,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 - (void)unregisterCallbackForRamdisk:(RMFRamdisk *)ramdisk {
   
   [self.registerdRamdisks removeObject:ramdisk];
-  if(0 == [_registerdRamdisks count] && NULL != self.approvalSession) {
+  if(0 == _registerdRamdisks.count && NULL != self.approvalSession) {
     DAApprovalSessionUnscheduleFromRunLoop(self.approvalSession, CFRunLoopGetMain(), kCFRunLoopCommonModes);
     self.approvalSession = NULL;
   }
@@ -150,8 +150,8 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   NSArray *mountedDisk = [favouriteManager mountedFavourites];
   NSArray *backupDisks = [mountedDisk filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.%@ == %d", NSStringFromSelector(@selector(backupMode)), RMFBackupPeriodically]];
   
-  NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, [mountedDisk count], mountedDisk);
-  NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, [backupDisks count], backupDisks);
+  NSLog(@"%@: Found %lu mounted Disks. Disks: %@", self, mountedDisk.count, mountedDisk);
+  NSLog(@"%@: Found %lu disk that need periodic backups. Disks: %@", self, backupDisks.count, backupDisks);
   
   for(RMFRamdisk *ramdisk in backupDisks) {
     [self backupRamdisk:ramdisk ejectVolume:NO];
@@ -177,7 +177,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 
 #pragma mark Notifications
 - (void)didMountFavourite:(NSNotification *)notification {
-  NSDictionary *userInfo = [notification userInfo];
+  NSDictionary *userInfo = notification.userInfo;
   RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   BOOL mountedOnStartup = [userInfo[RMFVolumeObserverWasAlreadyMountedOnStartupKey] boolValue];
   
@@ -195,7 +195,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
 }
 
 - (void)didUnmountFavourite:(NSNotification *)notification {
-  NSDictionary *userInfo = [notification userInfo];
+  NSDictionary *userInfo = notification.userInfo;
   RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   
   if(nil == ramdisk) {
@@ -210,7 +210,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
    
   if(self.backupTimer != nil && self.backupTimer.isValid) {
     // timer is valid
-    if([self.backupTimer timeInterval] != newInterval) {
+    if((self.backupTimer).timeInterval != newInterval) {
       // but has a different value than the settings
       [self backupIntervallChanged:(NSUInteger)newInterval];
     }
@@ -237,7 +237,7 @@ static DADissenterRef createUnmountReply(DADiskRef disk, void * context)
   NSUInteger backupInterval = [[NSUserDefaults standardUserDefaults] integerForKey:RMFSettingsKeyBackupInterval];
   NSTimeInterval interval = backupInterval;
   if (self.backupTimer != nil) {
-    interval = [self.backupTimer timeInterval];
+    interval = (self.backupTimer).timeInterval;
     [self.backupTimer invalidate];
     self.backupTimer = nil;
   }

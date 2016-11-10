@@ -34,7 +34,7 @@ APPKIT_EXTERN NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdis
  Finds all mounted favourites
  @return array of mounted favourites
  */
-- (NSArray *)mountedFavourites;
+@property (nonatomic, readonly, copy) NSArray *mountedFavourites;
 
 /*
  Add a new Favourite

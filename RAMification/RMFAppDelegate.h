@@ -10,6 +10,6 @@
 
 @interface RMFAppDelegate : NSObject <NSApplicationDelegate, NSUserNotificationCenterDelegate>
 
-- (NSString *)executabelName;
+@property (nonatomic, readonly, copy) NSString *executabelName;
 
 @end

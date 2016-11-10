@@ -25,17 +25,17 @@
 
 - (void)didLoadView;
 - (void)didRenameFavourite:(NSNotification *)notification;
-- (NSMenu *)backupModeMenu;
-- (NSMenu *)labelMenu;
-- (NSMenu *)actionContextMenu;
-- (NSMenu *)actionPopupMenu;
+@property (nonatomic, readonly, copy) NSMenu *backupModeMenu;
+@property (nonatomic, readonly, copy) NSMenu *labelMenu;
+@property (nonatomic, readonly, copy) NSMenu *actionContextMenu;
+@property (nonatomic, readonly, copy) NSMenu *actionPopupMenu;
 - (NSImage *)labelImageWithColor:(NSColor *)color;
 
 - (void)toggleMount:(id)sender;
 - (void)makeDefaultRamdisk:(id)sender;
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
 
-- (RMFRamdisk *)_selectedRamdisk;
+@property (nonatomic, readonly, strong) RMFRamdisk *_selectedRamdisk;
 
 @end
 
@@ -55,9 +55,9 @@
   dispatch_once(&onceToken, ^{
     item = [[NSToolbarItem alloc] initWithItemIdentifier:[RMFFavouritesSettingsController identifier]];
     NSImage *toolbarImage = [[NSBundle mainBundle] imageForResource:@"favourite"];
-    [item setImage:toolbarImage];
-    [item setLabel:[RMFFavouritesSettingsController label]];
-    [item setAction:@selector(showSettings:)];
+    item.image = toolbarImage;
+    item.label = [RMFFavouritesSettingsController label];
+    item.action = @selector(showSettings:);
   });
   return item;
 }
@@ -67,7 +67,7 @@
   return @"FavouritesPane";
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
   if (self) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRenameFavourite:) name:RMFVolumeObserverDidRenameRamdiskNotification object:nil];
@@ -93,14 +93,14 @@
   
   _tableDelegate = [[RMFFavouritesTableViewDelegate alloc] init];
   _favouritesTableView.delegate = self.tableDelegate;
-  [_favouritesTableView setMenu:[self actionContextMenu]];
+  _favouritesTableView.menu = [self actionContextMenu];
   
-  [_backupPopUpButton setMenu:[self backupModeMenu]];
-  [_labelPopupButton setMenu:[self labelMenu]];
-  [_actionPopupButton setMenu:[self actionPopupMenu]];
+  _backupPopUpButton.menu = [self backupModeMenu];
+  _labelPopupButton.menu = [self labelMenu];
+  _actionPopupButton.menu = [self actionPopupMenu];
   [_actionPopupButton selectItemAtIndex:0];
   
-  [_sizeTextField setFormatter:[RMFSizeFormatter formatter]];
+  _sizeTextField.formatter = [RMFSizeFormatter formatter];
   
   // Setup bindings for the detail view
   NSString *selection = @"selection.%@";
@@ -127,8 +127,8 @@
   [_useMountScriptCheckButton bind:NSValueBinding toObject:_favouritesController withKeyPath:hasMountScript options:nil];
   [_editScriptButton bind:NSEnabledBinding toObject:_favouritesController withKeyPath:hasMountScript options:nil];
   
-  [_volumeIconImageView setImage:[[NSBundle mainBundle] imageForResource:@"Removable"]];
-  [_sizeWarningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
+  _volumeIconImageView.image = [[NSBundle mainBundle] imageForResource:@"Removable"];
+  _sizeWarningImageView.image = [NSImage imageNamed:NSImageNameCaution];
 }
 
 #pragma mark Menus
@@ -153,18 +153,18 @@
 - (NSMenu *)labelMenu {
   NSMenu *labelMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
   NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-  NSArray *labelColors = [workspace fileLabelColors];
+  NSArray *labelColors = workspace.fileLabelColors;
   
-  for(NSString *label in [workspace fileLabels]) {
-    NSUInteger index = [[workspace fileLabels] indexOfObject:label];
+  for(NSString *label in workspace.fileLabels) {
+    NSUInteger index = [workspace.fileLabels indexOfObject:label];
     NSColor *labelColor = labelColors[index];
     NSMenuItem *item = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:label action:NULL keyEquivalent:@""];
     
     if(index != 0) {
-      [item setImage:[self labelImageWithColor:labelColor]];
+      item.image = [self labelImageWithColor:labelColor];
     }
     else {
-      [item setImage:[NSImage imageNamed:NSImageNameStopProgressTemplate]];
+      item.image = [NSImage imageNamed:NSImageNameStopProgressTemplate];
     }
     
     [labelMenu addItem:item];
@@ -178,7 +178,7 @@
   NSMenu *popupMenu = [self actionContextMenu];
   
   NSMenuItem *actionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] init];
-  [actionItem setImage:[NSImage imageNamed:NSImageNameActionTemplate]];
+  actionItem.image = [NSImage imageNamed:NSImageNameActionTemplate];
   [popupMenu insertItem:actionItem atIndex:0];
   
   return popupMenu;
@@ -204,9 +204,9 @@
   [ejectItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsMountedKeyPath options:nil];
   [markAsDefaultItem bind:NSEnabledBinding toObject:_favouritesController withKeyPath:selectionIsDefaultKeyPath options:negateBindingOption];
   
-  [mountItem setTarget:self];
-  [ejectItem setTarget:self];
-  [markAsDefaultItem setTarget:self];
+  mountItem.target = self;
+  ejectItem.target = self;
+  markAsDefaultItem.target = self;
   
   [actionMenu addItem:mountItem];
   [actionMenu addItem:ejectItem];
@@ -228,7 +228,7 @@
 - (void)deletePreset:(id)sender {
   // find the selected preset
   RMFFavouritesManager *favouriteManager = [RMFFavouritesManager sharedManager];
-  NSInteger selectedRow = [_favouritesTableView selectedRow];
+  NSInteger selectedRow = _favouritesTableView.selectedRow;
   if(-1 == selectedRow) {
     return;
   }
@@ -241,7 +241,7 @@
   if(NO == [sender isMemberOfClass:[NSMenuItem class]]) {
     return; // wrong sender
   }
-  RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
+  RMFRamdisk *selectedRamdisk = [_favouritesController.selection valueForKey:@"self"];
   if(nil != selectedRamdisk) {
     [[RMFMountController sharedController] toggleMounted:selectedRamdisk];
   }
@@ -252,7 +252,7 @@
     return; // wrong sender
   }
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
-  RMFRamdisk *selectedRamdisk = [[_favouritesController selection] valueForKey:@"self"];
+  RMFRamdisk *selectedRamdisk = [_favouritesController.selection valueForKey:@"self"];
   [favouritesManager setDefaultRamdisk:selectedRamdisk];
 }
 
@@ -287,8 +287,8 @@
 }
 
 - (IBAction)toggleUseMountScript:(id)sender {
-  NSInteger state = [self.useMountScriptCheckButton state];
-  [self.editScriptButton setEnabled:(state == NSOnState)];
+  NSInteger state = (self.useMountScriptCheckButton).state;
+  (self.editScriptButton).enabled = (state == NSOnState);
   if(state == NSOffState) {
     [self _selectedRamdisk].mountScript = nil;
   }
@@ -296,9 +296,9 @@
 
 #pragma mark Notifications
 - (void)didRenameFavourite:(NSNotification *)notification {
-  NSDictionary *userInfo = [notification userInfo];
+  NSDictionary *userInfo = notification.userInfo;
   RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
-  NSArray *favourites = [[RMFFavouritesManager sharedManager] favourites];
+  NSArray *favourites = [RMFFavouritesManager sharedManager].favourites;
   NSIndexSet *rowIndexSet = [NSIndexSet indexSetWithIndex:[favourites indexOfObject:ramdisk]];
   NSIndexSet *columIndexSet = [NSIndexSet indexSetWithIndex:0];
   [_favouritesTableView reloadDataForRowIndexes:rowIndexSet columnIndexes:columIndexSet];
@@ -328,7 +328,7 @@
 #pragma mark Helper
 
 - (RMFRamdisk *)_selectedRamdisk {
-  return [[RMFFavouritesManager sharedManager] favourites][[_favouritesController selectionIndex]];
+  return [RMFFavouritesManager sharedManager].favourites[_favouritesController.selectionIndex];
 }
 
 @end

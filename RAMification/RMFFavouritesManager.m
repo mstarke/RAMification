@@ -46,7 +46,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 
 #pragma mark object lifecycle
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   
   if (self) {
@@ -61,7 +61,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
       }
     }
     // We use the favourites as defualts so we need at least one!
-    if(0 == [_favourites count]) {
+    if(0 == _favourites.count) {
       RMFRamdisk *defaultRamdisk = [RMFRamdisk defaultRamdisk];
       [_favourites addObject:defaultRamdisk];
     }
@@ -104,7 +104,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
   }
   BOOL isDuplicate = [_favourites containsObject:ramdisk];
   if(!isDuplicate) {
-    [self insertObject:ramdisk inFavouritesAtIndex:[_favourites count]];
+    [self insertObject:ramdisk inFavouritesAtIndex:_favourites.count];
     _uuidToFavourites[ramdisk.uuid] = ramdisk;
     [self _observerRamdisk:ramdisk];
     [self _synchronizeDefaults];
@@ -175,7 +175,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
     _uuidToFavourites = [[NSMutableDictionary alloc] init];
   }
   else {
-    self.uuidToFavourites = [NSMutableDictionary dictionaryWithCapacity:[_favourites count]];
+    self.uuidToFavourites = [NSMutableDictionary dictionaryWithCapacity:_favourites.count];
   }
   for(RMFRamdisk *ramdisk in _favourites) {
     _uuidToFavourites[ramdisk.uuid] = ramdisk;
@@ -280,7 +280,7 @@ NSString *const kRMFFavouritesManagerFavouritesKeyForDefaultRamdisk = @"defaultR
 }
 
 - (NSUInteger)countOfFavourites {
-  return [_favourites count];
+  return _favourites.count;
 }
 
 #pragma mark KVO

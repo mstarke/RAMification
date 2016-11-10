@@ -13,6 +13,6 @@
  Convenience method for an autoreleased new formatter
  @returns a new autoreleases formatter
  */
-+ (id)formatter;
++ (instancetype)formatter;
 
 @end

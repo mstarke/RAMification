@@ -32,12 +32,12 @@ static NSArray *_excludedPathsInSync;
   });
 }
 
-- (id)init {
+- (instancetype)init {
   self = [self initWithRamdisk:nil mode:RMFSyncModeNone];
   return self;
 }
 
-- (id)initWithRamdisk:(RMFRamdisk *)ramdisk mode:(RMFSyncMode)syncMode {
+- (instancetype)initWithRamdisk:(RMFRamdisk *)ramdisk mode:(RMFSyncMode)syncMode {
   self = [super init];
   if (self) {
     self.ramdisk = ramdisk;
@@ -73,7 +73,7 @@ static NSArray *_excludedPathsInSync;
   
   // We create the backup folder on restore and on sync
   // It might be better to just create the folder if we actually need it - that it on backup not on restore
-    NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
+    NSString *executableName = [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
     NSString *backupSubfolder = [executableName stringByAppendingFormat:@"/Backups/%@",self.ramdisk.uuid];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
@@ -85,7 +85,7 @@ static NSArray *_excludedPathsInSync;
     }
  
     NSURL *ramificationSupportURL = [applicationSupportURL URLByAppendingPathComponent:backupSubfolder isDirectory:YES];
-    NSString *backupPath = [ramificationSupportURL path];
+    NSString *backupPath = ramificationSupportURL.path;
     BOOL isDirectory = FALSE;
     BOOL isPresent= [fileManager fileExistsAtPath:backupPath isDirectory:&isDirectory];
     // The Path is not there
@@ -97,12 +97,12 @@ static NSArray *_excludedPathsInSync;
         return;
       }
     }
-    NSString *ramdiskDirVolumePath = [[self.ramdisk.volumeURL path] stringByAppendingString:@"/"];
+    NSString *ramdiskDirVolumePath = [(self.ramdisk.volumeURL).path stringByAppendingString:@"/"];
     NSString *ramdiskBackupPath = [backupPath stringByAppendingString:@"/"];
     // in restore mode, we sync from backup to ramdisk
     // in backup mode, we sync from ramdisk to backup
     
-    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + [_excludedPathsInSync count])];
+    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:(4 + _excludedPathsInSync.count)];
     [arguments addObject:@"-anv"];
     
     if([[[NSUserDefaults standardUserDefaults] objectForKey:RMFSettingsKeyBackupTrashcan] boolValue]) {
@@ -131,22 +131,22 @@ static NSArray *_excludedPathsInSync;
     }
     /* Setup the rsycn task and run it */
     NSTask *rsync = [[NSTask alloc] init];
-    [rsync setLaunchPath:@"/usr/bin/rsync"];
-    [rsync setArguments:arguments];
+    rsync.launchPath = @"/usr/bin/rsync";
+    rsync.arguments = arguments;
     [rsync launch];
     [rsync waitUntilExit];
     self.ramdisk.activity = RMFRamdiskIdle;
     if(self.syncMode == RMFSyncModeBackup || self.syncMode == RMFSyncModeBackupAndEject ) {
       [self.ramdisk didFinishBackup];
     }
-    NSLog(@"%@ finished with exit code %d", [rsync launchPath], [rsync terminationStatus]);
+    NSLog(@"%@ finished with exit code %d", rsync.launchPath, rsync.terminationStatus);
     
     // Eject the volume after the operation
     if(self.syncMode == RMFSyncModeBackupAndEject ) {
       NSError *unmountError = nil;
       [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:self.ramdisk.volumeURL error:&unmountError];
       if(nil != unmountError) {
-        NSLog(@"%@: Could not auto eject Volume: %@: %@", [self class], self.ramdisk.volumeURL, [unmountError localizedDescription]);
+        NSLog(@"%@: Could not auto eject Volume: %@: %@", [self class], self.ramdisk.volumeURL, unmountError.localizedDescription);
       }
     }
   }

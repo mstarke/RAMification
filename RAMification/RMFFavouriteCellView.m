@@ -44,13 +44,13 @@ NSString *const kRMFFavouriteCellViewKeyForIsDefault = @"isDefault";
     _isDefault = isDefault;
   }
   
-  NSFont *labelFont = [_lableTextField font];
+  NSFont *labelFont = _lableTextField.font;
   NSFontManager *fontManager = [NSFontManager sharedFontManager];
   
   NSFontTraitMask traitMask = self.isDefault ? NSBoldFontMask : NSUnboldFontMask;
   
   labelFont = [fontManager convertFont:labelFont toHaveTrait:traitMask];
-  [_lableTextField setFont:labelFont];
+  _lableTextField.font = labelFont;
 }
 
 @end

@@ -80,7 +80,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   return instance;
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     
@@ -88,7 +88,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     _watchedRamdiskURLs = [[NSMutableDictionary alloc] initWithCapacity:5];
     
     NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-    NSNotificationCenter *center = [workspace notificationCenter];
+    NSNotificationCenter *center = workspace.notificationCenter;
     // Register ourselves for mount/unmount events to easly update favourite mount status
     [center addObserver:self selector:@selector(_didMountVolume:) name:NSWorkspaceDidMountNotification object:nil];
     [center addObserver:self selector:@selector(_didUnmountVolume:) name:NSWorkspaceDidUnmountNotification object:nil];
@@ -100,7 +100,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 
 - (void)dealloc {
   NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-  NSNotificationCenter *center = [workspace notificationCenter];
+  NSNotificationCenter *center = workspace.notificationCenter;
   [center removeObserver:self];
   
 }
@@ -108,7 +108,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 - (void)searchForMountedFavourites {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSArray *mountedVolumeUrls = [fileManager mountedVolumeURLsIncludingResourceValuesForKeys:@[ NSURLVolumeNameKey, NSURLVolumeTotalCapacityKey, NSURLVolumeIsRemovableKey ] options:0];
-  NSMutableArray *ramdiskWithChangedLabel = [NSMutableArray arrayWithCapacity:[mountedVolumeUrls count]];
+  NSMutableArray *ramdiskWithChangedLabel = [NSMutableArray arrayWithCapacity:mountedVolumeUrls.count];
   for( NSURL *volumeURL in mountedVolumeUrls) {
     BOOL hasValue = YES;
     NSString *name;
@@ -131,7 +131,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       if(foundUUID) {
         RMFRamdisk *ramdisk = [[RMFFavouritesManager sharedManager] findFavouriteByUUID:uuid];
         if(nil != ramdisk) {
-          NSString *mountedLabel = [volumeURL lastPathComponent];
+          NSString *mountedLabel = volumeURL.lastPathComponent;
           if(NO == [ramdisk.label isEqualToString:mountedLabel]) {
             [ramdiskWithChangedLabel addObject:ramdisk];
           }
@@ -140,15 +140,15 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
       }
     }
   }
-  if([ramdiskWithChangedLabel count] != 0) {
+  if(ramdiskWithChangedLabel.count != 0) {
     [self _showChangedRamdisksWindow:ramdiskWithChangedLabel];
   }
 }
 #pragma marks volume notifictaions
 - (void)_didMountVolume:(NSNotification *)notification {
-  NSString *volumeName = [notification userInfo][NSWorkspaceVolumeLocalizedNameKey];
-  NSURL *volumeURL = [notification userInfo][NSWorkspaceVolumeURLKey];
-  NSString *volumePath = [volumeURL path];
+  NSString *volumeName = notification.userInfo[NSWorkspaceVolumeLocalizedNameKey];
+  NSURL *volumeURL = notification.userInfo[NSWorkspaceVolumeURLKey];
+  NSString *volumePath = volumeURL.path;
   
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   NSString *bsdDevice = [RMFVolumeObserver bsdDeviceForVolumeAtURL:volumeURL];
@@ -163,7 +163,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 
 - (void)_didUnmountVolume:(NSNotification *)notification {
-  NSURL *deviceUrl = [notification userInfo][NSWorkspaceVolumeURLKey];
+  NSURL *deviceUrl = notification.userInfo[NSWorkspaceVolumeURLKey];
   RMFFavouritesManager *favouritesManager = [RMFFavouritesManager sharedManager];
   RMFRamdisk *ramdisk = [favouritesManager findFavouriteWithVolumeURL:deviceUrl];
   NSLog(@"%@: Device %@ unmounted", self, deviceUrl);
@@ -187,7 +187,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
 }
 
 - (void)_didRenameVolume:(NSNotification *)notification {
-  NSDictionary *userInfo = [notification userInfo];
+  NSDictionary *userInfo = notification.userInfo;
   NSURL *newURL = userInfo[NSWorkspaceVolumeURLKey];
   NSString *newName =userInfo[NSWorkspaceVolumeLocalizedNameKey];
   NSURL *oldURL = userInfo[NSWorkspaceVolumeOldURLKey];
@@ -239,7 +239,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   // show dialog with changed ramdisks
   _changedFavouritesController =  [[RMFChangedMountedFavouritesController alloc] init];
   [_changedFavouritesController setChangedFavourites:ramdisks];
-  [_changedFavouritesController showWindow:[_changedFavouritesController window]];
+  [_changedFavouritesController showWindow:_changedFavouritesController.window];
 }
 
 # pragma mark FSEvent processing
@@ -262,7 +262,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     RMFRamdisk *affectedRamdisk = nil;
     BOOL didMatchPath = NO;
     for(NSURL *url in self.watchedRamdiskURLs ) {
-      if([path hasPrefix:[url path]]) {
+      if([path hasPrefix:url.path]) {
         affectedRamdisk = self.watchedRamdiskURLs[url];
         didMatchPath = YES;
         continue;
@@ -281,7 +281,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
      Modification is only necessary if it happens on the volume,
      everything else we do not care about
      */
-    const BOOL didModifyFileVolume = (flag & kFSEventStreamEventFlagItemXattrMod) && [[affectedRamdisk.volumeURL path] isEqualToString:path];
+    const BOOL didModifyFileVolume = (flag & kFSEventStreamEventFlagItemXattrMod) && [(affectedRamdisk.volumeURL).path isEqualToString:path];
     if(didModifyFileVolume) {
       NSError *error = nil;
       NSDictionary *resourceValues = [affectedRamdisk.volumeURL resourceValuesForKeys:@[NSURLLabelNumberKey] error:&error];
@@ -294,7 +294,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
         }
       }
       else {
-        NSLog(@"%@", [error localizedDescription]);
+        NSLog(@"%@", error.localizedDescription);
       }
     }
   }
@@ -316,7 +316,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   }
   
   // Nothing to watch
-  if([self.watchedRamdiskURLs count] == 0) {
+  if((self.watchedRamdiskURLs).count == 0) {
     NSLog(@"%@: No RAM disk mounted. Nothing to regiser for", [self class]);
     return; // nothing to watch
   }
@@ -327,21 +327,21 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   // Watch for File events (Create, Modify, Remove,) and use CF Storage types on callback
   const FSEventStreamCreateFlags flags = (kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagUseCFTypes);
   
-  NSMutableSet *volumePaths = [[NSMutableSet alloc] initWithCapacity:[self.watchedRamdiskURLs count]];
-  for(RMFRamdisk *ramdisk in [self.watchedRamdiskURLs allValues]) {
-    [volumePaths addObject:[ramdisk.volumeURL path]];
+  NSMutableSet *volumePaths = [[NSMutableSet alloc] initWithCapacity:(self.watchedRamdiskURLs).count];
+  for(RMFRamdisk *ramdisk in (self.watchedRamdiskURLs).allValues) {
+    [volumePaths addObject:(ramdisk.volumeURL).path];
   }
   _eventStream = FSEventStreamCreate(NULL,
                                      &fileSystemEventCallback,
                                      &context,
-                                     (__bridge CFArrayRef)[volumePaths allObjects],
+                                     (__bridge CFArrayRef)volumePaths.allObjects,
                                      _lastEventId,
                                      (CFTimeInterval)latency,
                                      flags);
   
   FSEventStreamScheduleWithRunLoop(_eventStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
   FSEventStreamStart(_eventStream);
-  NSLog(@"%@: Registerd callbacks for following paths: %@", [self class], [volumePaths allObjects]);
+  NSLog(@"%@: Registerd callbacks for following paths: %@", [self class], volumePaths.allObjects);
 }
 
 - (void)_watchRamdisk:(RMFRamdisk *)ramdisk {
@@ -349,7 +349,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
     return; // no ramdisk;
   }
   
-  if([[self.watchedRamdiskURLs allValues] containsObject:ramdisk]) {
+  if([(self.watchedRamdiskURLs).allValues containsObject:ramdisk]) {
     return; // already watching this one
   }
   
@@ -357,7 +357,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   NSDictionary *resourceValues = [ramdisk.volumeURL resourceValuesForKeys:@[NSURLIsVolumeKey, ] error:&error];
   
   if(error != nil) {
-    NSLog(@"%@: An Error occured while trying to wath URL %@ for changes. %@", [self class], ramdisk.volumeURL, [error localizedDescription]);
+    NSLog(@"%@: An Error occured while trying to wath URL %@ for changes. %@", [self class], ramdisk.volumeURL, error.localizedDescription);
     return; // error while reading
   }
   
@@ -374,7 +374,7 @@ static void fileSystemEventCallback(ConstFSEventStreamRef streamRef
   if(nil == ramdisk) {
     return; // no ramdisk
   }
-  if(NO == [[self.watchedRamdiskURLs allValues] containsObject:ramdisk]) {
+  if(NO == [(self.watchedRamdiskURLs).allValues containsObject:ramdisk]) {
     return; // not watched
   }
   [self.watchedRamdiskURLs removeObjectForKey:ramdisk.volumeURL];

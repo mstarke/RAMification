@@ -14,11 +14,11 @@ extern NSString *const kRMFRamdiskScriptKeyForScript;
 
 @class RMFRamdisk;
 
-typedef enum {
+typedef NS_ENUM(unsigned int, RMFScriptLanguage) {
   RMFUnknownLanguage, // Interal state. Should not occur on valid object
   RMFShellScript,
   RMFAppleScript
-} RMFScriptLanguage;
+};
 
 @interface RMFRamdiskScript : NSObject <NSCoding>
 
@@ -35,7 +35,7 @@ typedef enum {
 /*
  Designated initalizer
  */
-- initWithScript:(NSString *)script language:(RMFScriptLanguage)language;
+- (instancetype) initWithScript:(NSString *)script language:(RMFScriptLanguage)language NS_DESIGNATED_INITIALIZER;
 
 /* Executed the Script in the Context of a Ramdisk*/
 - (void)executeForRamdisk:(RMFRamdisk *)ramdisk;

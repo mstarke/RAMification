@@ -36,7 +36,7 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
 
 @implementation RMFChangedMountedFavouritesController
 
-- (id)init {
+- (instancetype)init {
   return [self initWithWindowNibName:@"ChangedMountedFavourites"];
 }
 
@@ -48,7 +48,7 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
     [_changedFavouritesWrapper removeAllObjects];
   }
   for(RMFRamdisk *ramdisk in favourites) {
-    [_changedFavouritesWrapper insertObject:RMFCreateFavouritesEntry(ramdisk) atIndex:[_changedFavouritesWrapper count]];
+    [_changedFavouritesWrapper insertObject:RMFCreateFavouritesEntry(ramdisk) atIndex:_changedFavouritesWrapper.count];
   }
 }
 
@@ -56,10 +56,10 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
   [super windowDidLoad];
   // GUI setup
   [self.window setTitle:NSLocalizedString(@"WINDOW_FAVOURITE_NAME_CHANGED_TITLE", @"Title for the Window displaying changed mounted favourites after launch")];
-  [_warningImageView setImage:[NSImage imageNamed:NSImageNameCaution]];
+  _warningImageView.image = [NSImage imageNamed:NSImageNameCaution];
   
   
-  [_favouritesTableView setDelegate:self];
+  _favouritesTableView.delegate = self;
   // Table view population
   _favouritesController = [[NSArrayController alloc] init];
   [_favouritesController bind:NSContentArrayBinding toObject:self withKeyPath:kRMFChangedMountedFavouritesControllerKeyForChagendeFavourites options:0];
@@ -94,7 +94,7 @@ static NSMutableDictionary *RMFCreateFavouritesEntry(RMFRamdisk *ramdiks) {
         break;
       }
       case RMFChangedFavouriteUpdateFavourite:
-        ramdisk.label = [ramdisk.volumeURL lastPathComponent];
+        ramdisk.label = (ramdisk.volumeURL).lastPathComponent;
         break;
       case RMFChangedFavouriteIgnoreAction:
       default:

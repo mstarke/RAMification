@@ -29,8 +29,8 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  const NSRect originalFrame = [self frame];
-  const NSRect drawRect = [self bounds];
+  const NSRect originalFrame = self.frame;
+  const NSRect drawRect = self.bounds;
   if(_finderLabelIndex != 0) {
     const NSRect adjustedRect = NSMakeRect(drawRect.origin.x + .5, drawRect.origin.y + .5, drawRect.size.width - 1, drawRect.size.height - 1);
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:adjustedRect xRadius:kRMFLabelTextFieldCornderRadius yRadius:kRMFLabelTextFieldCornderRadius];
@@ -40,18 +40,18 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
     [fillGradient drawInBezierPath:path angle:90.0];
     [[lableColor shadowWithLevel:0.2] setStroke];
     [path stroke];
-    [self setFrame:RMFRectWithoutLabel(self.frame)];
+    self.frame = RMFRectWithoutLabel(self.frame);
     [self setNeedsDisplay:YES];
   }
   [super drawRect:dirtyRect];
-  [self setFrame:originalFrame];
+  self.frame = originalFrame;
 }
 
 - (NSColor *)finderLabelColor {
   if(_finderLabelIndex == 0) {
     return [NSColor clearColor]; // No lable so no color
   }
-  NSArray *labelColors = [[NSWorkspace sharedWorkspace] fileLabelColors];
+  NSArray *labelColors = [NSWorkspace sharedWorkspace].fileLabelColors;
   NSColor *color = nil;
   @try {
     color = labelColors[_finderLabelIndex];
@@ -69,11 +69,11 @@ static NSRect RMFRectWithoutLabel(const NSRect rect) {
   }
   // shift frame left if are using labels now
   if(_finderLabelIndex == 0) {
-    [self setFrame:RMFRectWithLabel(self.frame)];
+    self.frame = RMFRectWithLabel(self.frame);
   }
   // shift back if label was removed
   else if(finderLabelIndex == 0) {
-    [self setFrame:RMFRectWithoutLabel(self.frame)];
+    self.frame = RMFRectWithoutLabel(self.frame);
   }
   _finderLabelIndex = finderLabelIndex;
   [self setNeedsDisplay:YES];

@@ -73,7 +73,7 @@
 }
 
 - (NSString *)executabelName {
-  return [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
+  return [NSBundle mainBundle].infoDictionary[@"CFBundleExecutable"];
 }
 
 #pragma mark NSUserNotificationCenterDelegate protocoll

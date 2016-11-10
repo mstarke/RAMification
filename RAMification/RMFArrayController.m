@@ -10,7 +10,7 @@
 
 @implementation RMFArrayController
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     self.delegate = nil;
@@ -24,7 +24,7 @@
       return [_delegate canAddWithArrayController:self];
     }
   }
-  return [super canAdd];
+  return super.canAdd;
 }
 
 - (BOOL)canRemove {
@@ -33,7 +33,7 @@
       return [_delegate canRemoveWithArrayController:self];
     }
   }
-  return [super canInsert];
+  return super.canInsert;
 }
 
 - (BOOL)canInsert {
@@ -42,7 +42,7 @@
       return [_delegate canInsertWithArrayController:self];
     }
   }
-  return [super canRemove];
+  return super.canRemove;
 }
 
 @end

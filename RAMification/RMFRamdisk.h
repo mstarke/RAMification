@@ -60,7 +60,7 @@ typedef enum RMFRamdiskVolumeIconType {
 + (NSUUID *)uuidOfRamdiskAtAURL:(NSURL *)volumeURL success:(BOOL *)success;
 + (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL;
 
-- (id)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount;
+- (instancetype)initWithLabel:(NSString*)aLable size:(NSUInteger)aSize automount:(BOOL)automount NS_DESIGNATED_INITIALIZER;
 // Call this function to indicate that this ramdisk was just backed up
 - (void)didFinishBackup;
 - (void)prepareContent;

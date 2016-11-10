@@ -32,11 +32,11 @@
 }
 
 + (BOOL)isMemoryAvailableForRamdisk:(RMFRamdisk *)ramdisk {
-  unsigned long long systemMemory = [[NSProcessInfo processInfo] physicalMemory];
+  unsigned long long systemMemory = [NSProcessInfo processInfo].physicalMemory;
   return (ramdisk.size <= systemMemory);
 }
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     _queue = [[NSOperationQueue alloc] init];
@@ -56,7 +56,7 @@
     }
     
     NSString *infoTextTemplate = NSLocalizedString(@"ALERT_RAMDISK_SIZE_WARNING_INFO_TEXT", @"Additinal info to dispaly on trying to mount too large RAM disk %1 System size %2 RAM disk size");
-    NSString *availableRam = [NSByteCountFormatter stringFromByteCount:[[NSProcessInfo processInfo] physicalMemory] countStyle:NSByteCountFormatterCountStyleBinary];
+    NSString *availableRam = [NSByteCountFormatter stringFromByteCount:[NSProcessInfo processInfo].physicalMemory countStyle:NSByteCountFormatterCountStyleBinary];
     NSString *ramdisksize = [NSByteCountFormatter stringFromByteCount:ramdisk.size countStyle:NSByteCountFormatterCountStyleBinary];
     NSString *infoText = [NSString stringWithFormat:infoTextTemplate, availableRam, ramdisksize];
     
@@ -64,7 +64,7 @@
     [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_NOMOUNT", @"Do not mount RAM disk with low memory")];
     [sizeAlert addButtonWithTitle:NSLocalizedString(@"ALERT_RAMDISK_SIZE_TOO_BIG_MOUNT", @"Mount RAM disk dispite low memory")];
     [sizeAlert setMessageText:NSLocalizedString(@"ALERT_RAMDISK_SIZE_WARNING_TITLE", @"Titel to dispaly on trying to mount too large RAM disk")];
-    [sizeAlert setInformativeText:infoText];
+    sizeAlert.informativeText = infoText;
     
     if( [sizeAlert runModal] == NSAlertFirstButtonReturn ) {
       return; // user canceld operation
@@ -83,7 +83,7 @@
   NSError *error = nil;
   [[NSWorkspace sharedWorkspace] unmountAndEjectDeviceAtURL:ramdisk.volumeURL error:&error];
   if(nil != error) {
-    NSLog(@"Could not unmount Ramdisk %@ mounted at %@. %@", ramdisk.label, ramdisk.volumeURL, [error localizedDescription] );
+    NSLog(@"Could not unmount Ramdisk %@ mounted at %@. %@", ramdisk.label, ramdisk.volumeURL, error.localizedDescription );
   }
 }
 

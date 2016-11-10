@@ -13,7 +13,7 @@
 @implementation RMFChangedMountedFavouriteCellView
 
 - (void)awakeFromNib {
-  [_actionSelectionControl setSegmentCount:RMFChangedFavouriteActionCount];
+  _actionSelectionControl.segmentCount = RMFChangedFavouriteActionCount;
   
   NSDictionary *images = @{
   @(RMFChangedFavouriteIgnoreAction) : [NSImage imageNamed:NSImageNameStopProgressTemplate],
@@ -27,9 +27,9 @@
   @(RMFChangedFavouriteUpdateFavourite) : NSLocalizedString(@"FAVOURITE_NAME_CHANGED_ACTION_UPDATE_VOLUME", @"Update the volume")
   };
 
-  for(NSNumber *key in [images allKeys]) {
-    NSUInteger segmentIndex = [key integerValue];
-    [[_actionSelectionControl cell] setToolTip:toolTips[key] forSegment:segmentIndex];
+  for(NSNumber *key in images.allKeys) {
+    NSUInteger segmentIndex = key.integerValue;
+    [_actionSelectionControl.cell setToolTip:toolTips[key] forSegment:segmentIndex];
     [_actionSelectionControl setImage:images[key] forSegment:segmentIndex];
   }
 }

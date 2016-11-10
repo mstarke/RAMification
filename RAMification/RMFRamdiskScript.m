@@ -28,7 +28,7 @@ NSString *const kRMFRamdiskScriptKeyForScript = @"script";
 /*
  Designated Initalizer
  */
-- (id)initWithScript:(NSString *)script language:(RMFScriptLanguage)language {
+- (instancetype)initWithScript:(NSString *)script language:(RMFScriptLanguage)language {
   self = [super init];
   if(self){
     _language = language;
@@ -37,12 +37,12 @@ NSString *const kRMFRamdiskScriptKeyForScript = @"script";
   return self;
 }
 
-- (id)init {
+- (instancetype)init {
   return [self initWithScript:nil language:RMFUnknownLanguage];
 }
 
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [super init];
     if(self) {

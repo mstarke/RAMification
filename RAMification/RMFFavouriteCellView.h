@@ -14,7 +14,6 @@ APPKIT_EXTERN NSString *const kRMFFavouriteCellViewKeyForIsDefault;
 
 @interface RMFFavouriteCellView : NSTableCellView
 
-@property (weak) IBOutlet NSImageView *imageView;
 @property (weak) IBOutlet RMFLabelTextField *lableTextField;
 @property (weak) IBOutlet NSTextField *infoTextField;
 @property (nonatomic, assign) BOOL isDefault;

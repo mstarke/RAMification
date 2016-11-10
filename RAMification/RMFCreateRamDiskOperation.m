@@ -18,7 +18,7 @@
 
 @implementation RMFCreateRamDiskOperation
 
-- (id) initWithRamdisk:(RMFRamdisk *)ramdisk {
+- (instancetype) initWithRamdisk:(RMFRamdisk *)ramdisk {
   self = [super init];
   if (self) {
     self.ramdisk = ramdisk;
@@ -26,7 +26,7 @@
   return self;
 }
 
-- (id) init {
+- (instancetype) init {
   RMFRamdisk* ramdisk= [[RMFRamdisk alloc] init];
   self = [self initWithRamdisk:ramdisk];
   return self;
@@ -34,7 +34,7 @@
 
 - (void) main {  
   // stop if we are cancelled or are a already mounted volume
-  if([self isCancelled]) {
+  if(self.cancelled) {
     NSLog(@"We got canceled!");
     return;
   }
@@ -52,22 +52,22 @@
     
     // create the task and run it
     NSTask *createBlockDevice = [[NSTask alloc] init];
-    [createBlockDevice setLaunchPath:@"/usr/bin/hdiutil"];
-    [createBlockDevice setArguments:@[@"attach", @"-nomount", ramdisksize]];
-    [createBlockDevice setStandardOutput:output];
+    createBlockDevice.launchPath = @"/usr/bin/hdiutil";
+    createBlockDevice.arguments = @[@"attach", @"-nomount", ramdisksize];
+    createBlockDevice.standardOutput = output;
     [createBlockDevice launch];
     
     // retrieve the device name
-    NSFileHandle *outputFileHandle = [output fileHandleForReading];
+    NSFileHandle *outputFileHandle = output.fileHandleForReading;
     NSString *deviceName = [[NSString alloc] initWithData:[outputFileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
     NSString *strippedDeviceName = [deviceName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    self.ramdisk.bsdDevice = [strippedDeviceName lastPathComponent];
+    self.ramdisk.bsdDevice = strippedDeviceName.lastPathComponent;
     
     // and format it
     // diskutil erasevolume HFS+ <NAME> <DEVICE>
     NSTask *formatDisk = [[NSTask alloc] init];
-    [formatDisk setLaunchPath:@"/usr/sbin/diskutil"];
-    [formatDisk setArguments:@[@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName]];
+    formatDisk.launchPath = @"/usr/sbin/diskutil";
+    formatDisk.arguments = @[@"erasevolume", @"HFS+", self.ramdisk.label, strippedDeviceName];
     [formatDisk launch];
  
   }

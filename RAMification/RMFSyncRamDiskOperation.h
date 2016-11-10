@@ -24,6 +24,6 @@ typedef enum RMFSyncModeType {
 @property (strong,readonly) RMFRamdisk *ramdisk;
 
 /* Creates a synchronization operation for the given ramdisk with the given mode */
-- (id)initWithRamdisk:(RMFRamdisk *)ramdisk mode:(RMFSyncMode)syncMode;
+- (instancetype)initWithRamdisk:(RMFRamdisk *)ramdisk mode:(RMFSyncMode)syncMode NS_DESIGNATED_INITIALIZER;
 
 @end

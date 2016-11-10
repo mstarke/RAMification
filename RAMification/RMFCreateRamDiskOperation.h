@@ -12,6 +12,6 @@
 
 @interface RMFCreateRamDiskOperation : NSOperation
 
-- (id) initWithRamdisk:(RMFRamdisk *)ramdisk;
+- (instancetype) initWithRamdisk:(RMFRamdisk *)ramdisk NS_DESIGNATED_INITIALIZER;
 
 @end

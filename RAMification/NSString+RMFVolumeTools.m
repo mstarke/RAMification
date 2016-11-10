@@ -17,10 +17,10 @@
   NSError *anError = nil;
   NSArray *filePaths= [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&anError];
   //TODO: add error handling
-  NSMutableSet *files = [NSMutableSet setWithCapacity:[filePaths count]];
+  NSMutableSet *files = [NSMutableSet setWithCapacity:filePaths.count];
   for(NSString* filePath in filePaths)
   {
-    [files addObject:[filePath lastPathComponent]];
+    [files addObject:filePath.lastPathComponent];
   }
   
   if([files containsObject:baseName])
@@ -28,7 +28,7 @@
     // search for all matching files to our pattern
     NSPredicate *nameMatcher = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [baseName stringByAppendingString:@"_[0-9]+"]];
     [files filterUsingPredicate:nameMatcher];
-    NSMutableSet *suffixes = [NSMutableSet setWithCapacity:[files count]];
+    NSMutableSet *suffixes = [NSMutableSet setWithCapacity:files.count];
     
     // gather all the numerical extensions
     for(NSString *filename in files)
@@ -43,8 +43,8 @@
     NSArray *sortedSuffixed = [suffixes sortedArrayUsingDescriptors:descriptor];
     // Calculate next number based on biggest found
     // We do not try to fill holes
-    NSNumber *maximum = [sortedSuffixed lastObject];
-    NSNumber *nextSuffix = @( [maximum integerValue] + 1 );
+    NSNumber *maximum = sortedSuffixed.lastObject;
+    NSNumber *nextSuffix = @( maximum.integerValue + 1 );
     
     NSString *newName = [uniqueName stringByAppendingFormat:@"%@_", nextSuffix];
     // release retained old string as we do not need it anymore

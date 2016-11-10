@@ -32,20 +32,20 @@
    */
   NSMenu *languageMenu = [[NSMenu alloc] init];
   NSDictionary *languages = [RMFRamdiskScript availableLanguages];
-  for(NSNumber *languageNumber in [languages allKeys]) {
-    RMFScriptLanguage language = (RMFScriptLanguage)[languageNumber integerValue];
+  for(NSNumber *languageNumber in languages.allKeys) {
+    RMFScriptLanguage language = (RMFScriptLanguage)languageNumber.integerValue;
     NSMenuItem *item = [[NSMenuItem alloc] init];
-    [item setTitle:languages[languageNumber]];
-    [item setTag:language];
+    item.title = languages[languageNumber];
+    item.tag = language;
     [languageMenu addItem:item];
   }
-  [self.languagePopupButton setMenu:languageMenu];
+  (self.languagePopupButton).menu = languageMenu;
 
   /*
    Setup textview
    */
   NSFont *font = [[NSFontManager sharedFontManager] fontWithFamily:@"Menlo" traits:(NSUnboldFontMask|NSUnitalicFontMask) weight:0 size:12];
-  [self.scriptTextView setFont:font];
+  (self.scriptTextView).font = font;
   [self.scriptTextView setRichText:NO];
   [self.scriptTextView setUsesFontPanel:NO];
 }
@@ -58,20 +58,20 @@
   if(ramdisk.hasMountScript) {
     RMFRamdiskScript *script = ramdisk.mountScript;
     [self.languagePopupButton selectItemWithTag:script.language];
-    [self.scriptTextView setString:script.script];
+    (self.scriptTextView).string = script.script;
   }
   else {
     [self.languagePopupButton selectItemAtIndex:0];
-    [self.scriptTextView setString:@""];
+    (self.scriptTextView).string = @"";
   }
-  [[self window] makeKeyAndOrderFront:self];
+  [self.window makeKeyAndOrderFront:self];
 }
 
 
 - (IBAction)save:(id)sender {
   if(self.ramdisk) {
-    RMFScriptLanguage language = (RMFScriptLanguage)[self.languagePopupButton selectedTag];
-    NSString *scriptContent = [self.scriptTextView string];
+    RMFScriptLanguage language = (RMFScriptLanguage)(self.languagePopupButton).selectedTag;
+    NSString *scriptContent = (self.scriptTextView).string;
     
     if(!self.ramdisk.mountScript) {
       RMFRamdiskScript *script = [[RMFRamdiskScript alloc] initWithScript:scriptContent language:language];
@@ -83,10 +83,10 @@
     }
     
   }
-  [[self window] close];
+  [self.window close];
 }
 
 - (IBAction)cancel:(id)sender {
-  [[self window] close];
+  [self.window close];
 }
 @end

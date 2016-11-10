@@ -54,14 +54,14 @@ static NSDictionary *volumeIconImageNames;
 }
 
 + (BOOL)volumeIsRamdiskAtURL:(NSURL *)volumeURL {
-  if(![volumeURL isFileURL]) {
+  if(!volumeURL.fileURL) {
     return NO; // No valid file URL
   }
   NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
   NSError *error = nil;
   BOOL isReachable = [idFileURL checkResourceIsReachableAndReturnError:&error];
   if(nil != error) {
-    NSLog(@"%@: Volume at URL %@ is not Ramdisk. %@", [self class], volumeURL, [error localizedDescription]);
+    NSLog(@"%@: Volume at URL %@ is not Ramdisk. %@", [self class], volumeURL, error.localizedDescription);
   }
   return isReachable;
 }
@@ -73,7 +73,7 @@ static NSDictionary *volumeIconImageNames;
     @throw invalidArgumentException;
   }
   
-  if(![volumeURL isFileURL]) {
+  if(!volumeURL.fileURL) {
     success = NO;
     return nil; // No valid file URL
   }
@@ -82,7 +82,7 @@ static NSDictionary *volumeIconImageNames;
   NSURL *idFileURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskIdentifierFile];
   NSData *uuidData = [NSData dataWithContentsOfURL:idFileURL options:0 error:&readError];
   if(readError != nil) {
-    NSLog(@"Warning. Unable to Read UUID at URL:%@. %@", volumeURL, [readError localizedDescription]);
+    NSLog(@"Warning. Unable to Read UUID at URL:%@. %@", volumeURL, readError.localizedDescription);
     *success = NO;
   }
   else {
@@ -94,7 +94,7 @@ static NSDictionary *volumeIconImageNames;
 }
 
 + (BOOL)volumeHasCustomIconAtURL:(NSURL *)volumeURL {
-  if(![volumeURL isFileURL]) {
+  if(!volumeURL.fileURL) {
     return NO; // No valid volume URL given
   }
   NSURL *volumeIconURL = [volumeURL URLByAppendingPathComponent:kRMFRamdiskVolumeIconFileName];
@@ -103,11 +103,11 @@ static NSDictionary *volumeIconImageNames;
 
 #pragma mark object lifecycle
 
-- (id)init {
+- (instancetype)init {
   return [self initWithLabel:RMFRamdiskDefaultLabel size:kRMFRamdiskDefaultSize automount:NO];
 }
 
-- (id)initWithLabel:(NSString *)aLable size:(NSUInteger)aSize automount:(BOOL)automount {
+- (instancetype)initWithLabel:(NSString *)aLable size:(NSUInteger)aSize automount:(BOOL)automount {
   self = [super init];
   if (self)   {
     _size = aSize;
@@ -135,14 +135,14 @@ static NSDictionary *volumeIconImageNames;
                            , _uuid
                            , _bsdDevice
                            , _volumeURL
-                           , [self isMounted]
+                           , self.isMounted
                            , _isAutomount
                            , _backupMode];
   return description;
 }
 
 #pragma mark NSCoder
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
   if([aDecoder isKindOfClass:[NSKeyedUnarchiver class]]) {
     self = [super init];
     // retain the objects
@@ -199,7 +199,7 @@ static NSDictionary *volumeIconImageNames;
   BOOL isEqual = NO;
   if([object isMemberOfClass:[RMFRamdisk class]]) {
     RMFRamdisk* other = (RMFRamdisk*)object;
-    isEqual = [[self.uuid UUIDString] isEqualToString:[other.uuid UUIDString]];
+    isEqual = [(self.uuid).UUIDString isEqualToString:(other.uuid).UUIDString];
   }
   return isEqual;
 }
@@ -243,11 +243,11 @@ static NSDictionary *volumeIconImageNames;
   uuid_t uuidBytes = {0};
   [self.uuid getUUIDBytes:uuidBytes];
   NSData *uuidData = [[NSData alloc] initWithBytesNoCopy:uuidBytes length:sizeof(uuidBytes) freeWhenDone:NO];
-  if(NO == [fileManager fileExistsAtPath:[doNotIndexFileURL path]]) {
-    [fileManager createFileAtPath:[markAsRamdiskFileURL path] contents:uuidData attributes:nil];
+  if(NO == [fileManager fileExistsAtPath:doNotIndexFileURL.path]) {
+    [fileManager createFileAtPath:markAsRamdiskFileURL.path contents:uuidData attributes:nil];
   }
-  if(NO ==[fileManager fileExistsAtPath:[markAsRamdiskFileURL path]]) {
-    [fileManager createFileAtPath:[doNotIndexFileURL path] contents:nil attributes:nil];
+  if(NO ==[fileManager fileExistsAtPath:markAsRamdiskFileURL.path]) {
+    [fileManager createFileAtPath:doNotIndexFileURL.path contents:nil attributes:nil];
   }
 }
 

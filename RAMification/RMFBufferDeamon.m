@@ -23,7 +23,7 @@
 
 @implementation RMFBufferDeamon
 
-- (id)init {
+- (instancetype)init {
   self = [super init];
   if (self) {
     _isObservingNotifications = NO;
@@ -87,7 +87,7 @@
   if(_bufferEnabled) {
     return; // nothing to du;
   }
-  NSDictionary *userInfo = [notification userInfo];
+  NSDictionary *userInfo = notification.userInfo;
   RMFRamdisk *ramdisk = userInfo[RMFVolumeObserverRamdiskKey];
   if(nil == ramdisk ) {
     return; // no ramdisk;
@@ -99,7 +99,7 @@
 - (void)setShouldBuffer:(BOOL)shouldBuffer forRamdisk:(RMFRamdisk *)ramdisk {
   
   NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSString *volumePath = [ramdisk.volumeURL path];
+  NSString *volumePath = (ramdisk.volumeURL).path;
   NSDirectoryEnumerator *dirEnumerator = [fileManager enumeratorAtPath:volumePath];
   NSString *file;
   while( file = [dirEnumerator nextObject] ) {
@@ -113,7 +113,7 @@
     return; // No valid file found
   }
   NSString *actionString = (shouldBuffer ? @"enable" : @"disable");
-  const int fileDesciptor= open([file UTF8String], O_RDONLY);
+  const int fileDesciptor= open(file.UTF8String, O_RDONLY);
   if(fileDesciptor >= 0) {
     if(shouldBuffer){
       //fcntl(fileDesciptor, F_GLOBAL_NOCACHE, 0); // Turn UBC on
